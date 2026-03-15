@@ -161,15 +161,15 @@ if (heroOrbs.length) {
   if (!track || !walker) return;
 
   const LEVELS = [
-    [0,   'Lv.1 Explorer'],
-    [100, 'Lv.2 Dreamer'],
-    [200, 'Lv.3 Builder'],
-    [300, 'Lv.4 Achiever'],
-    [400, 'Lv.5 Innovator'],
-    [500, 'Lv.6 Leader'],
-    [600, 'Lv.7 Visionary'],
-    [700, 'Lv.8 Champion'],
-    [800, 'Lv.MAX Legend 🏆'],
+    [0,   '📖 A curious kid from Patras'],
+    [100, '🌱 First steps & small wins'],
+    [200, '🎓 Learning, failing, growing'],
+    [300, '✨ Finding my purpose'],
+    [400, '🚀 Building something real'],
+    [500, '🏆 Recognition & momentum'],
+    [600, '🌍 Taking it global'],
+    [700, '🙏 Grateful & still learning'],
+    [800, '⭐ The journey continues…'],
   ];
   const MAX_XP = 800;
 
