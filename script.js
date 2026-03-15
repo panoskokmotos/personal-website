@@ -157,28 +157,38 @@ if (heroOrbs.length) {
   const xpFill  = document.getElementById('journeyXpFill');
   const xpPts   = document.getElementById('journeyXpPts');
   const lvlBadge = document.getElementById('journeyLevelBadge');
-  if (!track || !walker) return;
+  const toastWrap = document.getElementById('achievementToasts');
+  if (!track) return;
 
   const LEVELS = [
-    [0,   'Lv.1 Explorer'],
-    [100, 'Lv.2 Dreamer'],
-    [200, 'Lv.3 Builder'],
-    [300, 'Lv.4 Achiever'],
-    [400, 'Lv.5 Innovator'],
-    [500, 'Lv.6 Leader'],
-    [600, 'Lv.7 Visionary'],
-    [700, 'Lv.8 Steward'],
-    [900, 'Lv.9 Purpose-Driven Leader'],
+    [0,   '📖 A curious kid from Patras'],
+    [100, '🌱 First steps & small wins'],
+    [200, '🎓 Learning, failing, growing'],
+    [300, '✨ Finding my purpose'],
+    [400, '🚀 Building something real'],
+    [500, '🏆 Recognition & momentum'],
+    [600, '🌍 Taking it global'],
+    [700, '🙏 Grateful & still learning'],
+    [800, '⭐ The journey continues…'],
   ];
-  const MAX_XP = 900;
+  const MAX_XP = 800;
 
-  let totalXp = 800;
+  let totalXp = 0;
 
   function getLevelLabel(xp) {
     for (let i = LEVELS.length - 1; i >= 0; i--) {
       if (xp >= LEVELS[i][0]) return LEVELS[i][1];
     }
     return LEVELS[0][1];
+  }
+
+  function showToast(text) {
+    if (!toastWrap) return;
+    const t = document.createElement('div');
+    t.className = 'achievement-toast';
+    t.innerHTML = `<span class="toast-icon">🔓</span><span>${text}</span><span class="toast-xp">+100 XP</span>`;
+    toastWrap.appendChild(t);
+    setTimeout(() => t.remove(), 3000);
   }
 
   function updateXp(newXp) {
@@ -218,8 +228,10 @@ if (heroOrbs.length) {
       if (idx <= lastUnlockedIdx) return; // already processed
       lastUnlockedIdx = idx;
 
-      moveWalkerTo(ms);
+      if (walker) moveWalkerTo(ms);
       updateXp(totalXp + 100);
+      const achievement = ms.dataset.achievement;
+      if (achievement) showToast(achievement);
       gameObserver.unobserve(ms);
     });
   }, { threshold: 0.4, rootMargin: '0px 0px -10% 0px' });

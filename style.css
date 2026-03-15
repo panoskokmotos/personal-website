@@ -1821,3 +1821,83 @@ html[data-theme="light"] .footer-links a:hover {
   background: rgba(59,110,248,0.12);
   border-color: rgba(59,110,248,0.42);
 }
+
+/* ─────────────────────────────────────────
+   BOOKS PHILOSOPHY BOX
+───────────────────────────────────────── */
+.books-philosophy {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  background: rgba(59,110,248,0.07);
+  border: 1px solid rgba(59,110,248,0.18);
+  border-left: 4px solid var(--blue);
+  border-radius: var(--radius);
+  padding: 24px 28px;
+  margin-bottom: 44px;
+}
+.books-philosophy-icon { font-size: 2.4rem; flex-shrink: 0; margin-top: 2px; }
+.books-philosophy-text p { font-size: 0.92rem; color: var(--text); line-height: 1.75; margin-bottom: 12px; }
+.books-philosophy-text p:last-child { margin-bottom: 0; }
+
+html[data-theme="light"] .books-philosophy {
+  background: rgba(59,110,248,0.05);
+  border-color: rgba(59,110,248,0.2);
+}
+
+@media (max-width: 600px) {
+  .books-philosophy { flex-direction: column; gap: 12px; }
+  .books-philosophy-icon { font-size: 1.8rem; }
+}
+
+/* ─────────────────────────────────────────
+   BLOG / WRITING SECTION
+───────────────────────────────────────── */
+#blog { background: var(--bg); }
+.blog-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 12px;
+}
+.blog-card {
+  background: var(--bg-alt);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  text-decoration: none;
+  display: flex; flex-direction: column; gap: 12px;
+  box-shadow: var(--shadow);
+  transition: transform 0.25s var(--ease), box-shadow 0.25s, border-color 0.25s;
+  opacity: 0; transform: translateY(16px);
+}
+.blog-card.visible { opacity: 1; transform: translateY(0); }
+.blog-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-md); border-color: var(--blue); }
+.blog-card-top { display: flex; justify-content: space-between; align-items: center; }
+.blog-tag {
+  font-size: 0.72rem; font-weight: 700;
+  background: rgba(59,110,248,0.12); color: var(--blue);
+  padding: 3px 10px; border-radius: 20px;
+  text-transform: uppercase; letter-spacing: 0.04em;
+}
+.blog-read { font-size: 0.7rem; color: var(--text-muted); }
+.blog-card h3 { font-size: 1rem; font-weight: 700; color: var(--navy); line-height: 1.4; margin: 0; }
+.blog-card p { font-size: 0.84rem; color: var(--text-muted); line-height: 1.65; margin: 0; flex: 1; }
+.blog-cta { font-size: 0.78rem; font-weight: 700; color: var(--blue); align-self: flex-start; margin-top: 4px; }
+.blog-card:hover .blog-cta { text-decoration: underline; }
+
+@media (max-width: 900px) { .blog-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 600px) { .blog-grid { grid-template-columns: 1fr; } }
+
+html[data-theme="light"] .blog-card {
+  background: #fff;
+  box-shadow: 0 2px 12px rgba(15,30,61,0.07);
+  border-color: rgba(15,30,61,0.09);
+}
+
+/* ─────────────────────────────────────────
+   SKILLS — wider grid
+───────────────────────────────────────── */
+.skills-cols { grid-template-columns: repeat(3, 1fr) !important; }
+@media (max-width: 900px) { .skills-cols { grid-template-columns: repeat(2, 1fr) !important; } }
+@media (max-width: 580px) { .skills-cols { grid-template-columns: 1fr !important; } }
