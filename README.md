@@ -45,17 +45,26 @@ Where to see analytics:
 2. Open the site project for `panoskokmotos.com`.
 3. See dashboard metrics (visitors, top pages, referrers, countries, goals).
 
-## GitHub recommendations
+## GitHub profile and repository setup
+
+### Make repository private
+On GitHub: **Settings → General → Danger Zone → Change repository visibility → Make private**.
+
+### Improve repository "About" section
+On the repo homepage, click the **⚙️** next to About and add:
+- Description: `Panos Kokmotos personal website — entrepreneur, builder, and social impact advocate.`
+- Website: `https://panoskokmotos.com`
+- Topics: `personal-website`, `portfolio`, `entrepreneurship`, `social-impact`, `givelink`, `forbes30under30`, `wef`
+
+### Add Codex as collaborator
+On GitHub: **Settings → Collaborators and teams → Add people** and invite the username you want to grant access to.
+Use **Write** access if you want contribution support only, or **Admin** only if you fully trust the account.
 
 ### Protect main branch
 On GitHub: **Settings → Branches → Add branch protection rule** for `main`.
 Recommended:
-- Require pull request before merging.
+- Require a pull request before merging.
 - Require at least 1 approval.
-- Require status checks to pass (if CI enabled).
+- Require conversation resolution before merge.
 - Restrict direct pushes.
-
-### Extra content suggestions
-- Add 3–6 high-quality lifestyle/professional photos (speaking, team, events).
-- Keep one clean profile portrait and one “in-action” photo for social previews.
-- Create a dedicated 1200×630 OG banner image for better LinkedIn/Twitter shares.
+- Require status checks to pass (if CI is enabled).

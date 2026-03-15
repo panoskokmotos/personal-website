@@ -157,7 +157,6 @@ if (heroOrbs.length) {
   const xpFill  = document.getElementById('journeyXpFill');
   const xpPts   = document.getElementById('journeyXpPts');
   const lvlBadge = document.getElementById('journeyLevelBadge');
-  const toastWrap = document.getElementById('achievementToasts');
   if (!track || !walker) return;
 
   const LEVELS = [
@@ -169,26 +168,17 @@ if (heroOrbs.length) {
     [500, 'Lv.6 Leader'],
     [600, 'Lv.7 Visionary'],
     [700, 'Lv.8 Steward'],
-    [800, 'Lv.9 Purpose-Driven Leader'],
+    [900, 'Lv.9 Purpose-Driven Leader'],
   ];
-  const MAX_XP = 800;
+  const MAX_XP = 900;
 
-  let totalXp = 0;
+  let totalXp = 800;
 
   function getLevelLabel(xp) {
     for (let i = LEVELS.length - 1; i >= 0; i--) {
       if (xp >= LEVELS[i][0]) return LEVELS[i][1];
     }
     return LEVELS[0][1];
-  }
-
-  function showToast(text) {
-    if (!toastWrap) return;
-    const t = document.createElement('div');
-    t.className = 'achievement-toast';
-    t.innerHTML = `<span class="toast-icon">🔓</span><span>${text}</span><span class="toast-xp">+100 XP</span>`;
-    toastWrap.appendChild(t);
-    setTimeout(() => t.remove(), 3000);
   }
 
   function updateXp(newXp) {
@@ -230,16 +220,15 @@ if (heroOrbs.length) {
 
       moveWalkerTo(ms);
       updateXp(totalXp + 100);
-      const achievement = ms.dataset.achievement;
-      if (achievement) showToast(achievement);
-
       gameObserver.unobserve(ms);
     });
   }, { threshold: 0.4, rootMargin: '0px 0px -10% 0px' });
 
   milestones.forEach(ms => gameObserver.observe(ms));
 
-  // Position walker at first milestone on load
+  // Initialize progress and walker
+  updateXp(totalXp);
+  if (lvlBadge) lvlBadge.textContent = getLevelLabel(totalXp);
   if (milestones.length) moveWalkerTo(milestones[0]);
 })();
 
