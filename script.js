@@ -89,7 +89,7 @@ window.addEventListener('scroll', () => {
   canvas.height = window.innerHeight;
 
   const COLORS = ['#3b6ef8', '#d4af37', '#10b981', '#f43f5e', '#8b5cf6', '#f97316'];
-  const pieces = Array.from({ length: 120 }, () => ({
+  const pieces = Array.from({ length: 65 }, () => ({
     x: Math.random() * canvas.width,
     y: Math.random() * canvas.height - canvas.height,
     r: Math.random() * 6 + 3,
@@ -117,7 +117,7 @@ window.addEventListener('scroll', () => {
       ctx.stroke();
     });
     frame++;
-    if (frame < 220) {
+    if (frame < 140) {
       anim = requestAnimationFrame(draw);
     } else {
       cancelAnimationFrame(anim);
