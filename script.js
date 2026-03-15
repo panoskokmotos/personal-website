@@ -127,6 +127,122 @@ window.addEventListener('scroll', () => {
   draw();
 })();
 
+// ── Book cover placeholder detection (Open Library returns 1px gif for missing covers) ──
+document.querySelectorAll('.book-cover-img').forEach(img => {
+  const checkSize = () => {
+    if (img.naturalWidth < 10 || img.naturalHeight < 10) {
+      const abbr = img.alt.replace(' cover', '').split(' ').map(w => w[0]).join('').substring(0, 3).toUpperCase();
+      img.parentElement.innerHTML = `<div class="book-cover-fb">${abbr}</div>`;
+    }
+  };
+  if (img.complete) checkSize();
+  else img.addEventListener('load', checkSize);
+});
+
+// ── Hero parallax orbs ──
+const heroOrbs = document.querySelectorAll('.hero-orb');
+if (heroOrbs.length) {
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY;
+    heroOrbs[0] && (heroOrbs[0].style.transform = `translateY(${y * 0.25}px)`);
+    heroOrbs[1] && (heroOrbs[1].style.transform = `translateY(${-y * 0.18}px)`);
+    heroOrbs[2] && (heroOrbs[2].style.transform = `translate(-50%, calc(-50% + ${y * 0.1}px))`);
+  }, { passive: true });
+}
+
+// ── Journey Gamification ──
+(function() {
+  const track   = document.getElementById('milestonesTrack');
+  const walker  = document.getElementById('journeyWalker');
+  const xpFill  = document.getElementById('journeyXpFill');
+  const xpPts   = document.getElementById('journeyXpPts');
+  const lvlBadge = document.getElementById('journeyLevelBadge');
+  const toastWrap = document.getElementById('achievementToasts');
+  if (!track || !walker) return;
+
+  const LEVELS = [
+    [0,   'Lv.1 Explorer'],
+    [100, 'Lv.2 Dreamer'],
+    [200, 'Lv.3 Builder'],
+    [300, 'Lv.4 Achiever'],
+    [400, 'Lv.5 Innovator'],
+    [500, 'Lv.6 Leader'],
+    [600, 'Lv.7 Visionary'],
+    [700, 'Lv.8 Champion'],
+    [800, 'Lv.MAX Legend 🏆'],
+  ];
+  const MAX_XP = 800;
+
+  let totalXp = 0;
+
+  function getLevelLabel(xp) {
+    for (let i = LEVELS.length - 1; i >= 0; i--) {
+      if (xp >= LEVELS[i][0]) return LEVELS[i][1];
+    }
+    return LEVELS[0][1];
+  }
+
+  function showToast(text) {
+    if (!toastWrap) return;
+    const t = document.createElement('div');
+    t.className = 'achievement-toast';
+    t.innerHTML = `<span class="toast-icon">🔓</span><span>${text}</span><span class="toast-xp">+100 XP</span>`;
+    toastWrap.appendChild(t);
+    setTimeout(() => t.remove(), 3000);
+  }
+
+  function updateXp(newXp) {
+    const prevLabel = getLevelLabel(totalXp);
+    totalXp = Math.min(newXp, MAX_XP);
+    const pct = (totalXp / MAX_XP) * 100;
+    if (xpFill) xpFill.style.width = pct + '%';
+    if (xpPts) xpPts.textContent = totalXp;
+    const newLabel = getLevelLabel(totalXp);
+    if (lvlBadge && newLabel !== prevLabel) {
+      lvlBadge.textContent = newLabel;
+      lvlBadge.classList.remove('level-up');
+      void lvlBadge.offsetWidth; // reflow
+      lvlBadge.classList.add('level-up');
+    }
+  }
+
+  // Move walker to milestone
+  function moveWalkerTo(milestoneEl) {
+    const dotEl = milestoneEl.querySelector('.ms-dot');
+    if (!dotEl) return;
+    // offsetTop relative to milestones-track
+    const msTop  = milestoneEl.offsetTop;
+    const dotH   = dotEl.offsetTop; // dot's position within the milestone row
+    walker.style.top = (msTop + dotH + 4) + 'px';
+  }
+
+  // Observe each milestone for intersection
+  const milestones = track.querySelectorAll('.milestone[data-achievement]');
+  let lastUnlockedIdx = -1;
+
+  const gameObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      const ms = entry.target;
+      const idx = Array.from(milestones).indexOf(ms);
+      if (idx <= lastUnlockedIdx) return; // already processed
+      lastUnlockedIdx = idx;
+
+      moveWalkerTo(ms);
+      updateXp(totalXp + 100);
+      const achievement = ms.dataset.achievement;
+      if (achievement) showToast(achievement);
+
+      gameObserver.unobserve(ms);
+    });
+  }, { threshold: 0.4, rootMargin: '0px 0px -10% 0px' });
+
+  milestones.forEach(ms => gameObserver.observe(ms));
+
+  // Position walker at first milestone on load
+  if (milestones.length) moveWalkerTo(milestones[0]);
+})();
+
 // ── Contact form async submit ──
 const contactForm = document.getElementById('contactForm');
 if (contactForm) {

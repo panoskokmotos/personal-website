@@ -198,7 +198,19 @@ section { padding: 100px 0; }
   opacity: 0.15;
 }
 
+/* Cinematic hero intro */
+@keyframes hero-reveal {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
 .hero-content { position: relative; z-index: 1; max-width: 720px; }
+.hero-avatar   { animation: hero-reveal 0.8s 0.1s both; }
+.hero-eyebrow  { animation: hero-reveal 0.8s 0.25s both; }
+.hero-heading  { animation: hero-reveal 0.8s 0.4s both; }
+.hero-sub      { animation: hero-reveal 0.8s 0.55s both; }
+.hero-quote    { animation: hero-reveal 0.8s 0.7s both; }
+.hero-ctas     { animation: hero-reveal 0.8s 0.85s both; }
+.hero-pills    { animation: hero-reveal 0.8s 1.0s both; }
 
 .hero-avatar {
   width: 90px; height: 90px;
@@ -747,6 +759,27 @@ html[data-theme="light"] .skill-group h4 { color: rgba(255,255,255,0.5); }
   font-size: 1.4rem; font-weight: 800; color: rgba(255,255,255,0.9);
   letter-spacing: -1px;
 }
+.book-cover-wrap {
+  height: 120px;
+  overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(0,0,0,0.15);
+}
+.book-cover-img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.35s ease;
+}
+.book-card:hover .book-cover-img { transform: scale(1.06); }
+.book-cover-fb {
+  height: 100%;
+  width: 100%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.4rem; font-weight: 800; color: rgba(255,255,255,0.9);
+  letter-spacing: -1px;
+  background: linear-gradient(135deg, #1e3a8a, #3b6ef8);
+}
 .book-body { padding: 16px 18px; }
 .book-body h4 { font-size: 0.95rem; font-weight: 700; color: var(--navy); margin-bottom: 2px; }
 .book-author { font-size: 0.78rem; color: var(--blue); font-weight: 600; margin-bottom: 8px; }
@@ -755,6 +788,139 @@ html[data-theme="light"] .skill-group h4 { color: rgba(255,255,255,0.5); }
 @media (max-width: 1100px) { .books-grid { grid-template-columns: repeat(4, 1fr); } }
 @media (max-width: 800px)  { .books-grid { grid-template-columns: repeat(3, 1fr); } }
 @media (max-width: 580px)  { .books-grid { grid-template-columns: repeat(2, 1fr); } }
+
+/* ─────────────────────────────────────────
+   JOURNEY GAMIFICATION
+───────────────────────────────────────── */
+
+/* XP Bar */
+.journey-xp-bar {
+  max-width: 760px; margin: 0 auto 32px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 20px;
+  display: flex; flex-direction: column; gap: 8px;
+}
+.journey-xp-labels {
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 0.82rem; font-weight: 700; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 0.05em;
+}
+.journey-level-badge {
+  background: linear-gradient(135deg, var(--blue), #7c3aed);
+  color: #fff; font-size: 0.72rem; font-weight: 800;
+  padding: 3px 10px; border-radius: 20px;
+  letter-spacing: 0.05em;
+}
+.journey-xp-track {
+  height: 8px; background: rgba(255,255,255,0.08);
+  border-radius: 99px; overflow: hidden;
+}
+.journey-xp-fill {
+  height: 100%; width: 0%;
+  background: linear-gradient(90deg, var(--blue), #7c3aed);
+  border-radius: 99px;
+  transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: relative;
+}
+.journey-xp-fill::after {
+  content: '';
+  position: absolute; right: 0; top: 50%;
+  transform: translateY(-50%);
+  width: 12px; height: 12px;
+  background: #fff; border-radius: 50%;
+  box-shadow: 0 0 8px rgba(124, 58, 237, 0.8);
+  opacity: 0.9;
+}
+.journey-xp-pts {
+  font-size: 0.72rem; font-weight: 700;
+  color: var(--blue); text-align: right;
+}
+
+/* Achievement Toasts */
+.achievement-toasts-wrap {
+  position: fixed; bottom: 100px; left: 50%;
+  transform: translateX(-50%);
+  z-index: 9990;
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+  pointer-events: none;
+}
+.achievement-toast {
+  background: linear-gradient(135deg, #1a2550, #0f1e3d);
+  border: 1px solid var(--gold);
+  border-radius: 12px;
+  padding: 12px 20px;
+  color: #fff;
+  font-size: 0.88rem; font-weight: 700;
+  display: flex; align-items: center; gap: 10px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5), 0 0 24px rgba(212,175,55,0.2);
+  animation: toast-in 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards,
+             toast-out 0.3s ease 2.5s forwards;
+  white-space: nowrap;
+}
+.achievement-toast .toast-icon {
+  font-size: 1.2rem;
+}
+.achievement-toast .toast-xp {
+  font-size: 0.75rem; color: var(--gold);
+  font-weight: 800; margin-left: 4px;
+}
+@keyframes toast-in {
+  from { opacity: 0; transform: translateY(20px) scale(0.9); }
+  to   { opacity: 1; transform: translateY(0)    scale(1); }
+}
+@keyframes toast-out {
+  to { opacity: 0; transform: translateY(-10px) scale(0.95); }
+}
+
+/* Level-up flash */
+.journey-level-badge.level-up {
+  animation: level-flash 0.6s ease;
+}
+@keyframes level-flash {
+  0%, 100% { transform: scale(1); box-shadow: none; }
+  40%       { transform: scale(1.25); box-shadow: 0 0 20px rgba(124,58,237,0.8); }
+}
+
+/* Milestones Track + Walking Character */
+.milestones-track {
+  position: relative;
+  max-width: 760px; margin: 0 auto;
+}
+.journey-walker {
+  position: absolute;
+  left: 60px; /* just left of the dot column */
+  top: 0;
+  font-size: 1.4rem;
+  line-height: 1;
+  z-index: 10;
+  transition: top 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  animation: walker-bob 0.7s ease-in-out infinite;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
+  pointer-events: none;
+  transform-origin: bottom center;
+}
+@keyframes walker-bob {
+  0%, 100% { transform: translateY(0) rotate(-3deg); }
+  50%       { transform: translateY(-5px) rotate(3deg); }
+}
+/* Milestones inside track doesn't need its own max-width */
+.milestones-track .milestones {
+  max-width: 100%;
+}
+
+/* Light mode */
+html[data-theme="light"] .journey-xp-bar {
+  background: rgba(0,0,0,0.04);
+}
+html[data-theme="light"] .journey-xp-track {
+  background: rgba(0,0,0,0.08);
+}
+html[data-theme="light"] .achievement-toast {
+  background: linear-gradient(135deg, #fff, #f0f4ff);
+  color: #0f1e3d;
+}
 
 /* ─────────────────────────────────────────
    NEWSLETTER

@@ -84,10 +84,9 @@
       <h1>Panos <span class="hero-name-accent">Kokmotos</span></h1>
       <p class="hero-tagline">Advocate. Changemaker. Builder.</p>
       <p class="hero-sub">
-        Co-Founder &amp; COO of <a href="https://givelink.app/en" target="_blank" rel="noopener" class="hero-link">Givelink</a> · Podcast Host · Athens &amp; San Francisco
+        Co-Founder &amp; COO of <a href="https://givelink.app/en" target="_blank" rel="noopener" class="hero-link">Givelink</a> · Podcast Host · Athens, Patras &amp; San Francisco
       </p>
       <p class="hero-quote">"My mission is to be useful and contribute to a better tomorrow."</p>
-      <p class="hero-quote-attr">— Panos Kokmotos</p>
       <div class="hero-actions">
         <a href="#projects" class="btn btn-primary">See My Work</a>
         <a href="https://tidycal.com/givelink/panos" target="_blank" rel="noopener" class="btn btn-ghost">Book a Call</a>
@@ -144,9 +143,10 @@
         <div class="about-left">
           <p class="section-eyebrow">About Me</p>
           <h2 class="section-heading">Entrepreneur building for <em>social impact</em></h2>
-          <p>I'm a mechanical engineer turned entrepreneur with a mission to learn and grow continuously — and a vision to contribute toward a better tomorrow.</p>
+          <p>Born in <strong>Patras, Greece</strong>, I grew up in a low-income family — which taught me to value the small, important things in life and live with purpose over comfort. Watching my family come home tired and unmotivated was a crucial mindshift: I committed to getting educated, understanding how the world works, and taking risks.</p>
+          <p>I studied <strong>Mechanical Engineering</strong> at the University of Patras (Top 3%, GPA 3.5), spent a semester at <strong>UPC Barcelona</strong> on Erasmus, and turned that foundation into a mission: contribute to a better tomorrow.</p>
           <p>I co-founded <strong>Givelink</strong> in 2022 — an in-kind donation platform where donors shop for exactly what nonprofits need. No cash abstraction, just real goods, real impact, real stories.</p>
-          <p>Beyond Givelink, I host <strong>Entrepreneurship Talks</strong>, serve as a <strong>WEF Global Shaper</strong> (San Francisco), and sit on the Executive Board of <strong>Social Impact SF</strong>.</p>
+          <p>Beyond Givelink, I host <strong>Entrepreneurship Talks</strong>, serve as a <strong>WEF Global Shaper</strong> in San Francisco, and sit on the Executive Board of <strong>Social Impact SF</strong>. Ultimately, I want to provide value to every young person facing economic difficulties — and help them believe in their future.</p>
           <div class="about-values">
             <div class="value-pill">🎯 Impact-first</div>
             <div class="value-pill">📈 Growth mindset</div>
@@ -165,7 +165,7 @@
           </div>
           <div class="about-location-card">
             <span>📍</span>
-            <div><strong>Based in</strong><p>Athens, Greece &amp; San Francisco, USA</p></div>
+            <div><strong>Based in</strong><p>Athens &amp; Patras, Greece · San Francisco, USA</p></div>
           </div>
           <div class="about-org-card">
             <span>🌐</span>
@@ -181,8 +181,27 @@
     <div class="container">
       <p class="section-eyebrow">My Story</p>
       <h2 class="section-heading">Key Milestones</h2>
-      <div class="milestones">
-        <div class="milestone" data-animate>
+
+      <!-- Journey XP Bar -->
+      <div class="journey-xp-bar">
+        <div class="journey-xp-labels">
+          <span>⚡ Journey Progress</span>
+          <span class="journey-level-badge" id="journeyLevelBadge">Lv.1 Explorer</span>
+        </div>
+        <div class="journey-xp-track">
+          <div class="journey-xp-fill" id="journeyXpFill"></div>
+        </div>
+        <div class="journey-xp-pts"><span id="journeyXpPts">0</span> / 800 XP</div>
+      </div>
+
+      <!-- Achievement Toasts -->
+      <div id="achievementToasts" class="achievement-toasts-wrap" aria-live="polite"></div>
+
+      <!-- Milestones + Walking Character -->
+      <div class="milestones-track" id="milestonesTrack">
+        <div class="journey-walker" id="journeyWalker" aria-hidden="true">🧑‍💻</div>
+        <div class="milestones">
+        <div class="milestone" data-animate data-achievement="🏅 Achievement: First in Class" data-xp="100">
           <div class="ms-year">2016</div>
           <div class="ms-dot"></div>
           <div class="ms-card">
@@ -190,7 +209,7 @@
             <div><h4>First in Class</h4><p>1st in graduating class · Panhellenic scholarship · Accepted to 4 UK universities</p></div>
           </div>
         </div>
-        <div class="milestone" data-animate>
+        <div class="milestone" data-animate data-achievement="🎓 Achievement: University of Patras" data-xp="100">
           <div class="ms-year">2019</div>
           <div class="ms-dot"></div>
           <div class="ms-card">
@@ -198,7 +217,7 @@
             <div><h4>University of Patras</h4><p>M.Eng Mechanical Engineering — GPA 3.5 · Top 3% of class</p></div>
           </div>
         </div>
-        <div class="milestone" data-animate>
+        <div class="milestone" data-animate data-achievement="🚀 Achievement: Startup Universe PM" data-xp="100">
           <div class="ms-year">2021</div>
           <div class="ms-dot"></div>
           <div class="ms-card">
@@ -206,7 +225,7 @@
             <div><h4>European Startup Universe</h4><p>Project Manager · Led 9-person team across 6 countries · 1,500+ founders</p></div>
           </div>
         </div>
-        <div class="milestone" data-animate>
+        <div class="milestone" data-animate data-achievement="💡 Achievement: Co-Founded Givelink" data-xp="100">
           <div class="ms-year">2022</div>
           <div class="ms-dot ms-dot-accent"></div>
           <div class="ms-card ms-card-featured">
@@ -218,7 +237,7 @@
             </div>
           </div>
         </div>
-        <div class="milestone" data-animate>
+        <div class="milestone" data-animate data-achievement="🏆 Achievement: Forbes 30 Under 30!" data-xp="100">
           <div class="ms-year">2023</div>
           <div class="ms-dot ms-dot-gold"></div>
           <div class="ms-card ms-card-featured">
@@ -230,7 +249,7 @@
             </div>
           </div>
         </div>
-        <div class="milestone" data-animate>
+        <div class="milestone" data-animate data-achievement="💰 Achievement: Pappajohn Winner" data-xp="100">
           <div class="ms-year">2024</div>
           <div class="ms-dot"></div>
           <div class="ms-card">
@@ -238,7 +257,7 @@
             <div><h4>Pappajohn Competition Winner</h4><p>John &amp; Mary Pappajohn Business Plan Competition · New investment round (SAFE)</p></div>
           </div>
         </div>
-        <div class="milestone" data-animate>
+        <div class="milestone" data-animate data-achievement="🌐 Achievement: WEF Global Shaper" data-xp="100">
           <div class="ms-year">2025</div>
           <div class="ms-dot ms-dot-accent"></div>
           <div class="ms-card ms-card-featured">
@@ -246,7 +265,7 @@
             <div><h4>WEF Global Shaper · San Francisco</h4><p>World Economic Forum · M.Eng graduation · US expansion launched</p></div>
           </div>
         </div>
-        <div class="milestone" data-animate>
+        <div class="milestone" data-animate data-achievement="📣 Achievement: Executive Board SF" data-xp="100">
           <div class="ms-year">2026</div>
           <div class="ms-dot ms-dot-accent"></div>
           <div class="ms-card ms-card-featured">
@@ -255,6 +274,7 @@
           </div>
         </div>
       </div>
+      </div><!-- /milestones-track -->
     </div>
   </section>
 
@@ -638,43 +658,43 @@
       <p class="books-sub">Physics, philosophy, biology, entrepreneurship — the books I keep coming back to.</p>
       <div class="books-grid">
         <div class="book-card" data-animate>
-          <div class="book-cover" style="background:linear-gradient(135deg,#0a0a2e,#1a1a6e)">FoR</div>
+          <div class="book-cover-wrap"><img src="https://covers.openlibrary.org/b/isbn/9780140146905-M.jpg" alt="The Fabric of Reality cover" class="book-cover-img" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'book-cover-fb\'>FoR</div>'" /></div>
           <div class="book-body"><h4>The Fabric of Reality</h4><p class="book-author">David Deutsch</p><p class="book-note">Four deep theories — quantum mechanics, evolution, computation, epistemology — weave together into one unified structure of reality.</p></div>
         </div>
         <div class="book-card" data-animate>
-          <div class="book-cover" style="background:linear-gradient(135deg,#0d1940,#1a3a7a)">BoI</div>
+          <div class="book-cover-wrap"><img src="https://covers.openlibrary.org/b/isbn/9780143121350-M.jpg" alt="The Beginning of Infinity cover" class="book-cover-img" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'book-cover-fb\'>BoI</div>'" /></div>
           <div class="book-body"><h4>The Beginning of Infinity</h4><p class="book-author">David Deutsch</p><p class="book-note">Good explanations are the beginning of infinite progress. Problems are inevitable; problems are soluble.</p></div>
         </div>
         <div class="book-card" data-animate>
-          <div class="book-cover" style="background:linear-gradient(135deg,#2a1a0a,#5a3a1a)">Disc</div>
+          <div class="book-cover-wrap"><img src="https://covers.openlibrary.org/b/isbn/9780140449358-M.jpg" alt="Discourses cover" class="book-cover-img" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'book-cover-fb\'>Disc</div>'" /></div>
           <div class="book-body"><h4>Discourses</h4><p class="book-author">Epictetus</p><p class="book-note">Control what you can, release what you cannot. Freedom comes not from external circumstances but from the discipline of the mind.</p></div>
         </div>
         <div class="book-card" data-animate>
-          <div class="book-cover" style="background:linear-gradient(135deg,#1a1a1a,#3a3a3a)">Med</div>
+          <div class="book-cover-wrap"><img src="https://covers.openlibrary.org/b/isbn/9780140449334-M.jpg" alt="Meditations cover" class="book-cover-img" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'book-cover-fb\'>Med</div>'" /></div>
           <div class="book-body"><h4>Meditations</h4><p class="book-author">Marcus Aurelius</p><p class="book-note">A Roman emperor writing to himself about virtue, impermanence, and service. Still the best daily philosophy after 2,000 years.</p></div>
         </div>
         <div class="book-card" data-animate>
-          <div class="book-cover" style="background:linear-gradient(135deg,#001a3a,#003a7a)">3.0</div>
+          <div class="book-cover-wrap"><img src="https://covers.openlibrary.org/b/isbn/9781101970317-M.jpg" alt="Life 3.0 cover" class="book-cover-img" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'book-cover-fb\'>3.0</div>'" /></div>
           <div class="book-body"><h4>Life 3.0</h4><p class="book-author">Max Tegmark</p><p class="book-note">What does it mean to be human when AI can design its own software? The most important conversation of our time, explained clearly.</p></div>
         </div>
         <div class="book-card" data-animate>
-          <div class="book-cover" style="background:linear-gradient(135deg,#3a1a00,#8a4000)">T3D</div>
+          <div class="book-cover-wrap"><img src="https://covers.openlibrary.org/b/isbn/9780735211469-M.jpg" alt="The Third Door cover" class="book-cover-img" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'book-cover-fb\'>T3D</div>'" /></div>
           <div class="book-body"><h4>The Third Door</h4><p class="book-author">Alex Banayan</p><p class="book-note">Success isn't about the front door or the VIP line. It's about finding the side entrance — the one you have to create yourself.</p></div>
         </div>
         <div class="book-card" data-animate>
-          <div class="book-cover" style="background:linear-gradient(135deg,#0d1b2a,#1b4f72)">FoH</div>
+          <div class="book-cover-wrap"><img src="https://covers.openlibrary.org/b/isbn/9780385542760-M.jpg" alt="The Future of Humanity cover" class="book-cover-img" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'book-cover-fb\'>FoH</div>'" /></div>
           <div class="book-body"><h4>The Future of Humanity</h4><p class="book-author">Michio Kaku</p><p class="book-note">Terraforming planets, star travel, immortality — Kaku maps the trajectory of civilization across the next 10,000 years.</p></div>
         </div>
         <div class="book-card" data-animate>
-          <div class="book-cover" style="background:linear-gradient(135deg,#001a1a,#004a4a)">SiN</div>
+          <div class="book-cover-wrap"><img src="https://covers.openlibrary.org/b/isbn/9780143037880-M.jpg" alt="The Singularity Is Near cover" class="book-cover-img" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'book-cover-fb\'>SiN</div>'" /></div>
           <div class="book-body"><h4>The Singularity Is Near</h4><p class="book-author">Ray Kurzweil</p><p class="book-note">Exponential growth is counterintuitive. By 2045, machine intelligence will exceed all human intelligence combined.</p></div>
         </div>
         <div class="book-card" data-animate>
-          <div class="book-cover" style="background:linear-gradient(135deg,#1a0a2a,#4a1a6a)">DD</div>
+          <div class="book-cover-wrap"><img src="https://covers.openlibrary.org/b/isbn/9780446583657-M.jpg" alt="The Defining Decade cover" class="book-cover-img" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'book-cover-fb\'>DD</div>'" /></div>
           <div class="book-body"><h4>The Defining Decade</h4><p class="book-author">Meg Jay</p><p class="book-note">Your twenties matter more than you think. The choices you make now set the trajectory for the next 50 years. Don't waste them.</p></div>
         </div>
         <div class="book-card" data-animate>
-          <div class="book-cover" style="background:linear-gradient(135deg,#1a0000,#4a0000)">ToT</div>
+          <div class="book-cover-wrap"><img src="https://covers.openlibrary.org/b/isbn/9781328683786-M.jpg" alt="Tools of Titans cover" class="book-cover-img" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'book-cover-fb\'>ToT</div>'" /></div>
           <div class="book-body"><h4>Tools of Titans</h4><p class="book-author">Tim Ferriss</p><p class="book-note">200+ world-class performers — athletes, investors, artists, scientists. The tactics, routines, and habits that make the difference.</p></div>
         </div>
       </div>
@@ -737,7 +757,7 @@
   <footer>
     <div class="footer-inner">
       <a href="#hero" class="footer-logo"><img src="photo.jpg" alt="Panos" /></a>
-      <p>© 2026 Panagiotis Kokmotos · Advocate. Changemaker. Builder.</p>
+      <p>© 2026 Panos Kokmotos · Advocate. Changemaker. Builder.</p>
       <div class="footer-links">
         <a href="https://www.linkedin.com/in/panagiotiskokmotos/" target="_blank" rel="noopener">LinkedIn</a>
         <a href="https://twitter.com/PanagiotisKokm" target="_blank" rel="noopener">Twitter</a>
