@@ -1,0 +1,14 @@
+# Claude Code internal directory
+.claude/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.env
+
+# macOS
+.DS_Store
+
+# Node
+node_modules/

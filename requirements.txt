@@ -1,0 +1,4 @@
+# Simple Coding Agent Requirements
+# This agent uses only Python standard library, so no external dependencies are required!
+# Python 3.7+ is recommended
+
