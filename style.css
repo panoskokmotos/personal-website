@@ -275,11 +275,11 @@ section { padding: 100px 0; }
 .hero-quote {
   font-size: 0.95rem; color: rgba(255,255,255,0.45);
   font-style: italic; line-height: 1.6;
-  max-width: 520px; margin: 0 auto 4px;
+  max-width: 520px; margin: 0 auto 16px;
 }
 .hero-quote-attr { font-size: 0.78rem; color: rgba(255,255,255,0.3); margin-bottom: 32px; }
 
-.hero-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-bottom: 32px; }
+.hero-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin: 0 0 36px; }
 
 .hero-socials { display: flex; gap: 16px; justify-content: center; }
 .hero-socials a {
@@ -704,6 +704,8 @@ footer p { font-size: 0.82rem; color: rgba(255,255,255,0.3); }
 }
 .theme-toggle svg { width: 18px; height: 18px; }
 .icon-moon { display: none; }
+html[data-theme="dark"] .icon-sun  { display: block; }
+html[data-theme="dark"] .icon-moon { display: none; }
 html[data-theme="light"] .icon-sun  { display: none; }
 html[data-theme="light"] .icon-moon { display: block; }
 
@@ -1268,6 +1270,13 @@ html[data-theme="light"] .nav-logo { border-color: rgba(15,30,61,0.2); }
 }
 .watch-card p {
   font-size: 0.78rem; color: var(--text-muted); margin: 0;
+}
+
+.watch-summary {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  line-height: 1.55;
+  margin-top: 4px;
 }
 
 .watch-more {
