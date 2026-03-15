@@ -36,6 +36,11 @@ python3 -m http.server 4173
 - [ ] Replace LinkedIn card links with your **exact post URLs**.
 - [ ] Replace Formspree endpoint if you want a different inbox owner.
 
+
+## Domain troubleshooting
+
+If `panoskokmotos.com` is not visible, follow the step-by-step runbook in [`DOMAIN_TROUBLESHOOTING.md`](./DOMAIN_TROUBLESHOOTING.md).
+
 ## Analytics
 
 This site uses **Plausible Analytics** via script in `index.html`.
