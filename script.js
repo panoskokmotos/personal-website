@@ -14,7 +14,7 @@ navMobile.querySelectorAll('a').forEach(a => a.addEventListener('click', () => n
 const observer = new IntersectionObserver(entries => {
   entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
 }, { threshold: 0.12 });
-document.querySelectorAll('[data-animate], .timeline-item, .edu-card, .award-card, .project-card, .book-card').forEach(el => observer.observe(el));
+document.querySelectorAll('[data-animate], .timeline-item, .edu-card, .award-card, .project-card, .book-card, .milestone, .press-card').forEach(el => observer.observe(el));
 
 // ── Animated counters ──
 function animateCounter(el) {
@@ -67,25 +67,94 @@ themeToggle.addEventListener('click', () => {
   localStorage.setItem('theme', next);
 });
 
-// ── Language toggle (EN ↔ GR) ──
-const langToggle = document.getElementById('langToggle');
-let currentLang = 'en';
+// ── Scroll progress bar ──
+const progressBar = document.getElementById('progress-bar');
+window.addEventListener('scroll', () => {
+  const scrollTop = window.scrollY;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+  progressBar.style.width = pct + '%';
+}, { passive: true });
 
-function applyLang(lang) {
-  document.querySelectorAll('[data-en]').forEach(el => {
-    const text = el.getAttribute('data-' + lang);
-    if (text) {
-      if (el.innerHTML.includes('<')) {
-        el.innerHTML = text;
+// ── Confetti on first visit (session-gated) ──
+(function () {
+  if (sessionStorage.getItem('confetti_done')) return;
+  sessionStorage.setItem('confetti_done', '1');
+
+  const canvas = document.createElement('canvas');
+  canvas.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:99999';
+  document.body.appendChild(canvas);
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  const COLORS = ['#3b6ef8', '#d4af37', '#10b981', '#f43f5e', '#8b5cf6', '#f97316'];
+  const pieces = Array.from({ length: 120 }, () => ({
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height - canvas.height,
+    r: Math.random() * 6 + 3,
+    d: Math.random() * 80 + 20,
+    color: COLORS[Math.floor(Math.random() * COLORS.length)],
+    tilt: Math.random() * 10 - 10,
+    tiltAngle: 0,
+    tiltSpeed: Math.random() * 0.1 + 0.05,
+  }));
+
+  let frame = 0;
+  let anim;
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    pieces.forEach(p => {
+      p.tiltAngle += p.tiltSpeed;
+      p.y += (Math.cos(frame / 10 + p.d) + 2.5);
+      p.x += Math.sin(frame / 10) * 0.8;
+      p.tilt = Math.sin(p.tiltAngle) * 12;
+      ctx.beginPath();
+      ctx.lineWidth = p.r;
+      ctx.strokeStyle = p.color;
+      ctx.moveTo(p.x + p.tilt + p.r / 2, p.y);
+      ctx.lineTo(p.x + p.tilt, p.y + p.tilt + p.r / 2);
+      ctx.stroke();
+    });
+    frame++;
+    if (frame < 220) {
+      anim = requestAnimationFrame(draw);
+    } else {
+      cancelAnimationFrame(anim);
+      canvas.remove();
+    }
+  }
+  draw();
+})();
+
+// ── Contact form async submit ──
+const contactForm = document.getElementById('contactForm');
+if (contactForm) {
+  contactForm.addEventListener('submit', async e => {
+    e.preventDefault();
+    const btn = contactForm.querySelector('button[type="submit"]');
+    const success = document.getElementById('formSuccess');
+    btn.disabled = true;
+    btn.textContent = 'Sending…';
+    try {
+      const res = await fetch(contactForm.action, {
+        method: 'POST',
+        body: new FormData(contactForm),
+        headers: { 'Accept': 'application/json' },
+      });
+      if (res.ok) {
+        contactForm.reset();
+        success.style.display = 'block';
+        btn.textContent = 'Sent ✓';
       } else {
-        el.textContent = text;
+        btn.disabled = false;
+        btn.textContent = 'Send Message';
+        alert('Something went wrong. Please try again.');
       }
+    } catch {
+      btn.disabled = false;
+      btn.textContent = 'Send Message';
+      alert('Network error. Please email panagiotis.kokmotoss@gmail.com directly.');
     }
   });
-  langToggle.textContent = lang === 'en' ? 'ΕΛ' : 'EN';
-  currentLang = lang;
 }
-
-langToggle.addEventListener('click', () => {
-  applyLang(currentLang === 'en' ? 'gr' : 'en');
-});
