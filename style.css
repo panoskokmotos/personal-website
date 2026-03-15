@@ -2009,3 +2009,150 @@ html[data-theme="light"] .now-section { background: #f7f9fc; }
 ───────────────────────────────────────── */
 .press-thumb { transition: opacity 0.3s; }
 .press-card:hover .press-thumb { opacity: 0.85; }
+
+/* ─────────────────────────────────────────
+   NOW SECTION — desktop-optimised redesign
+───────────────────────────────────────── */
+.now-header {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  flex-wrap: wrap; gap: 12px; margin-bottom: 40px;
+}
+.now-header .section-heading { margin-bottom: 0; }
+.now-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+.now-card {
+  display: flex; flex-direction: column; gap: 0;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition: transform 0.25s var(--ease), box-shadow 0.25s;
+}
+.now-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-md); }
+.now-card-top {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 20px 12px;
+  border-bottom: 1px solid var(--border);
+  background: linear-gradient(135deg, rgba(59,110,248,0.06), transparent);
+}
+.now-tag {
+  font-size: 0.7rem; font-weight: 700; letter-spacing: 0.8px;
+  text-transform: uppercase; color: var(--blue);
+  background: rgba(59,110,248,0.1); padding: 3px 9px; border-radius: 20px;
+}
+.now-icon { font-size: 1.6rem; line-height: 1; }
+.now-body { padding: 18px 20px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+.now-body h4 { font-size: 0.98rem; font-weight: 700; color: var(--navy); margin: 0; }
+.now-body p { font-size: 0.85rem; color: var(--text-muted); line-height: 1.65; margin: 0; flex: 1; }
+.now-links-row { display: flex; gap: 12px; margin-top: 4px; }
+.now-link {
+  display: inline-block; font-size: 0.8rem; font-weight: 600;
+  color: var(--blue); text-decoration: none; margin-top: 4px;
+}
+.now-link:hover { text-decoration: underline; }
+.now-updated {
+  font-size: 0.78rem; color: var(--text-muted); opacity: 0.65;
+  white-space: nowrap;
+}
+html[data-theme="light"] .now-card-top { background: linear-gradient(135deg, rgba(59,110,248,0.05), transparent); }
+@media (max-width: 1000px) { .now-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 560px)  { .now-grid { grid-template-columns: 1fr; } .now-header { flex-direction: column; align-items: flex-start; } }
+
+/* ─────────────────────────────────────────
+   STICKY MOBILE CTA
+───────────────────────────────────────── */
+.sticky-cta {
+  display: none;
+  position: fixed; bottom: 0; left: 0; right: 0;
+  z-index: 999;
+  padding: 12px 20px;
+  background: linear-gradient(to top, rgba(10,18,34,0.98) 80%, transparent);
+  backdrop-filter: blur(10px);
+  transform: translateY(100%);
+  transition: transform 0.35s var(--ease);
+}
+.sticky-cta.visible { transform: translateY(0); }
+.sticky-cta-btn {
+  display: block; width: 100%;
+  background: linear-gradient(135deg, #3b6ef8, #6366f1);
+  color: #fff; font-weight: 700; font-size: 0.95rem;
+  text-align: center; padding: 14px; border-radius: 12px;
+  text-decoration: none; letter-spacing: 0.2px;
+  box-shadow: 0 4px 20px rgba(59,110,248,0.4);
+}
+@media (max-width: 768px) { .sticky-cta { display: block; } }
+html[data-theme="light"] .sticky-cta { background: linear-gradient(to top, rgba(255,255,255,0.98) 80%, transparent); }
+
+/* ─────────────────────────────────────────
+   BOOK COVER SKELETON LOADING
+───────────────────────────────────────── */
+@keyframes skeleton-shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+.skeleton-wrap::before {
+  content: '';
+  display: block;
+  position: absolute; inset: 0;
+  background: linear-gradient(90deg,
+    rgba(255,255,255,0) 0%,
+    rgba(255,255,255,0.06) 50%,
+    rgba(255,255,255,0) 100%
+  );
+  background-size: 400px 100%;
+  animation: skeleton-shimmer 1.4s infinite;
+  z-index: 1;
+  pointer-events: none;
+  border-radius: inherit;
+}
+.skeleton-wrap { position: relative; }
+.skeleton-wrap img.loaded + .skeleton-wrap::before,
+.skeleton-wrap img { position: relative; z-index: 2; }
+.skeleton-wrap img.img-loaded::after { display: none; }
+
+/* ─────────────────────────────────────────
+   HERO — small phones (320–375px)
+───────────────────────────────────────── */
+@media (max-width: 420px) {
+  .hero-avatar { width: 90px; height: 90px; }
+  .hero-badges { gap: 6px; }
+  .badge { font-size: 0.68rem; padding: 5px 10px; }
+  .hero-content h1 { font-size: clamp(2rem, 10vw, 3rem); }
+  .hero-tagline { font-size: 1rem; }
+  .hero-sub { font-size: 0.82rem; }
+  .hero-quote { font-size: 0.82rem; padding: 10px 14px; }
+  .hero-actions { flex-direction: column; align-items: stretch; gap: 10px; }
+  .hero-actions .btn, .hero-actions .btn-spotify-hero { width: 100%; text-align: center; justify-content: center; }
+  .hero-socials { gap: 14px; }
+  .hero-socials a { width: 34px; height: 34px; }
+}
+
+/* ─────────────────────────────────────────
+   APPLE PODCAST BUTTON
+───────────────────────────────────────── */
+.btn-apple-podcast {
+  background: #000 !important; color: #fff !important;
+  display: inline-flex; align-items: center; gap: 5px;
+}
+.btn-apple-podcast:hover { background: #222 !important; }
+html[data-theme="light"] .btn-apple-podcast { background: #1c1c1e !important; }
+
+/* ─────────────────────────────────────────
+   ACCESSIBILITY — focus states
+───────────────────────────────────────── */
+a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible {
+  outline: 2px solid #3b6ef8;
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+.skip-to-content {
+  position: absolute; top: -100px; left: 16px;
+  background: var(--blue); color: #fff;
+  padding: 8px 16px; border-radius: 6px; font-weight: 600;
+  text-decoration: none; z-index: 10000;
+  transition: top 0.2s;
+}
+.skip-to-content:focus { top: 16px; }
