@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Panos Kokmotos — Co-Founder & COO of Givelink, Entrepreneur, Forbes 30 Under 30 Greece, WEF Global Shaper." />
+  <meta name="description" content="Panos Kokmotos — Co-Founder & COO of Givelink, Forbes 30 Under 30 Greece, WEF Global Shaper." />
   <title>Panos Kokmotos · Entrepreneur & Changemaker</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -16,25 +16,28 @@
     <div class="nav-inner">
       <a href="#hero" class="nav-logo">PK</a>
       <ul class="nav-links">
-        <li><a href="#about">About</a></li>
-        <li><a href="#experience">Experience</a></li>
-        <li><a href="#projects">Projects</a></li>
-        <li><a href="#education">Education</a></li>
-        <li><a href="#awards">Awards</a></li>
-        <li><a href="#contact" class="nav-cta">Let's Talk</a></li>
+        <li><a href="#about"   data-en="About"      data-gr="Σχετικά">About</a></li>
+        <li><a href="#experience" data-en="Experience" data-gr="Εμπειρία">Experience</a></li>
+        <li><a href="#projects" data-en="Projects"   data-gr="Έργα">Projects</a></li>
+        <li><a href="#press"   data-en="Press"       data-gr="Τύπος">Press</a></li>
+        <li><a href="#contact" class="nav-cta" data-en="Let's Talk" data-gr="Επικοινωνία">Let's Talk</a></li>
       </ul>
-      <button class="hamburger" id="hamburger" aria-label="Menu">
-        <span></span><span></span><span></span>
-      </button>
+      <div class="nav-controls">
+        <button class="lang-toggle" id="langToggle" title="Switch language">ΕΛ</button>
+        <button class="theme-toggle" id="themeToggle" title="Toggle theme" aria-label="Toggle dark/light mode">
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+        <button class="hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+      </div>
     </div>
     <div class="nav-mobile-wrap" id="nav-mobile">
       <ul>
-        <li><a href="#about">About</a></li>
-        <li><a href="#experience">Experience</a></li>
-        <li><a href="#projects">Projects</a></li>
-        <li><a href="#education">Education</a></li>
-        <li><a href="#awards">Awards</a></li>
-        <li><a href="#contact">Let's Talk</a></li>
+        <li><a href="#about"      data-en="About"      data-gr="Σχετικά">About</a></li>
+        <li><a href="#experience" data-en="Experience" data-gr="Εμπειρία">Experience</a></li>
+        <li><a href="#projects"   data-en="Projects"   data-gr="Έργα">Projects</a></li>
+        <li><a href="#press"      data-en="Press"      data-gr="Τύπος">Press</a></li>
+        <li><a href="#contact"    data-en="Let's Talk" data-gr="Επικοινωνία">Let's Talk</a></li>
       </ul>
     </div>
   </nav>
@@ -51,62 +54,60 @@
       <div class="hero-badges">
         <span class="badge">🏆 Forbes 30 Under 30 Greece</span>
         <span class="badge">🌍 WEF Global Shaper</span>
+        <span class="badge">🚀 Co-Founder, Givelink</span>
       </div>
       <h1>Panos <span class="hero-name-accent">Kokmotos</span></h1>
-      <p class="hero-tagline">Advocate. Changemaker. Builder.</p>
-      <p class="hero-sub">
-        Co-Founder &amp; COO of <a href="https://givelink.app/en" target="_blank" rel="noopener" class="hero-link">Givelink</a> ·
-        Podcast Host · Athens &amp; San Francisco
+      <p class="hero-tagline" data-en="Advocate. Changemaker. Builder." data-gr="Υποστηρικτής. Αλλαγή. Δημιουργός.">Advocate. Changemaker. Builder.</p>
+      <p class="hero-sub" data-en="Co-Founder &amp; COO of Givelink · Podcast Host · Athens &amp; San Francisco" data-gr="Συν-Ιδρυτής &amp; COO της Givelink · Παρουσιαστής Podcast · Αθήνα &amp; Σαν Φρανσίσκο">
+        Co-Founder &amp; COO of <a href="https://givelink.app/en" target="_blank" rel="noopener" class="hero-link">Givelink</a> · Podcast Host · Athens &amp; San Francisco
       </p>
       <p class="hero-quote">"I would rather have questions that can't be answered than answers that can't be questioned."</p>
       <p class="hero-quote-attr">— Richard Feynman</p>
       <div class="hero-actions">
-        <a href="#projects" class="btn btn-primary">See My Work</a>
-        <a href="#contact" class="btn btn-ghost">Book a Call</a>
+        <a href="#projects" class="btn btn-primary" data-en="See My Work" data-gr="Τα Έργα Μου">See My Work</a>
+        <a href="https://tidycal.com/panoskokmotos" target="_blank" rel="noopener" class="btn btn-ghost" data-en="Book a Call" data-gr="Κλείσε Ραντεβού">Book a Call</a>
       </div>
       <div class="hero-socials">
-        <a href="https://www.linkedin.com/in/panagiotiskokmotos/" target="_blank" rel="noopener" aria-label="LinkedIn">
+        <a href="https://www.linkedin.com/in/panagiotiskokmotos/" target="_blank" rel="noopener" title="LinkedIn">
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
         </a>
-        <a href="https://twitter.com/PanagiotisKokm" target="_blank" rel="noopener" aria-label="Twitter/X">
+        <a href="https://twitter.com/PanagiotisKokm" target="_blank" rel="noopener" title="Twitter/X">
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
         </a>
-        <a href="mailto:panagiotis.kokmotoss@gmail.com" aria-label="Email">
+        <a href="https://github.com/panoskokmotos" target="_blank" rel="noopener" title="GitHub">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+        </a>
+        <a href="mailto:panagiotis.kokmotoss@gmail.com" title="Email">
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
         </a>
       </div>
     </div>
-    <a href="#about" class="hero-scroll-arrow" aria-label="Scroll down">
+    <a href="#impact" class="hero-scroll-arrow" aria-label="Scroll down">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
     </a>
   </section>
 
   <!-- ── Impact Bar ── -->
-  <div class="impact-bar">
+  <div class="impact-bar" id="impact">
     <div class="impact-bar-inner">
-      <div class="impact-stat">
-        <span class="impact-num" data-target="200000" data-prefix="$" data-suffix="K+">$0</span>
-        <span class="impact-label">Donations Facilitated</span>
-      </div>
+      <div class="impact-stat"><span class="impact-num" data-target="200" data-prefix="$" data-suffix="K+">$0</span><span class="impact-label" data-en="Donations" data-gr="Δωρεές">Donations</span></div>
       <div class="impact-divider"></div>
-      <div class="impact-stat">
-        <span class="impact-num" data-target="100" data-suffix="K+ Lives">0</span>
-        <span class="impact-label">People Impacted</span>
-      </div>
+      <div class="impact-stat"><span class="impact-num" data-target="100" data-suffix="K+">0</span><span class="impact-label" data-en="Lives Impacted" data-gr="Ζωές">Lives Impacted</span></div>
       <div class="impact-divider"></div>
-      <div class="impact-stat">
-        <span class="impact-num" data-target="130" data-suffix="K+">0</span>
-        <span class="impact-label">Products Delivered</span>
-      </div>
+      <div class="impact-stat"><span class="impact-num" data-target="130" data-suffix="K+">0</span><span class="impact-label" data-en="Products Delivered" data-gr="Προϊόντα">Products Delivered</span></div>
       <div class="impact-divider"></div>
-      <div class="impact-stat">
-        <span class="impact-num" data-target="350" data-suffix="K+">0</span>
-        <span class="impact-label">Podcast Views</span>
-      </div>
+      <div class="impact-stat"><span class="impact-num" data-target="350" data-suffix="K+">0</span><span class="impact-label" data-en="Podcast Views" data-gr="Podcast">Podcast Views</span></div>
       <div class="impact-divider"></div>
-      <div class="impact-stat">
-        <span class="impact-num" data-target="85" data-suffix="+">0</span>
-        <span class="impact-label">Charity Partners</span>
+      <div class="impact-stat"><span class="impact-num" data-target="85" data-suffix="+">0</span><span class="impact-label" data-en="Charity Partners" data-gr="Εταίροι">Charity Partners</span></div>
+    </div>
+  </div>
+
+  <!-- ── Featured In ── -->
+  <div class="featured-bar">
+    <p class="featured-label" data-en="Featured In &amp; Recognised By" data-gr="Αναγνωρίσεις">Featured In &amp; Recognised By</p>
+    <div class="marquee-wrap">
+      <div class="marquee">
+        <span>Forbes 30 Under 30</span><span>World Economic Forum</span><span>GSEA Top 4 Europe</span><span>European Young Innovators</span><span>Mediterranean College</span><span>Pappajohn Competition</span><span>Circle Future Leaders</span><span>Pegasus Accelerator</span><span>Forbes 30 Under 30</span><span>World Economic Forum</span><span>GSEA Top 4 Europe</span><span>European Young Innovators</span><span>Mediterranean College</span><span>Pappajohn Competition</span><span>Circle Future Leaders</span><span>Pegasus Accelerator</span>
       </div>
     </div>
   </div>
@@ -116,11 +117,11 @@
     <div class="container">
       <div class="about-grid">
         <div class="about-left">
-          <p class="section-eyebrow">About Me</p>
-          <h2 class="section-heading">Entrepreneur building for <em>social impact</em></h2>
-          <p>I'm a mechanical engineer turned entrepreneur with a mission to learn and grow continuously — and a vision to contribute toward a better tomorrow.</p>
-          <p>I co-founded <strong>Givelink</strong> in 2022, an in-kind donation platform letting donors shop directly for goods nonprofits need most. No cash abstraction — just real goods, real impact, real stories.</p>
-          <p>Beyond Givelink, I host <strong>Entrepreneurship Talks</strong>, serve as a <strong>Global Shaper</strong> at the World Economic Forum (San Francisco), and sit on the Executive Board of <strong>Social Impact SF</strong>.</p>
+          <p class="section-eyebrow" data-en="About Me" data-gr="Σχετικά">About Me</p>
+          <h2 class="section-heading" data-en="Entrepreneur building for <em>social impact</em>" data-gr="Επιχειρηματίας για <em>κοινωνικό αντίκτυπο</em>">Entrepreneur building for <em>social impact</em></h2>
+          <p data-en="I'm a mechanical engineer turned entrepreneur with a mission to learn and grow continuously — and a vision to contribute toward a better tomorrow." data-gr="Είμαι μηχανολόγος μηχανικός που έγινε επιχειρηματίας με αποστολή να μαθαίνω και να εξελίσσομαι συνεχώς.">I'm a mechanical engineer turned entrepreneur with a mission to learn and grow continuously — and a vision to contribute toward a better tomorrow.</p>
+          <p data-en="I co-founded Givelink in 2022, an in-kind donation platform letting donors shop directly for goods nonprofits need most. No cash abstraction — just real goods, real impact, real stories." data-gr="Συν-ίδρυσα την Givelink το 2022, μια πλατφόρμα εικονικών δωρεών για μη κερδοσκοπικές οργανώσεις.">I co-founded <strong>Givelink</strong> in 2022 — an in-kind donation platform where donors shop for exactly what nonprofits need. No cash abstraction, just real goods, real impact, real stories.</p>
+          <p data-en="Beyond Givelink, I host Entrepreneurship Talks, serve as a Global Shaper at WEF San Francisco, and sit on the Executive Board of Social Impact SF." data-gr="Παρουσιάζω το podcast Entrepreneurship Talks, είμαι Global Shaper στο ΠΟΕ και μέλος του Executive Board του Social Impact SF.">Beyond Givelink, I host <strong>Entrepreneurship Talks</strong>, serve as a <strong>WEF Global Shaper</strong> (San Francisco), and sit on the Executive Board of <strong>Social Impact SF</strong>.</p>
           <div class="about-values">
             <div class="value-pill">🎯 Impact-first</div>
             <div class="value-pill">📈 Growth mindset</div>
@@ -128,7 +129,7 @@
             <div class="value-pill">🌍 Global citizen</div>
           </div>
           <div class="about-ctas">
-            <a href="mailto:panagiotis.kokmotoss@gmail.com" class="btn btn-primary">Get in Touch</a>
+            <a href="https://tidycal.com/panoskokmotos" target="_blank" rel="noopener" class="btn btn-primary" data-en="Book a Call" data-gr="Κλείσε Ραντεβού">Book a Call</a>
             <a href="https://www.linkedin.com/in/panagiotiskokmotos/" target="_blank" rel="noopener" class="btn btn-outline">LinkedIn</a>
           </div>
         </div>
@@ -139,17 +140,11 @@
           </div>
           <div class="about-location-card">
             <span>📍</span>
-            <div>
-              <strong>Based in</strong>
-              <p>Athens, Greece &amp; San Francisco, USA</p>
-            </div>
+            <div><strong data-en="Based in" data-gr="Βάση">Based in</strong><p>Athens, Greece &amp; San Francisco, USA</p></div>
           </div>
           <div class="about-org-card">
             <span>🌐</span>
-            <div>
-              <strong>Current Focus</strong>
-              <p>Scaling Givelink to the US market</p>
-            </div>
+            <div><strong data-en="Current Focus" data-gr="Τρέχον Εστία">Current Focus</strong><p data-en="Scaling Givelink to the US market" data-gr="Επέκταση της Givelink στις ΗΠΑ">Scaling Givelink to the US market</p></div>
           </div>
         </div>
       </div>
@@ -159,31 +154,21 @@
   <!-- ── Experience ── -->
   <section id="experience" class="section-dark">
     <div class="container">
-      <p class="section-eyebrow light">Career</p>
-      <h2 class="section-heading light">Professional Experience</h2>
+      <p class="section-eyebrow light" data-en="Career" data-gr="Καριέρα">Career</p>
+      <h2 class="section-heading light" data-en="Professional Experience" data-gr="Επαγγελματική Εμπειρία">Professional Experience</h2>
       <div class="timeline">
-
         <div class="timeline-item" data-animate>
           <div class="tl-dot tl-dot-accent"></div>
-          <div class="tl-meta">
-            <span class="tl-date">July 2022 – Present</span>
-            <span class="tl-loc">SF, USA / Athens, Greece</span>
-          </div>
+          <div class="tl-meta"><span class="tl-date">July 2022 – Present</span><span class="tl-loc">SF, USA / Athens, Greece</span></div>
           <div class="tl-card">
-            <div class="tl-header">
-              <div>
-                <h3>Co-Founder &amp; COO</h3>
-                <p class="tl-company">Givelink</p>
-              </div>
-              <span class="tl-badge current">Current</span>
-            </div>
-            <p>In-kind donation platform and widget for nonprofits — donors shop the goods charities need most, track their donation, and see its real impact.</p>
+            <div class="tl-header"><div><h3>Co-Founder &amp; COO</h3><p class="tl-company">Givelink</p></div><span class="tl-badge current">Current</span></div>
+            <p>In-kind donation platform letting donors shop the goods nonprofits need most — with step-by-step tracking, photo confirmation, and real impact stories.</p>
             <ul class="tl-bullets">
-              <li>$200K+ in donations · 7,500+ individual contributions · 100K+ lives impacted</li>
-              <li>Raised 200,000€ Pre-Seed from LATSCO Family Office &amp; V Group</li>
+              <li>$200K+ donations · 7,500+ contributions · 100K+ lives impacted</li>
+              <li>Raised €200,000 Pre-Seed (LATSCO Family Office &amp; V Group)</li>
               <li>85+ charity partners · major supermarket chain · 5+ corporate donors</li>
-              <li>Forbes 30 Under 30 Greece · Top 4 Europe GSEA 2023 · 2x Best University Startup Greece</li>
-              <li>US expansion (Sept 2025): 15+ nonprofits onboarded · $7,000+ early traction</li>
+              <li>Forbes 30 Under 30 Greece · Top 4 Europe GSEA 2023 · 2× Best University Startup Greece</li>
+              <li>US expansion Sept 2025: 15+ nonprofits, $7,000+ early traction</li>
             </ul>
             <div class="tl-links">
               <a href="https://givelink.app/en" target="_blank" rel="noopener" class="chip">Website</a>
@@ -192,82 +177,41 @@
             </div>
           </div>
         </div>
-
         <div class="timeline-item" data-animate>
           <div class="tl-dot"></div>
-          <div class="tl-meta">
-            <span class="tl-date">July – Sept 2023</span>
-            <span class="tl-loc">Piraeus, Greece</span>
-          </div>
+          <div class="tl-meta"><span class="tl-date">July – Sept 2023</span><span class="tl-loc">Piraeus, Greece</span></div>
           <div class="tl-card">
-            <div class="tl-header">
-              <div>
-                <h3>R&amp;D Engineer Trainee</h3>
-                <p class="tl-company">DNV</p>
-              </div>
-            </div>
-            <p>R&amp;D and customer projects focused on decarbonization services and machinery performance. Conducted analyses in Excel and Power BI, developed data analytics code.</p>
+            <div class="tl-header"><div><h3>R&amp;D Engineer Trainee</h3><p class="tl-company">DNV</p></div></div>
+            <p>Decarbonization services R&amp;D, machinery performance analytics, Excel &amp; Power BI analysis, data analytics code development.</p>
           </div>
         </div>
-
         <div class="timeline-item" data-animate>
           <div class="tl-dot"></div>
-          <div class="tl-meta">
-            <span class="tl-date">June – Dec 2022</span>
-            <span class="tl-loc">Singapore (Remote)</span>
-          </div>
+          <div class="tl-meta"><span class="tl-date">June – Dec 2022</span><span class="tl-loc">Singapore (Remote)</span></div>
           <div class="tl-card">
-            <div class="tl-header">
-              <div>
-                <h3>Growth Consultant</h3>
-                <p class="tl-company">Atlas Analytics</p>
-              </div>
-            </div>
-            <p>B2B sales campaigns across Greece, Cyprus &amp; UK. Delivered presentations to C-level decision makers at consulting firms, IT companies, and startups.</p>
+            <div class="tl-header"><div><h3>Growth Consultant</h3><p class="tl-company">Atlas Analytics</p></div></div>
+            <p>B2B sales campaigns across Greece, Cyprus &amp; UK. Delivered pitches to C-level decision makers at consulting, IT, and startup firms.</p>
           </div>
         </div>
-
         <div class="timeline-item" data-animate>
           <div class="tl-dot"></div>
-          <div class="tl-meta">
-            <span class="tl-date">Oct 2021 – Apr 2022</span>
-            <span class="tl-loc">Remote</span>
-          </div>
+          <div class="tl-meta"><span class="tl-date">Oct 2021 – Apr 2022</span><span class="tl-loc">Remote</span></div>
           <div class="tl-card">
-            <div class="tl-header">
-              <div>
-                <h3>Project Manager</h3>
-                <p class="tl-company">European Startup Universe</p>
-              </div>
-            </div>
+            <div class="tl-header"><div><h3>Project Manager</h3><p class="tl-company">European Startup Universe</p></div></div>
             <ul class="tl-bullets">
-              <li>Led 9-person remote team from 6 countries · 150+ company partnerships</li>
-              <li>1,500+ startup founders &amp; 120+ experts from 9 countries · 450% participation growth</li>
-              <li>Presented to 850+ founders, investors &amp; stakeholders</li>
+              <li>Led 9-person team from 6 countries · 150+ company partnerships · 5,000+ organic visitors</li>
+              <li>1,500+ founders &amp; 120+ experts from 9 countries · 450% participation growth</li>
             </ul>
           </div>
         </div>
-
         <div class="timeline-item" data-animate>
           <div class="tl-dot"></div>
-          <div class="tl-meta">
-            <span class="tl-date">July – Sept 2021</span>
-            <span class="tl-loc">Athens, Greece</span>
-          </div>
+          <div class="tl-meta"><span class="tl-date">July – Sept 2021</span><span class="tl-loc">Athens, Greece</span></div>
           <div class="tl-card">
-            <div class="tl-header">
-              <div>
-                <h3>Innovation Consultant Intern</h3>
-                <p class="tl-company">Break-Even Consulting</p>
-              </div>
-            </div>
-            <ul class="tl-bullets">
-              <li>Accelerated 4 corporate innovation labs and intrapreneurship programs</li>
-              <li>Research across 4 internal projects — 95% of goals achieved</li>
-            </ul>
+            <div class="tl-header"><div><h3>Innovation Consultant Intern</h3><p class="tl-company">Break-Even Consulting</p></div></div>
+            <ul class="tl-bullets"><li>Accelerated 4 corporate innovation labs &amp; intrapreneurship programs</li><li>95% of research goals achieved across 4 internal projects</li></ul>
           </div>
         </div>
-
       </div>
     </div>
   </section>
@@ -275,21 +219,14 @@
   <!-- ── Projects ── -->
   <section id="projects">
     <div class="container">
-      <p class="section-eyebrow">What I've Built</p>
-      <h2 class="section-heading">Projects</h2>
+      <p class="section-eyebrow" data-en="What I've Built" data-gr="Τι Έχω Δημιουργήσει">What I've Built</p>
+      <h2 class="section-heading" data-en="Projects" data-gr="Έργα">Projects</h2>
       <div class="projects-grid">
-
         <div class="project-card project-featured" data-animate>
-          <div class="project-img project-img-givelink">
-            <div class="project-img-text">Givelink</div>
-          </div>
+          <div class="project-img project-img-givelink"><div class="project-img-text">Givelink</div></div>
           <div class="project-body">
-            <div class="project-top">
-              <span class="project-label">Featured · Active</span>
-              <h3>Givelink</h3>
-              <p class="project-type">In-Kind Donation Platform &amp; Widget</p>
-            </div>
-            <p>Instead of donating money, donors directly shop the goods nonprofits need most — with step-by-step tracking, photo confirmation on arrival, and impact stories of how their help changed lives.</p>
+            <div class="project-top"><span class="project-label">Featured · Active</span><h3>Givelink</h3><p class="project-type">In-Kind Donation Platform &amp; Widget</p></div>
+            <p>Donors shop goods nonprofits need most — with step-by-step tracking, photo confirmation on arrival, and impact stories of how their help changed lives.</p>
             <div class="project-metrics-row">
               <div class="proj-metric"><strong>$200K+</strong><span>Donated</span></div>
               <div class="proj-metric"><strong>85+</strong><span>Charities</span></div>
@@ -302,226 +239,150 @@
             </div>
           </div>
         </div>
-
         <div class="project-card" data-animate>
-          <div class="project-img project-img-podcast">
-            <div class="project-img-text">🎙</div>
-          </div>
+          <div class="project-img project-img-podcast"><div class="project-img-text">🎙</div></div>
           <div class="project-body">
-            <div class="project-top">
-              <span class="project-label">Active · Since 2020</span>
-              <h3>Entrepreneurship Talks</h3>
-              <p class="project-type">Podcast · Co-Founder &amp; Host</p>
-            </div>
-            <p>Inspiring conversations with entrepreneurs, founders, and leaders. Built from zero to a community of 20+ volunteers and a loyal cross-platform audience.</p>
+            <div class="project-top"><span class="project-label">Active · Since 2020</span><h3>Entrepreneurship Talks</h3><p class="project-type">Podcast · Co-Founder &amp; Host</p></div>
+            <p>Inspiring conversations with entrepreneurs and leaders. From zero to 20+ volunteers and a cross-platform community.</p>
             <div class="project-metrics-row">
               <div class="proj-metric"><strong>350K+</strong><span>Views</span></div>
               <div class="proj-metric"><strong>50+</strong><span>Episodes</span></div>
               <div class="proj-metric"><strong>2.5K+</strong><span>Subscribers</span></div>
             </div>
-            <div class="project-actions">
-              <a href="https://open.spotify.com/show/3R2F6kjvzVh1QXmTvmUQEu" target="_blank" rel="noopener" class="btn btn-primary btn-sm">Listen on Spotify</a>
+            <!-- Spotify Embed -->
+            <div class="spotify-embed">
+              <iframe style="border-radius:12px" src="https://open.spotify.com/embed/show/3R2F6kjvzVh1QXmTvmUQEu?utm_source=generator&theme=0" width="100%" height="152" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+            </div>
+            <div class="project-actions" style="margin-top:12px">
+              <a href="https://open.spotify.com/show/3R2F6kjvzVh1QXmTvmUQEu" target="_blank" rel="noopener" class="btn btn-primary btn-sm">Spotify</a>
               <a href="#" class="chip">YouTube</a>
             </div>
           </div>
         </div>
+      </div>
+    </div>
+  </section>
 
+  <!-- ── Press & Media ── -->
+  <section id="press" class="section-alt">
+    <div class="container">
+      <p class="section-eyebrow" data-en="Media & Press" data-gr="Μέσα &amp; Τύπος">Media &amp; Press</p>
+      <h2 class="section-heading" data-en="Recognition &amp; Awards" data-gr="Αναγνωρίσεις &amp; Βραβεία">Recognition &amp; Awards</h2>
+      <div class="awards-grid">
+        <div class="award-card" data-animate><span class="award-emoji">🏆</span><p>Forbes 30 Under 30 Greece</p></div>
+        <div class="award-card" data-animate><span class="award-emoji">🌍</span><p>Top 4 Europe — GSEA 2023</p></div>
+        <div class="award-card" data-animate><span class="award-emoji">🚀</span><p>2× Best University Startup Greece</p></div>
+        <div class="award-card" data-animate><span class="award-emoji">💡</span><p>European Young Innovators Top 15 (U26)</p></div>
+        <div class="award-card" data-animate><span class="award-emoji">🎓</span><p>Pappajohn Competition Winners 2024–25</p></div>
+        <div class="award-card" data-animate><span class="award-emoji">⭕</span><p>Circle Future Leaders Fellow</p></div>
+        <div class="award-card" data-animate><span class="award-emoji">👼</span><p>Pegasus Angel Accelerator Fellow</p></div>
+        <div class="award-card" data-animate><span class="award-emoji">🌐</span><p>WEF Global Shaper, San Francisco</p></div>
+        <div class="award-card" data-animate><span class="award-emoji">📣</span><p>Speaker at 15+ Podcasts &amp; Events</p></div>
+      </div>
+
+      <div class="leadership-strip">
+        <h3>Leadership &amp; Community</h3>
+        <div class="leadership-items">
+          <div class="leadership-item"><strong>Global Shaper</strong><span>WEF · San Francisco · Dec 2025–</span></div>
+          <div class="leadership-item"><strong>Executive Board</strong><span>Social Impact SF · Jan 2026–</span></div>
+          <div class="leadership-item"><strong>Mentor &amp; Int'l Team</strong><span>EESTEC · Europe · 2021–2023</span></div>
+          <div class="leadership-item"><strong>Mensa Member</strong><span>132+ IQ requirement</span></div>
+        </div>
       </div>
     </div>
   </section>
 
   <!-- ── Education ── -->
-  <section id="education" class="section-alt">
+  <section id="education">
     <div class="container">
-      <p class="section-eyebrow">Academic Background</p>
-      <h2 class="section-heading">Education</h2>
+      <p class="section-eyebrow" data-en="Academic Background" data-gr="Σπουδές">Academic Background</p>
+      <h2 class="section-heading" data-en="Education" data-gr="Εκπαίδευση">Education</h2>
       <div class="edu-grid">
-
         <div class="edu-card" data-animate>
           <div class="edu-icon">🎓</div>
-          <div class="edu-body">
-            <span class="edu-period">2019 – 2025</span>
-            <h3>M.Eng Mechanical Engineering</h3>
-            <p class="edu-inst">University of Patras, Greece</p>
-            <p>Major: Industrial Management · <strong>GPA 3.5 · Top 3% of Class</strong></p>
-          </div>
+          <div class="edu-body"><span class="edu-period">2019 – 2025</span><h3>M.Eng Mechanical Engineering</h3><p class="edu-inst">University of Patras, Greece</p><p>Major: Industrial Management · <strong>GPA 3.5 · Top 3% of Class</strong></p></div>
         </div>
-
         <div class="edu-card" data-animate>
           <div class="edu-icon">🇪🇸</div>
-          <div class="edu-body">
-            <span class="edu-period">Feb – June 2022</span>
-            <h3>Technology &amp; Engineering Management</h3>
-            <p class="edu-inst">Universitat Politècnica de Catalunya (UPC), Barcelona · Erasmus</p>
-            <p>International Business · Strategy &amp; Marketing · Data Analysis (R, SQL, Python) · Game Theory · <strong>Grade 8.11</strong></p>
-          </div>
+          <div class="edu-body"><span class="edu-period">Feb – June 2022</span><h3>Technology &amp; Engineering Management</h3><p class="edu-inst">UPC Barcelona · Erasmus</p><p>Int'l Business · Strategy · Data Analysis (R, SQL, Python) · <strong>Grade 8.11</strong></p></div>
         </div>
-
         <div class="edu-card" data-animate>
           <div class="edu-icon">🏅</div>
-          <div class="edu-body">
-            <span class="edu-period">2016 – 2019</span>
-            <h3>High School Diploma</h3>
-            <p class="edu-inst">3rd High School of Patras</p>
-            <p><strong>100% · 1st of graduating class (100+ students)</strong> · 6 consecutive years of academic excellence · Panhellenic scholarship (1st in local region)</p>
-          </div>
+          <div class="edu-body"><span class="edu-period">2016 – 2019</span><h3>High School Diploma</h3><p class="edu-inst">3rd High School of Patras</p><p><strong>100% · 1st of graduating class</strong> · Panhellenic scholarship (1st in region)</p></div>
         </div>
-
       </div>
     </div>
   </section>
 
-  <!-- ── Awards ── -->
-  <section id="awards">
+  <!-- ── Book Notes ── -->
+  <section id="books" class="section-alt">
     <div class="container">
-      <p class="section-eyebrow">Recognition</p>
-      <h2 class="section-heading">Awards &amp; Honours</h2>
-      <div class="awards-grid">
-        <div class="award-card" data-animate>
-          <span class="award-emoji">🏆</span>
-          <p>Forbes 30 Under 30 Greece</p>
+      <p class="section-eyebrow" data-en="Reading" data-gr="Βιβλία">Reading</p>
+      <h2 class="section-heading" data-en="Book Notes" data-gr="Σημειώσεις Βιβλίων">Book Notes</h2>
+      <p class="books-sub" data-en="Books that shaped how I think about entrepreneurship, impact, and the future." data-gr="Βιβλία που διαμόρφωσαν τον τρόπο σκέψης μου.">Books that shaped how I think about entrepreneurship, impact, and the future.</p>
+      <div class="books-grid">
+        <div class="book-card" data-animate>
+          <div class="book-cover" style="background:linear-gradient(135deg,#1a1a2e,#16213e)">0→1</div>
+          <div class="book-body"><h4>Zero to One</h4><p class="book-author">Peter Thiel</p><p class="book-note">"Every moment in business happens only once. The next Bill Gates won't build an operating system."</p></div>
         </div>
-        <div class="award-card" data-animate>
-          <span class="award-emoji">🌍</span>
-          <p>Top 4 Europe — Global Student Entrepreneur Awards 2023</p>
+        <div class="book-card" data-animate>
+          <div class="book-cover" style="background:linear-gradient(135deg,#0d1b2a,#1b4f72)">FoH</div>
+          <div class="book-body"><h4>The Future of Humanity</h4><p class="book-author">Michio Kaku</p><p class="book-note">Expanding what's possible — from interplanetary civilization to Type III civilizations.</p></div>
         </div>
-        <div class="award-card" data-animate>
-          <span class="award-emoji">🚀</span>
-          <p>2× Best University Startup in Greece</p>
+        <div class="book-card" data-animate>
+          <div class="book-cover" style="background:linear-gradient(135deg,#2c1654,#4a235a)">Naval</div>
+          <div class="book-body"><h4>Almanack of Naval Ravikant</h4><p class="book-author">Eric Jorgenson</p><p class="book-note">"Specific knowledge is knowledge you cannot be trained for. If someone else can be trained for it, then eventually you'll be automated."</p></div>
         </div>
-        <div class="award-card" data-animate>
-          <span class="award-emoji">💡</span>
-          <p>European Young Innovators — Top 15 Social Entrepreneurship Startups (U26)</p>
+        <div class="book-card" data-animate>
+          <div class="book-cover" style="background:linear-gradient(135deg,#1a3a1a,#2e7d32)">GM</div>
+          <div class="book-body"><h4>Growth Mindset</h4><p class="book-author">Carol Dweck</p><p class="book-note">Talent is a starting point. Effort and learning are what separate those who fulfill potential from those who don't.</p></div>
         </div>
-        <div class="award-card" data-animate>
-          <span class="award-emoji">🎓</span>
-          <p>Winners — John &amp; Mary Pappajohn Business Plan Competition 2024–25</p>
+        <div class="book-card" data-animate>
+          <div class="book-cover" style="background:linear-gradient(135deg,#4a2c00,#7d4e00)">MBA</div>
+          <div class="book-body"><h4>The Visual MBA</h4><p class="book-author">Jason Barron</p><p class="book-note">Two years of business school distilled into visual notes. The fastest way to build business intuition.</p></div>
         </div>
-        <div class="award-card" data-animate>
-          <span class="award-emoji">⭕</span>
-          <p>Circle Future Leaders Fellow</p>
-        </div>
-        <div class="award-card" data-animate>
-          <span class="award-emoji">👼</span>
-          <p>Pegasus Angel Accelerator Fellow</p>
-        </div>
-        <div class="award-card" data-animate>
-          <span class="award-emoji">🌐</span>
-          <p>Global Shaper — World Economic Forum, San Francisco</p>
-        </div>
-        <div class="award-card" data-animate>
-          <span class="award-emoji">📣</span>
-          <p>Guest Speaker at 15+ Podcasts &amp; Events</p>
+        <div class="book-card" data-animate>
+          <div class="book-cover" style="background:linear-gradient(135deg,#1a1a1a,#333)">L2L</div>
+          <div class="book-body"><h4>Learning How to Learn</h4><p class="book-author">Barbara Oakley</p><p class="book-note">Understanding how your brain forms memories and connections changes everything about how you study and grow.</p></div>
         </div>
       </div>
+    </div>
+  </section>
 
-      <!-- Leadership -->
-      <div class="leadership-strip">
-        <h3>Leadership &amp; Community</h3>
-        <div class="leadership-items">
-          <div class="leadership-item">
-            <strong>Global Shaper</strong>
-            <span>World Economic Forum · San Francisco · Dec 2025–</span>
-          </div>
-          <div class="leadership-item">
-            <strong>Executive Board</strong>
-            <span>Social Impact SF · Jan 2026–</span>
-          </div>
-          <div class="leadership-item">
-            <strong>Mentor &amp; Int'l Team</strong>
-            <span>EESTEC · Europe · 2021–2023</span>
-          </div>
-          <div class="leadership-item">
-            <strong>Mensa Member</strong>
-            <span>132+ IQ requirement</span>
-          </div>
-        </div>
+  <!-- ── Skills ── -->
+  <section id="skills" class="section-dark">
+    <div class="container">
+      <p class="section-eyebrow light" data-en="Skills &amp; Interests" data-gr="Δεξιότητες">Skills &amp; Interests</p>
+      <div class="skills-cols">
+        <div class="skill-group"><h4 data-en="Languages" data-gr="Γλώσσες">Languages</h4><div class="chips"><span class="chip">Greek (Native)</span><span class="chip">English (C2)</span><span class="chip">French (B2)</span><span class="chip">Spanish (Elementary)</span></div></div>
+        <div class="skill-group"><h4 data-en="Technical" data-gr="Τεχνικά">Technical</h4><div class="chips"><span class="chip">Python</span><span class="chip">SQL</span><span class="chip">R / RStudio</span><span class="chip">Excel</span><span class="chip">Power BI</span><span class="chip">Tableau</span></div></div>
+        <div class="skill-group"><h4 data-en="Certificates" data-gr="Πιστοποιητικά">Certificates</h4><div class="chips"><span class="chip">Google PM (Pro)</span><span class="chip">Financial Markets (Honors)</span><span class="chip">Learning How to Learn</span><span class="chip">Erasmus+ Youth</span></div></div>
+        <div class="skill-group"><h4 data-en="Interests" data-gr="Ενδιαφέροντα">Interests</h4><div class="chips"><span class="chip">📚 Books</span><span class="chip">🏋️ Gym</span><span class="chip">🏔️ Extreme Sports</span><span class="chip">♟️ Chess</span><span class="chip">✈️ Travel</span><span class="chip">🎓 Courses</span></div></div>
       </div>
+    </div>
+  </section>
 
-      <!-- Skills -->
-      <div class="skills-block">
-        <h3>Skills &amp; Interests</h3>
-        <div class="skills-cols">
-          <div class="skill-group">
-            <h4>Languages</h4>
-            <div class="chips">
-              <span class="chip">Greek (Native)</span>
-              <span class="chip">English (C2)</span>
-              <span class="chip">French (B2)</span>
-              <span class="chip">Spanish (Elementary)</span>
-            </div>
-          </div>
-          <div class="skill-group">
-            <h4>Technical</h4>
-            <div class="chips">
-              <span class="chip">Python</span>
-              <span class="chip">SQL</span>
-              <span class="chip">R / RStudio</span>
-              <span class="chip">Excel</span>
-              <span class="chip">Power BI</span>
-              <span class="chip">Tableau</span>
-            </div>
-          </div>
-          <div class="skill-group">
-            <h4>Certificates</h4>
-            <div class="chips">
-              <span class="chip">Google Project Management (Pro)</span>
-              <span class="chip">Financial Markets (Honors)</span>
-              <span class="chip">Learning How to Learn</span>
-              <span class="chip">Erasmus+ Youth</span>
-            </div>
-          </div>
-          <div class="skill-group">
-            <h4>Interests</h4>
-            <div class="chips">
-              <span class="chip">📚 Books</span>
-              <span class="chip">🏋️ Working Out</span>
-              <span class="chip">🏔️ Extreme Sports</span>
-              <span class="chip">♟️ Chess</span>
-              <span class="chip">✈️ Travel</span>
-              <span class="chip">🎓 Online Courses</span>
-            </div>
-          </div>
-        </div>
-      </div>
+  <!-- ── Newsletter ── -->
+  <section id="newsletter">
+    <div class="container newsletter-wrap">
+      <div class="newsletter-icon">✉️</div>
+      <h2 data-en="Stay in the Loop" data-gr="Μείνε Ενήμερος">Stay in the Loop</h2>
+      <p data-en="Get my thoughts on entrepreneurship, social impact, and building companies that matter. No spam — just signal." data-gr="Σκέψεις για επιχειρηματικότητα, κοινωνικό αντίκτυπο και δημιουργία εταιρειών. Χωρίς spam.">Get my thoughts on entrepreneurship, social impact, and building companies that matter. No spam — just signal.</p>
+      <a href="https://panoskokmotos.substack.com" target="_blank" rel="noopener" class="btn btn-primary btn-lg" data-en="Subscribe on Substack" data-gr="Εγγραφή στο Substack">Subscribe on Substack</a>
     </div>
   </section>
 
   <!-- ── Contact ── -->
   <section id="contact" class="section-dark">
     <div class="container contact-wrap">
-      <p class="section-eyebrow light">Get in Touch</p>
-      <h2 class="section-heading light">Let's build something <em>meaningful</em> together</h2>
-      <p class="contact-sub">Open to collaborations, speaking invitations, investment conversations, and connecting with bold people working on hard problems.</p>
+      <p class="section-eyebrow light" data-en="Get in Touch" data-gr="Επικοινωνία">Get in Touch</p>
+      <h2 class="section-heading light" data-en="Let's build something <em>meaningful</em> together" data-gr="Ας χτίσουμε κάτι <em>σημαντικό</em> μαζί">Let's build something <em>meaningful</em> together</h2>
+      <p class="contact-sub" data-en="Open to collaborations, speaking invitations, investment conversations, and connecting with bold people working on hard problems." data-gr="Ανοιχτός σε συνεργασίες, ομιλίες, επενδυτικές συνομιλίες και ανθρώπους με όραμα.">Open to collaborations, speaking invitations, investment conversations, and connecting with bold people working on hard problems.</p>
       <div class="contact-cards">
-        <a href="mailto:panagiotis.kokmotoss@gmail.com" class="contact-card">
-          <span class="cc-icon">✉️</span>
-          <div>
-            <strong>Email</strong>
-            <p>panagiotis.kokmotoss@gmail.com</p>
-          </div>
-        </a>
-        <a href="https://www.linkedin.com/in/panagiotiskokmotos/" target="_blank" rel="noopener" class="contact-card">
-          <span class="cc-icon">💼</span>
-          <div>
-            <strong>LinkedIn</strong>
-            <p>/in/panagiotiskokmotos</p>
-          </div>
-        </a>
-        <a href="https://twitter.com/PanagiotisKokm" target="_blank" rel="noopener" class="contact-card">
-          <span class="cc-icon">𝕏</span>
-          <div>
-            <strong>Twitter / X</strong>
-            <p>@PanagiotisKokm</p>
-          </div>
-        </a>
-        <a href="tel:+16282505152" class="contact-card">
-          <span class="cc-icon">📞</span>
-          <div>
-            <strong>Phone</strong>
-            <p>+1 (628) 250-51-52</p>
-          </div>
-        </a>
+        <a href="mailto:panagiotis.kokmotoss@gmail.com" class="contact-card"><span class="cc-icon">✉️</span><div><strong>Email</strong><p>panagiotis.kokmotoss@gmail.com</p></div></a>
+        <a href="https://www.linkedin.com/in/panagiotiskokmotos/" target="_blank" rel="noopener" class="contact-card"><span class="cc-icon">💼</span><div><strong>LinkedIn</strong><p>/in/panagiotiskokmotos</p></div></a>
+        <a href="https://twitter.com/PanagiotisKokm" target="_blank" rel="noopener" class="contact-card"><span class="cc-icon">𝕏</span><div><strong>Twitter / X</strong><p>@PanagiotisKokm</p></div></a>
+        <a href="https://tidycal.com/panoskokmotos" target="_blank" rel="noopener" class="contact-card contact-card-cta"><span class="cc-icon">📅</span><div><strong data-en="Book a Call" data-gr="Κλείσε Ραντεβού">Book a Call</strong><p data-en="Schedule time with me" data-gr="Κλείσε χρόνο μαζί μου">Schedule time with me</p></div></a>
       </div>
     </div>
   </section>
@@ -534,11 +395,43 @@
       <div class="footer-links">
         <a href="https://www.linkedin.com/in/panagiotiskokmotos/" target="_blank" rel="noopener">LinkedIn</a>
         <a href="https://twitter.com/PanagiotisKokm" target="_blank" rel="noopener">Twitter</a>
+        <a href="https://github.com/panoskokmotos" target="_blank" rel="noopener">GitHub</a>
         <a href="mailto:panagiotis.kokmotoss@gmail.com">Email</a>
       </div>
     </div>
   </footer>
 
+  <!-- ── AI Chat Widget ── -->
+  <div class="chat-widget" id="chatWidget">
+    <button class="chat-toggle" id="chatToggle" aria-label="Chat with Panos AI">
+      <svg class="chat-icon-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      <svg class="chat-icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      <span class="chat-badge">AI</span>
+    </button>
+    <div class="chat-panel" id="chatPanel">
+      <div class="chat-header">
+        <div class="chat-header-info">
+          <img src="photo.jpg" alt="Panos" class="chat-avatar" />
+          <div><strong>Ask Panos</strong><span>AI · Usually replies instantly</span></div>
+        </div>
+        <button class="chat-close-btn" id="chatClose">✕</button>
+      </div>
+      <div class="chat-messages" id="chatMessages">
+        <div class="chat-msg bot">
+          <p>👋 Hi! I'm Panos's AI assistant. Ask me anything about his work, Givelink, the podcast, or how to get in touch!</p>
+        </div>
+      </div>
+      <div class="chat-input-wrap">
+        <input type="text" id="chatInput" placeholder="Ask something..." autocomplete="off" />
+        <button id="chatSend" aria-label="Send">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+        </button>
+      </div>
+      <p class="chat-note">Powered by <a href="https://anthropic.com" target="_blank" rel="noopener">Claude AI</a></p>
+    </div>
+  </div>
+
   <script src="script.js"></script>
+  <script src="chat.js"></script>
 </body>
 </html>
