@@ -294,3 +294,36 @@ if (contactForm) {
     }
   });
 }
+
+// ── Sticky mobile CTA (shows after scrolling past hero) ──
+(function() {
+  const cta = document.getElementById('stickyCta');
+  if (!cta) return;
+  const hero = document.getElementById('hero');
+  const contact = document.getElementById('contact');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.target === hero && !e.isIntersecting) cta.classList.add('visible');
+      if (e.target === hero && e.isIntersecting) cta.classList.remove('visible');
+      if (e.target === contact && e.isIntersecting) cta.classList.remove('visible');
+    });
+  }, { threshold: 0.1 });
+  obs.observe(hero);
+  if (contact) obs.observe(contact);
+  cta.setAttribute('aria-hidden', 'false');
+})();
+
+// ── "Now" section — auto date ──
+(function() {
+  const el = document.getElementById('nowDate');
+  if (!el) return;
+  const d = new Date();
+  el.textContent = d.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+})();
+
+// ── Book cover skeleton — mark loaded images ──
+document.querySelectorAll('.skeleton-wrap img.book-cover-img').forEach(img => {
+  const done = () => img.classList.add('img-loaded');
+  if (img.complete && img.naturalWidth > 0) done();
+  else img.addEventListener('load', done);
+});
