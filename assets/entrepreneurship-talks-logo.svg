@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Entrepreneurship Talks logo">
+  <rect width="512" height="512" rx="40" fill="#f0f2f6"/>
+  <g fill="none" stroke="#2b6286" stroke-width="12" stroke-linecap="round">
+    <path d="M74 352h178"/>
+    <path d="M74 314h178" opacity=".85"/>
+    <path d="M74 276h178" opacity=".7"/>
+    <path d="M74 238h178" opacity=".55"/>
+    <path d="M74 200h178" opacity=".4"/>
+  </g>
+  <path d="M148 352c0-72 58-130 130-130 20 0 40 4 56 13l31-31 53 4-4 53-31 31c9 16 13 36 13 56 0 72-58 130-130 130h-68v-56h68c41 0 74-33 74-74s-33-74-74-74-74 33-74 74z" fill="#2b6286"/>
+  <path d="M333 177l61 4-4 61-17-17-39 39-28-28 39-39z" fill="#2b6286"/>
+</svg>

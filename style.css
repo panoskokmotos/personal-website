@@ -90,6 +90,18 @@ section { padding: 100px 0; }
 
 .btn-outline { background: transparent; color: var(--blue); border-color: var(--blue); }
 .btn-outline:hover { background: var(--blue); color: #fff; }
+.btn-logo { width: 16px; height: 16px; border-radius: 4px; object-fit: contain; }
+
+.btn-givelink { background: linear-gradient(135deg, #6c4bff, #ff6268); color: #fff; border-color: transparent; }
+.btn-givelink:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(108,75,255,0.35); color: #fff; }
+.btn-youtube { background: #ff0000; color: #fff; border-color: #ff0000; }
+.btn-youtube:hover { background: #d70000; color: #fff; }
+.btn-spotify { background: #1db954; color: #fff; border-color: #1db954; }
+.btn-instagram { background: linear-gradient(135deg,#f58529,#dd2a7b,#8134af,#515bd4); color: #fff; border-color: transparent; }
+.btn-tiktok { background: #151515; color: #fff; border-color: #333; }
+.btn-linkedin { background: #0a66c2; color: #fff; border-color: #0a66c2; }
+.btn-et-site { background: rgba(43,98,134,0.12); color: #2b6286; border-color: rgba(43,98,134,0.35); }
+.btn-spotify:hover,.btn-instagram:hover,.btn-tiktok:hover,.btn-linkedin:hover,.btn-et-site:hover { transform: translateY(-2px); color: #fff; }
 
 /* ── Chips ── */
 .chip {
@@ -830,6 +842,17 @@ html[data-theme="light"] .skill-group h4 { color: rgba(255,255,255,0.5); }
 .book-body { padding: 16px 18px; display:flex; flex-direction:column; gap:6px; min-height: 220px; }
 .book-body h4 { font-size: 0.95rem; font-weight: 700; color: var(--navy); margin-bottom: 2px; }
 .book-author { font-size: 0.78rem; color: var(--blue); font-weight: 600; margin-bottom: 8px; }
+.book-highlights {
+  margin: 0;
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 0.77rem;
+  color: var(--text-muted);
+  line-height: 1.45;
+}
+.book-highlights li::marker { color: var(--blue); }
 .book-note { font-size: 0.82rem; color: var(--text-muted); line-height: 1.6; font-style: italic; display:-webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical; overflow:hidden; }
 .book-points {
   margin: 0;
@@ -1579,6 +1602,14 @@ html[data-theme="dark"] .store-badge-google:hover { background: rgba(255,255,255
 .press-headline {
   font-size: 0.88rem; font-weight: 600; color: #fff;
   line-height: 1.45; margin: 0; flex: 1;
+}
+.press-thumb {
+  width: calc(100% + 40px);
+  height: 132px;
+  object-fit: cover;
+  margin: -20px -20px 8px;
+  border-radius: 12px 12px 0 0;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
 }
 .press-arrow {
   display: inline-block; color: rgba(255,255,255,0.3);

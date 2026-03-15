@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Givelink logo">
+  <rect width="512" height="512" rx="256" fill="#d5d7dc"/>
+  <defs>
+    <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#7c4dff"/>
+      <stop offset="1" stop-color="#5c3cf0"/>
+    </linearGradient>
+  </defs>
+  <path d="M246 134c-62 0-112 50-112 112s50 112 112 112c28 0 52-7 73-24" fill="none" stroke="url(#g)" stroke-width="44" stroke-linecap="round"/>
+  <path d="M250 258h98" stroke="url(#g)" stroke-width="34" stroke-linecap="round"/>
+  <path d="M326 230l34 28-34 28" fill="none" stroke="url(#g)" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M266 178c15-16 38-26 64-26 62 0 112 50 112 112s-50 112-112 112c-25 0-46-5-66-20" fill="none" stroke="#ff5a5f" stroke-width="44" stroke-linecap="round"/>
+  <path d="M264 254h95" stroke="#ff5a5f" stroke-width="34" stroke-linecap="round"/>
+  <path d="M336 226l34 28-34 28" fill="none" stroke="#ff5a5f" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
