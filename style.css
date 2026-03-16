@@ -675,7 +675,8 @@ section { padding: 100px 0; }
   border-color: rgba(59,110,248,0.4);
   transform: translateY(-2px);
 }
-.cc-icon { font-size: 1.5rem; flex-shrink: 0; }
+.cc-icon { font-size: 1.5rem; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+.cc-icon-linkedin { color: #0A66C2; }
 .contact-card strong { display: block; font-size: 0.8rem; font-weight: 700; color: rgba(255,255,255,0.9); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px; }
 .contact-card p { font-size: 0.85rem; color: rgba(255,255,255,0.45); margin: 0; }
 
@@ -880,6 +881,72 @@ html[data-theme="light"] .skill-group h4 { color: rgba(255,255,255,0.5); }
 .book-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-md); }
 
 /* ── Currently Reading book card ── */
+/* ── Currently Reading strip ── */
+@keyframes pulse-dot {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(34,197,94,0.5); }
+  50%       { box-shadow: 0 0 0 7px rgba(34,197,94,0); }
+}
+.books-now-reading {
+  margin-bottom: 56px;
+}
+.bnr-header {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 20px;
+}
+.bnr-pulse {
+  width: 10px; height: 10px; border-radius: 50%;
+  background: #22c55e; flex-shrink: 0;
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+.bnr-label {
+  font-size: 0.78rem; font-weight: 700; letter-spacing: 0.1em;
+  text-transform: uppercase; color: #22c55e;
+}
+.bnr-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
+}
+.bnr-card {
+  display: flex; gap: 20px;
+  background: var(--bg);
+  border: 1px solid rgba(34,197,94,0.3);
+  border-radius: var(--radius);
+  padding: 20px;
+  box-shadow: 0 0 0 3px rgba(34,197,94,0.07), var(--shadow);
+  transition: transform 0.25s var(--ease), box-shadow 0.25s;
+  opacity: 0; transform: translateY(16px);
+}
+.bnr-card.visible { opacity: 1; transform: translateY(0); }
+.bnr-card:hover { transform: translateY(-4px); box-shadow: 0 0 0 3px rgba(34,197,94,0.12), var(--shadow-md); }
+.bnr-cover-wrap {
+  width: 90px; flex-shrink: 0;
+  aspect-ratio: 2 / 3;
+  border-radius: 6px; overflow: hidden;
+  background: rgba(10,18,34,0.5);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+}
+.bnr-cover-img { width: 100%; height: 100%; object-fit: cover; }
+.bnr-body { flex: 1; display: flex; flex-direction: column; gap: 6px; }
+.bnr-title { font-size: 1rem; font-weight: 700; color: var(--text); margin: 0; }
+.bnr-author { font-size: 0.8rem; color: var(--text-muted); margin: 0; }
+.bnr-insights {
+  margin: 8px 0 0; padding: 0; list-style: none;
+  display: flex; flex-direction: column; gap: 7px;
+}
+.bnr-insights li {
+  font-size: 0.82rem; line-height: 1.5; color: var(--text-muted);
+  padding-left: 14px; position: relative;
+}
+.bnr-insights li::before {
+  content: '→'; position: absolute; left: 0;
+  color: #22c55e; font-size: 0.75rem; top: 1px;
+}
+@media (max-width: 700px) {
+  .bnr-grid { grid-template-columns: 1fr; }
+  .bnr-card { flex-direction: row; }
+  .bnr-cover-wrap { width: 72px; }
+}
+
+/* Legacy reading badge (kept for backwards compat) */
 .book-card-reading {
   border-color: rgba(59,110,248,0.35) !important;
   background: rgba(59,110,248,0.04) !important;
