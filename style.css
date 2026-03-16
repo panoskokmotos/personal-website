@@ -34,6 +34,16 @@
 
 html { scroll-behavior: smooth; font-size: 16px; }
 body { font-family: var(--font); color: var(--text); background: var(--bg); line-height: 1.7; -webkit-font-smoothing: antialiased; }
+
+/* ── Scroll progress bar ── */
+#scroll-progress {
+  position: fixed; top: 0; left: 0; z-index: 9999;
+  height: 2px; width: 0%;
+  background: linear-gradient(90deg, var(--blue), #7eb3ff);
+  transition: width 0.1s linear;
+  pointer-events: none;
+}
+
 a { color: var(--blue); text-decoration: none; transition: color 0.2s; }
 a:hover { color: var(--blue-light); }
 ul { list-style: none; }
@@ -567,6 +577,26 @@ section { padding: 100px 0; }
 .award-emoji { font-size: 1.8rem; display: block; margin-bottom: 10px; }
 .award-card p { font-size: 0.85rem; color: var(--text-muted); font-weight: 500; line-height: 1.5; }
 
+/* ── Awards collapse (mobile) ── */
+.awards-hidden-extra { display: contents; }
+.awards-show-more-wrap { display: none; text-align: center; margin-top: 20px; }
+.awards-show-more-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 10px 24px; border-radius: 24px;
+  background: rgba(59,110,248,0.1); border: 1px solid rgba(59,110,248,0.25);
+  color: var(--blue-light); font-size: 0.85rem; font-weight: 600;
+  cursor: pointer; transition: background 0.2s, transform 0.2s;
+}
+.awards-show-more-btn:hover { background: rgba(59,110,248,0.2); transform: translateY(-1px); }
+.awards-show-more-btn svg { transition: transform 0.3s; }
+.awards-show-more-btn.open svg { transform: rotate(180deg); }
+
+@media (max-width: 768px) {
+  .awards-hidden-extra { display: none; }
+  .awards-hidden-extra.open { display: contents; }
+  .awards-show-more-wrap { display: block; }
+}
+
 /* Leadership Strip */
 .leadership-strip {
   background: linear-gradient(135deg, var(--navy) 0%, #1a3470 100%);
@@ -824,6 +854,21 @@ html[data-theme="light"] .skill-group h4 { color: rgba(255,255,255,0.5); }
 }
 .book-card.visible { opacity: 1; transform: translateY(0); }
 .book-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-md); }
+
+/* ── Currently Reading book card ── */
+.book-card-reading {
+  border-color: rgba(59,110,248,0.35) !important;
+  background: rgba(59,110,248,0.04) !important;
+  position: relative;
+}
+.book-reading-badge {
+  position: absolute; top: -10px; left: 16px;
+  background: var(--blue); color: #fff;
+  font-size: 0.68rem; font-weight: 700; letter-spacing: 0.04em;
+  padding: 3px 10px; border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(59,110,248,0.4);
+}
+
 .book-cover {
   height: 100px;
   display: flex; align-items: center; justify-content: center;
