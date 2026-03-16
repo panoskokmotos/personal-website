@@ -2357,3 +2357,145 @@ html[data-theme="light"] .btn-book-call { border-color: rgba(0,0,0,0.2); color: 
 .ec-disclaimer {
   font-size: 0.72rem; color: var(--text-muted); margin: 0; text-align: center;
 }
+
+/* ─────────────────────────────────────────
+   NAVBAR — IMPROVED
+───────────────────────────────────────── */
+.nav-logo {
+  display: flex; align-items: center; gap: 9px;
+  text-decoration: none;
+}
+.nav-logo-avatar {
+  width: 32px; height: 32px; border-radius: 50%;
+  object-fit: cover; border: 2px solid rgba(255,255,255,0.15);
+  transition: border-color 0.2s;
+}
+.nav-logo:hover .nav-logo-avatar { border-color: var(--blue); }
+.nav-logo-name {
+  font-size: 0.9rem; font-weight: 700; color: var(--navy);
+  letter-spacing: -0.01em;
+}
+@media (max-width: 680px) { .nav-logo-name { display: none; } }
+
+.nav-link {
+  position: relative;
+}
+.nav-link::after {
+  content: '';
+  position: absolute; left: 0; bottom: -4px;
+  width: 0; height: 2px;
+  background: var(--blue); border-radius: 2px;
+  transition: width 0.2s ease;
+}
+.nav-link:hover::after,
+.nav-link.active::after { width: 100%; }
+.nav-link.active { color: var(--blue); }
+
+.nav-cta {
+  background: var(--blue) !important;
+  color: #fff !important;
+  padding: 7px 16px !important;
+  border-radius: 8px !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.01em;
+  transition: background 0.2s, transform 0.15s, box-shadow 0.2s !important;
+  box-shadow: 0 2px 10px rgba(59,110,248,0.3);
+}
+.nav-cta:hover {
+  background: #2952cc !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(59,110,248,0.45) !important;
+}
+
+/* ─────────────────────────────────────────
+   SECTION TRANSITIONS — gradient dividers
+───────────────────────────────────────── */
+.section-dark + section:not(.section-dark),
+section:not(.section-dark) + .section-dark {
+  position: relative;
+}
+.section-dark + section:not(.section-dark)::before,
+section:not(.section-dark) + .section-dark::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 60px;
+  background: linear-gradient(to bottom, var(--bg-dark, #0d1b2a), transparent);
+  pointer-events: none; z-index: 1;
+}
+
+/* ─────────────────────────────────────────
+   BOOKS — 4-column optimised grid
+───────────────────────────────────────── */
+.books-category .books-grid {
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: 18px;
+}
+.book-card {
+  border-radius: 14px;
+}
+.book-cover-wrap {
+  border-radius: 10px 10px 0 0;
+}
+@media (max-width: 1100px) {
+  .books-category .books-grid { grid-template-columns: repeat(2, 1fr) !important; }
+}
+@media (max-width: 560px) {
+  .books-category .books-grid { grid-template-columns: 1fr !important; }
+}
+
+/* ─────────────────────────────────────────
+   LINKEDIN FOLLOW BUTTON
+───────────────────────────────────────── */
+.btn-linkedin-follow {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: #0A66C2; color: #fff;
+  border-radius: 10px; padding: 10px 20px;
+  font-weight: 700; font-size: 0.9rem;
+  text-decoration: none;
+  box-shadow: 0 4px 14px rgba(10,102,194,0.3);
+  transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+}
+.btn-linkedin-follow:hover {
+  background: #004182;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(10,102,194,0.45);
+}
+
+/* ─────────────────────────────────────────
+   TIDYCAL EMBED
+───────────────────────────────────────── */
+.tidycal-embed-wrap {
+  margin-top: 40px;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  overflow: hidden;
+}
+@media (max-width: 640px) {
+  .tidycal-embed-wrap { padding: 16px; }
+}
+
+/* ─────────────────────────────────────────
+   CHAT STARTER CHIPS
+───────────────────────────────────────── */
+.chat-starters {
+  display: flex; flex-wrap: wrap; gap: 7px;
+  padding: 0 14px 10px;
+}
+.chat-starter-chip {
+  background: rgba(59,110,248,0.12);
+  border: 1px solid rgba(59,110,248,0.3);
+  color: var(--blue);
+  border-radius: 20px;
+  padding: 5px 13px;
+  font-size: 0.78rem; font-weight: 600; font-family: inherit;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.15s;
+  white-space: nowrap;
+}
+.chat-starter-chip:hover {
+  background: rgba(59,110,248,0.22);
+  transform: translateY(-1px);
+}
+.chat-starters.hidden { display: none; }

@@ -327,3 +327,19 @@ document.querySelectorAll('.skeleton-wrap img.book-cover-img').forEach(img => {
   if (img.complete && img.naturalWidth > 0) done();
   else img.addEventListener('load', done);
 });
+
+// ── Active nav link on scroll ──
+(function() {
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-link');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(a => {
+          a.classList.toggle('active', a.getAttribute('href') === '#' + entry.target.id);
+        });
+      }
+    });
+  }, { rootMargin: '-40% 0px -55% 0px' });
+  sections.forEach(s => obs.observe(s));
+})();

@@ -72,3 +72,11 @@ async function sendMessage() {
 
 chatSend.addEventListener('click', sendMessage);
 chatInput.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } });
+
+// ── Chat starter chips ──
+function useChatStarter(btn) {
+  chatInput.value = btn.textContent;
+  // hide all starters after first use
+  document.getElementById('chatStarters').classList.add('hidden');
+  sendMessage();
+}
