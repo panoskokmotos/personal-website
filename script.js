@@ -696,3 +696,44 @@ document.querySelectorAll('.award-flip').forEach(card => {
   window.addEventListener('scroll', update, { passive: true });
   update();
 })();
+
+// ── Timeline active item highlight ──
+(function initTimelineActiveHighlight() {
+  const items = document.querySelectorAll('.timeline-item');
+  if (!items.length) return;
+
+  function updateActiveItem() {
+    let closestItem = null;
+    let closestDist = Infinity;
+    const mid = window.innerHeight / 2;
+    items.forEach(item => {
+      const rect = item.getBoundingClientRect();
+      const itemMid = rect.top + rect.height / 2;
+      const dist = Math.abs(itemMid - mid);
+      if (dist < closestDist) {
+        closestDist = dist;
+        closestItem = item;
+      }
+    });
+    items.forEach(item => item.classList.remove('tl-active'));
+    if (closestItem) closestItem.classList.add('tl-active');
+  }
+
+  // Only activate when experience section is in view
+  const section = document.getElementById('experience');
+  if (!section) return;
+
+  const sectionObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        window.addEventListener('scroll', updateActiveItem, { passive: true });
+        updateActiveItem();
+      } else {
+        window.removeEventListener('scroll', updateActiveItem);
+        items.forEach(item => item.classList.remove('tl-active'));
+      }
+    });
+  }, { threshold: 0.1 });
+
+  sectionObserver.observe(section);
+})();

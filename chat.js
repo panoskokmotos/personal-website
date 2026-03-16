@@ -7,9 +7,22 @@ const chatClose    = document.getElementById('chatClose');
 const chatMessages = document.getElementById('chatMessages');
 const chatInput    = document.getElementById('chatInput');
 const chatSend     = document.getElementById('chatSend');
+const chatNewChat  = document.getElementById('chatNewChat');
 
 const STORAGE_KEY = 'panos_chat_v1';
 let messages = []; // conversation history
+let firstReplyShown = false; // track if we've shown follow-up chips
+
+// ── Minimal markdown: bold & italic ──
+function parseMarkdown(text) {
+  // **bold** → <strong>
+  text = text.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  // *italic* (not inside bold)
+  text = text.replace(/(?<!\*)\*(?!\*)(.+?)(?<!\*)\*(?!\*)/g, '<em>$1</em>');
+  // Line breaks
+  text = text.replace(/\n/g, '<br>');
+  return text;
+}
 
 // ── Load saved chat from localStorage ──
 (function loadHistory() {
@@ -24,6 +37,7 @@ let messages = []; // conversation history
     // Hide starters since there's a conversation
     const starters = document.getElementById('chatStarters');
     if (starters) starters.classList.add('hidden');
+    firstReplyShown = true;
   } catch (e) {
     messages = [];
   }
@@ -53,11 +67,36 @@ function addMessage(role, text) {
   const div = document.createElement('div');
   div.className = 'chat-msg ' + role;
   const p = document.createElement('p');
-  p.textContent = text;
+  p.innerHTML = parseMarkdown(text);
   div.appendChild(p);
   chatMessages.appendChild(div);
   chatMessages.scrollTop = chatMessages.scrollHeight;
   return div;
+}
+
+// ── Follow-up suggested chips (shown after first AI reply) ──
+const followUpChips = [
+  { icon: '🚀', text: 'Tell me more about Givelink\'s impact' },
+  { icon: '📬', text: 'How can I contact Panos?' },
+  { icon: '🎙️', text: 'What is Entrepreneurship Talks?' },
+  { icon: '🌍', text: 'What is Panos working on now?' },
+];
+
+function showFollowUpChips() {
+  const starters = document.getElementById('chatStarters');
+  if (!starters) return;
+  // Clear existing chips and label
+  starters.innerHTML = '<p class="chat-starters-label">Follow-up questions</p>';
+  // Add 2 random follow-up chips
+  const shuffled = followUpChips.sort(() => 0.5 - Math.random()).slice(0, 2);
+  shuffled.forEach(chip => {
+    const btn = document.createElement('button');
+    btn.className = 'chat-starter-chip';
+    btn.setAttribute('onclick', 'useChatStarter(this)');
+    btn.innerHTML = `<span class="csc-icon">${chip.icon}</span><span class="csc-text">${chip.text}</span><svg class="csc-arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg>`;
+    starters.appendChild(btn);
+  });
+  starters.classList.remove('hidden');
 }
 
 // ── Send message ──
@@ -71,6 +110,10 @@ async function sendMessage() {
   addMessage('user', text);
   messages.push({ role: 'user', content: text });
   saveHistory();
+
+  // Hide starters while waiting
+  const starters = document.getElementById('chatStarters');
+  if (starters) starters.classList.add('hidden');
 
   // Animated typing dots indicator
   const thinkingEl = document.createElement('div');
@@ -93,6 +136,12 @@ async function sendMessage() {
     addMessage('bot', reply);
     messages.push({ role: 'assistant', content: reply });
     saveHistory();
+
+    // Show follow-up chips after first bot reply
+    if (!firstReplyShown) {
+      firstReplyShown = true;
+      showFollowUpChips();
+    }
   } catch {
     thinkingEl.remove();
     addMessage('bot', 'Connection error. Email panagiotis.kokmotoss@gmail.com directly!');
@@ -113,11 +162,32 @@ function useChatStarter(btn) {
   sendMessage();
 }
 
-// ── Clear chat (exposed for potential use) ──
+// ── Clear chat (new conversation) ──
 function clearChat() {
   messages = [];
+  firstReplyShown = false;
   localStorage.removeItem(STORAGE_KEY);
   chatMessages.innerHTML = '<div class="chat-msg bot"><p>👋 Hi! I\'m Panos\'s AI assistant. Ask me anything about his work, Givelink, the podcast, or how to get in touch!</p></div>';
   const starters = document.getElementById('chatStarters');
-  if (starters) starters.classList.remove('hidden');
+  if (starters) {
+    starters.innerHTML = `<p class="chat-starters-label">Suggested questions</p>
+      <button class="chat-starter-chip" onclick="useChatStarter(this)">
+        <span class="csc-icon">💡</span>
+        <span class="csc-text">What is Givelink?</span>
+        <svg class="csc-arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+      </button>
+      <button class="chat-starter-chip" onclick="useChatStarter(this)">
+        <span class="csc-icon">📅</span>
+        <span class="csc-text">How can I book a call?</span>
+        <svg class="csc-arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+      </button>
+      <button class="chat-starter-chip" onclick="useChatStarter(this)">
+        <span class="csc-icon">🏆</span>
+        <span class="csc-text">What awards has Panos won?</span>
+        <svg class="csc-arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+      </button>`;
+    starters.classList.remove('hidden');
+  }
 }
+
+if (chatNewChat) chatNewChat.addEventListener('click', clearChat);
