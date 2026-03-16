@@ -737,3 +737,36 @@ document.querySelectorAll('.award-flip').forEach(card => {
 
   sectionObserver.observe(section);
 })();
+
+// ── Scroll progress bar ──
+(function initScrollProgress() {
+  const bar = document.createElement('div');
+  bar.id = 'scroll-progress';
+  document.body.prepend(bar);
+
+  function updateBar() {
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+    bar.style.width = pct + '%';
+  }
+
+  window.addEventListener('scroll', updateBar, { passive: true });
+  updateBar();
+})();
+
+// ── Awards show more toggle ──
+function toggleAwards(btn) {
+  const extra = document.getElementById('awardsExtra');
+  if (!extra) return;
+  extra.classList.toggle('open');
+  btn.classList.toggle('open');
+  const isOpen = extra.classList.contains('open');
+  const textNode = [...btn.childNodes].find(n => n.nodeType === 3);
+  if (textNode) textNode.textContent = isOpen ? 'Show less ' : 'Show all 9 awards ';
+  if (isOpen) {
+    extra.querySelectorAll('[data-animate]').forEach(el => {
+      setTimeout(() => el.classList.add('visible'), 50);
+    });
+  }
+}

@@ -1,34 +1,26 @@
-/**
- * Panos Kokmotos — Service Worker
- * Strategy: Cache-first for shell assets, network-first for API calls.
- * Serves offline.html when a navigation request fails.
- */
-
-const CACHE_NAME = 'panos-v1';
+const CACHE_NAME = 'panos-v2';
 const OFFLINE_URL = '/offline.html';
 
-// Assets to pre-cache on install
-const SHELL_ASSETS = [
+const PRECACHE_ASSETS = [
   '/',
   '/index.html',
   '/style.css',
   '/script.js',
   '/chat.js',
-  '/offline.html',
   '/photo.webp',
-  '/photo.jpg',
-  'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap',
+  '/offline.html',
+  '/manifest.json',
 ];
 
-// ── Install: pre-cache shell ──
+// Install: precache core assets
 self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => cache.addAll(SHELL_ASSETS))
+    caches.open(CACHE_NAME).then(cache => cache.addAll(PRECACHE_ASSETS))
   );
   self.skipWaiting();
 });
 
-// ── Activate: remove old caches ──
+// Activate: clear old caches
 self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys().then(keys =>
@@ -38,47 +30,42 @@ self.addEventListener('activate', event => {
   self.clients.claim();
 });
 
-// ── Fetch: cache-first for static assets, network-first for navigation ──
+// Fetch strategy:
+// - HTML → network-first (always get fresh HTML, fallback to cache, then offline page)
+// - Everything else → cache-first (fast, fallback to network)
 self.addEventListener('fetch', event => {
-  const { request } = event;
+  if (event.request.method !== 'GET') return;
 
-  // Skip non-GET, chrome-extension, and API calls
-  if (request.method !== 'GET') return;
-  if (request.url.includes('workers.dev')) return;
-  if (request.url.includes('formspree.io')) return;
+  const url = new URL(event.request.url);
+  const isHTML = event.request.headers.get('accept')?.includes('text/html');
+  const isSameOrigin = url.origin === self.location.origin;
 
-  // Navigation requests (HTML pages)
-  if (request.mode === 'navigate') {
+  if (isHTML && isSameOrigin) {
+    // Network-first for HTML
     event.respondWith(
-      fetch(request)
+      fetch(event.request)
         .then(res => {
-          // Cache a fresh copy
           const clone = res.clone();
-          caches.open(CACHE_NAME).then(c => c.put(request, clone));
+          caches.open(CACHE_NAME).then(c => c.put(event.request, clone));
           return res;
         })
-        .catch(() => caches.match(OFFLINE_URL))
+        .catch(() =>
+          caches.match(event.request)
+            .then(cached => cached || caches.match(OFFLINE_URL))
+        )
     );
-    return;
-  }
-
-  // Static assets: cache-first
-  event.respondWith(
-    caches.match(request).then(cached => {
-      if (cached) return cached;
-      return fetch(request).then(res => {
-        // Only cache same-origin and whitelisted cdn assets
-        if (
-          res.ok &&
-          (request.url.startsWith(self.location.origin) ||
-           request.url.includes('fonts.googleapis.com') ||
-           request.url.includes('fonts.gstatic.com'))
-        ) {
+  } else {
+    // Cache-first for assets
+    event.respondWith(
+      caches.match(event.request).then(cached => {
+        if (cached) return cached;
+        return fetch(event.request).then(res => {
+          if (!res || res.status !== 200 || res.type === 'opaque') return res;
           const clone = res.clone();
-          caches.open(CACHE_NAME).then(c => c.put(request, clone));
-        }
-        return res;
-      });
-    })
-  );
+          caches.open(CACHE_NAME).then(c => c.put(event.request, clone));
+          return res;
+        });
+      })
+    );
+  }
 });
