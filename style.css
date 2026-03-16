@@ -20,6 +20,8 @@
   --text-light:  rgba(255,255,255,0.7);
   --border:      rgba(255,255,255,0.08);
   --border-dark: rgba(255,255,255,0.08);
+  --card-bg:     rgba(255,255,255,0.04);
+  --card-hover:  rgba(255,255,255,0.07);
   --radius-sm:   8px;
   --radius:      14px;
   --radius-lg:   20px;
@@ -715,22 +717,26 @@ html[data-theme="light"] .icon-moon { display: block; }
 ───────────────────────────────────────── */
 html[data-theme="light"] {
   --bg:          #ffffff;
-  --bg-alt:      #edf1ff;
-  --bg-dark:     #e4eaff;
+  --bg-alt:      #f0f4ff;
+  --bg-dark:     #e8eeff;
   --bg-dark2:    #dce6ff;
   --navy:        #0f1e3d;
   --text:        #111827;
   --text-muted:  #5a6382;
-  --border:      rgba(0,0,0,0.08);
-  --shadow:      0 2px 16px rgba(15,30,61,0.08);
-  --shadow-md:   0 6px 32px rgba(15,30,61,0.12);
-  --shadow-lg:   0 12px 48px rgba(15,30,61,0.18);
+  --text-light:  #4a5568;
+  --border:      rgba(15,30,61,0.1);
+  --card-bg:     #ffffff;
+  --card-hover:  #f5f7ff;
+  --shadow:      0 2px 16px rgba(15,30,61,0.07);
+  --shadow-md:   0 6px 32px rgba(15,30,61,0.11);
+  --shadow-lg:   0 12px 48px rgba(15,30,61,0.16);
 }
 html[data-theme="light"] #navbar.scrolled {
   background: rgba(255,255,255,0.92);
   box-shadow: 0 1px 0 rgba(0,0,0,0.07);
 }
-html[data-theme="light"] .nav-logo { color: #fff; }
+html[data-theme="light"] .nav-logo { color: var(--navy); }
+html[data-theme="light"] .nav-logo-name { color: var(--navy); }
 html[data-theme="light"] .nav-links a { color: rgba(15,30,61,0.7); }
 html[data-theme="light"] .nav-links a:hover { color: var(--navy); background: rgba(15,30,61,0.05); }
 html[data-theme="light"] .theme-toggle,
@@ -2357,3 +2363,203 @@ html[data-theme="light"] .btn-book-call { border-color: rgba(0,0,0,0.2); color: 
 .ec-disclaimer {
   font-size: 0.72rem; color: var(--text-muted); margin: 0; text-align: center;
 }
+
+/* ─────────────────────────────────────────
+   LIGHT MODE — COMPREHENSIVE FIX
+   Covers every component that uses hardcoded
+   dark values instead of CSS variables
+───────────────────────────────────────── */
+
+/* ── Cards & containers ── */
+html[data-theme="light"] .book-card {
+  background: #fff;
+  border-color: rgba(15,30,61,0.1);
+  box-shadow: 0 2px 12px rgba(15,30,61,0.07);
+}
+html[data-theme="light"] .book-card:hover {
+  box-shadow: 0 8px 28px rgba(15,30,61,0.13);
+}
+html[data-theme="light"] .book-body h4 { color: var(--navy); }
+html[data-theme="light"] .book-author { color: var(--text-muted); }
+html[data-theme="light"] .book-highlights li { color: var(--text); }
+
+/* ── Timeline ── */
+html[data-theme="light"] .tl-card {
+  background: #fff;
+  border-color: rgba(15,30,61,0.1);
+  box-shadow: 0 2px 12px rgba(15,30,61,0.07);
+}
+html[data-theme="light"] .tl-card:hover { box-shadow: 0 6px 24px rgba(15,30,61,0.12); }
+html[data-theme="light"] .tl-card h3 { color: var(--navy); }
+html[data-theme="light"] .tl-company { color: var(--blue); }
+html[data-theme="light"] .tl-card p,
+html[data-theme="light"] .tl-bullets li { color: var(--text); }
+html[data-theme="light"] .tl-date,
+html[data-theme="light"] .tl-loc { color: var(--text-muted); }
+html[data-theme="light"] .tl-badge.current { background: rgba(59,110,248,0.12); color: var(--blue); }
+html[data-theme="light"] .tl-dot { background: var(--border); }
+html[data-theme="light"] .tl-line { background: var(--border); }
+
+/* ── LinkedIn post cards ── */
+html[data-theme="light"] .li-card {
+  background: #fff;
+  border-color: rgba(15,30,61,0.1);
+  box-shadow: 0 2px 12px rgba(15,30,61,0.07);
+}
+html[data-theme="light"] .li-card:hover { box-shadow: 0 6px 24px rgba(15,30,61,0.12); }
+html[data-theme="light"] .li-text { color: var(--text); }
+html[data-theme="light"] .li-author strong { color: var(--navy); }
+html[data-theme="light"] .li-author span { color: var(--text-muted); }
+html[data-theme="light"] .li-engagement span { color: var(--text-muted); }
+html[data-theme="light"] .li-cta { color: var(--blue); }
+
+/* ── Watch section ── */
+html[data-theme="light"] .watch-card { background: #fff; border-radius: 14px; box-shadow: 0 2px 12px rgba(15,30,61,0.08); padding-bottom: 12px; }
+html[data-theme="light"] .watch-label { color: var(--navy); }
+html[data-theme="light"] .watch-summary { color: var(--text-muted); }
+html[data-theme="light"] .watch-featured-info h3 { color: var(--navy); }
+html[data-theme="light"] .watch-featured-info p { color: var(--text-muted); }
+
+/* ── Project cards ── */
+html[data-theme="light"] .project-card {
+  background: #fff;
+  border-color: rgba(15,30,61,0.1);
+  box-shadow: 0 2px 16px rgba(15,30,61,0.08);
+}
+html[data-theme="light"] .project-card:hover { box-shadow: 0 8px 32px rgba(15,30,61,0.13); }
+html[data-theme="light"] .project-card h3 { color: var(--navy); }
+html[data-theme="light"] .project-card p { color: var(--text); }
+html[data-theme="light"] .project-type { color: var(--text-muted); }
+html[data-theme="light"] .proj-metric strong { color: var(--navy); }
+html[data-theme="light"] .proj-metric span { color: var(--text-muted); }
+
+/* ── Blog cards ── */
+html[data-theme="light"] .blog-card {
+  background: #fff;
+  border-color: rgba(15,30,61,0.1);
+  box-shadow: 0 2px 12px rgba(15,30,61,0.07);
+}
+html[data-theme="light"] .blog-card:hover { box-shadow: 0 6px 24px rgba(15,30,61,0.12); }
+html[data-theme="light"] .blog-card h3 { color: var(--navy); }
+html[data-theme="light"] .blog-card p { color: var(--text); }
+html[data-theme="light"] .blog-read { color: var(--text-muted); }
+html[data-theme="light"] .blog-cta { color: var(--blue); }
+
+/* ── Open To cards ── */
+html[data-theme="light"] .open-to-card {
+  background: #fff;
+  border-color: rgba(15,30,61,0.1);
+  box-shadow: 0 2px 12px rgba(15,30,61,0.07);
+}
+html[data-theme="light"] .open-to-card:hover { box-shadow: 0 8px 28px rgba(15,30,61,0.13); }
+html[data-theme="light"] .open-to-card h4 { color: var(--navy); }
+html[data-theme="light"] .open-to-card p { color: var(--text-muted); }
+
+/* ── Now section ── */
+html[data-theme="light"] .now-card {
+  background: #fff;
+  border-color: rgba(15,30,61,0.1);
+  box-shadow: 0 2px 12px rgba(15,30,61,0.07);
+}
+html[data-theme="light"] .now-card h4 { color: var(--navy); }
+html[data-theme="light"] .now-card p { color: var(--text); }
+
+/* ── Leadership cards ── */
+html[data-theme="light"] .leadership-card {
+  background: rgba(15,30,61,0.04);
+  border-color: rgba(15,30,61,0.1);
+}
+html[data-theme="light"] .leadership-card:hover { background: rgba(15,30,61,0.07); }
+html[data-theme="light"] .lc-body strong { color: var(--navy); }
+html[data-theme="light"] .lc-body span { color: var(--text-muted); }
+
+/* ── Programs grid ── */
+html[data-theme="light"] .prog-card {
+  background: #fff;
+  border-color: rgba(15,30,61,0.1);
+  color: var(--navy);
+  box-shadow: 0 2px 8px rgba(15,30,61,0.06);
+}
+html[data-theme="light"] .prog-card:hover { background: #f0f4ff; }
+
+/* ── Milestone / Journey ── */
+html[data-theme="light"] .milestone-track,
+html[data-theme="light"] .milestones-track { background: transparent; }
+html[data-theme="light"] .ms-card h4 { color: var(--navy); }
+html[data-theme="light"] .ms-card p { color: var(--text-muted); }
+html[data-theme="light"] .ms-year { color: var(--text-muted); }
+html[data-theme="light"] .ms-dot::before { background: var(--blue); border-color: var(--bg-alt); }
+html[data-theme="light"] .ms-dot::after { background: rgba(15,30,61,0.15); }
+html[data-theme="light"] .journey-xp-bar { background: #fff; border-color: rgba(15,30,61,0.12); }
+html[data-theme="light"] .journey-xp-track { background: rgba(15,30,61,0.08); }
+
+/* ── About section ── */
+html[data-theme="light"] .about-text p { color: var(--text); }
+html[data-theme="light"] .about-tag { background: rgba(15,30,61,0.06); color: var(--navy); border-color: rgba(15,30,61,0.1); }
+
+/* ── Skills ── */
+html[data-theme="light"] .skill-group { background: #fff; border-color: rgba(15,30,61,0.1); box-shadow: 0 1px 8px rgba(15,30,61,0.05); }
+
+/* ── Press cards (section stays dark — text already #fff) ── */
+html[data-theme="light"] .press-thumb-placeholder { opacity: 0.92; }
+
+/* ── Email capture ── */
+html[data-theme="light"] .email-capture-inner { background: #fff; }
+html[data-theme="light"] .email-capture-text h3 { color: var(--navy); }
+html[data-theme="light"] .email-capture-text p { color: var(--text-muted); }
+html[data-theme="light"] .ec-input { background: #f8faff; border-color: rgba(15,30,61,0.15); color: var(--navy); }
+
+/* ── TidyCal embed ── */
+html[data-theme="light"] .tidycal-embed-wrap { background: #f8faff; border-color: rgba(15,30,61,0.1); }
+
+/* ── Chat widget ── */
+html[data-theme="light"] .chat-panel {
+  background: #fff;
+  border-color: rgba(15,30,61,0.12);
+  box-shadow: 0 16px 48px rgba(15,30,61,0.18);
+}
+html[data-theme="light"] .chat-header { background: #f5f7ff; border-color: rgba(15,30,61,0.1); }
+html[data-theme="light"] .chat-header strong { color: var(--navy); }
+html[data-theme="light"] .chat-header span { color: var(--text-muted); }
+html[data-theme="light"] .chat-messages { background: #fafbff; }
+html[data-theme="light"] .chat-msg.bot p { background: #eef1ff; color: var(--navy); }
+html[data-theme="light"] .chat-msg.user p { background: var(--blue); color: #fff; }
+html[data-theme="light"] .chat-input-wrap { background: #fff; border-color: rgba(15,30,61,0.1); }
+html[data-theme="light"] #chatInput { color: var(--navy); background: transparent; }
+html[data-theme="light"] #chatInput::placeholder { color: var(--text-muted); }
+html[data-theme="light"] .chat-note { color: var(--text-muted); }
+html[data-theme="light"] .chat-starter-chip {
+  background: rgba(59,110,248,0.08);
+  border-color: rgba(59,110,248,0.2);
+  color: var(--blue);
+}
+html[data-theme="light"] .chat-starter-chip:hover { background: rgba(59,110,248,0.15); }
+
+/* ── Section-alt background text ── */
+html[data-theme="light"] .section-sub { color: var(--text-muted); }
+html[data-theme="light"] .contact-sub { color: rgba(255,255,255,0.75); }
+
+/* ── Awards grid ── */
+html[data-theme="light"] .award-card {
+  background: rgba(15,30,61,0.04);
+  border-color: rgba(15,30,61,0.1);
+}
+html[data-theme="light"] .award-card p { color: var(--navy); }
+html[data-theme="light"] .award-card:hover { background: rgba(59,110,248,0.08); }
+
+/* ── Chips (general) ── */
+html[data-theme="light"] .chip-brand {
+  background: rgba(59,110,248,0.08);
+  border-color: rgba(59,110,248,0.2);
+  color: var(--blue);
+}
+html[data-theme="light"] .chip-brand:hover { background: var(--blue); color: #fff; }
+
+/* ── Footer ── */
+html[data-theme="light"] footer {
+  background: #f0f4ff;
+  border-top: 1px solid rgba(15,30,61,0.1);
+}
+html[data-theme="light"] .footer-inner p { color: var(--text-muted); }
+html[data-theme="light"] .footer-links a { color: var(--text-muted); }
+html[data-theme="light"] .footer-links a:hover { color: var(--navy); }
