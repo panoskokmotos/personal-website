@@ -2767,12 +2767,28 @@ html[data-theme="light"] .footer-links a:hover { color: var(--navy); }
   padding: 6px 28px; gap: 4px;
   transition: opacity 0.2s;
 }
-.logo-item:hover { opacity: 0.75; }
+.logo-item:hover { opacity: 0.8; }
 .logo-svg {
   height: 22px; width: auto;
   fill: var(--text-muted);
   display: block;
 }
+
+/* ── Real logo images — grayscale + blend-mode for dark/light harmony ── */
+.logo-img {
+  display: block; width: auto; object-fit: contain;
+  filter: grayscale(1) brightness(2) opacity(0.7);
+  mix-blend-mode: screen;          /* dark bg: white logos show, dark bg disappears */
+  transition: filter 0.2s, opacity 0.2s;
+  max-height: 40px;
+}
+.logo-item:hover .logo-img { filter: grayscale(0) brightness(1) opacity(1); mix-blend-mode: normal; }
+/* Logo-specific height tweaks */
+.logo-img-forbes  { max-height: 26px; }
+.logo-img-wef     { max-height: 42px; }
+.logo-img-dragons { max-height: 44px; }
+.logo-img-mit     { max-height: 30px; }
+.logo-img-athens  { max-height: 40px; }
 .logo-sub {
   font-size: 0.6rem; font-weight: 700;
   letter-spacing: 0.08em; text-transform: uppercase;
@@ -2786,6 +2802,11 @@ html[data-theme="light"] .footer-links a:hover { color: var(--navy); }
 html[data-theme="light"] .logo-svg { fill: rgba(15,30,61,0.45); }
 html[data-theme="light"] .logo-sub { opacity: 0.5; }
 html[data-theme="light"] .logo-divider { background: rgba(15,30,61,0.1); }
+html[data-theme="light"] .logo-img {
+  filter: grayscale(1) opacity(0.55);
+  mix-blend-mode: multiply;        /* light bg: dark logos show, white bg disappears */
+}
+html[data-theme="light"] .logo-item:hover .logo-img { filter: grayscale(0) opacity(1); mix-blend-mode: normal; }
 
 /* ── Press Kit button ── */
 .press-kit-row {
