@@ -901,7 +901,7 @@ html[data-theme="light"] .skill-group h4 { color: rgba(255,255,255,0.5); }
    JOURNEY GAMIFICATION
 ───────────────────────────────────────── */
 
-/* XP Bar */
+/* XP Bar — sticky while scrolling milestones */
 .journey-xp-bar {
   max-width: 760px; margin: 0 auto 32px;
   background: rgba(255,255,255,0.05);
@@ -909,6 +909,11 @@ html[data-theme="light"] .skill-group h4 { color: rgba(255,255,255,0.5); }
   border-radius: 12px;
   padding: 14px 20px;
   display: flex; flex-direction: column; gap: 8px;
+  position: sticky;
+  top: 68px;
+  z-index: 90;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 .journey-xp-labels {
   display: flex; justify-content: space-between; align-items: center;
@@ -2156,3 +2161,199 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
   transition: top 0.2s;
 }
 .skip-to-content:focus { top: 16px; }
+
+/* ─────────────────────────────────────────
+   PREFERS REDUCED MOTION
+───────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .hero-orb { animation: none !important; }
+  .journey-xp-fill { transition: none !important; }
+}
+
+/* ─────────────────────────────────────────
+   IMPROVED BUTTONS
+───────────────────────────────────────── */
+/* Watch on YouTube — featured */
+.btn-youtube-featured {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: #ff0000; color: #fff;
+  border-radius: 10px; padding: 12px 22px;
+  font-weight: 700; font-size: 0.95rem;
+  text-decoration: none;
+  box-shadow: 0 4px 14px rgba(255,0,0,0.35);
+  transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+  margin-top: 8px;
+}
+.btn-youtube-featured:hover {
+  background: #cc0000;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(255,0,0,0.45);
+}
+
+/* Visit Givelink button */
+.btn-visit-givelink {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: linear-gradient(135deg, #7c4dff, #5c3cf0);
+  color: #fff;
+  border-radius: 10px; padding: 11px 20px;
+  font-weight: 700; font-size: 0.9rem;
+  text-decoration: none;
+  box-shadow: 0 4px 16px rgba(124,77,255,0.35);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.btn-visit-givelink:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(124,77,255,0.5);
+}
+.btn-visit-givelink .btn-logo {
+  width: 18px; height: 18px; border-radius: 4px; object-fit: contain;
+}
+
+/* Book a Call button (hero) */
+.btn-book-call {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: transparent;
+  color: var(--text);
+  border: 2px solid var(--border);
+  border-radius: 10px; padding: 11px 20px;
+  font-weight: 700; font-size: 0.95rem;
+  text-decoration: none;
+  transition: border-color 0.2s, color 0.2s, background 0.2s, transform 0.2s;
+}
+.btn-book-call:hover {
+  border-color: var(--blue);
+  color: var(--blue);
+  background: rgba(59,110,248,0.07);
+  transform: translateY(-2px);
+}
+html[data-theme="light"] .btn-book-call { border-color: rgba(0,0,0,0.2); color: var(--navy); }
+
+/* ─────────────────────────────────────────
+   PRESS COVERAGE — Custom Placeholder Thumbnails
+───────────────────────────────────────── */
+.press-thumb-placeholder {
+  width: calc(100% + 40px);
+  height: 132px;
+  margin: -20px -20px 12px;
+  border-radius: 12px 12px 0 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 8px;
+  overflow: hidden;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.ptp-icon { font-size: 2rem; line-height: 1; }
+.ptp-label {
+  font-size: 0.75rem; font-weight: 800;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  opacity: 0.9;
+}
+.press-thumb-forbes   { background: linear-gradient(135deg, #0a0a0a 0%, #222 100%); color: #fff; }
+.press-thumb-athensvoice { background: linear-gradient(135deg, #1a237e 0%, #283593 100%); color: #fff; }
+.press-thumb-startupper  { background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 100%); color: #fff; }
+.press-thumb-epixeiro    { background: linear-gradient(135deg, #e65100 0%, #f57c00 100%); color: #fff; }
+.press-thumb-orangegrove { background: linear-gradient(135deg, #bf360c 0%, #e64a19 100%); color: #fff; }
+.press-thumb-patras      { background: linear-gradient(135deg, #1a237e 0%, #3949ab 100%); color: #fff; }
+.press-thumb-naftemporiki { background: linear-gradient(135deg, #212121 0%, #424242 100%); color: #fff; }
+
+/* ─────────────────────────────────────────
+   OPEN TO SECTION
+───────────────────────────────────────── */
+.open-to-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-top: 32px;
+}
+@media (max-width: 900px) {
+  .open-to-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 540px) {
+  .open-to-grid { grid-template-columns: 1fr; }
+}
+.open-to-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.open-to-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+.ot-icon {
+  font-size: 2rem; margin-bottom: 12px;
+}
+.open-to-card h4 {
+  font-size: 0.97rem; font-weight: 700; color: var(--navy);
+  margin-bottom: 8px;
+}
+.open-to-card p {
+  font-size: 0.83rem; color: var(--text-muted); line-height: 1.6; margin: 0;
+}
+
+/* ─────────────────────────────────────────
+   EMAIL CAPTURE
+───────────────────────────────────────── */
+.email-capture {
+  margin-top: 48px;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(135deg, var(--blue) 0%, #7c3aed 100%);
+  padding: 2px;
+}
+.email-capture-inner {
+  background: var(--bg);
+  border-radius: calc(var(--radius-lg) - 2px);
+  padding: 36px 40px;
+  display: flex; align-items: center; gap: 40px;
+}
+@media (max-width: 760px) {
+  .email-capture-inner {
+    flex-direction: column; gap: 24px; padding: 28px 22px; text-align: center;
+  }
+  .ec-input-row { flex-direction: column; }
+  .ec-btn { width: 100%; }
+}
+.email-capture-text { flex: 1; }
+.ec-eyebrow {
+  font-size: 0.7rem; font-weight: 800; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--blue);
+  display: block; margin-bottom: 8px;
+}
+.email-capture-text h3 {
+  font-size: 1.15rem; font-weight: 800; color: var(--navy); margin-bottom: 6px;
+}
+.email-capture-text p {
+  font-size: 0.85rem; color: var(--text-muted); margin: 0;
+}
+.email-capture-form { flex-shrink: 0; min-width: 280px; }
+.ec-input-row {
+  display: flex; gap: 8px; margin-bottom: 8px;
+}
+.ec-input {
+  flex: 1; padding: 10px 14px;
+  border: 1.5px solid var(--border); border-radius: 8px;
+  background: var(--bg); color: var(--text);
+  font-size: 0.9rem; font-family: inherit;
+  outline: none;
+}
+.ec-input:focus { border-color: var(--blue); }
+.ec-btn {
+  padding: 10px 18px;
+  background: var(--blue); color: #fff;
+  border: none; border-radius: 8px;
+  font-weight: 700; font-size: 0.9rem; font-family: inherit;
+  cursor: pointer; white-space: nowrap;
+  transition: background 0.2s, transform 0.15s;
+}
+.ec-btn:hover { background: #2952cc; transform: translateY(-1px); }
+.ec-disclaimer {
+  font-size: 0.72rem; color: var(--text-muted); margin: 0; text-align: center;
+}
