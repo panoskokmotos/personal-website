@@ -1,6 +1,5 @@
 // ── Ask Panos AI Chat ──
-// Replace WORKER_URL with your deployed Cloudflare Worker URL after deploying cloudflare-worker.js
-const WORKER_URL = 'https://ask-panos.YOUR-SUBDOMAIN.workers.dev';
+const WORKER_URL = 'https://ask-panos.panagiotis-kokmotoss.workers.dev';
 
 const chatWidget   = document.getElementById('chatWidget');
 const chatToggle   = document.getElementById('chatToggle');
