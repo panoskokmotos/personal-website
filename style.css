@@ -52,8 +52,26 @@ em { font-style: italic; color: var(--blue); }
 /* ── Container ── */
 .container { max-width: 1000px; margin: 0 auto; padding: 0 28px; }
 section { padding: 100px 0; }
-.section-alt  { background: var(--bg-alt); }
-.section-dark { background: var(--bg-dark); }
+.section-alt  { background: var(--bg-alt); position: relative; }
+.section-dark { background: var(--bg-dark); position: relative; }
+
+/* ── Section transition gradient bleeds ── */
+/* Dark → Alt: fade dark bg out at bottom of dark section */
+.section-dark + .section-alt::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 60px; pointer-events: none;
+  background: linear-gradient(to bottom, var(--bg-dark), transparent);
+  z-index: 1;
+}
+/* Alt → Dark: fade alt bg out at bottom of alt section */
+.section-alt + .section-dark::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 60px; pointer-events: none;
+  background: linear-gradient(to bottom, var(--bg-alt), transparent);
+  z-index: 1;
+}
 
 /* ── Section Labels ── */
 .section-eyebrow {
@@ -247,6 +265,12 @@ section { padding: 100px 0; }
   border: 3px solid rgba(255,255,255,0.2);
   box-shadow: 0 8px 32px rgba(59,110,248,0.4);
   overflow: hidden;
+  transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.35s ease;
+  cursor: default;
+}
+.hero-avatar:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 48px rgba(59,110,248,0.55), 0 4px 16px rgba(0,0,0,0.3);
 }
 .hero-avatar img {
   width: 100%; height: 100%; object-fit: cover; object-position: center top;
@@ -3249,14 +3273,28 @@ html[data-theme="light"] .chat-typing-dots span { background: #bbb; }
 }
 .contact-card-inner-link strong { display: block; font-weight: 600; font-size: 0.92rem; }
 .contact-card-inner-link p { margin: 2px 0 0; font-size: 0.82rem; color: var(--text-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+@keyframes copy-green-flash {
+  0%   { background: rgba(34,197,94,0.28); box-shadow: 0 0 0 3px rgba(34,197,94,0.22); }
+  60%  { background: rgba(34,197,94,0.12); box-shadow: 0 0 0 1px rgba(34,197,94,0.10); }
+  100% { background: rgba(34,197,94,0.08); box-shadow: none; }
+}
+@keyframes check-pop {
+  0%   { transform: scale(0.5); opacity: 0; }
+  60%  { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(1);   opacity: 1; }
+}
 .copy-email-btn {
   flex-shrink: 0; background: none; border: 1px solid var(--border);
   border-radius: 8px; padding: 7px; cursor: pointer;
-  color: var(--text-muted); transition: all 0.18s var(--ease,ease);
+  color: var(--text-muted); transition: background 0.18s, border-color 0.18s, color 0.18s;
   display: flex; align-items: center; justify-content: center;
 }
 .copy-email-btn:hover { background: rgba(59,110,248,0.1); border-color: var(--blue); color: var(--blue); }
-.copy-email-btn.copied { border-color: #22c55e; color: #22c55e; background: rgba(34,197,94,0.1); }
+.copy-email-btn.copied {
+  border-color: #22c55e; color: #22c55e;
+  animation: copy-green-flash 1.5s ease forwards;
+}
+.copy-email-btn.copied .check-icon { animation: check-pop 0.3s cubic-bezier(0.34,1.56,0.64,1) forwards; }
 
 /* ── Spotify lazy facade ── */
 .spotify-facade {

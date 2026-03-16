@@ -586,23 +586,25 @@ document.querySelectorAll('.copy-email-btn').forEach(btn => {
   btn.addEventListener('click', () => {
     const text = btn.dataset.copy;
     if (!text) return;
-    navigator.clipboard.writeText(text).then(() => {
+    const applyFeedback = () => {
       btn.classList.add('copied');
-      btn.querySelector('.copy-icon').style.display = 'none';
-      btn.querySelector('.check-icon').style.display = '';
+      const copyIcon  = btn.querySelector('.copy-icon');
+      const checkIcon = btn.querySelector('.check-icon');
+      if (copyIcon)  copyIcon.style.display  = 'none';
+      if (checkIcon) checkIcon.style.display = '';
       setTimeout(() => {
         btn.classList.remove('copied');
-        btn.querySelector('.copy-icon').style.display = '';
-        btn.querySelector('.check-icon').style.display = 'none';
-      }, 2200);
-    }).catch(() => {
+        if (copyIcon)  copyIcon.style.display  = '';
+        if (checkIcon) checkIcon.style.display = 'none';
+      }, 1500);
+    };
+    navigator.clipboard.writeText(text).then(applyFeedback).catch(() => {
       // Fallback for older browsers
       const ta = document.createElement('textarea');
       ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
       document.body.appendChild(ta); ta.select();
       document.execCommand('copy'); document.body.removeChild(ta);
-      btn.classList.add('copied');
-      setTimeout(() => btn.classList.remove('copied'), 2200);
+      applyFeedback();
     });
   });
 });
