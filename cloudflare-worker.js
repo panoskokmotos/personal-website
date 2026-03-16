@@ -1,5 +1,6 @@
 /**
  * Cloudflare Worker — "Ask Panos" AI Chat Proxy
+ * With IP-based rate limiting (20 req/hour using in-memory Map)
  *
  * Deploy at: https://dash.cloudflare.com → Workers & Pages → Create Worker
  * Add env var ANTHROPIC_API_KEY in Settings → Variables
@@ -16,7 +17,7 @@ KEY FACTS ABOUT PANOS:
 
 GIVELINK (Co-Founder & COO, 2022–present):
 - In-kind donation platform for nonprofits — donors shop the goods charities need most
-- 10,000+ users, 8,500+ donations processed, operating in 2+ countries
+- 100K+ lives impacted, $220K+ donated to nonprofits, 8,500+ donations processed
 - 100+ charity partners, raised €200,000 Pre-Seed (LATSCO Family Office & V Group)
 - Forbes 30 Under 30 Greece · Top 4 Europe GSEA 2023 · 2× Best University Startup Greece
 - European Young Innovators Top 15 Social Entrepreneurship Startups U26
@@ -60,25 +61,61 @@ If someone wants to contact Panos, give them his email and LinkedIn.
 If you don't know something, say you're not sure and suggest emailing him directly.
 Never make up facts. Keep responses friendly, short, and helpful.`;
 
+// ── In-memory rate limit store (resets on worker cold-start) ──
+const rateLimitStore = new Map();
+const RATE_LIMIT = 20;          // max requests
+const RATE_WINDOW_MS = 60 * 60 * 1000; // 1 hour
+
+function checkRateLimit(ip) {
+  const now = Date.now();
+  const entry = rateLimitStore.get(ip);
+
+  if (!entry || now > entry.resetAt) {
+    rateLimitStore.set(ip, { count: 1, resetAt: now + RATE_WINDOW_MS });
+    return true; // allowed
+  }
+
+  if (entry.count >= RATE_LIMIT) {
+    return false; // blocked
+  }
+
+  entry.count++;
+  return true; // allowed
+}
+
+const CORS_HEADERS = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type',
+};
+
 export default {
   async fetch(request, env) {
     // CORS preflight
     if (request.method === 'OPTIONS') {
-      return new Response(null, {
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Methods': 'POST, OPTIONS',
-          'Access-Control-Allow-Headers': 'Content-Type',
-        },
-      });
+      return new Response(null, { headers: CORS_HEADERS });
     }
 
     if (request.method !== 'POST') {
       return new Response('Method not allowed', { status: 405 });
     }
 
+    // Rate limiting
+    const ip = request.headers.get('CF-Connecting-IP') ||
+               request.headers.get('X-Forwarded-For') || 'unknown';
+
+    if (!checkRateLimit(ip)) {
+      return new Response(
+        JSON.stringify({ text: "You've sent a lot of messages! Please wait a bit before trying again, or email panagiotis.kokmotoss@gmail.com directly." }),
+        { status: 429, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
+      );
+    }
+
     try {
       const { messages } = await request.json();
+
+      // Guard: max 10 messages in context to prevent prompt injection via long histories
+      const recentMessages = messages.slice(-10);
 
       const response = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
@@ -91,7 +128,7 @@ export default {
           model: 'claude-haiku-4-5',
           max_tokens: 512,
           system: SYSTEM_PROMPT,
-          messages,
+          messages: recentMessages,
         }),
       });
 
@@ -99,19 +136,13 @@ export default {
       const text = data.content?.[0]?.text ?? 'Sorry, I had trouble responding. Please try again.';
 
       return new Response(JSON.stringify({ text }), {
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-        },
+        headers: { 'Content-Type': 'application/json', ...CORS_HEADERS },
       });
     } catch (err) {
-      return new Response(JSON.stringify({ text: 'Something went wrong. Please email panagiotis.kokmotoss@gmail.com directly.' }), {
-        status: 500,
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-        },
-      });
+      return new Response(
+        JSON.stringify({ text: 'Something went wrong. Please email panagiotis.kokmotoss@gmail.com directly.' }),
+        { status: 500, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
+      );
     }
   },
 };

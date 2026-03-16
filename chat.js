@@ -2,14 +2,40 @@
 // Replace WORKER_URL with your deployed Cloudflare Worker URL after deploying cloudflare-worker.js
 const WORKER_URL = 'https://ask-panos.YOUR-SUBDOMAIN.workers.dev';
 
-const chatWidget  = document.getElementById('chatWidget');
-const chatToggle  = document.getElementById('chatToggle');
-const chatClose   = document.getElementById('chatClose');
+const chatWidget   = document.getElementById('chatWidget');
+const chatToggle   = document.getElementById('chatToggle');
+const chatClose    = document.getElementById('chatClose');
 const chatMessages = document.getElementById('chatMessages');
-const chatInput   = document.getElementById('chatInput');
-const chatSend    = document.getElementById('chatSend');
+const chatInput    = document.getElementById('chatInput');
+const chatSend     = document.getElementById('chatSend');
 
+const STORAGE_KEY = 'panos_chat_v1';
 let messages = []; // conversation history
+
+// ── Load saved chat from localStorage ──
+(function loadHistory() {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (!saved) return;
+    const parsed = JSON.parse(saved);
+    if (!Array.isArray(parsed) || parsed.length === 0) return;
+    messages = parsed;
+    // Re-render saved messages
+    parsed.forEach(m => addMessage(m.role === 'user' ? 'user' : 'bot', m.content));
+    // Hide starters since there's a conversation
+    const starters = document.getElementById('chatStarters');
+    if (starters) starters.classList.add('hidden');
+  } catch (e) {
+    messages = [];
+  }
+})();
+
+// ── Save to localStorage ──
+function saveHistory() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(messages.slice(-20))); // keep last 20 msgs
+  } catch (e) {}
+}
 
 // ── Toggle open/close ──
 function openChat() { chatWidget.classList.add('open'); chatInput.focus(); }
@@ -45,6 +71,7 @@ async function sendMessage() {
 
   addMessage('user', text);
   messages.push({ role: 'user', content: text });
+  saveHistory();
 
   const thinkingEl = addMessage('thinking', 'Thinking…');
 
@@ -61,6 +88,7 @@ async function sendMessage() {
     thinkingEl.remove();
     addMessage('bot', reply);
     messages.push({ role: 'assistant', content: reply });
+    saveHistory();
   } catch {
     thinkingEl.remove();
     addMessage('bot', 'Connection error. Email panagiotis.kokmotoss@gmail.com directly!');
@@ -75,7 +103,17 @@ chatInput.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKe
 
 // ── Chat starter chips ──
 function useChatStarter(btn) {
-  chatInput.value = btn.textContent;
-  document.getElementById('chatStarters').classList.add('hidden');
+  chatInput.value = btn.querySelector('.csc-text')?.textContent || btn.textContent;
+  const starters = document.getElementById('chatStarters');
+  if (starters) starters.classList.add('hidden');
   sendMessage();
+}
+
+// ── Clear chat (exposed for potential use) ──
+function clearChat() {
+  messages = [];
+  localStorage.removeItem(STORAGE_KEY);
+  chatMessages.innerHTML = '<div class="chat-msg bot"><p>👋 Hi! I\'m Panos\'s AI assistant. Ask me anything about his work, Givelink, the podcast, or how to get in touch!</p></div>';
+  const starters = document.getElementById('chatStarters');
+  if (starters) starters.classList.remove('hidden');
 }
