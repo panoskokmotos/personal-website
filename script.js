@@ -14,6 +14,7 @@ function closeMenu() {
   hamburger.classList.remove('active');
   hamburger.setAttribute('aria-expanded', 'false');
   hamburger.setAttribute('aria-label', 'Menu');
+  document.body.style.overflow = '';
 }
 
 hamburger.addEventListener('click', () => {
@@ -21,6 +22,8 @@ hamburger.addEventListener('click', () => {
   hamburger.classList.toggle('active', isOpen);
   hamburger.setAttribute('aria-expanded', isOpen);
   hamburger.setAttribute('aria-label', isOpen ? 'Close menu' : 'Menu');
+  if (isOpen) { document.body.style.overflow = 'hidden'; }
+  else { document.body.style.overflow = ''; }
 });
 if (navMobileClose) {
   navMobileClose.addEventListener('click', closeMenu);
