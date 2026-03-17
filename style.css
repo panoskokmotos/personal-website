@@ -35,6 +35,89 @@
 html { scroll-behavior: smooth; font-size: 16px; }
 body { font-family: var(--font); color: var(--text); background: var(--bg); line-height: 1.7; -webkit-font-smoothing: antialiased; }
 
+/* ── Page Loader ── */
+#page-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 100000;
+  background: var(--bg-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 20px;
+  transition: opacity 0.55s var(--ease), visibility 0.55s;
+}
+#page-loader.loader-done {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.loader-inner {
+  position: relative;
+  width: 88px;
+  height: 88px;
+}
+.loader-ring {
+  width: 88px;
+  height: 88px;
+  transform: rotate(-90deg);
+  animation: loader-ring-appear 0.4s var(--ease) both;
+}
+@keyframes loader-ring-appear {
+  from { opacity: 0; transform: rotate(-90deg) scale(0.7); }
+  to   { opacity: 1; transform: rotate(-90deg) scale(1); }
+}
+.loader-ring-track {
+  fill: none;
+  stroke: rgba(59,110,248,0.12);
+  stroke-width: 3;
+}
+.loader-ring-fill {
+  fill: none;
+  stroke: var(--blue);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-dasharray: 226.2; /* 2π × 36 */
+  stroke-dashoffset: 226.2;
+  animation: loader-arc 1.1s cubic-bezier(0.4, 0, 0.2, 1) 0.15s forwards;
+  filter: drop-shadow(0 0 8px rgba(59,110,248,0.75));
+}
+@keyframes loader-arc {
+  to { stroke-dashoffset: 0; }
+}
+.loader-monogram {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font);
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: 0.06em;
+  animation: loader-mono 0.7s var(--ease) 0.1s both;
+}
+@keyframes loader-mono {
+  0%   { opacity: 0; transform: scale(0.75); }
+  60%  { opacity: 1; transform: scale(1.08); }
+  100% { opacity: 1; transform: scale(1); }
+}
+.loader-tagline {
+  font-family: var(--font);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.3);
+  animation: loader-tag 0.6s var(--ease) 0.5s both;
+}
+@keyframes loader-tag {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
 /* ── Scroll progress bar ── */
 #scroll-progress {
   position: fixed; top: 0; left: 0; z-index: 9999;

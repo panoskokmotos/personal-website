@@ -1,3 +1,23 @@
+// ── Page Loader ──
+(function () {
+  const loader = document.getElementById('page-loader');
+  if (!loader) return;
+
+  function hideLoader() {
+    loader.classList.add('loader-done');
+    loader.addEventListener('transitionend', () => loader.remove(), { once: true });
+  }
+
+  // Hide as soon as everything is loaded, with a tiny delay so the animation plays
+  if (document.readyState === 'complete') {
+    setTimeout(hideLoader, 350);
+  } else {
+    window.addEventListener('load', () => setTimeout(hideLoader, 300));
+  }
+  // Hard fallback: never block the user longer than 2.5 s
+  setTimeout(hideLoader, 2500);
+})();
+
 // ── Navbar: transparent → solid on scroll ──
 const navbar = document.getElementById('navbar');
 window.addEventListener('scroll', () => {
