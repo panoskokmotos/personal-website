@@ -3041,7 +3041,7 @@ html[data-theme="light"] .footer-links a:hover { color: var(--navy); }
 .logo-img-wef     { max-height: 30px; max-width: 100px; }
 .logo-img-dragons { max-height: 28px; }
 .logo-img-mit     { max-height: 26px; }
-.logo-img-athens  { max-height: 22px; max-width: 100px; }
+.logo-img-athens  { max-height: 20px; max-width: 120px; }
 .logo-sub {
   font-size: 0.6rem; font-weight: 700;
   letter-spacing: 0.08em; text-transform: uppercase;
