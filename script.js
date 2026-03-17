@@ -80,17 +80,8 @@ const sectionObserver = new IntersectionObserver(entries => {
 }, { threshold: 0.4 });
 sections.forEach(s => sectionObserver.observe(s));
 
-// ── Dark / Light mode toggle ──
-const themeToggle = document.getElementById('themeToggle');
-const html = document.documentElement;
-const savedTheme = localStorage.getItem('theme') || 'dark';
-html.setAttribute('data-theme', savedTheme);
-
-themeToggle.addEventListener('click', () => {
-  const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-  html.setAttribute('data-theme', next);
-  localStorage.setItem('theme', next);
-});
+// ── Theme: dark mode locked ──
+document.documentElement.setAttribute('data-theme', 'dark');
 
 // ── Scroll progress bar ──
 const progressBar = document.getElementById('progress-bar');

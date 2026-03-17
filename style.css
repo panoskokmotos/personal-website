@@ -385,13 +385,14 @@ section { padding: 100px 0; }
 .about-left p:last-of-type { margin-bottom: 24px; }
 .about-left strong { color: var(--navy); font-weight: 700; }
 
-.about-values { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 28px; }
-.value-pill {
-  padding: 7px 14px;
-  background: var(--bg-alt);
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  font-size: 0.85rem; font-weight: 600; color: var(--navy);
+.about-voice {
+  font-size: 1rem;
+  line-height: 1.75;
+  color: var(--text-muted);
+  margin-bottom: 28px;
+  font-style: italic;
+  border-left: 3px solid rgba(59,110,248,0.4);
+  padding-left: 16px;
 }
 .about-ctas { display: flex; gap: 12px; flex-wrap: wrap; }
 

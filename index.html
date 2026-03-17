@@ -55,29 +55,58 @@
   "name": "Panos Kokmotos",
   "alternateName": "Panagiotis Kokmotos",
   "url": "https://panoskokmotos.com",
-  "image": "https://panoskokmotos.com/photo.jpg",
+  "image": {
+    "@type": "ImageObject",
+    "url": "https://panoskokmotos.com/og-image.png",
+    "width": 1200,
+    "height": 630
+  },
+  "description": "Greek entrepreneur, Forbes 30 Under 30 Greece 2024, WEF Global Shaper in San Francisco. Co-Founder & COO of Givelink — an in-kind donation platform that has impacted 100,000+ lives.",
   "jobTitle": "Co-Founder & COO",
   "worksFor": {
     "@type": "Organization",
     "name": "Givelink",
     "url": "https://givelink.app",
-    "description": "In-kind donation platform connecting donors with nonprofits"
+    "description": "In-kind donation platform connecting donors with nonprofits — 100K+ lives impacted, $220K+ in donations processed",
+    "sameAs": ["https://givelink.app", "https://www.linkedin.com/company/givelink-app"]
   },
   "alumniOf": [
-    { "@type": "EducationalOrganization", "name": "University of Patras" },
-    { "@type": "EducationalOrganization", "name": "Universitat Politècnica de Catalunya (UPC Barcelona)" }
+    {
+      "@type": "EducationalOrganization",
+      "name": "University of Patras",
+      "url": "https://www.upatras.gr",
+      "description": "M.Eng Mechanical Engineering — GPA 3.5, Top 3% of class"
+    },
+    {
+      "@type": "EducationalOrganization",
+      "name": "Universitat Politècnica de Catalunya (UPC Barcelona)",
+      "url": "https://www.upc.edu",
+      "description": "Erasmus — Technology & Engineering Management"
+    }
   ],
   "award": [
     "Forbes 30 Under 30 Greece 2024",
     "WEF Global Shaper – San Francisco Hub",
     "Top 4 Europe GSEA 2023",
     "2× Best University Startup Greece",
-    "European Young Innovators Top 15 (U26)",
-    "Pappajohn Business Plan Competition Winner 2024–25"
+    "European Young Innovators Top 15 Social Entrepreneurship (Under 26)",
+    "Pappajohn Business Plan Competition Winner 2024–25",
+    "Circle Future Leaders Fellow",
+    "Pegasus Angel Accelerator Fellow",
+    "Mensa Member"
   ],
-  "knowsAbout": ["Entrepreneurship", "Social Impact", "In-Kind Donations", "Startup Fundraising", "AI & Technology", "Mechanical Engineering"],
-  "knowsLanguage": ["Greek", "English", "French", "Spanish"],
+  "knowsAbout": ["Entrepreneurship", "Social Impact", "In-Kind Donations", "Startup Fundraising", "AI & Technology", "Mechanical Engineering", "Product Management", "Public Speaking"],
+  "knowsLanguage": [
+    { "@type": "Language", "name": "Greek" },
+    { "@type": "Language", "name": "English" },
+    { "@type": "Language", "name": "French" },
+    { "@type": "Language", "name": "Spanish" }
+  ],
   "nationality": "Greek",
+  "homeLocation": [
+    { "@type": "Place", "name": "San Francisco, California, USA" },
+    { "@type": "Place", "name": "Athens, Greece" }
+  ],
   "sameAs": [
     "https://www.linkedin.com/in/panoskokmotos",
     "https://twitter.com/panoskokmotoss",
@@ -87,6 +116,30 @@
     "https://www.weforum.org/people/panagiotis-kokmotos",
     "https://www.youtube.com/@entrepreneurshiptalks",
     "https://givelink.app"
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "@id": "https://givelink.app/#organization",
+  "name": "Givelink",
+  "url": "https://givelink.app",
+  "logo": "https://givelink.app/logo.png",
+  "description": "Givelink is an in-kind donation platform that lets donors shop for the exact goods nonprofits need most. Founded in 2022, it has 100+ charity partners, 8,500+ donations processed, 100,000+ lives impacted, and raised €200,000 in Pre-Seed funding.",
+  "foundingDate": "2022",
+  "founder": {
+    "@type": "Person",
+    "name": "Panos Kokmotos",
+    "url": "https://panoskokmotos.com"
+  },
+  "numberOfEmployees": { "@type": "QuantitativeValue", "value": 5 },
+  "areaServed": "Greece",
+  "sameAs": [
+    "https://givelink.app",
+    "https://www.linkedin.com/company/givelink-app",
+    "https://pitchbook.com/profiles/company/703792-90"
   ]
 }
 </script>
@@ -198,14 +251,10 @@
         <li><a href="#journey" class="nav-link">Milestones</a></li>
         <li><a href="#watch" class="nav-link">Watch</a></li>
         <li><a href="#books" class="nav-link">Books</a></li>
-        <li><a href="#skills" class="nav-link">Toolkit</a></li>
+
         <li><a href="#contact" class="nav-cta">Let's Talk →</a></li>
       </ul>
       <div class="nav-controls">
-        <button class="theme-toggle" id="themeToggle" title="Toggle theme" aria-label="Toggle dark/light mode">
-          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-        </button>
         <button class="hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
       </div>
     </div>
@@ -222,7 +271,7 @@
           <li><a href="#journey">Milestones</a></li>
           <li><a href="#watch">Watch</a></li>
           <li><a href="#books">Books</a></li>
-          <li><a href="#skills">Toolkit</a></li>
+
           <li><a href="#contact">Let's Talk</a></li>
         </ul>
         <div class="nav-mobile-socials">
@@ -249,7 +298,7 @@
       <div class="hero-avatar">
         <picture>
           <source srcset="photo.webp" type="image/webp" />
-          <img src="photo.jpg" alt="Panos Kokmotos" width="90" height="90" fetchpriority="high" />
+          <img src="photo.webp" alt="Panos Kokmotos, entrepreneur and Forbes 30 Under 30" width="90" height="90" fetchpriority="high" />
         </picture>
       </div>
       <div class="hero-badges">
@@ -371,12 +420,7 @@
           <p>I studied <strong>Mechanical Engineering</strong> at the University of Patras (Top 3%), spent a semester at <strong>UPC Barcelona</strong> on Erasmus, and turned that foundation into a mission: contribute to a better tomorrow.</p>
           <p>I co-founded <strong>Givelink</strong> in 2022 — an in-kind donation platform where donors shop for exactly what nonprofits need. No cash abstraction, just real goods, real impact, real stories.</p>
           <p>Beyond Givelink, I host <strong>Entrepreneurship Talks</strong>, serve as a <strong>WEF Global Shaper</strong> in San Francisco, and sit on the Executive Board of <strong>Social Impact SF</strong>. Ultimately, I want to provide value to every young person facing economic difficulties — and help them believe in their future.</p>
-          <div class="about-values">
-            <div class="value-pill">🎯 Impact-first</div>
-            <div class="value-pill">📈 Growth mindset</div>
-            <div class="value-pill">🤝 Community builder</div>
-            <div class="value-pill">🌍 Global citizen</div>
-          </div>
+          <p class="about-voice">I get my energy from problems where the stakes are real. I'm not drawn to impressive-sounding ideas — I'm drawn to things that make an actual difference in people's daily lives. I read obsessively, train for HYROX and triathlons, and I genuinely believe that the discipline of finishing a hard race and the discipline of building a company you believe in are exactly the same muscle.</p>
           <div class="about-ctas">
             <a href="https://tidycal.com/givelink/panos" target="_blank" rel="noopener" class="btn btn-primary">Book a Call</a>
             <a href="https://www.linkedin.com/in/panoskokmotos/" target="_blank" rel="noopener" class="btn btn-outline">LinkedIn</a>
@@ -386,7 +430,7 @@
           <div class="about-photo-wrap">
             <picture>
               <source srcset="assets/headshot.webp" type="image/webp" />
-              <img src="assets/headshot.jpg" alt="Panos Kokmotos" class="about-photo-placeholder" width="260" height="260" loading="lazy" onerror="this.src='photo.jpg'" />
+              <img src="assets/headshot.jpg" alt="Panos Kokmotos — Greek entrepreneur, Forbes 30 Under 30, Co-Founder of Givelink" class="about-photo-placeholder" width="260" height="260" loading="lazy" onerror="this.src='photo.jpg'" />
             </picture>
             <div class="about-photo-ring"></div>
           </div>
@@ -1233,46 +1277,6 @@
           <p class="insight-text" id="insightText"></p>
           <span class="insight-source" id="insightSource"></span>
         </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ── Skills ── -->
-  <section id="skills" class="section-dark">
-    <div class="container">
-      <p class="section-eyebrow light">Skills &amp; Interests</p>
-      <h2 class="section-heading light">Toolkit &amp; Passions</h2>
-      <div class="skills-cols">
-        <div class="skill-group"><h4>🌍 Languages</h4>
-          <div class="lang-bars">
-            <div class="lang-bar-item">
-              <span class="lang-bar-label">Greek (Native)</span>
-              <div class="lang-bar-track"><div class="lang-bar-fill" data-pct="100"></div></div>
-              <span class="lang-bar-pct">100%</span>
-            </div>
-            <div class="lang-bar-item">
-              <span class="lang-bar-label">English (C2)</span>
-              <div class="lang-bar-track"><div class="lang-bar-fill" data-pct="98"></div></div>
-              <span class="lang-bar-pct">98%</span>
-            </div>
-            <div class="lang-bar-item">
-              <span class="lang-bar-label">French (B2)</span>
-              <div class="lang-bar-track"><div class="lang-bar-fill" data-pct="70"></div></div>
-              <span class="lang-bar-pct">70%</span>
-            </div>
-            <div class="lang-bar-item">
-              <span class="lang-bar-label">Spanish (Elementary)</span>
-              <div class="lang-bar-track"><div class="lang-bar-fill" data-pct="40"></div></div>
-              <span class="lang-bar-pct">40%</span>
-            </div>
-          </div>
-        </div>
-        <div class="skill-group"><h4>💻 Technical</h4><div class="chips"><span class="chip">Python</span><span class="chip">SQL</span><span class="chip">R / RStudio</span><span class="chip">Excel</span><span class="chip">Power BI</span><span class="chip">Notion</span><span class="chip">Canva</span></div></div>
-        <div class="skill-group"><h4>🤖 AI Tools</h4><div class="chips"><span class="chip">Claude (Anthropic)</span><span class="chip">ChatGPT / GPT-4o</span><span class="chip">Cursor</span><span class="chip">Midjourney</span><span class="chip">Perplexity AI</span><span class="chip">Gemini</span><span class="chip">Notion AI</span><span class="chip">ElevenLabs</span></div></div>
-        <div class="skill-group"><h4>⚡ Entrepreneurship</h4><div class="chips"><span class="chip">Startup Fundraising</span><span class="chip">B2B Sales</span><span class="chip">Product Management</span><span class="chip">Go-to-Market</span><span class="chip">Public Speaking</span><span class="chip">Community Building</span><span class="chip">Business Development</span><span class="chip">Data Storytelling</span></div></div>
-        <div class="skill-group"><h4>🧠 Soft Skills</h4><div class="chips"><span class="chip">Leadership</span><span class="chip">Communication</span><span class="chip">Team Building</span><span class="chip">Problem Solving</span><span class="chip">Adaptability</span><span class="chip">Negotiation</span><span class="chip">Critical Thinking</span><span class="chip">Stakeholder Management</span></div></div>
-        <div class="skill-group"><h4>📜 Certificates</h4><div class="chips"><span class="chip">Google PM (Pro)</span><span class="chip">Financial Markets (Honors)</span><span class="chip">Learning How to Learn</span><span class="chip">Erasmus+ Youth</span><span class="chip">AI Catalyst Program</span></div></div>
-        <div class="skill-group"><h4>🏃 Sports &amp; Hobbies</h4><div class="chips"><span class="chip" data-tooltip="~40 books per year across business, psychology &amp; philosophy">📚 Books (40/yr)</span><span class="chip" data-tooltip="Completed 3+ HYROX races — the fitness racing world series">🏋️ HYROX</span><span class="chip" data-tooltip="Regular CrossFit athlete since 2022">⚡ CrossFit</span><span class="chip" data-tooltip="Completed sprint &amp; Olympic distance triathlons">🏊 Triathlon</span><span class="chip" data-tooltip="Mountain trail runner — loves long climbs">🥾 Trail Running</span><span class="chip" data-tooltip="Classical piano training since childhood">🎹 Piano</span><span class="chip" data-tooltip="Salsa, Bachata &amp; Kizomba">💃 Latin Dance</span><span class="chip" data-tooltip="Argentine Tango — patience &amp; connection">🕺 Tango</span><span class="chip" data-tooltip="ELO ~1400 — always improving">♟️ Chess</span><span class="chip" data-tooltip="40+ countries visited &amp; counting">✈️ Travel</span></div></div>
       </div>
     </div>
   </section>
