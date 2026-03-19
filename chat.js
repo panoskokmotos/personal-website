@@ -185,3 +185,17 @@ function clearChat() {
 }
 
 if (chatNewChat) chatNewChat.addEventListener('click', clearChat);
+
+// ── AI button size toggle ──
+const chatSizeToggle = document.getElementById('chatSizeToggle');
+if (chatSizeToggle && chatWidget) {
+  if (localStorage.getItem('chat_btn_lg') === '1') {
+    chatWidget.classList.add('chat-widget-lg');
+    chatSizeToggle.title = 'Restore button size';
+  }
+  chatSizeToggle.addEventListener('click', () => {
+    const isLg = chatWidget.classList.toggle('chat-widget-lg');
+    localStorage.setItem('chat_btn_lg', isLg ? '1' : '0');
+    chatSizeToggle.title = isLg ? 'Restore button size' : 'Enlarge AI button';
+  });
+}
