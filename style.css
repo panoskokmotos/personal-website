@@ -132,7 +132,7 @@ section { padding: 100px 0; }
   flex-shrink: 0;
   transition: transform 0.2s, box-shadow 0.2s;
 }
-.nav-logo img { width: 100%; height: 100%; object-fit: cover; object-position: center top; display: block; }
+.nav-logo img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; display: block; transform: scale(1.4); transform-origin: 50% 30%; }
 .nav-logo:hover { transform: scale(1.07); box-shadow: 0 0 0 3px var(--blue-light); }
 
 .nav-links { display: flex; align-items: center; gap: 8px; }
@@ -213,14 +213,14 @@ section { padding: 100px 0; }
 .hero-pills    { animation: hero-reveal 0.8s 1.0s both; }
 
 .hero-avatar {
-  width: 90px; height: 90px;
+  width: 120px; height: 120px;
   border-radius: 50%; margin: 0 auto 20px;
   border: 3px solid rgba(255,255,255,0.2);
   box-shadow: 0 8px 32px rgba(59,110,248,0.4);
   overflow: hidden;
 }
 .hero-avatar img {
-  width: 100%; height: 100%; object-fit: cover; object-position: center top;
+  width: 100%; height: 100%; object-fit: cover; object-position: 40% 28%;
 }
 
 .hero-badges { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 20px; }
@@ -254,18 +254,17 @@ section { padding: 100px 0; }
 }
 
 .hero-sub {
-  font-size: 1rem; color: rgba(255,255,255,0.55);
+  font-size: 1rem; color: rgba(255,255,255,0.72);
   margin-bottom: 28px;
 }
 .hero-link { color: rgba(255,255,255,0.9); border-bottom: 1px solid rgba(255,255,255,0.3); }
 .hero-link:hover { color: #fff; border-color: #fff; }
 
 .hero-quote {
-  font-size: 0.95rem; color: rgba(255,255,255,0.45);
+  font-size: 0.95rem; color: rgba(255,255,255,0.72);
   font-style: italic; line-height: 1.6;
-  max-width: 520px; margin: 0 auto 4px;
+  max-width: 520px; margin: 0 auto 32px;
 }
-.hero-quote-attr { font-size: 0.78rem; color: rgba(255,255,255,0.3); margin-bottom: 32px; }
 
 .hero-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-bottom: 32px; }
 
@@ -345,7 +344,7 @@ section { padding: 100px 0; }
 .about-photo-wrap { position: relative; }
 .about-photo-placeholder {
   width: 200px; height: 200px; border-radius: 50%;
-  object-fit: cover; object-position: center top;
+  object-fit: cover; object-position: 40% 28%;
   position: relative; z-index: 1;
   box-shadow: var(--shadow-lg);
   border: 4px solid var(--bg);
@@ -355,8 +354,9 @@ section { padding: 100px 0; }
   position: absolute; inset: -8px;
   border: 2px dashed rgba(59,110,248,0.3);
   border-radius: 50%;
-  animation: spin 20s linear infinite;
+  animation: spin 60s linear infinite;
 }
+.about-photo-wrap:hover .about-photo-ring { animation-play-state: paused; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
 .about-location-card, .about-org-card {
@@ -376,7 +376,7 @@ section { padding: 100px 0; }
 .timeline { position: relative; padding-left: 28px; }
 .timeline::before {
   content: '';
-  position: absolute; left: 0; top: 8px; bottom: 8px;
+  position: absolute; left: 7px; top: 8px; bottom: 8px;
   width: 2px; background: rgba(255,255,255,0.1);
 }
 
@@ -389,7 +389,7 @@ section { padding: 100px 0; }
 .timeline-item:last-child { margin-bottom: 0; }
 
 .tl-dot {
-  position: absolute; left: -35px; top: 20px;
+  position: absolute; left: -27px; top: 20px;
   width: 14px; height: 14px; border-radius: 50%;
   background: rgba(255,255,255,0.2);
   border: 2px solid rgba(255,255,255,0.3);
@@ -398,7 +398,7 @@ section { padding: 100px 0; }
 
 .tl-meta { margin-bottom: 10px; }
 .tl-date { display: block; font-size: 0.78rem; font-weight: 700; color: var(--blue-light); letter-spacing: 0.5px; margin-bottom: 2px; }
-.tl-loc { font-size: 0.75rem; color: rgba(255,255,255,0.35); }
+.tl-loc { font-size: 0.75rem; color: rgba(255,255,255,0.6); }
 
 .tl-card {
   background: rgba(255,255,255,0.04);
@@ -445,9 +445,8 @@ section { padding: 100px 0; }
   border-radius: var(--radius-lg);
   overflow: hidden;
   box-shadow: var(--shadow);
-  transition: transform 0.25s var(--ease), box-shadow 0.25s var(--ease);
   opacity: 0; transform: translateY(20px);
-  transition: opacity 0.5s var(--ease), transform 0.5s var(--ease), box-shadow 0.25s;
+  transition: opacity 0.5s var(--ease), transform 0.5s var(--ease), box-shadow 0.25s var(--ease);
 }
 .project-card.visible { opacity: 1; transform: translateY(0); }
 .project-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); }
@@ -505,7 +504,7 @@ section { padding: 100px 0; }
    AWARDS
 ───────────────────────────────────────── */
 .awards-grid {
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 56px;
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 56px;
 }
 .award-card {
   background: var(--bg);
@@ -597,9 +596,9 @@ footer {
   flex-shrink: 0;
 }
 .footer-logo img { width: 100%; height: 100%; object-fit: cover; object-position: center top; display: block; }
-footer p { font-size: 0.82rem; color: rgba(255,255,255,0.3); }
+footer p { font-size: 0.82rem; color: rgba(255,255,255,0.55); }
 .footer-links { display: flex; gap: 20px; }
-.footer-links a { font-size: 0.82rem; color: rgba(255,255,255,0.4); transition: color 0.2s; }
+.footer-links a { font-size: 0.82rem; color: rgba(255,255,255,0.65); transition: color 0.2s; }
 .footer-links a:hover { color: rgba(255,255,255,0.8); }
 
 /* ─────────────────────────────────────────
@@ -622,10 +621,11 @@ footer p { font-size: 0.82rem; color: rgba(255,255,255,0.3); }
   .hamburger { display: flex; }
   .impact-bar-inner { flex-wrap: wrap; }
   .impact-stat { flex: 0 0 50%; }
+  .impact-stat:last-child:nth-child(odd) { flex: 0 0 100%; }
   .impact-divider { display: none; }
   .awards-grid { grid-template-columns: 1fr; }
   .timeline { padding-left: 20px; }
-  .tl-dot { left: -27px; }
+  .tl-dot { left: -19px; }
   .tl-card { padding: 18px; }
   .footer-inner { flex-direction: column; text-align: center; }
 }
@@ -712,6 +712,7 @@ html[data-theme="light"] .skill-group h4 { color: rgba(255,255,255,0.5); }
   margin-bottom: 18px;
 }
 .marquee-wrap { overflow: hidden; }
+.marquee-wrap:hover .marquee { animation-play-state: paused; }
 .marquee {
   display: flex; gap: 0; white-space: nowrap;
   animation: marquee 28s linear infinite;
@@ -840,8 +841,7 @@ html[data-theme="light"] .skill-group h4 { color: rgba(255,255,255,0.5); }
 
 /* Achievement Toasts */
 .achievement-toasts-wrap {
-  position: fixed; bottom: 100px; left: 50%;
-  transform: translateX(-50%);
+  position: fixed; bottom: 100px; right: 90px;
   z-index: 9990;
   display: flex; flex-direction: column; align-items: center; gap: 10px;
   pointer-events: none;
@@ -1088,8 +1088,8 @@ html[data-theme="light"] .achievement-toast {
 }
 .nav-logo img {
   width: 100%; height: 100%;
-  object-fit: cover; object-position: center top;
-  display: block;
+  object-fit: cover; object-position: 50% 30%;
+  display: block; transform: scale(1.4); transform-origin: 50% 30%;
 }
 html[data-theme="light"] .nav-logo { border-color: rgba(15,30,61,0.2); }
 
@@ -1178,6 +1178,26 @@ html[data-theme="light"] .nav-logo { border-color: rgba(15,30,61,0.2); }
   border-radius: var(--radius-lg); overflow: hidden;
   box-shadow: var(--shadow-lg);
 }
+/* YouTube facade — click to load */
+.yt-facade {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  cursor: pointer; background: #000;
+  display: flex; align-items: center; justify-content: center;
+}
+.yt-facade img {
+  width: 100%; height: 100%; object-fit: cover; opacity: 0.85;
+  transition: opacity 0.2s;
+}
+.yt-facade:hover img { opacity: 1; }
+.yt-play-btn {
+  position: absolute;
+  width: 68px; height: 48px; border-radius: 12px;
+  background: rgba(0,0,0,0.75); color: #fff;
+  font-size: 1.5rem; display: flex; align-items: center; justify-content: center;
+  transition: background 0.2s, transform 0.2s;
+}
+.yt-facade:hover .yt-play-btn { background: #ff0000; transform: scale(1.1); }
+.yt-facade:focus-visible { outline: 2px solid var(--blue); outline-offset: 4px; }
 .watch-embed-wrap iframe {
   position: absolute; top: 0; left: 0;
   width: 100%; height: 100%; border: 0;
@@ -1534,6 +1554,10 @@ html[data-theme="dark"] .store-badge-google:hover { background: rgba(255,255,255
   text-transform: uppercase; color: var(--gold);
   margin-bottom: 6px;
 }
+.press-date {
+  font-weight: 400; letter-spacing: 0; text-transform: none;
+  color: rgba(255,255,255,0.5); margin-left: 4px;
+}
 .press-headline {
   font-size: 0.88rem; font-weight: 600; color: #fff;
   line-height: 1.45; margin: 0; flex: 1;
@@ -1824,20 +1848,43 @@ html[data-theme="light"] .books-philosophy {
 @media (max-width: 580px) { .skills-cols { grid-template-columns: 1fr; } }
 
 /* ─────────────────────────────────────────
-   TIMELINE — entrance animations
+   TIMELINE — entrance animations (alternating slide)
 ───────────────────────────────────────── */
-.timeline-item {
-  opacity: 0;
-  transform: translateX(-24px);
-  transition: opacity 0.5s var(--ease), transform 0.5s var(--ease);
+/* Note: base .timeline-item opacity/transform is defined above (~line 383).
+   These rules add alternating left/right slide direction on top. */
+.timeline-item:nth-child(odd)  { transform: translateX(-20px) translateY(20px); }
+.timeline-item:nth-child(even) { transform: translateX(20px)  translateY(20px); }
+.timeline-item.visible         { opacity: 1; transform: translate(0, 0) !important; }
+
+/* ─────────────────────────────────────────
+   FOCUS VISIBLE — keyboard navigation
+───────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 3px;
+  border-radius: 4px;
 }
-.timeline-item.visible {
-  opacity: 1;
-  transform: translateX(0);
+/* Remove focus ring for mouse/touch users */
+:focus:not(:focus-visible) { outline: none; }
+
+/* ─────────────────────────────────────────
+   REDUCED MOTION
+───────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .marquee { animation: none; }
+  .about-photo-ring { animation: none; }
+  .journey-walker { animation: none; }
 }
-.timeline-item:nth-child(even) {
-  transform: translateX(24px);
-}
-.timeline-item:nth-child(even).visible {
-  transform: translateX(0);
+
+/* ─────────────────────────────────────────
+   WALKER — mobile position fix
+───────────────────────────────────────── */
+@media (max-width: 640px) {
+  .journey-walker { left: 42px; }
 }

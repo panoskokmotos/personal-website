@@ -7,8 +7,14 @@ window.addEventListener('scroll', () => {
 // ── Mobile menu ──
 const hamburger = document.getElementById('hamburger');
 const navMobile = document.getElementById('nav-mobile');
-hamburger.addEventListener('click', () => navMobile.classList.toggle('open'));
-navMobile.querySelectorAll('a').forEach(a => a.addEventListener('click', () => navMobile.classList.remove('open')));
+hamburger.addEventListener('click', () => {
+  navMobile.classList.toggle('open');
+  hamburger.setAttribute('aria-expanded', navMobile.classList.contains('open') ? 'true' : 'false');
+});
+navMobile.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+  navMobile.classList.remove('open');
+  hamburger.setAttribute('aria-expanded', 'false');
+}));
 
 // ── Scroll-triggered fade-in ──
 const observer = new IntersectionObserver(entries => {
@@ -242,6 +248,23 @@ if (heroOrbs.length) {
   // Position walker at first milestone on load
   if (milestones.length) moveWalkerTo(milestones[0]);
 })();
+
+// ── YouTube facade: click/Enter to load iframe ──
+document.querySelectorAll('.yt-facade').forEach(facade => {
+  const load = () => {
+    const id = facade.dataset.videoid;
+    const title = facade.title || 'YouTube video';
+    const iframe = document.createElement('iframe');
+    iframe.src = `https://www.youtube.com/embed/${id}?autoplay=1`;
+    iframe.title = title;
+    iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+    iframe.allowFullscreen = true;
+    iframe.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;border:0';
+    facade.replaceWith(iframe);
+  };
+  facade.addEventListener('click', load);
+  facade.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); load(); } });
+});
 
 // ── Contact form async submit ──
 const contactForm = document.getElementById('contactForm');

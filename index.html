@@ -39,12 +39,12 @@
   <!-- ── Navbar ── -->
   <nav id="navbar">
     <div class="nav-inner">
-      <a href="#hero" class="nav-logo"><img src="photo.jpg" alt="Panos Kokmotos" /></a>
+      <a href="#hero" class="nav-logo"><img src="photo.jpg" alt="Panos Kokmotos" width="36" height="36" /></a>
       <ul class="nav-links">
         <li><a href="#about">About</a></li>
         <li><a href="#experience">Experience</a></li>
-        <li><a href="#linkedin">LinkedIn</a></li>
-        <li><a href="#watch">Watch</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#blog">Blog</a></li>
         <li><a href="#press">Press</a></li>
         <li><a href="#contact" class="nav-cta">Let's Talk</a></li>
       </ul>
@@ -53,14 +53,15 @@
           <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
           <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
         </button>
-        <button class="hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+        <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
       </div>
     </div>
     <div class="nav-mobile-wrap" id="nav-mobile">
       <ul>
         <li><a href="#about">About</a></li>
         <li><a href="#experience">Experience</a></li>
-        <li><a href="#linkedin">LinkedIn</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#blog">Blog</a></li>
         <li><a href="#watch">Watch</a></li>
         <li><a href="#press">Press</a></li>
         <li><a href="#contact">Let's Talk</a></li>
@@ -76,10 +77,10 @@
       <div class="hero-orb hero-orb-3"></div>
     </div>
     <div class="hero-content">
-      <div class="hero-avatar"><img src="photo.jpg" alt="Panos Kokmotos" /></div>
+      <div class="hero-avatar"><img src="photo.jpg" alt="Panos Kokmotos" width="120" height="120" /></div>
       <div class="hero-badges">
-        <span class="badge">🏆 Forbes 30 Under 30 Greece</span>
-        <span class="badge">🌍 WEF Global Shaper</span>
+        <a href="#press" class="badge">🏆 Forbes 30 Under 30 Greece</a>
+        <a href="#press" class="badge">🌍 WEF Global Shaper</a>
         <span class="badge">🚀 Co-Founder, Givelink</span>
       </div>
       <h1>Panos <span class="hero-name-accent">Kokmotos</span></h1>
@@ -155,13 +156,13 @@
             <div class="value-pill">🌍 Global citizen</div>
           </div>
           <div class="about-ctas">
-            <a href="https://tidycal.com/givelink/panos" target="_blank" rel="noopener" class="btn btn-primary">Book a Call</a>
+            <a href="#journey" class="btn btn-primary">See My Journey</a>
             <a href="https://www.linkedin.com/in/panoskokmotos/" target="_blank" rel="noopener" class="btn btn-outline">Connect on LinkedIn</a>
           </div>
         </div>
         <div class="about-right">
           <div class="about-photo-wrap">
-            <img src="photo.jpg" alt="Panos Kokmotos" class="about-photo-placeholder" />
+            <img src="photo.jpg" alt="Panos Kokmotos" class="about-photo-placeholder" width="400" height="400" />
             <div class="about-photo-ring"></div>
           </div>
           <div class="about-location-card">
@@ -356,7 +357,7 @@
         <!-- Replace href values with your real LinkedIn post URLs -->
         <a href="https://www.linkedin.com/in/panoskokmotos/" target="_blank" rel="noopener" class="li-card" data-animate>
           <div class="li-card-header">
-            <img src="photo.jpg" alt="Panos Kokmotos" class="li-avatar" />
+            <img src="photo.jpg" alt="Panos Kokmotos" class="li-avatar" width="40" height="40" />
             <div class="li-author">
               <strong>Panos Kokmotos</strong>
               <span>Co-Founder &amp; COO at Givelink</span>
@@ -365,16 +366,13 @@
             <svg class="li-icon" viewBox="0 0 24 24" fill="#0A66C2" width="22" height="22"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
           </div>
           <p class="li-text">Givelink was just named in Forbes 30 Under 30 Greece 🏆<br><br>2 years ago we started with an idea on a napkin. Today: 100+ charities, 100K+ lives impacted, €200K raised, and expanding to the US.<br><br>None of this would exist without a team that refused to quit, nonprofits that trusted us, and donors who believed that giving could work differently.<br><br>We're just getting started. 🚀</p>
-          <div class="li-engagement">
-            <span>❤️ 847</span>
-            <span>💬 93 comments</span>
-          </div>
-          <span class="li-cta">View Post →</span>
+          <!-- TODO: Replace href above with the specific LinkedIn post URL -->
+          <span class="li-cta">View on LinkedIn →</span>
         </a>
 
         <a href="https://www.linkedin.com/in/panoskokmotos/" target="_blank" rel="noopener" class="li-card" data-animate>
           <div class="li-card-header">
-            <img src="photo.jpg" alt="Panos Kokmotos" class="li-avatar" />
+            <img src="photo.jpg" alt="Panos Kokmotos" class="li-avatar" width="40" height="40" />
             <div class="li-author">
               <strong>Panos Kokmotos</strong>
               <span>Co-Founder &amp; COO at Givelink</span>
@@ -383,16 +381,13 @@
             <svg class="li-icon" viewBox="0 0 24 24" fill="#0A66C2" width="22" height="22"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
           </div>
           <p class="li-text">Honored to join the World Economic Forum Global Shapers — San Francisco Hub 🌍<br><br>1,000+ hubs. 180+ countries. Young people under 30 driving real change in their communities.<br><br>Moving from Athens to San Francisco has been the biggest leap of my life. The Shapers community is exactly the kind of network I want to be part of — people who don't just talk about making the world better, they actually do it.<br><br>Grateful for this. 🙏</p>
-          <div class="li-engagement">
-            <span>❤️ 612</span>
-            <span>💬 71 comments</span>
-          </div>
-          <span class="li-cta">View Post →</span>
+          <!-- TODO: Replace href above with the specific LinkedIn post URL -->
+          <span class="li-cta">View on LinkedIn →</span>
         </a>
 
         <a href="https://www.linkedin.com/in/panoskokmotos/" target="_blank" rel="noopener" class="li-card" data-animate>
           <div class="li-card-header">
-            <img src="photo.jpg" alt="Panos Kokmotos" class="li-avatar" />
+            <img src="photo.jpg" alt="Panos Kokmotos" class="li-avatar" width="40" height="40" />
             <div class="li-author">
               <strong>Panos Kokmotos</strong>
               <span>Co-Founder &amp; COO at Givelink</span>
@@ -401,11 +396,8 @@
             <svg class="li-icon" viewBox="0 0 24 24" fill="#0A66C2" width="22" height="22"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
           </div>
           <p class="li-text">Givelink is officially live in the US 🇺🇸<br><br>September 2025. San Francisco. 15+ nonprofits onboarded. $7,000+ in early traction in the first weeks.<br><br>We built this in Greece. We proved it works. Now we're bringing it to the market that can scale it globally.<br><br>The mission stays the same: make donating goods as easy as online shopping — with 100% transparency on where your help goes. 💙</p>
-          <div class="li-engagement">
-            <span>❤️ 1.1K</span>
-            <span>💬 108 comments</span>
-          </div>
-          <span class="li-cta">View Post →</span>
+          <!-- TODO: Replace href above with the specific LinkedIn post URL -->
+          <span class="li-cta">View on LinkedIn →</span>
         </a>
 
       </div>
@@ -422,7 +414,10 @@
       <h2 class="section-heading">Watch &amp; Listen</h2>
       <div class="watch-featured">
         <div class="watch-embed-wrap">
-          <iframe src="https://www.youtube.com/embed/WV7NpBBhXGQ" title="Dragons' Den — Givelink" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+          <div class="yt-facade" data-videoid="WV7NpBBhXGQ" title="Dragons' Den — Givelink" role="button" tabindex="0" aria-label="Play Dragons' Den — Givelink">
+            <img src="https://i.ytimg.com/vi/WV7NpBBhXGQ/hqdefault.jpg" alt="Dragons' Den — Givelink" width="480" height="360" loading="lazy" />
+            <span class="yt-play-btn" aria-hidden="true">▶</span>
+          </div>
         </div>
         <div class="watch-featured-info">
           <span class="project-label">🐉 Featured Appearance</span>
@@ -434,19 +429,28 @@
       <div class="watch-grid">
         <div class="watch-card" data-animate>
           <div class="watch-embed-wrap">
-            <iframe src="https://www.youtube.com/embed/TcVqF3OUZ0Q" title="Hustle Hours" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+            <div class="yt-facade" data-videoid="TcVqF3OUZ0Q" title="Hustle Hours" role="button" tabindex="0" aria-label="Play Hustle Hours">
+              <img src="https://i.ytimg.com/vi/TcVqF3OUZ0Q/hqdefault.jpg" alt="Hustle Hours Podcast" width="480" height="360" loading="lazy" />
+              <span class="yt-play-btn" aria-hidden="true">▶</span>
+            </div>
           </div>
           <p class="watch-label">Hustle Hours Podcast</p>
         </div>
         <div class="watch-card" data-animate>
           <div class="watch-embed-wrap">
-            <iframe src="https://www.youtube.com/embed/QouMSOF4wqQ" title="Startupper.gr" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+            <div class="yt-facade" data-videoid="QouMSOF4wqQ" title="Startupper.gr" role="button" tabindex="0" aria-label="Play Startupper.gr">
+              <img src="https://i.ytimg.com/vi/QouMSOF4wqQ/hqdefault.jpg" alt="Startupper.gr" width="480" height="360" loading="lazy" />
+              <span class="yt-play-btn" aria-hidden="true">▶</span>
+            </div>
           </div>
           <p class="watch-label">Startupper.gr</p>
         </div>
         <div class="watch-card" data-animate>
           <div class="watch-embed-wrap">
-            <iframe src="https://www.youtube.com/embed/JtWaA282G9Y" title="NAUTEMPORIKI" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+            <div class="yt-facade" data-videoid="JtWaA282G9Y" title="NAUTEMPORIKI" role="button" tabindex="0" aria-label="Play NAUTEMPORIKI">
+              <img src="https://i.ytimg.com/vi/JtWaA282G9Y/hqdefault.jpg" alt="NAUTEMPORIKI" width="480" height="360" loading="lazy" />
+              <span class="yt-play-btn" aria-hidden="true">▶</span>
+            </div>
           </div>
           <p class="watch-label">NAUTEMPORIKI</p>
         </div>
@@ -543,38 +547,32 @@
         <div class="award-card" data-animate><span class="award-emoji">⭕</span><p>Circle Future Leaders Fellow</p></div>
         <div class="award-card" data-animate><span class="award-emoji">👼</span><p>Pegasus Angel Accelerator Fellow</p></div>
         <div class="award-card" data-animate><span class="award-emoji">🌐</span><p>WEF Global Shaper, San Francisco</p></div>
-        <div class="award-card" data-animate><span class="award-emoji">🧠</span><p>Mensa Member · 132+ IQ</p></div>
       </div>
 
       <h3 class="press-sub-heading">Press Coverage</h3>
       <div class="press-grid">
         <a href="https://www.forbesgreece.gr/forbes-elliniki-ekdosi/3925981" target="_blank" rel="noopener" class="press-card" data-animate>
-          <div class="press-outlet">Forbes Greece</div>
+          <div class="press-outlet">Forbes Greece <span class="press-date">2024</span></div>
           <p class="press-headline">Feature on Givelink &amp; Social Innovation</p>
           <span class="press-arrow">→</span>
         </a>
         <a href="https://www.athensvoice.gr/epikairotita/ellada/856803/givelink-tesseris-neoi-filodoxoun-na-allaxoun-tin-filanthropia-stin-ellada/" target="_blank" rel="noopener" class="press-card" data-animate>
-          <div class="press-outlet">Athens Voice</div>
+          <div class="press-outlet">Athens Voice <span class="press-date">2023</span></div>
           <p class="press-headline">Four Young Founders Looking to Change Philanthropy in Greece</p>
           <span class="press-arrow">→</span>
         </a>
         <a href="https://startupper.gr/top-startups-2024/" target="_blank" rel="noopener" class="press-card" data-animate>
-          <div class="press-outlet">Startupper.gr</div>
+          <div class="press-outlet">Startupper.gr <span class="press-date">2024</span></div>
           <p class="press-headline">Top Greek Startups 2024</p>
           <span class="press-arrow">→</span>
         </a>
         <a href="https://www.epixeiro.gr/article/278586" target="_blank" rel="noopener" class="press-card" data-animate>
-          <div class="press-outlet">Epixeiro.gr</div>
+          <div class="press-outlet">Epixeiro.gr <span class="press-date">2023</span></div>
           <p class="press-headline">Citathlon 2023 — Innovation Challenge</p>
           <span class="press-arrow">→</span>
         </a>
-        <a href="https://orangegrove.eu/wp-content/uploads/2024/10/Orange-Grove_Annual-Report_2023.pdf" target="_blank" rel="noopener" class="press-card" data-animate>
-          <div class="press-outlet">Orange Grove</div>
-          <p class="press-headline">Annual Report 2023 — Accelerator Fellow</p>
-          <span class="press-arrow">→</span>
-        </a>
         <a href="http://patrasevents.gr/article/405865-o-17-xronos-patrinos-aristouxos-pou-egine-dektos-se-tessera-panepistimia-tis-megalis-bretanias" target="_blank" rel="noopener" class="press-card" data-animate>
-          <div class="press-outlet">Patras Events</div>
+          <div class="press-outlet">Patras Events <span class="press-date">2019</span></div>
           <p class="press-headline">17-Year-Old Accepted to 4 UK Universities</p>
           <span class="press-arrow">→</span>
         </a>
@@ -622,34 +620,11 @@
         <div class="prog-card">💼<span>Genesis Ventures Founders Club</span></div>
         <div class="prog-card">🇪🇺<span>Erasmus for Young Entrepreneurs</span></div>
         <div class="prog-card">🤖<span>AI Catalyst</span></div>
-        <div class="prog-card">🍊<span>Orange Grove Accelerator</span></div>
         <div class="prog-card">🌱<span>Impact Accelerator</span></div>
         <div class="prog-card">🏆<span>Forbes 30U30 Greece Club</span></div>
         <div class="prog-card">🇧🇪<span>European Commission Brussels</span></div>
         <div class="prog-card">🎖️<span>Mediterranean College Award</span></div>
         <div class="prog-card">❤️<span>Startups Voluntary Action Award</span></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ── Education ── -->
-  <section id="education" class="section-alt">
-    <div class="container">
-      <p class="section-eyebrow">Academic Background</p>
-      <h2 class="section-heading">Education</h2>
-      <div class="edu-grid">
-        <div class="edu-card" data-animate>
-          <div class="edu-icon">🎓</div>
-          <div class="edu-body"><span class="edu-period">2019 – 2025</span><h3>M.Eng Mechanical Engineering</h3><p class="edu-inst">University of Patras, Greece</p><p>Major: Industrial Management · <strong>Top 3% of Class</strong> · Erasmus+ Barcelona</p></div>
-        </div>
-        <div class="edu-card" data-animate>
-          <div class="edu-icon">🇪🇸</div>
-          <div class="edu-body"><span class="edu-period">Feb – June 2022</span><h3>Technology &amp; Engineering Management</h3><p class="edu-inst">UPC Barcelona · Erasmus</p><p>Int'l Business · Strategy · Data Analysis (R, SQL, Python) · <strong>Grade 8.11</strong></p></div>
-        </div>
-        <div class="edu-card" data-animate>
-          <div class="edu-icon">🏅</div>
-          <div class="edu-body"><span class="edu-period">2016 – 2019</span><h3>High School Diploma</h3><p class="edu-inst">3rd High School of Patras</p><p><strong>100% · 1st of graduating class</strong> · Panhellenic scholarship (1st in region)</p></div>
-        </div>
       </div>
     </div>
   </section>
@@ -709,6 +684,9 @@
           <div class="book-body"><h4>Tools of Titans</h4><p class="book-author">Tim Ferriss</p><p class="book-note">200+ world-class performers — athletes, investors, artists, scientists. The tactics, routines, and habits that make the difference.</p></div>
         </div>
       </div>
+      <div style="text-align:center;margin-top:40px">
+        <a href="https://panoskokmotos.substack.com" target="_blank" rel="noopener" class="btn btn-outline">See Full Reading List →</a>
+      </div>
     </div>
   </section>
 
@@ -735,6 +713,7 @@
       <h2 class="section-heading">Blogs &amp; Insights</h2>
       <p class="section-sub">Thoughts on entrepreneurship, social impact, AI, and building companies that matter.</p>
       <div class="blog-grid">
+        <!-- TODO: Replace href with the specific Substack post URL, e.g. https://panoskokmotos.substack.com/p/how-we-built-givelink -->
         <a href="https://panoskokmotos.substack.com" target="_blank" rel="noopener" class="blog-card" data-animate>
           <div class="blog-card-top">
             <span class="blog-tag">🚀 Entrepreneurship</span>
@@ -744,6 +723,7 @@
           <p>The raw, honest story of building a social impact startup with no money, no network, and everything to prove.</p>
           <span class="blog-cta">Read on Substack →</span>
         </a>
+        <!-- TODO: Replace href with the specific Substack post URL, e.g. https://panoskokmotos.substack.com/p/why-every-founder-needs-ai -->
         <a href="https://panoskokmotos.substack.com" target="_blank" rel="noopener" class="blog-card" data-animate>
           <div class="blog-card-top">
             <span class="blog-tag">🤖 AI &amp; Future</span>
@@ -753,6 +733,7 @@
           <p>AI is not a feature. It's a paradigm shift. The founders who ignore it will be disrupted by the ones who don't.</p>
           <span class="blog-cta">Read on Substack →</span>
         </a>
+        <!-- TODO: Replace href with the specific Substack post URL, e.g. https://panoskokmotos.substack.com/p/google-map-theory-of-learning -->
         <a href="https://panoskokmotos.substack.com" target="_blank" rel="noopener" class="blog-card" data-animate>
           <div class="blog-card-top">
             <span class="blog-tag">📚 Learning</span>
@@ -783,8 +764,8 @@
         <a href="https://twitter.com/PanagiotisKokm" target="_blank" rel="noopener" class="contact-card"><span class="cc-icon">𝕏</span><div><strong>Twitter / X</strong><p>@PanagiotisKokm</p></div></a>
         <a href="https://tidycal.com/givelink/panos" target="_blank" rel="noopener" class="contact-card contact-card-cta"><span class="cc-icon">📅</span><div><strong>Book a Call</strong><p>Schedule time with me</p></div></a>
       </div>
-      <!-- Formspree form: go to formspree.io → New Form → copy your form ID and replace YOUR_FORM_ID -->
-      <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST" class="contact-form" id="contactForm">
+      <!-- TODO: Replace mailto with Formspree → go to formspree.io, create a form, and set action="https://formspree.io/f/YOUR_FORM_ID" method="POST" -->
+      <form action="mailto:panagiotis.kokmotoss@gmail.com" method="GET" enctype="text/plain" class="contact-form" id="contactForm">
         <div class="form-row">
           <input type="text" name="name" placeholder="Your name" required />
           <input type="email" name="email" placeholder="Your email" required />
@@ -803,7 +784,7 @@
   <!-- ── Footer ── -->
   <footer>
     <div class="footer-inner">
-      <a href="#hero" class="footer-logo"><img src="photo.jpg" alt="Panos" /></a>
+      <a href="#hero" class="footer-logo"><img src="photo.jpg" alt="Panos" width="36" height="36" /></a>
       <p>© 2026 Panos Kokmotos · Advocate. Changemaker. Builder.</p>
       <div class="footer-links">
         <a href="https://www.linkedin.com/in/panoskokmotos/" target="_blank" rel="noopener">LinkedIn</a>
