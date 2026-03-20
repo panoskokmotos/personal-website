@@ -3145,18 +3145,24 @@ html[data-theme="light"] .footer-links a:hover { color: var(--navy); }
 
 /* ── Logos strip (Featured In) ── */
 .logos-strip-wrap {
-  overflow-x: auto; scrollbar-width: none;
-  -webkit-overflow-scrolling: touch;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 8%, #000 92%, transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0%, #000 8%, #000 92%, transparent 100%);
 }
-.logos-strip-wrap::-webkit-scrollbar { display: none; }
+.logos-track {
+  display: flex; align-items: center;
+  width: max-content;
+  animation: logoMarquee 32s linear infinite;
+}
+.logos-track:hover { animation-play-state: paused; }
+@keyframes logoMarquee {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
 .logos-strip {
   display: flex; align-items: center;
-  gap: 0; padding: 0 16px;
-  min-width: max-content; margin: 0 auto;
-  justify-content: center;
-}
-@media (max-width: 900px) {
-  .logos-strip { justify-content: flex-start; }
+  gap: 0; padding: 0 8px;
+  flex-shrink: 0;
 }
 .logo-item {
   display: flex; flex-direction: column; align-items: center;
