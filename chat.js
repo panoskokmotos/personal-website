@@ -189,8 +189,31 @@ if (chatNewChat) chatNewChat.addEventListener('click', clearChat);
 // ── Book AI: open chat pre-loaded with a book question ──
 window.chatOpenWithBook = function(title, author) {
   openChat();
-  chatInput.value = 'How did reading "' + title + '" by ' + author + ' affect Panos\u2019 life and thinking?';
-  sendMessage();
+  // Show book-specific starters instead of immediately sending
+  const starters = document.getElementById('chatStarters');
+  if (starters) {
+    starters.innerHTML = '<p class="chat-starters-label">Ask about <em>' + title + '</em></p>' +
+      '<button class="chat-starter-chip" onclick="useChatStarter(this)">' +
+        '<span class="csc-icon">\uD83D\uDCAD</span>' +
+        '<span class="csc-text">How did this book influence Panos\u2019 thinking?</span>' +
+        '<svg class="csc-arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg>' +
+      '</button>' +
+      '<button class="chat-starter-chip" onclick="useChatStarter(this)">' +
+        '<span class="csc-icon">\uD83D\uDCD6</span>' +
+        '<span class="csc-text">What are the key lessons from \u201c' + title + '\u201d?</span>' +
+        '<svg class="csc-arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg>' +
+      '</button>' +
+      '<button class="chat-starter-chip" onclick="useChatStarter(this)">' +
+        '<span class="csc-icon">\uD83D\uDE80</span>' +
+        '<span class="csc-text">How did \u201c' + title + '\u201d apply to Panos\u2019 work?</span>' +
+        '<svg class="csc-arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg>' +
+      '</button>';
+    starters.classList.remove('hidden');
+  }
+  // Pre-fill input with a contextual prompt
+  chatInput.value = 'Tell me about "' + title + '" by ' + author + ' \u2014 what did Panos take from it and how did it shape his thinking?';
+  chatInput.focus();
+  chatInput.select();
 };
 
 // ── AI button size toggle ──

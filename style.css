@@ -515,6 +515,11 @@ body.nav-open { overflow: hidden; position: fixed; width: 100%; }
 }
 .about-ctas { display: flex; gap: 12px; flex-wrap: wrap; }
 
+@media (max-width: 600px) {
+  .about-ctas { flex-direction: column; }
+  .about-ctas .btn { width: 100%; text-align: center; justify-content: center; }
+}
+
 .about-right { display: flex; flex-direction: column; gap: 16px; align-items: center; }
 .about-photo-wrap { position: relative; }
 .about-photo-placeholder {
@@ -945,6 +950,8 @@ html[data-theme="light"] .skill-group h4 { color: rgba(255,255,255,0.5); }
   border-bottom: 1px solid var(--border);
   background: var(--bg-alt);
 }
+
+#about { position: relative; }
 .featured-label {
   text-align: center;
   font-size: 0.7rem; font-weight: 700; letter-spacing: 3px;
@@ -3150,7 +3157,7 @@ html[data-theme="light"] .footer-links a:hover { color: var(--navy); }
   mask-image: linear-gradient(to right, transparent 0%, #000 8%, #000 92%, transparent 100%);
 }
 .logos-track {
-  display: flex; align-items: center;
+  display: flex; align-items: center; flex-wrap: nowrap;
   width: max-content;
   animation: logoMarquee 32s linear infinite;
 }
@@ -3856,6 +3863,11 @@ html[data-theme="light"] .tidycal-toggle {
   .sticky-cta svg { width: 14px; height: 14px; }
 }
 
+/* ── Nav CTA — very small phones ── */
+@media (max-width: 380px) {
+  .nav-cta { font-size: 0.78rem; padding: 7px 10px; }
+}
+
 /* ── Book covers — 2 columns on mobile ── */
 @media (max-width: 580px) {
   .books-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 8px !important; }
@@ -4385,3 +4397,7 @@ html[data-theme="light"] .timeline-item.tl-active .tl-card {
   .beliefs-grid { grid-template-columns: 1fr; }
   .now-page-block { flex-direction: column; gap: 12px; padding: 20px; }
 }
+
+/* ── SVG icon rendering consistency ── */
+.tl-links .chip-icon-only .chip-icon svg { display: block; }
+.media-icon svg { display: block; vertical-align: middle; }
