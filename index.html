@@ -508,13 +508,25 @@
   <!-- ── GDPR Cookie Consent Banner ── -->
   <div id="cookieBanner" class="cookie-banner" role="dialog" aria-label="Cookie consent" style="display:none">
     <div class="cookie-banner-inner">
-      <p class="cookie-text">
-        This site uses cookies for analytics (Google Analytics &amp; PostHog) to understand how visitors use it. No personal data is sold or shared with advertisers.
-        <a href="https://policies.google.com/privacy" target="_blank" rel="noopener" class="cookie-link">Privacy Policy</a>
-      </p>
+      <div class="cookie-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="22" height="22">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10c0-.34-.02-.67-.05-1a3 3 0 01-3.45-3.45A3 3 0 0115 4.05 9.97 9.97 0 0012 2z"/>
+          <circle cx="8.5" cy="10" r="1" fill="currentColor" stroke="none"/>
+          <circle cx="13" cy="15" r="1" fill="currentColor" stroke="none"/>
+          <circle cx="15" cy="9" r="0.7" fill="currentColor" stroke="none"/>
+        </svg>
+      </div>
+      <div class="cookie-content">
+        <p class="cookie-title">We use cookies</p>
+        <p class="cookie-text">
+          This site uses analytics cookies (Google Analytics &amp; PostHog) to understand how visitors use it. No personal data is sold or shared with advertisers. See our
+          <a href="/privacy.html" class="cookie-link">Privacy Policy</a> and
+          <a href="/terms.html" class="cookie-link">Terms &amp; Conditions</a>.
+        </p>
+      </div>
       <div class="cookie-actions">
-        <button class="cookie-btn cookie-btn-accept" id="cookieAccept">Accept</button>
         <button class="cookie-btn cookie-btn-decline" id="cookieDecline">Decline</button>
+        <button class="cookie-btn cookie-btn-accept" id="cookieAccept">Accept All</button>
       </div>
     </div>
   </div>
