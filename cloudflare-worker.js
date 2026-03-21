@@ -111,6 +111,48 @@ export default {
       );
     }
 
+    const url = new URL(request.url);
+
+    // ── /tool route: generic Claude call for Social Impact AI tools ──
+    if (url.pathname === '/tool') {
+      try {
+        const { systemPrompt, userMessage } = await request.json();
+        if (!systemPrompt || !userMessage) {
+          return new Response(JSON.stringify({ error: 'Missing systemPrompt or userMessage' }), {
+            status: 400, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS },
+          });
+        }
+
+        const response = await fetch('https://api.anthropic.com/v1/messages', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': env.ANTHROPIC_API_KEY,
+            'anthropic-version': '2023-06-01',
+          },
+          body: JSON.stringify({
+            model: 'claude-haiku-4-5',
+            max_tokens: 1024,
+            system: systemPrompt,
+            messages: [{ role: 'user', content: userMessage }],
+          }),
+        });
+
+        const data = await response.json();
+        const result = data.content?.[0]?.text ?? 'Sorry, I had trouble responding. Please try again.';
+
+        return new Response(JSON.stringify({ result }), {
+          headers: { 'Content-Type': 'application/json', ...CORS_HEADERS },
+        });
+      } catch (err) {
+        return new Response(
+          JSON.stringify({ error: 'Something went wrong. Please try again.' }),
+          { status: 500, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
+        );
+      }
+    }
+
+    // ── Default route: "Ask Panos" chat ──
     try {
       const { messages } = await request.json();
 

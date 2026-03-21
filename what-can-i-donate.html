@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>"What Can I Donate?" — AI Donation Matcher</title>
+  <meta name="description" content="Input what you have at home → AI matches it to types of nonprofits who need exactly that. The donor side of Givelink, standalone." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/style.css" />
+  <link rel="icon" href="/favicon.ico" />
+</head>
+<body class="tool-page">
+
+  <header class="tool-header">
+    <a href="/#ai-lab" class="tool-back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      panoskokmotos.com
+    </a>
+  </header>
+
+  <main class="tool-main">
+    <p class="tool-eyebrow">AI for Social Impact · Free Tool</p>
+    <h1 class="tool-title">"What Can I Donate?"</h1>
+    <p class="tool-desc">List the items you have at home — things you no longer use, duplicates, or things in good condition. AI matches them to the types of nonprofits who need them most, and tells you how to donate them.</p>
+
+    <form class="tool-form" id="toolForm">
+
+      <div class="tool-field">
+        <label class="tool-label" for="items">
+          What do you have to donate?
+          <span class="tool-hint"> — list items, one per line or comma-separated</span>
+        </label>
+        <textarea
+          id="items"
+          class="tool-textarea"
+          placeholder="e.g.
+winter coats (2)
+men's dress shoes size 11
+children's books
+old laptop (working)
+kitchenware"
+          rows="6"
+          required
+        ></textarea>
+      </div>
+
+      <div class="tool-field">
+        <label class="tool-label" for="location">
+          Your city or region
+          <span class="tool-hint"> — helps tailor the types of orgs</span>
+        </label>
+        <input
+          id="location"
+          class="tool-input"
+          type="text"
+          placeholder="e.g. San Francisco, CA"
+        />
+      </div>
+
+      <button type="submit" class="tool-submit" id="submitBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16"><path d="M20 7H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+        Match My Donations
+      </button>
+    </form>
+
+    <div class="tool-loading" id="loading">
+      <div class="tool-spinner"></div>
+      Finding the best homes for your items…
+    </div>
+
+    <div class="tool-error" id="errorBox"></div>
+
+    <div class="tool-result" id="result">
+      <div class="tool-result-header">
+        <span class="tool-result-label">Your Donation Matches</span>
+        <button class="tool-copy-btn" id="copyBtn">Copy</button>
+      </div>
+      <div class="tool-result-body" id="resultBody"></div>
+    </div>
+
+    <footer class="tool-footer">
+      Built by <a href="/" target="_blank">Panos Kokmotos</a> · Part of the
+      <a href="/#ai-lab">AI for Social Impact Lab</a> ·
+      This tool is inspired by <a href="https://givelink.app/en" target="_blank" rel="noopener">Givelink</a>, the in-kind donation platform ·
+      Powered by Claude AI
+    </footer>
+  </main>
+
+  <script>
+    const WORKER_URL = 'https://ask-panos.panagiotis-kokmotoss.workers.dev/tool';
+
+    const form = document.getElementById('toolForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const loading = document.getElementById('loading');
+    const errorBox = document.getElementById('errorBox');
+    const result = document.getElementById('result');
+    const resultBody = document.getElementById('resultBody');
+    const copyBtn = document.getElementById('copyBtn');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const items = document.getElementById('items').value.trim();
+      const location = document.getElementById('location').value.trim();
+
+      if (!items) {
+        showError('Please list at least one item you\'d like to donate.');
+        return;
+      }
+
+      setLoading(true);
+      hideError();
+      hideResult();
+
+      const systemPrompt = `You are a donation matching expert who knows the in-kind donation landscape well. Your job is to look at what someone has to donate and match each item (or group of similar items) to the best type of nonprofit that needs it.
+
+For each item or category, provide:
+- The type of nonprofit that needs it most
+- Why that org type needs exactly this
+- A practical tip on how to donate it (drop-off, pick-up services, online platforms like Givelink, etc.)
+
+Format your response as:
+
+**[Item or category]**
+→ Best match: [Type of nonprofit]
+Why: [1 sentence]
+How to donate: [Practical tip]
+
+After all items, add a short encouraging note: "Everything you listed has value to someone who needs it."
+
+Be practical, warm, and specific. Do NOT name specific real organizations. Focus on org types (e.g., "domestic violence shelters", "after-school programs", "homeless shelters", "free clothing pantries").`;
+
+      const userMessage = `Items to donate: ${items}${location ? `\nLocation: ${location}` : ''}
+
+Match each item to the best type of nonprofit and tell me how to donate it.`;
+
+      try {
+        const res = await fetch(WORKER_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ systemPrompt, userMessage }),
+        });
+
+        if (!res.ok) throw new Error(`Server error: ${res.status}`);
+        const data = await res.json();
+        if (data.error) throw new Error(data.error);
+
+        showResult(data.result);
+      } catch (err) {
+        showError('Something went wrong. Please try again.');
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    });
+
+    copyBtn.addEventListener('click', () => {
+      navigator.clipboard.writeText(resultBody.textContent).then(() => {
+        copyBtn.textContent = 'Copied!';
+        setTimeout(() => { copyBtn.textContent = 'Copy'; }, 2000);
+      });
+    });
+
+    function setLoading(on) {
+      submitBtn.disabled = on;
+      loading.classList.toggle('visible', on);
+    }
+
+    function showResult(text) {
+      resultBody.innerHTML = formatText(text);
+      result.classList.add('visible');
+      result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function hideResult() { result.classList.remove('visible'); }
+    function showError(msg) { errorBox.textContent = msg; errorBox.classList.add('visible'); }
+    function hideError() { errorBox.classList.remove('visible'); }
+
+    function formatText(text) {
+      return text
+        .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+        .replace(/→/g, '→')
+        .replace(/\n/g, '<br>');
+    }
+  </script>
+</body>
+</html>

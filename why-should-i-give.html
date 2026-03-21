@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>"Why Should I Give?" — AI Giving Personalizer</title>
+  <meta name="description" content="Input your values, interests, and spending habits → AI builds a personalized case for giving tied to causes you already care about." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/style.css" />
+  <link rel="icon" href="/favicon.ico" />
+</head>
+<body class="tool-page">
+
+  <header class="tool-header">
+    <a href="/#ai-lab" class="tool-back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      panoskokmotos.com
+    </a>
+  </header>
+
+  <main class="tool-main">
+    <p class="tool-eyebrow">AI for Social Impact · Free Tool</p>
+    <h1 class="tool-title">"Why Should I Give?" Personalizer</h1>
+    <p class="tool-desc">Tell AI about your values, what you care about, and how you spend — it'll build a personalized case for giving that ties directly to who you already are. Converts skeptics.</p>
+
+    <form class="tool-form" id="toolForm">
+
+      <div class="tool-field">
+        <label class="tool-label" for="values">
+          What do you value most in life?
+          <span class="tool-hint"> — e.g. family, freedom, justice, community, health, adventure</span>
+        </label>
+        <input
+          id="values"
+          class="tool-input"
+          type="text"
+          placeholder="e.g. family, education, independence"
+          required
+        />
+      </div>
+
+      <div class="tool-field">
+        <label class="tool-label" for="interests">
+          What are your biggest interests or hobbies?
+          <span class="tool-hint"> — be specific</span>
+        </label>
+        <input
+          id="interests"
+          class="tool-input"
+          type="text"
+          placeholder="e.g. running, cooking, tech, travel, music"
+          required
+        />
+      </div>
+
+      <div class="tool-field">
+        <label class="tool-label" for="spending">
+          What do you spend money on regularly?
+          <span class="tool-hint"> — categories are fine</span>
+        </label>
+        <input
+          id="spending"
+          class="tool-input"
+          type="text"
+          placeholder="e.g. coffee, streaming, restaurants, gym, clothes"
+        />
+      </div>
+
+      <div class="tool-field">
+        <label class="tool-label" for="obstacle">
+          What's your biggest hesitation about giving?
+          <span class="tool-hint"> — optional but helps</span>
+        </label>
+        <select id="obstacle" class="tool-select">
+          <option value="">Choose one (optional)…</option>
+          <option value="I don't have enough money to make a difference">Don't have enough money to matter</option>
+          <option value="I don't know which organizations are trustworthy">Don't know which orgs to trust</option>
+          <option value="I'm not sure my donation actually reaches people in need">Not sure it reaches people</option>
+          <option value="I haven't found a cause I'm truly passionate about">Haven't found a cause I care about</option>
+          <option value="I already pay taxes — isn't that enough?">I already pay taxes</option>
+          <option value="I'll give more when I earn more">I'll give more when I earn more</option>
+        </select>
+      </div>
+
+      <button type="submit" class="tool-submit" id="submitBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        Build My Giving Case
+      </button>
+    </form>
+
+    <div class="tool-loading" id="loading">
+      <div class="tool-spinner"></div>
+      Personalizing your giving case…
+    </div>
+
+    <div class="tool-error" id="errorBox"></div>
+
+    <div class="tool-result" id="result">
+      <div class="tool-result-header">
+        <span class="tool-result-label">Your Personalized Case for Giving</span>
+        <button class="tool-copy-btn" id="copyBtn">Copy</button>
+      </div>
+      <div class="tool-result-body" id="resultBody"></div>
+    </div>
+
+    <footer class="tool-footer">
+      Built by <a href="/" target="_blank">Panos Kokmotos</a> · Part of the
+      <a href="/#ai-lab">AI for Social Impact Lab</a> ·
+      Powered by Claude AI
+    </footer>
+  </main>
+
+  <script>
+    const WORKER_URL = 'https://ask-panos.panagiotis-kokmotoss.workers.dev/tool';
+
+    const form = document.getElementById('toolForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const loading = document.getElementById('loading');
+    const errorBox = document.getElementById('errorBox');
+    const result = document.getElementById('result');
+    const resultBody = document.getElementById('resultBody');
+    const copyBtn = document.getElementById('copyBtn');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const values = document.getElementById('values').value.trim();
+      const interests = document.getElementById('interests').value.trim();
+      const spending = document.getElementById('spending').value.trim();
+      const obstacle = document.getElementById('obstacle').value;
+
+      if (!values || !interests) {
+        showError('Please fill in at least your values and interests.');
+        return;
+      }
+
+      setLoading(true);
+      hideError();
+      hideResult();
+
+      const systemPrompt = `You are a warm, persuasive giving advisor who specializes in connecting people's existing values and lifestyle to causes they'd genuinely care about.
+
+Your job: take someone's values, interests, spending habits, and hesitations — and write them a personalized, compelling case for charitable giving. Make it feel personal, not preachy.
+
+Structure your response as:
+
+**Why giving aligns with who you are**
+[2-3 sentences connecting their values directly to the act of giving]
+
+**Causes that match your world**
+[3 specific cause areas that connect to their interests/values — with a sentence each explaining the connection]
+
+**The coffee test**
+[Reframe their spending: compare a small giving amount to something they already spend on, to show it's achievable]
+
+[If they shared a hesitation, address it directly in 1-2 honest sentences]
+
+**One thing you could do today**
+[One small, concrete first step]
+
+Keep the tone warm, direct, and non-judgmental. Not preachy. Max 300 words.`;
+
+      const userMessage = `My values: ${values}
+My interests/hobbies: ${interests}
+What I spend on: ${spending || 'not specified'}
+My hesitation about giving: ${obstacle || 'none specified'}
+
+Write my personalized case for giving.`;
+
+      try {
+        const res = await fetch(WORKER_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ systemPrompt, userMessage }),
+        });
+
+        if (!res.ok) throw new Error(`Server error: ${res.status}`);
+        const data = await res.json();
+        if (data.error) throw new Error(data.error);
+
+        showResult(data.result);
+      } catch (err) {
+        showError('Something went wrong. Please try again.');
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    });
+
+    copyBtn.addEventListener('click', () => {
+      navigator.clipboard.writeText(resultBody.textContent).then(() => {
+        copyBtn.textContent = 'Copied!';
+        setTimeout(() => { copyBtn.textContent = 'Copy'; }, 2000);
+      });
+    });
+
+    function setLoading(on) {
+      submitBtn.disabled = on;
+      loading.classList.toggle('visible', on);
+    }
+
+    function showResult(text) {
+      resultBody.innerHTML = formatText(text);
+      result.classList.add('visible');
+      result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function hideResult() { result.classList.remove('visible'); }
+    function showError(msg) { errorBox.textContent = msg; errorBox.classList.add('visible'); }
+    function hideError() { errorBox.classList.remove('visible'); }
+
+    function formatText(text) {
+      return text
+        .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\n/g, '<br>');
+    }
+  </script>
+</body>
+</html>

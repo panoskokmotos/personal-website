@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Volunteer Match — AI Skills-to-Cause Matcher</title>
+  <meta name="description" content="Input your skills and availability → AI matches you to types of nonprofits and drafts your intro email, ready to send." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/style.css" />
+  <link rel="icon" href="/favicon.ico" />
+</head>
+<body class="tool-page">
+
+  <header class="tool-header">
+    <a href="/#ai-lab" class="tool-back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      panoskokmotos.com
+    </a>
+  </header>
+
+  <main class="tool-main">
+    <p class="tool-eyebrow">AI for Social Impact · Free Tool</p>
+    <h1 class="tool-title">Volunteer Match</h1>
+    <p class="tool-desc">Tell AI your skills, availability, and what causes matter to you — it'll match you to the types of nonprofits that need exactly what you offer, and draft an intro email you can send today.</p>
+
+    <form class="tool-form" id="toolForm">
+
+      <div class="tool-field">
+        <label class="tool-label" for="skills">
+          Your skills or expertise
+          <span class="tool-hint"> — professional, personal, anything useful</span>
+        </label>
+        <input
+          id="skills"
+          class="tool-input"
+          type="text"
+          placeholder="e.g. graphic design, Excel, teaching, carpentry, social media, coding"
+          required
+        />
+      </div>
+
+      <div class="tool-field">
+        <label class="tool-label" for="availability">
+          Your availability
+          <span class="tool-hint"> — how much time can you offer?</span>
+        </label>
+        <select id="availability" class="tool-select" required>
+          <option value="">Select…</option>
+          <option value="a few hours per month">A few hours per month</option>
+          <option value="about 4 hours per week on weekends">Weekends only (~4 hrs/week)</option>
+          <option value="about 5-10 hours per week on evenings">Evenings during the week (5–10 hrs/week)</option>
+          <option value="about 10+ hours per week flexible">10+ hours/week (flexible)</option>
+          <option value="one-time project help">One-time project help only</option>
+          <option value="remote/online only">Remote / online only</option>
+        </select>
+      </div>
+
+      <div class="tool-field">
+        <label class="tool-label" for="causes">
+          Causes you care about
+          <span class="tool-hint"> — optional, helps with matching</span>
+        </label>
+        <input
+          id="causes"
+          class="tool-input"
+          type="text"
+          placeholder="e.g. youth education, environment, animal welfare, homelessness"
+        />
+      </div>
+
+      <div class="tool-field">
+        <label class="tool-label" for="location">
+          Your city or region
+          <span class="tool-hint"> — optional</span>
+        </label>
+        <input
+          id="location"
+          class="tool-input"
+          type="text"
+          placeholder="e.g. Chicago, IL"
+        />
+      </div>
+
+      <div class="tool-field">
+        <label class="tool-label" for="yourName">
+          Your first name
+          <span class="tool-hint"> — for the draft email</span>
+        </label>
+        <input
+          id="yourName"
+          class="tool-input"
+          type="text"
+          placeholder="e.g. Maria"
+        />
+      </div>
+
+      <button type="submit" class="tool-submit" id="submitBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Match Me + Draft My Email
+      </button>
+    </form>
+
+    <div class="tool-loading" id="loading">
+      <div class="tool-spinner"></div>
+      Matching your skills to causes and drafting your email…
+    </div>
+
+    <div class="tool-error" id="errorBox"></div>
+
+    <div class="tool-result" id="result">
+      <div class="tool-result-header">
+        <span class="tool-result-label">Your Matches &amp; Draft Email</span>
+        <button class="tool-copy-btn" id="copyBtn">Copy All</button>
+      </div>
+      <div class="tool-tabs">
+        <button class="tool-tab active" data-tab="matches">Your Matches</button>
+        <button class="tool-tab" data-tab="email">Draft Email</button>
+      </div>
+      <div class="tool-tab-panel active" id="panel-matches">
+        <div class="tool-result-body" id="matchesBody"></div>
+      </div>
+      <div class="tool-tab-panel" id="panel-email">
+        <div class="tool-result-body" id="emailBody"></div>
+      </div>
+    </div>
+
+    <footer class="tool-footer">
+      Built by <a href="/" target="_blank">Panos Kokmotos</a> · Part of the
+      <a href="/#ai-lab">AI for Social Impact Lab</a> ·
+      Powered by Claude AI
+    </footer>
+  </main>
+
+  <script>
+    const WORKER_URL = 'https://ask-panos.panagiotis-kokmotoss.workers.dev/tool';
+
+    const form = document.getElementById('toolForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const loading = document.getElementById('loading');
+    const errorBox = document.getElementById('errorBox');
+    const result = document.getElementById('result');
+    const matchesBody = document.getElementById('matchesBody');
+    const emailBody = document.getElementById('emailBody');
+    const copyBtn = document.getElementById('copyBtn');
+
+    // Tabs
+    document.querySelectorAll('.tool-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.tool-tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tool-tab-panel').forEach(p => p.classList.remove('active'));
+        tab.classList.add('active');
+        document.getElementById('panel-' + tab.dataset.tab).classList.add('active');
+      });
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const skills = document.getElementById('skills').value.trim();
+      const availability = document.getElementById('availability').value;
+      const causes = document.getElementById('causes').value.trim();
+      const location = document.getElementById('location').value.trim();
+      const yourName = document.getElementById('yourName').value.trim() || 'a volunteer';
+
+      if (!skills || !availability) {
+        showError('Please fill in your skills and availability.');
+        return;
+      }
+
+      setLoading(true);
+      hideError();
+      hideResult();
+
+      const systemPrompt = `You are a volunteer placement expert and talented writer. Your job is to:
+
+1. Match a volunteer's skills and availability to 3 ideal types of nonprofits
+2. Draft a short, warm, compelling intro email they can send to volunteer coordinators
+
+PART 1 — MATCHES
+For each of 3 org types, write:
+**Match [number]: [Org type name]**
+Why it's a great fit: [1-2 sentences connecting their specific skills to this org's needs]
+What you'd likely do: [1-2 specific volunteer roles or tasks]
+
+PART 2 — DRAFT EMAIL
+Write a ready-to-send intro email. Use the volunteer's first name as the sender. The subject line should be concise and specific. The email should be warm, brief (under 150 words), and include a specific offer of help tied to their skills.
+
+Format the email section clearly with:
+Subject: [subject line]
+
+[email body]
+
+Separate the two parts with this exact text: ---EMAIL---
+
+Keep tone professional but human. Do NOT name specific real organizations.`;
+
+      const userMessage = `My skills: ${skills}
+Availability: ${availability}
+Causes I care about: ${causes || 'open to suggestions'}
+Location: ${location || 'not specified'}
+My first name: ${yourName}
+
+Generate my 3 nonprofit matches and a draft intro email.`;
+
+      try {
+        const res = await fetch(WORKER_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ systemPrompt, userMessage }),
+        });
+
+        if (!res.ok) throw new Error(`Server error: ${res.status}`);
+        const data = await res.json();
+        if (data.error) throw new Error(data.error);
+
+        const fullText = data.result;
+        const splitIndex = fullText.indexOf('---EMAIL---');
+
+        if (splitIndex !== -1) {
+          matchesBody.innerHTML = formatText(fullText.slice(0, splitIndex).trim());
+          emailBody.innerHTML = formatText(fullText.slice(splitIndex + 11).trim());
+        } else {
+          matchesBody.innerHTML = formatText(fullText);
+          emailBody.innerHTML = '<em style="color:var(--text-muted)">Email draft not generated separately — see matches tab.</em>';
+        }
+
+        result.classList.add('visible');
+        result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      } catch (err) {
+        showError('Something went wrong. Please try again.');
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    });
+
+    copyBtn.addEventListener('click', () => {
+      const activePanel = document.querySelector('.tool-tab-panel.active .tool-result-body');
+      navigator.clipboard.writeText(activePanel.textContent).then(() => {
+        copyBtn.textContent = 'Copied!';
+        setTimeout(() => { copyBtn.textContent = 'Copy All'; }, 2000);
+      });
+    });
+
+    function setLoading(on) {
+      submitBtn.disabled = on;
+      loading.classList.toggle('visible', on);
+    }
+
+    function hideResult() { result.classList.remove('visible'); }
+    function showError(msg) { errorBox.textContent = msg; errorBox.classList.add('visible'); }
+    function hideError() { errorBox.classList.remove('visible'); }
+
+    function formatText(text) {
+      return text
+        .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\n/g, '<br>');
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>"What Would $X Do?" — AI Impact Calculator</title>
+  <meta name="description" content="Input any dollar amount and cause area → AI generates 5 concrete impact scenarios across different types of nonprofits." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/style.css" />
+  <link rel="icon" href="/favicon.ico" />
+</head>
+<body class="tool-page">
+
+  <header class="tool-header">
+    <a href="/#ai-lab" class="tool-back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      panoskokmotos.com
+    </a>
+  </header>
+
+  <main class="tool-main">
+    <p class="tool-eyebrow">AI for Social Impact · Free Tool</p>
+    <h1 class="tool-title">"What Would $X Do?"</h1>
+    <p class="tool-desc">Input any dollar amount and cause area → AI generates 5 concrete, specific impact scenarios across different types of nonprofits. Turns abstract giving into vivid reality.</p>
+
+    <form class="tool-form" id="toolForm">
+
+      <div class="tool-field">
+        <label class="tool-label" for="amount">
+          Dollar amount
+          <span class="tool-hint"> — how much are you thinking of giving?</span>
+        </label>
+        <input
+          id="amount"
+          class="tool-input"
+          type="number"
+          min="1"
+          max="1000000"
+          placeholder="e.g. 50"
+          required
+        />
+      </div>
+
+      <div class="tool-field">
+        <label class="tool-label" for="cause">
+          Cause area
+          <span class="tool-hint"> — what issue matters to you?</span>
+        </label>
+        <select id="cause" class="tool-select">
+          <option value="">Select a cause…</option>
+          <option value="clean water">Clean Water</option>
+          <option value="hunger and food security">Hunger &amp; Food Security</option>
+          <option value="education for underserved youth">Education for Underserved Youth</option>
+          <option value="climate and environment">Climate &amp; Environment</option>
+          <option value="animal welfare">Animal Welfare</option>
+          <option value="mental health">Mental Health</option>
+          <option value="refugee support">Refugee Support</option>
+          <option value="homeless services">Homeless Services</option>
+          <option value="women's empowerment">Women's Empowerment</option>
+          <option value="medical research">Medical Research</option>
+          <option value="arts and culture">Arts &amp; Culture</option>
+          <option value="disability support">Disability Support</option>
+          <option value="veterans support">Veterans Support</option>
+          <option value="other">Other (I'll type it below)</option>
+        </select>
+      </div>
+
+      <div class="tool-field" id="causeOtherField" style="display:none">
+        <label class="tool-label" for="causeOther">Describe your cause</label>
+        <input id="causeOther" class="tool-input" type="text" placeholder="e.g. ocean plastic cleanup" />
+      </div>
+
+      <button type="submit" class="tool-submit" id="submitBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        Generate Impact Scenarios
+      </button>
+    </form>
+
+    <div class="tool-loading" id="loading">
+      <div class="tool-spinner"></div>
+      Calculating impact across cause areas…
+    </div>
+
+    <div class="tool-error" id="errorBox"></div>
+
+    <div class="tool-result" id="result">
+      <div class="tool-result-header">
+        <span class="tool-result-label">Your Impact Scenarios</span>
+        <button class="tool-copy-btn" id="copyBtn">Copy</button>
+      </div>
+      <div class="tool-result-body" id="resultBody"></div>
+    </div>
+
+    <footer class="tool-footer">
+      Built by <a href="/" target="_blank">Panos Kokmotos</a> · Part of the
+      <a href="/#ai-lab">AI for Social Impact Lab</a> ·
+      Powered by Claude AI · Results are illustrative, not affiliated with specific orgs.
+    </footer>
+  </main>
+
+  <script>
+    const WORKER_URL = 'https://ask-panos.panagiotis-kokmotoss.workers.dev/tool';
+
+    const form = document.getElementById('toolForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const loading = document.getElementById('loading');
+    const errorBox = document.getElementById('errorBox');
+    const result = document.getElementById('result');
+    const resultBody = document.getElementById('resultBody');
+    const copyBtn = document.getElementById('copyBtn');
+    const causeSelect = document.getElementById('cause');
+    const causeOtherField = document.getElementById('causeOtherField');
+
+    causeSelect.addEventListener('change', () => {
+      causeOtherField.style.display = causeSelect.value === 'other' ? 'flex' : 'none';
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const amount = document.getElementById('amount').value;
+      const causeVal = causeSelect.value === 'other'
+        ? document.getElementById('causeOther').value.trim()
+        : causeSelect.value;
+
+      if (!amount || !causeVal) {
+        showError('Please fill in both fields.');
+        return;
+      }
+
+      setLoading(true);
+      hideError();
+      hideResult();
+
+      const systemPrompt = `You are an expert in nonprofit impact and charitable giving. Your job is to make abstract dollar amounts feel real and tangible by showing concrete impact scenarios.
+
+When given a dollar amount and cause area, generate exactly 5 distinct, specific impact scenarios — each for a different type of nonprofit or intervention approach within that cause.
+
+Format your response like this:
+**1. [Short org type name]**
+[1-2 sentences describing exactly what that $X does at this type of org — be specific with numbers like people served, days of clean water, meals provided, etc.]
+
+**2. [Short org type name]**
+[1-2 sentences]
+
+... and so on for all 5.
+
+End with a single-line encouragement: "Every dollar has a story. Yours starts here."
+
+Be concrete, specific, and inspiring. Use real-world benchmarks (e.g., $1 = ~5 meals at a food bank). Do NOT name specific real organizations by name — describe org types instead.`;
+
+      const userMessage = `Dollar amount: $${amount}\nCause area: ${causeVal}\n\nGenerate 5 concrete impact scenarios for this donation.`;
+
+      try {
+        const res = await fetch(WORKER_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ systemPrompt, userMessage }),
+        });
+
+        if (!res.ok) throw new Error(`Server error: ${res.status}`);
+        const data = await res.json();
+
+        if (data.error) throw new Error(data.error);
+
+        showResult(data.result);
+      } catch (err) {
+        showError('Something went wrong. Please try again.');
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    });
+
+    copyBtn.addEventListener('click', () => {
+      navigator.clipboard.writeText(resultBody.textContent).then(() => {
+        copyBtn.textContent = 'Copied!';
+        setTimeout(() => { copyBtn.textContent = 'Copy'; }, 2000);
+      });
+    });
+
+    function setLoading(on) {
+      submitBtn.disabled = on;
+      loading.classList.toggle('visible', on);
+    }
+
+    function showResult(text) {
+      resultBody.innerHTML = formatText(text);
+      result.classList.add('visible');
+      result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function hideResult() { result.classList.remove('visible'); }
+
+    function showError(msg) {
+      errorBox.textContent = msg;
+      errorBox.classList.add('visible');
+    }
+
+    function hideError() { errorBox.classList.remove('visible'); }
+
+    function formatText(text) {
+      return text
+        .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\n/g, '<br>');
+    }
+  </script>
+</body>
+</html>
