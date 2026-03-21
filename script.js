@@ -28,6 +28,7 @@ window.addEventListener('scroll', () => {
 const hamburger = document.getElementById('hamburger');
 const navMobile = document.getElementById('nav-mobile');
 const navMobileClose = document.getElementById('navMobileClose');
+let menuScrollY = 0;
 
 function closeMenu() {
   navMobile.classList.remove('open');
@@ -35,7 +36,8 @@ function closeMenu() {
   hamburger.setAttribute('aria-expanded', 'false');
   hamburger.setAttribute('aria-label', 'Menu');
   document.body.classList.remove('nav-open');
-  document.body.style.overflow = '';
+  document.body.style.top = '';
+  window.scrollTo(0, menuScrollY);
 }
 
 hamburger.addEventListener('click', () => {
@@ -44,11 +46,13 @@ hamburger.addEventListener('click', () => {
   hamburger.setAttribute('aria-expanded', isOpen);
   hamburger.setAttribute('aria-label', isOpen ? 'Close menu' : 'Menu');
   if (isOpen) {
+    menuScrollY = window.scrollY;
+    document.body.style.top = `-${menuScrollY}px`;
     document.body.classList.add('nav-open');
-    document.body.style.overflow = 'hidden';
   } else {
     document.body.classList.remove('nav-open');
-    document.body.style.overflow = '';
+    document.body.style.top = '';
+    window.scrollTo(0, menuScrollY);
   }
 });
 if (navMobileClose) {
@@ -808,3 +812,65 @@ function toggleAwardsMobile(btn) {
   const textNode = [...btn.childNodes].find(n => n.nodeType === 3);
   if (textNode) textNode.textContent = isOpen ? 'Show less ' : 'Show 3 more ';
 }
+
+// ── Draggable logo marquee ──
+(function () {
+  const wrap = document.querySelector('.logos-strip-wrap');
+  if (!wrap) return;
+  const track = wrap.querySelector('.logos-track');
+  if (!track) return;
+
+  let dragging = false;
+  let startX = 0;
+  let frozenX = 0;
+
+  function getTranslateX(el) {
+    const t = window.getComputedStyle(el).transform;
+    if (!t || t === 'none') return 0;
+    const m = t.match(/matrix.*\((.+)\)/);
+    return m ? parseFloat(m[1].split(',')[4]) : 0;
+  }
+
+  function startDrag(x) {
+    dragging = true;
+    frozenX = getTranslateX(track);
+    track.style.animationPlayState = 'paused';
+    track.style.transform = `translateX(${frozenX}px)`;
+    startX = x;
+    wrap.classList.add('dragging');
+  }
+
+  function moveDrag(x) {
+    if (!dragging) return;
+    const dx = x - startX;
+    track.style.transform = `translateX(${frozenX + dx}px)`;
+  }
+
+  function endDrag(x) {
+    if (!dragging) return;
+    dragging = false;
+    wrap.classList.remove('dragging');
+    const dx = x - startX;
+    const endX = frozenX + dx;
+    const halfWidth = track.scrollWidth / 2;
+    // Map endX back into animation range [0, -halfWidth] for seamless resume
+    const pct = Math.max(0, Math.min(1, Math.abs(endX % halfWidth) / halfWidth));
+    const delay = -(pct * 32);
+    track.style.transform = '';
+    track.style.animation = 'none';
+    void track.offsetWidth; // force reflow
+    track.style.animation = `logoMarquee 32s linear infinite`;
+    track.style.animationDelay = `${delay}s`;
+    track.style.animationPlayState = 'running';
+  }
+
+  // Mouse
+  wrap.addEventListener('mousedown', e => { e.preventDefault(); startDrag(e.clientX); });
+  document.addEventListener('mousemove', e => moveDrag(e.clientX));
+  document.addEventListener('mouseup', e => endDrag(e.clientX));
+
+  // Touch
+  wrap.addEventListener('touchstart', e => startDrag(e.touches[0].clientX), { passive: true });
+  wrap.addEventListener('touchmove', e => { if (dragging) moveDrag(e.touches[0].clientX); }, { passive: true });
+  wrap.addEventListener('touchend', e => endDrag(e.changedTouches[0].clientX));
+})();
