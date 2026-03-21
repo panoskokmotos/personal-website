@@ -116,36 +116,37 @@ sections.forEach(s => sectionObserver.observe(s));
 // ── Theme: dark mode locked ──
 document.documentElement.setAttribute('data-theme', 'dark');
 
-// ── Marquee drag-to-scroll ──
-document.querySelectorAll('.marquee-wrap').forEach(wrap => {
+// ── Logo strip drag-to-scroll ──
+document.querySelectorAll('.logos-strip-wrap').forEach(wrap => {
   let isDown = false, startX = 0, scrollLeft = 0;
+  const track = wrap.querySelector('.logos-track');
 
   function dragStart(x) {
     isDown = true;
-    startX = x - wrap.offsetLeft;
+    startX = x - wrap.getBoundingClientRect().left;
     scrollLeft = wrap.scrollLeft;
     wrap.classList.add('dragging');
+    if (track) track.style.animationPlayState = 'paused';
   }
   function dragEnd() {
+    if (!isDown) return;
     isDown = false;
     wrap.classList.remove('dragging');
+    if (track) track.style.animationPlayState = '';
   }
   function dragMove(x) {
     if (!isDown) return;
-    const walk = (x - wrap.offsetLeft - startX) * 1.5;
+    const walk = (x - wrap.getBoundingClientRect().left - startX) * 1.5;
     wrap.scrollLeft = scrollLeft - walk;
   }
 
-  // Mouse
-  wrap.addEventListener('mousedown', e => { dragStart(e.pageX); });
-  wrap.addEventListener('mouseleave', dragEnd);
-  wrap.addEventListener('mouseup', dragEnd);
-  wrap.addEventListener('mousemove', e => { e.preventDefault(); dragMove(e.pageX); });
+  wrap.addEventListener('mousedown', e => { dragStart(e.clientX); e.preventDefault(); });
+  window.addEventListener('mouseup', dragEnd);
+  window.addEventListener('mousemove', e => { if (isDown) dragMove(e.clientX); });
 
-  // Touch
-  wrap.addEventListener('touchstart', e => { dragStart(e.touches[0].pageX); }, { passive: true });
+  wrap.addEventListener('touchstart', e => { dragStart(e.touches[0].clientX); }, { passive: true });
   wrap.addEventListener('touchend', dragEnd);
-  wrap.addEventListener('touchmove', e => { dragMove(e.touches[0].pageX); }, { passive: true });
+  wrap.addEventListener('touchmove', e => { if (isDown) dragMove(e.touches[0].clientX); }, { passive: true });
 });
 
 // ── Scroll progress bar ──

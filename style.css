@@ -3319,7 +3319,13 @@ html[data-theme="light"] .footer-links a:hover { color: var(--navy); }
   cursor: grab;
   -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 8%, #000 92%, transparent 100%);
   mask-image: linear-gradient(to right, transparent 0%, #000 8%, #000 92%, transparent 100%);
+  -webkit-overflow-scrolling: touch;
 }
+.logos-strip-wrap.dragging {
+  overflow: scroll;
+  scrollbar-width: none;
+}
+.logos-strip-wrap.dragging::-webkit-scrollbar { display: none; }
 .logos-strip-wrap.dragging { cursor: grabbing; }
 .logos-track {
   display: flex; align-items: center; flex-wrap: nowrap;
