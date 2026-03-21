@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Community Needs Map — AI Needs Analysis</title>
+  <meta name="description" content="Describe what you're seeing in your community → AI maps the underlying needs, surfaces patterns, and suggests which types of orgs and resources could help." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/style.css" />
+  <link rel="icon" href="/favicon.ico" />
+</head>
+<body class="tool-page">
+
+  <header class="tool-header">
+    <a href="/#ai-lab" class="tool-back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      panoskokmotos.com
+    </a>
+  </header>
+
+  <main class="tool-main">
+    <p class="tool-eyebrow">AI for Social Impact · Free Tool</p>
+    <h1 class="tool-title">Community Needs Map</h1>
+    <p class="tool-desc">You know your community better than any database. Describe what you're seeing on the ground — AI will map the underlying needs, identify patterns, surface gaps, and suggest concrete resources and org types that could help.</p>
+
+    <form class="tool-form" id="toolForm">
+
+      <div class="tool-field">
+        <label class="tool-label" for="location">
+          Your community or area
+          <span class="tool-hint"> — city, neighborhood, or region</span>
+        </label>
+        <input
+          id="location"
+          class="tool-input"
+          type="text"
+          placeholder="e.g. East Oakland, CA / South Side Chicago / rural Appalachia / our school district"
+          required
+        />
+      </div>
+
+      <div class="tool-field">
+        <label class="tool-label" for="observations">
+          What needs are you seeing in your community?
+          <span class="tool-hint"> — describe what you observe, even informally</span>
+        </label>
+        <textarea
+          id="observations"
+          class="tool-input"
+          rows="4"
+          placeholder="e.g. A lot of families in our area can't afford food. Kids show up to school hungry. There's one food bank but it's always overwhelmed. I see people sleeping outside near the library. Local businesses have been closing. There aren't many after-school programs."
+          required
+        ></textarea>
+      </div>
+
+      <div class="tool-field">
+        <label class="tool-label" for="yourRole">
+          What's your connection to this community?
+          <span class="tool-hint"> — helps calibrate the response</span>
+        </label>
+        <select id="yourRole" class="tool-select">
+          <option value="a resident who lives here">Resident</option>
+          <option value="a teacher or school staff member">Teacher / school staff</option>
+          <option value="a nonprofit or community organization worker">Nonprofit / community org worker</option>
+          <option value="a local government or civic leader">Local government / civic leader</option>
+          <option value="a concerned donor looking to help">Concerned donor looking to help</option>
+          <option value="a journalist or researcher">Journalist / researcher</option>
+          <option value="a volunteer who works in this area">Volunteer in this area</option>
+        </select>
+      </div>
+
+      <div class="tool-field">
+        <label class="tool-label" for="whatYouWant">
+          What would be most useful to you right now?
+        </label>
+        <select id="whatYouWant" class="tool-select">
+          <option value="understand the root causes behind what I'm seeing">Understand root causes</option>
+          <option value="find out what types of organizations could help">Find org types that could help</option>
+          <option value="identify gaps where no one is helping yet">Identify gaps where no one is helping</option>
+          <option value="know how to advocate for this community to funders or officials">Advocate to funders or officials</option>
+          <option value="figure out where to direct donations for maximum local impact">Direct donations for max local impact</option>
+        </select>
+      </div>
+
+      <button type="submit" class="tool-submit" id="submitBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+        Map My Community's Needs
+      </button>
+    </form>
+
+    <div class="tool-loading" id="loading">
+      <div class="tool-spinner"></div>
+      Mapping needs and identifying patterns…
+    </div>
+
+    <div class="tool-error" id="errorBox"></div>
+
+    <div class="tool-result" id="result">
+      <div class="tool-result-header">
+        <span class="tool-result-label">Community Needs Analysis</span>
+        <button class="tool-copy-btn" id="copyBtn">Copy</button>
+      </div>
+      <div class="tool-result-body" id="resultBody"></div>
+    </div>
+
+    <footer class="tool-footer">
+      Built by <a href="/" target="_blank">Panos Kokmotos</a> · Part of the
+      <a href="/#ai-lab">AI for Social Impact Lab</a> ·
+      Powered by Claude AI
+    </footer>
+  </main>
+
+  <script>
+    const WORKER_URL = 'https://ask-panos.panagiotis-kokmotoss.workers.dev/tool';
+
+    const form = document.getElementById('toolForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const loading = document.getElementById('loading');
+    const errorBox = document.getElementById('errorBox');
+    const result = document.getElementById('result');
+    const resultBody = document.getElementById('resultBody');
+    const copyBtn = document.getElementById('copyBtn');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const location = document.getElementById('location').value.trim();
+      const observations = document.getElementById('observations').value.trim();
+      const yourRole = document.getElementById('yourRole').value;
+      const whatYouWant = document.getElementById('whatYouWant').value;
+
+      if (!location || !observations) {
+        showError('Please describe your community and the needs you\'re observing.');
+        return;
+      }
+
+      setLoading(true);
+      hideError();
+      hideResult();
+
+      const systemPrompt = `You are a community development expert and social sector strategist who specializes in translating on-the-ground observations into actionable insights. You understand how needs interconnect, where systems fail, and how to direct resources effectively.
+
+Your job: take a community member's observations and produce a structured needs analysis tailored to what they need most.
+
+Structure your response as:
+
+**What you're seeing: A needs map**
+[Break their observations into 3-4 distinct need categories with brief labels — e.g. "Food insecurity", "Housing instability", "Youth services gap". For each: 1 sentence interpreting the signal they shared]
+
+**The pattern underneath**
+[2-3 sentences: what underlying structural or systemic issue connects these needs? What's the root cause worth naming?]
+
+**Where the gaps are**
+[2-3 specific gaps — types of services, populations being missed, or geographic coverage issues — that likely exist based on what they described]
+
+**Types of organizations that could help**
+[3-4 org types or program models that match the need profile — with a sentence on why each fits. Do NOT name specific orgs.]
+
+**Concrete next steps for a ${yourRole === 'a resident who lives here' ? 'resident' : yourRole}**
+[3 actionable steps tailored to their role — specific, realistic, not generic]
+
+Keep under 400 words. Be direct and useful. Treat them as a capable peer, not a passive recipient.`;
+
+      const userMessage = `Community/area: ${location}
+What I'm observing: ${observations}
+My role: ${yourRole}
+What I need most right now: ${whatYouWant}
+
+Build my community needs analysis.`;
+
+      try {
+        const res = await fetch(WORKER_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ systemPrompt, userMessage }),
+        });
+
+        if (!res.ok) throw new Error(`Server error: ${res.status}`);
+        const data = await res.json();
+        if (data.error) throw new Error(data.error);
+
+        showResult(data.result);
+      } catch (err) {
+        showError('Something went wrong. Please try again.');
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    });
+
+    copyBtn.addEventListener('click', () => {
+      navigator.clipboard.writeText(resultBody.textContent).then(() => {
+        copyBtn.textContent = 'Copied!';
+        setTimeout(() => { copyBtn.textContent = 'Copy'; }, 2000);
+      });
+    });
+
+    function setLoading(on) {
+      submitBtn.disabled = on;
+      loading.classList.toggle('visible', on);
+    }
+
+    function showResult(text) {
+      resultBody.innerHTML = formatText(text);
+      result.classList.add('visible');
+      result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function hideResult() { result.classList.remove('visible'); }
+    function showError(msg) { errorBox.textContent = msg; errorBox.classList.add('visible'); }
+    function hideError() { errorBox.classList.remove('visible'); }
+
+    function formatText(text) {
+      return text
+        .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\n/g, '<br>');
+    }
+  </script>
+</body>
+</html>

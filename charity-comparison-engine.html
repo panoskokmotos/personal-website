@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Charity Comparison Engine — AI Cause Area Breakdown</title>
+  <meta name="description" content="Input a cause area → AI compares top org types by effectiveness, overhead, reach, and transparency. GiveWell but conversational." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/style.css" />
+  <link rel="icon" href="/favicon.ico" />
+</head>
+<body class="tool-page">
+
+  <header class="tool-header">
+    <a href="/#ai-lab" class="tool-back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      panoskokmotos.com
+    </a>
+  </header>
+
+  <main class="tool-main">
+    <p class="tool-eyebrow">AI for Social Impact · Free Tool</p>
+    <h1 class="tool-title">Charity Comparison Engine</h1>
+    <p class="tool-desc">Pick a cause and tell AI what matters most to you as a donor — it'll compare the main types of organizations working in that space by effectiveness, overhead, reach, and approach. GiveWell, but in plain English and built around your priorities.</p>
+
+    <form class="tool-form" id="toolForm">
+
+      <div class="tool-field">
+        <label class="tool-label" for="cause">
+          Cause area you want to support
+          <span class="tool-hint"> — be specific for better comparison</span>
+        </label>
+        <input
+          id="cause"
+          class="tool-input"
+          type="text"
+          placeholder="e.g. hunger relief, childhood education, climate change, clean water, refugee support"
+          required
+        />
+      </div>
+
+      <div class="tool-field">
+        <label class="tool-label" for="priority">
+          What matters most to you as a donor?
+        </label>
+        <select id="priority" class="tool-select" required>
+          <option value="">Select your top priority…</option>
+          <option value="maximum lives impacted per dollar">Maximum lives impacted per dollar</option>
+          <option value="low overhead and administrative costs">Low overhead / admin costs</option>
+          <option value="local community focus and visible impact">Local impact I can see</option>
+          <option value="scientific evidence of effectiveness">Evidence-based / proven effectiveness</option>
+          <option value="systemic change and root-cause work">Systemic change, not just bandaids</option>
+          <option value="transparency and financial accountability">Transparency and accountability</option>
+          <option value="supporting underserved or overlooked communities">Underserved or overlooked communities</option>
+        </select>
+      </div>
+
+      <div class="tool-field">
+        <label class="tool-label" for="geoFocus">
+          Geographic focus
+          <span class="tool-hint"> — optional</span>
+        </label>
+        <select id="geoFocus" class="tool-select">
+          <option value="">No preference</option>
+          <option value="local / my city or region">Local — my city or region</option>
+          <option value="national — within my country">National — my country</option>
+          <option value="global / international">Global / international</option>
+          <option value="developing countries or Global South">Developing countries / Global South</option>
+        </select>
+      </div>
+
+      <div class="tool-field">
+        <label class="tool-label" for="donorExperience">
+          Your experience level as a donor
+          <span class="tool-hint"> — so we can calibrate the depth</span>
+        </label>
+        <select id="donorExperience" class="tool-select">
+          <option value="new to giving">New to giving</option>
+          <option value="occasional donor">Occasional donor</option>
+          <option value="regular donor who wants to go deeper">Regular donor going deeper</option>
+          <option value="experienced donor who evaluates orgs carefully">Experienced / evaluates orgs carefully</option>
+        </select>
+      </div>
+
+      <button type="submit" class="tool-submit" id="submitBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+        Compare Org Types
+      </button>
+    </form>
+
+    <div class="tool-loading" id="loading">
+      <div class="tool-spinner"></div>
+      Comparing approaches and building your breakdown…
+    </div>
+
+    <div class="tool-error" id="errorBox"></div>
+
+    <div class="tool-result" id="result">
+      <div class="tool-result-header">
+        <span class="tool-result-label">Your Cause Area Comparison</span>
+        <button class="tool-copy-btn" id="copyBtn">Copy</button>
+      </div>
+      <div class="tool-result-body" id="resultBody"></div>
+    </div>
+
+    <footer class="tool-footer">
+      Built by <a href="/" target="_blank">Panos Kokmotos</a> · Part of the
+      <a href="/#ai-lab">AI for Social Impact Lab</a> ·
+      Powered by Claude AI
+    </footer>
+  </main>
+
+  <script>
+    const WORKER_URL = 'https://ask-panos.panagiotis-kokmotoss.workers.dev/tool';
+
+    const form = document.getElementById('toolForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const loading = document.getElementById('loading');
+    const errorBox = document.getElementById('errorBox');
+    const result = document.getElementById('result');
+    const resultBody = document.getElementById('resultBody');
+    const copyBtn = document.getElementById('copyBtn');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const cause = document.getElementById('cause').value.trim();
+      const priority = document.getElementById('priority').value;
+      const geoFocus = document.getElementById('geoFocus').value;
+      const donorExperience = document.getElementById('donorExperience').value;
+
+      if (!cause || !priority) {
+        showError('Please fill in the cause area and your top priority.');
+        return;
+      }
+
+      setLoading(true);
+      hideError();
+      hideResult();
+
+      const systemPrompt = `You are a charitable giving strategist with deep expertise in effective altruism, nonprofit sector analysis, and donor education. You think like GiveWell but explain like a trusted friend.
+
+Your job: compare 3–4 distinct types of organizations working in the user's cause area, evaluated through the lens of their stated priority. Be honest about tradeoffs. Don't oversimplify.
+
+Structure your response as:
+
+**The landscape for [cause area]**
+[2-3 sentences: what's the range of approaches in this space and why do they differ]
+
+**Org Type 1: [Name]**
+Approach: [What they do and how]
+Effectiveness: [Honest assessment — what evidence exists, how much impact per dollar, limitations]
+Best for donors who: [1 sentence]
+Watch out for: [1 specific weakness or concern]
+
+**Org Type 2: [Name]**
+[Same format]
+
+**Org Type 3: [Name]**
+[Same format]
+
+[Optional Org Type 4 if truly distinct and useful]
+
+**Given your priority: [restate their priority]**
+[2-3 sentences: which approach best fits their priorities, and one honest caveat]
+
+**Where to dig deeper**
+[2-3 specific research tools or sources relevant to this cause — e.g. GiveWell, The Life You Can Save, Charity Navigator, academic research — with a note on what each is best for]
+
+Do NOT name specific real organizations — compare org types and approaches only. Keep it under 400 words. Calibrate depth to their experience level.`;
+
+      const userMessage = `Cause area: ${cause}
+My top priority as a donor: ${priority}
+Geographic focus: ${geoFocus || 'no preference'}
+My experience level: ${donorExperience}
+
+Compare the main org types and approaches in this space.`;
+
+      try {
+        const res = await fetch(WORKER_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ systemPrompt, userMessage }),
+        });
+
+        if (!res.ok) throw new Error(`Server error: ${res.status}`);
+        const data = await res.json();
+        if (data.error) throw new Error(data.error);
+
+        showResult(data.result);
+      } catch (err) {
+        showError('Something went wrong. Please try again.');
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    });
+
+    copyBtn.addEventListener('click', () => {
+      navigator.clipboard.writeText(resultBody.textContent).then(() => {
+        copyBtn.textContent = 'Copied!';
+        setTimeout(() => { copyBtn.textContent = 'Copy'; }, 2000);
+      });
+    });
+
+    function setLoading(on) {
+      submitBtn.disabled = on;
+      loading.classList.toggle('visible', on);
+    }
+
+    function showResult(text) {
+      resultBody.innerHTML = formatText(text);
+      result.classList.add('visible');
+      result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function hideResult() { result.classList.remove('visible'); }
+    function showError(msg) { errorBox.textContent = msg; errorBox.classList.add('visible'); }
+    function hideError() { errorBox.classList.remove('visible'); }
+
+    function formatText(text) {
+      return text
+        .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\n/g, '<br>');
+    }
+  </script>
+</body>
+</html>

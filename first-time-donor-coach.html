@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>First-Time Donor Coach — AI Giving Guide</title>
+  <meta name="description" content="New to giving? Input a few details and AI builds your personalized first-time giving plan — where to start, how much, which types of orgs to trust." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/style.css" />
+  <link rel="icon" href="/favicon.ico" />
+</head>
+<body class="tool-page">
+
+  <header class="tool-header">
+    <a href="/#ai-lab" class="tool-back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      panoskokmotos.com
+    </a>
+  </header>
+
+  <main class="tool-main">
+    <p class="tool-eyebrow">AI for Social Impact · Free Tool</p>
+    <h1 class="tool-title">First-Time Donor Coach</h1>
+    <p class="tool-desc">Never donated before and not sure where to start? Tell AI a little about yourself — it'll build you a personalized 5-step giving plan with concrete first moves you can make today.</p>
+
+    <form class="tool-form" id="toolForm">
+
+      <div class="tool-field">
+        <label class="tool-label" for="causes">
+          What causes do you care about most?
+          <span class="tool-hint"> — pick whatever resonates, even vaguely</span>
+        </label>
+        <input
+          id="causes"
+          class="tool-input"
+          type="text"
+          placeholder="e.g. kids, animals, climate, hunger, education, mental health"
+          required
+        />
+      </div>
+
+      <div class="tool-field">
+        <label class="tool-label" for="budget">
+          What monthly amount feels comfortable to start with?
+          <span class="tool-hint"> — be honest, any amount works</span>
+        </label>
+        <select id="budget" class="tool-select" required>
+          <option value="">Select…</option>
+          <option value="$5–$10/month">$5–$10/month</option>
+          <option value="$10–$25/month">$10–$25/month</option>
+          <option value="$25–$50/month">$25–$50/month</option>
+          <option value="$50–$100/month">$50–$100/month</option>
+          <option value="$100+/month">$100+/month</option>
+          <option value="a one-time gift to start">One-time gift to start</option>
+        </select>
+      </div>
+
+      <div class="tool-field">
+        <label class="tool-label" for="concerns">
+          What's your biggest worry about donating?
+          <span class="tool-hint"> — optional</span>
+        </label>
+        <select id="concerns" class="tool-select">
+          <option value="">Choose one (optional)…</option>
+          <option value="I don't know if organizations are legitimate">Not sure if orgs are legit</option>
+          <option value="I worry my money won't reach people in need">Worried money won't reach people</option>
+          <option value="I don't know which cause to pick">Don't know which cause to pick</option>
+          <option value="I'm not sure how much I should give">Not sure how much to give</option>
+          <option value="I've been burned by charities before">Been burned by charities before</option>
+          <option value="It all feels overwhelming and I don't know where to start">Feels overwhelming</option>
+        </select>
+      </div>
+
+      <div class="tool-field">
+        <label class="tool-label" for="style">
+          How do you like to give?
+          <span class="tool-hint"> — optional</span>
+        </label>
+        <select id="style" class="tool-select">
+          <option value="">Choose one (optional)…</option>
+          <option value="I want to give locally and see the impact near me">Locally, see the impact near me</option>
+          <option value="I want to maximize global impact per dollar">Maximize global impact per dollar</option>
+          <option value="I want to support underdog or small organizations">Support small / underdog orgs</option>
+          <option value="I want to give through my workplace or employer matching">Through workplace / employer match</option>
+          <option value="I want to give as a family or involve my kids">Give as a family</option>
+        </select>
+      </div>
+
+      <button type="submit" class="tool-submit" id="submitBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        Build My Giving Plan
+      </button>
+    </form>
+
+    <div class="tool-loading" id="loading">
+      <div class="tool-spinner"></div>
+      Building your personalized giving plan…
+    </div>
+
+    <div class="tool-error" id="errorBox"></div>
+
+    <div class="tool-result" id="result">
+      <div class="tool-result-header">
+        <span class="tool-result-label">Your First-Time Giving Plan</span>
+        <button class="tool-copy-btn" id="copyBtn">Copy</button>
+      </div>
+      <div class="tool-result-body" id="resultBody"></div>
+    </div>
+
+    <footer class="tool-footer">
+      Built by <a href="/" target="_blank">Panos Kokmotos</a> · Part of the
+      <a href="/#ai-lab">AI for Social Impact Lab</a> ·
+      Powered by Claude AI
+    </footer>
+  </main>
+
+  <script>
+    const WORKER_URL = 'https://ask-panos.panagiotis-kokmotoss.workers.dev/tool';
+
+    const form = document.getElementById('toolForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const loading = document.getElementById('loading');
+    const errorBox = document.getElementById('errorBox');
+    const result = document.getElementById('result');
+    const resultBody = document.getElementById('resultBody');
+    const copyBtn = document.getElementById('copyBtn');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const causes = document.getElementById('causes').value.trim();
+      const budget = document.getElementById('budget').value;
+      const concerns = document.getElementById('concerns').value;
+      const style = document.getElementById('style').value;
+
+      if (!causes || !budget) {
+        showError('Please fill in your causes and comfortable budget.');
+        return;
+      }
+
+      setLoading(true);
+      hideError();
+      hideResult();
+
+      const systemPrompt = `You are a warm, practical giving coach who specializes in helping first-time donors take their very first step. Your job is to remove overwhelm and create a clear, actionable plan.
+
+Structure your response as:
+
+**Your Giving Profile**
+[2-3 sentences summarizing who they are as a donor and what their giving style looks like]
+
+**Step 1: Pick your cause lane**
+[Help them narrow to 1-2 cause areas from what they shared, with a 1-sentence reason for each]
+
+**Step 2: How to vet an organization (in 2 minutes)**
+[3 quick, practical signals anyone can check without being an expert — specific and actionable]
+
+**Step 3: Your first donation**
+[A concrete recommendation for their first gift: amount, frequency, and what type of org to start with]
+
+**Step 4: Make it stick**
+[One simple habit or system to keep giving going without it being a chore]
+
+**Step 5: Level up later**
+[One optional next step for when they're ready to go deeper]
+
+${concerns ? '[Address their specific concern honestly in 1-2 sentences — do not skip this.]' : ''}
+
+Keep it under 350 words. Warm but practical. Not preachy. Make them feel capable, not guilty.`;
+
+      const userMessage = `Causes I care about: ${causes}
+Comfortable starting budget: ${budget}
+My biggest concern: ${concerns || 'none specified'}
+Preferred giving style: ${style || 'not specified'}
+
+Build my personalized first-time giving plan.`;
+
+      try {
+        const res = await fetch(WORKER_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ systemPrompt, userMessage }),
+        });
+
+        if (!res.ok) throw new Error(`Server error: ${res.status}`);
+        const data = await res.json();
+        if (data.error) throw new Error(data.error);
+
+        showResult(data.result);
+      } catch (err) {
+        showError('Something went wrong. Please try again.');
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    });
+
+    copyBtn.addEventListener('click', () => {
+      navigator.clipboard.writeText(resultBody.textContent).then(() => {
+        copyBtn.textContent = 'Copied!';
+        setTimeout(() => { copyBtn.textContent = 'Copy'; }, 2000);
+      });
+    });
+
+    function setLoading(on) {
+      submitBtn.disabled = on;
+      loading.classList.toggle('visible', on);
+    }
+
+    function showResult(text) {
+      resultBody.innerHTML = formatText(text);
+      result.classList.add('visible');
+      result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function hideResult() { result.classList.remove('visible'); }
+    function showError(msg) { errorBox.textContent = msg; errorBox.classList.add('visible'); }
+    function hideError() { errorBox.classList.remove('visible'); }
+
+    function formatText(text) {
+      return text
+        .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\n/g, '<br>');
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nonprofit Health Checker — AI Trust Score</title>
+  <meta name="description" content="Input any nonprofit name → AI interprets 990 data signals, ratings, and red flags → plain-English trust score so you can give with confidence." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/style.css" />
+  <link rel="icon" href="/favicon.ico" />
+</head>
+<body class="tool-page">
+
+  <header class="tool-header">
+    <a href="/#ai-lab" class="tool-back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      panoskokmotos.com
+    </a>
+  </header>
+
+  <main class="tool-main">
+    <p class="tool-eyebrow">AI for Social Impact · Free Tool</p>
+    <h1 class="tool-title">Nonprofit Health Checker</h1>
+    <p class="tool-desc">Thinking about donating but not sure if the org is legit? Tell AI what you know about the nonprofit — it'll walk you through the key health signals to check and what to look for, in plain English.</p>
+
+    <div class="tool-notice" style="background:rgba(255,200,50,0.08);border:1px solid rgba(255,200,50,0.25);border-radius:10px;padding:14px 18px;margin-bottom:24px;font-size:0.875rem;color:var(--text-muted);line-height:1.6;">
+      <strong style="color:var(--text-primary);">Note:</strong> This tool guides you through how to evaluate a nonprofit using public data — it doesn't connect to live databases. For live data, it'll point you to the right sources (Charity Navigator, GuideStar, ProPublica, etc.).
+    </div>
+
+    <form class="tool-form" id="toolForm">
+
+      <div class="tool-field">
+        <label class="tool-label" for="orgName">
+          Nonprofit name
+          <span class="tool-hint"> — as specific as possible</span>
+        </label>
+        <input
+          id="orgName"
+          class="tool-input"
+          type="text"
+          placeholder="e.g. Feeding America, local animal shelter name"
+          required
+        />
+      </div>
+
+      <div class="tool-field">
+        <label class="tool-label" for="orgDescription">
+          What do you know about them?
+          <span class="tool-hint"> — mission, how you heard of them, anything</span>
+        </label>
+        <textarea
+          id="orgDescription"
+          class="tool-input"
+          rows="3"
+          placeholder="e.g. They say they feed homeless families in Chicago. I saw them on Instagram. They're asking for donations after the recent flooding."
+        ></textarea>
+      </div>
+
+      <div class="tool-field">
+        <label class="tool-label" for="orgSize">
+          Approximate org size (if known)
+          <span class="tool-hint"> — optional</span>
+        </label>
+        <select id="orgSize" class="tool-select">
+          <option value="">Unknown / not sure</option>
+          <option value="small local org (under $500K budget)">Small local org (under $500K budget)</option>
+          <option value="mid-size regional org ($500K–$5M budget)">Mid-size regional ($500K–$5M)</option>
+          <option value="large national or international org ($5M+ budget)">Large national/international ($5M+)</option>
+        </select>
+      </div>
+
+      <div class="tool-field">
+        <label class="tool-label" for="redFlags">
+          Have you noticed anything suspicious?
+          <span class="tool-hint"> — optional</span>
+        </label>
+        <select id="redFlags" class="tool-select">
+          <option value="">Nothing specific</option>
+          <option value="they only accept cash or wire transfers">Only accepts cash or wire transfers</option>
+          <option value="they use high-pressure or urgent tactics">High-pressure / urgent tactics</option>
+          <option value="I can't find much information about them online">Hard to find info online</option>
+          <option value="they sprang up very recently after a disaster or news event">Appeared right after a disaster</option>
+          <option value="their name is very similar to a well-known charity">Name similar to known charity</option>
+          <option value="they have no clear address or leadership listed">No address or leadership listed</option>
+        </select>
+      </div>
+
+      <button type="submit" class="tool-submit" id="submitBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        Check This Nonprofit
+      </button>
+    </form>
+
+    <div class="tool-loading" id="loading">
+      <div class="tool-spinner"></div>
+      Analyzing signals and building your trust assessment…
+    </div>
+
+    <div class="tool-error" id="errorBox"></div>
+
+    <div class="tool-result" id="result">
+      <div class="tool-result-header">
+        <span class="tool-result-label">Nonprofit Health Assessment</span>
+        <button class="tool-copy-btn" id="copyBtn">Copy</button>
+      </div>
+      <div class="tool-result-body" id="resultBody"></div>
+    </div>
+
+    <footer class="tool-footer">
+      Built by <a href="/" target="_blank">Panos Kokmotos</a> · Part of the
+      <a href="/#ai-lab">AI for Social Impact Lab</a> ·
+      Powered by Claude AI
+    </footer>
+  </main>
+
+  <script>
+    const WORKER_URL = 'https://ask-panos.panagiotis-kokmotoss.workers.dev/tool';
+
+    const form = document.getElementById('toolForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const loading = document.getElementById('loading');
+    const errorBox = document.getElementById('errorBox');
+    const result = document.getElementById('result');
+    const resultBody = document.getElementById('resultBody');
+    const copyBtn = document.getElementById('copyBtn');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const orgName = document.getElementById('orgName').value.trim();
+      const orgDescription = document.getElementById('orgDescription').value.trim();
+      const orgSize = document.getElementById('orgSize').value;
+      const redFlags = document.getElementById('redFlags').value;
+
+      if (!orgName) {
+        showError('Please enter the nonprofit name.');
+        return;
+      }
+
+      setLoading(true);
+      hideError();
+      hideResult();
+
+      const systemPrompt = `You are a nonprofit due-diligence expert who helps everyday donors evaluate charities before giving. You don't have access to live databases, but you know exactly what signals matter and where to find them.
+
+Your job: given what the user knows about a nonprofit, produce a structured health assessment that empowers them to make a smart decision.
+
+Structure your response as:
+
+**Overall Signal: [Green / Yellow / Red]**
+[1 sentence summary of your overall read]
+
+**What to Check First (with sources)**
+[3-4 specific things to verify, each with the exact website or tool to use — e.g. Charity Navigator, ProPublica Nonprofit Explorer, IRS Tax Exempt org search, BBB Wise Giving Alliance, state charity registration database]
+
+**Key Health Indicators to Look For**
+[5 specific metrics or signals: program expense ratio, executive compensation, audit status, board independence, years of operation — with plain-English guidance on what "good" looks like for each]
+
+${redFlags && redFlags !== 'Nothing specific' ? `**On the Red Flag You Mentioned**\n[Address the specific suspicious signal they noticed — what it might mean, whether it's conclusive, and what to do next]` : ''}
+
+**Bottom Line**
+[2-3 sentences: given everything, what's your honest read? What's the one thing that would change your verdict?]
+
+Be specific, honest, and practical. Never make up data about the specific org. Max 350 words.`;
+
+      const userMessage = `Nonprofit name: ${orgName}
+What I know about them: ${orgDescription || 'nothing specific'}
+Approximate size: ${orgSize || 'unknown'}
+Suspicious signal noticed: ${redFlags || 'nothing specific'}
+
+Produce my nonprofit health assessment.`;
+
+      try {
+        const res = await fetch(WORKER_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ systemPrompt, userMessage }),
+        });
+
+        if (!res.ok) throw new Error(`Server error: ${res.status}`);
+        const data = await res.json();
+        if (data.error) throw new Error(data.error);
+
+        showResult(data.result);
+      } catch (err) {
+        showError('Something went wrong. Please try again.');
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    });
+
+    copyBtn.addEventListener('click', () => {
+      navigator.clipboard.writeText(resultBody.textContent).then(() => {
+        copyBtn.textContent = 'Copied!';
+        setTimeout(() => { copyBtn.textContent = 'Copy'; }, 2000);
+      });
+    });
+
+    function setLoading(on) {
+      submitBtn.disabled = on;
+      loading.classList.toggle('visible', on);
+    }
+
+    function showResult(text) {
+      resultBody.innerHTML = formatText(text);
+      result.classList.add('visible');
+      result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function hideResult() { result.classList.remove('visible'); }
+    function showError(msg) { errorBox.textContent = msg; errorBox.classList.add('visible'); }
+    function hideError() { errorBox.classList.remove('visible'); }
+
+    function formatText(text) {
+      return text
+        .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\n/g, '<br>');
+    }
+  </script>
+</body>
+</html>

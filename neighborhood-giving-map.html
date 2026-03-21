@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Neighborhood Giving Map — AI Local Giving Analysis</title>
+  <meta name="description" content="Tell AI your city and cause area → it analyzes where charitable dollars typically flow vs. where need concentrates, exposes giving deserts, and shows where local capital is most needed." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/style.css" />
+  <link rel="icon" href="/favicon.ico" />
+</head>
+<body class="tool-page">
+
+  <header class="tool-header">
+    <a href="/#ai-lab" class="tool-back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      panoskokmotos.com
+    </a>
+  </header>
+
+  <main class="tool-main">
+    <p class="tool-eyebrow">AI for Social Impact · Free Tool</p>
+    <h1 class="tool-title">Neighborhood Giving Map</h1>
+    <p class="tool-desc">Charitable dollars don't flow evenly — they flow to where donors feel comfortable, not where need is highest. Tell AI your city and context, and it'll map the known patterns: where giving concentrates, where giving deserts form, and where your dollars could matter most locally.</p>
+
+    <form class="tool-form" id="toolForm">
+
+      <div class="tool-field">
+        <label class="tool-label" for="city">
+          Your city or metro area
+          <span class="tool-hint"> — be as specific as you'd like</span>
+        </label>
+        <input
+          id="city"
+          class="tool-input"
+          type="text"
+          placeholder="e.g. San Francisco, CA / Chicago metro / Detroit, MI / Nashville, TN"
+          required
+        />
+      </div>
+
+      <div class="tool-field">
+        <label class="tool-label" for="causeArea">
+          Cause area or community you care about
+          <span class="tool-hint"> — optional but sharpens the analysis</span>
+        </label>
+        <input
+          id="causeArea"
+          class="tool-input"
+          type="text"
+          placeholder="e.g. youth services, food security, housing, workforce development, arts"
+        />
+      </div>
+
+      <div class="tool-field">
+        <label class="tool-label" for="donorType">
+          Who are you in this picture?
+        </label>
+        <select id="donorType" class="tool-select" required>
+          <option value="">Select…</option>
+          <option value="an individual donor deciding where to give locally">Individual donor deciding where to give</option>
+          <option value="a foundation or institutional funder evaluating local gaps">Foundation or institutional funder</option>
+          <option value="a nonprofit leader understanding my competitive landscape">Nonprofit leader mapping the landscape</option>
+          <option value="a community organizer or advocate">Community organizer / advocate</option>
+          <option value="a researcher or journalist studying giving patterns">Researcher / journalist</option>
+          <option value="a local government or civic leader">Local government / civic leader</option>
+        </select>
+      </div>
+
+      <div class="tool-field">
+        <label class="tool-label" for="whatKnow">
+          What do you already know or suspect about giving patterns here?
+          <span class="tool-hint"> — optional, any observations help</span>
+        </label>
+        <textarea
+          id="whatKnow"
+          class="tool-input"
+          rows="3"
+          placeholder="e.g. Most big donors fund arts downtown but the east side has almost no nonprofits. The wealthier neighborhoods get a lot of service orgs but there's a huge gap in the immigrant neighborhoods on the south side."
+        ></textarea>
+      </div>
+
+      <button type="submit" class="tool-submit" id="submitBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+        Map Local Giving Patterns
+      </button>
+    </form>
+
+    <div class="tool-loading" id="loading">
+      <div class="tool-spinner"></div>
+      Analyzing giving patterns and identifying gaps…
+    </div>
+
+    <div class="tool-error" id="errorBox"></div>
+
+    <div class="tool-result" id="result">
+      <div class="tool-result-header">
+        <span class="tool-result-label">Local Giving Pattern Analysis</span>
+        <button class="tool-copy-btn" id="copyBtn">Copy</button>
+      </div>
+      <div class="tool-result-body" id="resultBody"></div>
+    </div>
+
+    <footer class="tool-footer">
+      Built by <a href="/" target="_blank">Panos Kokmotos</a> · Part of the
+      <a href="/#ai-lab">AI for Social Impact Lab</a> ·
+      Powered by Claude AI
+    </footer>
+  </main>
+
+  <script>
+    const WORKER_URL = 'https://ask-panos.panagiotis-kokmotoss.workers.dev/tool';
+
+    const form = document.getElementById('toolForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const loading = document.getElementById('loading');
+    const errorBox = document.getElementById('errorBox');
+    const result = document.getElementById('result');
+    const resultBody = document.getElementById('resultBody');
+    const copyBtn = document.getElementById('copyBtn');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const city = document.getElementById('city').value.trim();
+      const causeArea = document.getElementById('causeArea').value.trim();
+      const donorType = document.getElementById('donorType').value;
+      const whatKnow = document.getElementById('whatKnow').value.trim();
+
+      if (!city || !donorType) {
+        showError('Please fill in your city and your role.');
+        return;
+      }
+
+      setLoading(true);
+      hideError();
+      hideResult();
+
+      const systemPrompt = `You are an urban philanthropy researcher and community development strategist with deep expertise in how charitable capital flows — and doesn't flow — within American cities and metros.
+
+Your job: provide a sharp, honest analysis of how giving typically patterns in cities like the one described, where the giving deserts tend to form, and what that means for someone in the user's role.
+
+Structure your response as:
+
+**How giving typically patterns in cities like ${city || 'this city'}**
+[3-4 sentences on the typical geography of charitable giving in U.S. cities of this type — donor concentrations, neighborhood access disparities, which cause areas tend to be over/under-funded]
+
+**The giving desert problem**
+[What a giving desert looks like — which communities and cause areas are most commonly underserved, and what structural reasons explain it (donor proximity bias, org capacity gaps, historic disinvestment, etc.)]
+
+${causeArea ? `**Specifically for ${causeArea}**\n[How this cause area tends to pattern locally — where it gets funded vs. where gaps typically form in cities like this]` : ''}
+
+**Where local capital is most needed**
+[3 specific types of communities or areas that are chronically underfunded relative to need in most U.S. cities — be specific and honest]
+
+**What this means for you as ${donorType}**
+[3 actionable implications tailored to their role — how to find local orgs in underserved areas, how to evaluate whether you're contributing to a giving desert, where to look for data on local giving patterns]
+
+**Data sources worth checking**
+[2-3 specific resources: IRS 990 explorer, National Center for Charitable Statistics, Urban Institute, local community foundation research, etc. — with a note on what each shows]
+
+Be direct, analytically sharp, and practically useful. Don't just describe the problem — give them a way to act on it. Max 400 words.`;
+
+      const userMessage = `City/metro: ${city}
+Cause area of interest: ${causeArea || 'general / not specified'}
+My role: ${donorType}
+What I already know or suspect: ${whatKnow || 'nothing specific yet'}
+
+Analyze local giving patterns and where the gaps are.`;
+
+      try {
+        const res = await fetch(WORKER_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ systemPrompt, userMessage }),
+        });
+
+        if (!res.ok) throw new Error(`Server error: ${res.status}`);
+        const data = await res.json();
+        if (data.error) throw new Error(data.error);
+
+        showResult(data.result);
+      } catch (err) {
+        showError('Something went wrong. Please try again.');
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    });
+
+    copyBtn.addEventListener('click', () => {
+      navigator.clipboard.writeText(resultBody.textContent).then(() => {
+        copyBtn.textContent = 'Copied!';
+        setTimeout(() => { copyBtn.textContent = 'Copy'; }, 2000);
+      });
+    });
+
+    function setLoading(on) {
+      submitBtn.disabled = on;
+      loading.classList.toggle('visible', on);
+    }
+
+    function showResult(text) {
+      resultBody.innerHTML = formatText(text);
+      result.classList.add('visible');
+      result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function hideResult() { result.classList.remove('visible'); }
+    function showError(msg) { errorBox.textContent = msg; errorBox.classList.add('visible'); }
+    function hideError() { errorBox.classList.remove('visible'); }
+
+    function formatText(text) {
+      return text
+        .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\n/g, '<br>');
+    }
+  </script>
+</body>
+</html>

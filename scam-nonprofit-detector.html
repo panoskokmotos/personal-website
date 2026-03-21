@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Scam Nonprofit Detector — AI Fraud Signal Checker</title>
+  <meta name="description" content="Something feel off about a charity? Describe it and AI scans for the classic warning signs of fraudulent fundraising — before you give a cent." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/style.css" />
+  <link rel="icon" href="/favicon.ico" />
+</head>
+<body class="tool-page">
+
+  <header class="tool-header">
+    <a href="/#ai-lab" class="tool-back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      panoskokmotos.com
+    </a>
+  </header>
+
+  <main class="tool-main">
+    <p class="tool-eyebrow">AI for Social Impact · Free Tool</p>
+    <h1 class="tool-title">Scam Nonprofit Detector</h1>
+    <p class="tool-desc">Something feel off about a charity you've seen — especially after a disaster or in the news? Describe what you know and AI will flag whether it matches known patterns of fraudulent fundraising, before you give a cent.</p>
+
+    <form class="tool-form" id="toolForm">
+
+      <div class="tool-field">
+        <label class="tool-label" for="orgName">
+          Name of the organization
+          <span class="tool-hint"> — as you've seen it written</span>
+        </label>
+        <input
+          id="orgName"
+          class="tool-input"
+          type="text"
+          placeholder="e.g. American Veterans Relief Fund, Children's Cancer Aid Society"
+          required
+        />
+      </div>
+
+      <div class="tool-field">
+        <label class="tool-label" for="howFound">
+          How did you find out about them?
+        </label>
+        <select id="howFound" class="tool-select" required>
+          <option value="">Select…</option>
+          <option value="social media post or ad">Social media post or ad</option>
+          <option value="email I received">Email I received</option>
+          <option value="phone call or robocall">Phone call / robocall</option>
+          <option value="door-to-door or in-person solicitation">Door-to-door or in-person</option>
+          <option value="text message">Text message</option>
+          <option value="crowdfunding platform like GoFundMe">Crowdfunding (GoFundMe, etc.)</option>
+          <option value="news article or media coverage">News article / media</option>
+          <option value="friend or family recommendation">Friend or family recommendation</option>
+          <option value="their website or search result">Their website or search result</option>
+        </select>
+      </div>
+
+      <div class="tool-field">
+        <label class="tool-label" for="context">
+          What's the context — is this tied to a recent event?
+          <span class="tool-hint"> — optional but important</span>
+        </label>
+        <input
+          id="context"
+          class="tool-input"
+          type="text"
+          placeholder="e.g. appeared after the recent hurricane / targeting veterans / claiming to help cancer patients"
+        />
+      </div>
+
+      <div class="tool-field">
+        <label class="tool-label" for="signals">
+          Check everything you've noticed
+          <span class="tool-hint"> — select all that apply</span>
+        </label>
+        <div class="tool-checks" id="signalChecks">
+          <label class="tool-check-item"><input type="checkbox" value="They only accept cash, gift cards, wire transfers, or cryptocurrency"> Only accepts cash, gift cards, wire transfers, or crypto</label>
+          <label class="tool-check-item"><input type="checkbox" value="They use very high pressure or urgent language to rush my decision"> High-pressure or urgent language</label>
+          <label class="tool-check-item"><input type="checkbox" value="Their name is very similar to a well-known organization"> Name similar to a well-known org</label>
+          <label class="tool-check-item"><input type="checkbox" value="I can't find them on Charity Navigator, GuideStar, or IRS search"> Can't find them on Charity Navigator / IRS</label>
+          <label class="tool-check-item"><input type="checkbox" value="They have no physical address, phone number, or named leadership listed"> No address, phone, or named leadership</label>
+          <label class="tool-check-item"><input type="checkbox" value="They appeared online or contacted me very soon after a recent disaster or news event"> Appeared very recently after a disaster</label>
+          <label class="tool-check-item"><input type="checkbox" value="Their website looks unprofessional, has broken links, or was created very recently"> Website looks new, unprofessional, or broken</label>
+          <label class="tool-check-item"><input type="checkbox" value="They can't clearly explain how they use donations"> Can't clearly explain how donations are used</label>
+          <label class="tool-check-item"><input type="checkbox" value="They use a name like 'fund', 'foundation', or 'society' without much substance behind it"> Uses generic charity language without substance</label>
+        </div>
+      </div>
+
+      <div class="tool-field">
+        <label class="tool-label" for="gut">
+          Anything else that feels off?
+          <span class="tool-hint"> — trust your gut, describe it</span>
+        </label>
+        <input
+          id="gut"
+          class="tool-input"
+          type="text"
+          placeholder="e.g. the photos look stock, their social media has no real activity, the person who called me seemed scripted"
+        />
+      </div>
+
+      <button type="submit" class="tool-submit" id="submitBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+        Check for Scam Signals
+      </button>
+    </form>
+
+    <div class="tool-loading" id="loading">
+      <div class="tool-spinner"></div>
+      Scanning for fraud patterns and warning signals…
+    </div>
+
+    <div class="tool-error" id="errorBox"></div>
+
+    <div class="tool-result" id="result">
+      <div class="tool-result-header">
+        <span class="tool-result-label">Scam Signal Assessment</span>
+        <button class="tool-copy-btn" id="copyBtn">Copy</button>
+      </div>
+      <div class="tool-result-body" id="resultBody"></div>
+    </div>
+
+    <footer class="tool-footer">
+      Built by <a href="/" target="_blank">Panos Kokmotos</a> · Part of the
+      <a href="/#ai-lab">AI for Social Impact Lab</a> ·
+      Powered by Claude AI
+    </footer>
+  </main>
+
+  <style>
+    .tool-checks {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 6px;
+    }
+    .tool-check-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      cursor: pointer;
+      line-height: 1.5;
+    }
+    .tool-check-item input[type="checkbox"] {
+      margin-top: 2px;
+      accent-color: var(--accent);
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+    .tool-check-item:hover {
+      color: var(--text-primary);
+    }
+  </style>
+
+  <script>
+    const WORKER_URL = 'https://ask-panos.panagiotis-kokmotoss.workers.dev/tool';
+
+    const form = document.getElementById('toolForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const loading = document.getElementById('loading');
+    const errorBox = document.getElementById('errorBox');
+    const result = document.getElementById('result');
+    const resultBody = document.getElementById('resultBody');
+    const copyBtn = document.getElementById('copyBtn');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const orgName = document.getElementById('orgName').value.trim();
+      const howFound = document.getElementById('howFound').value;
+      const context = document.getElementById('context').value.trim();
+      const gut = document.getElementById('gut').value.trim();
+
+      const checkedSignals = Array.from(document.querySelectorAll('#signalChecks input[type="checkbox"]:checked'))
+        .map(cb => cb.value);
+
+      if (!orgName || !howFound) {
+        showError('Please fill in the org name and how you found them.');
+        return;
+      }
+
+      setLoading(true);
+      hideError();
+      hideResult();
+
+      const systemPrompt = `You are a charity fraud investigator and consumer protection expert. You've studied hundreds of scam fundraising operations and know exactly how they work. Your job is to help everyday people avoid being defrauded.
+
+IMPORTANT: You are assessing patterns and signals only — you are NOT making a definitive legal determination. Be honest about what you can and can't conclude.
+
+Structure your response as:
+
+**Risk Level: [Low / Medium / High / Very High]**
+[1-2 sentences explaining your overall read]
+
+**Signal Analysis**
+[Go through the specific warning signs they flagged or described. For each one: is it a confirmed red flag, a yellow flag requiring more investigation, or something that has an innocent explanation? Be specific.]
+
+**What's most concerning here**
+[The 1-2 signals that worry you most, and why — what do they indicate in the context of known fraud patterns?]
+
+**What to do right now**
+[3-4 specific, actionable steps: where to verify legitimacy (FTC, state AG charity registry, IRS tax exempt search, Charity Navigator), who to report to if it's a scam (FTC, FBI IC3, state AG, platform where they found it), and whether/how to protect themselves]
+
+**If it turns out to be legit**
+[1 sentence: what would that look like — what evidence would clear their concerns?]
+
+Be direct. If it smells like a scam based on what they shared, say so. Protect the donor. Max 350 words.`;
+
+      const userMessage = `Organization name: ${orgName}
+How I found them: ${howFound}
+Context / trigger event: ${context || 'not specified'}
+Warning signals I noticed: ${checkedSignals.length > 0 ? checkedSignals.join('; ') : 'none checked'}
+Other things that feel off: ${gut || 'nothing specific'}
+
+Assess the fraud risk and tell me what to do.`;
+
+      try {
+        const res = await fetch(WORKER_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ systemPrompt, userMessage }),
+        });
+
+        if (!res.ok) throw new Error(`Server error: ${res.status}`);
+        const data = await res.json();
+        if (data.error) throw new Error(data.error);
+
+        showResult(data.result);
+      } catch (err) {
+        showError('Something went wrong. Please try again.');
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    });
+
+    copyBtn.addEventListener('click', () => {
+      navigator.clipboard.writeText(resultBody.textContent).then(() => {
+        copyBtn.textContent = 'Copied!';
+        setTimeout(() => { copyBtn.textContent = 'Copy'; }, 2000);
+      });
+    });
+
+    function setLoading(on) {
+      submitBtn.disabled = on;
+      loading.classList.toggle('visible', on);
+    }
+
+    function showResult(text) {
+      resultBody.innerHTML = formatText(text);
+      result.classList.add('visible');
+      result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function hideResult() { result.classList.remove('visible'); }
+    function showError(msg) { errorBox.textContent = msg; errorBox.classList.add('visible'); }
+    function hideError() { errorBox.classList.remove('visible'); }
+
+    function formatText(text) {
+      return text
+        .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\n/g, '<br>');
+    }
+  </script>
+</body>
+</html>
