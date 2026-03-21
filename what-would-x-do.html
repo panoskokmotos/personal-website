@@ -28,6 +28,20 @@
     <h1 class="tool-title">"What Would $X Do?"</h1>
     <p class="tool-desc">Pick an amount, pick a cause — see exactly what your donation could do across 5 different types of nonprofits. Turns abstract numbers into vivid reality.</p>
 
+    <!-- ── Empty state example ── -->
+    <div id="emptyStateExample" style="display:none;margin-bottom:28px">
+      <div class="wxd-empty-banner" id="emptyStateBanner">
+        ✨ Example — try it with your own amount →
+      </div>
+      <div class="wxd-scenarios-grid wxd-example-grid" id="exampleGrid"></div>
+    </div>
+
+    <!-- ── Recent searches ── -->
+    <div id="historySection" style="display:none;margin-bottom:20px">
+      <p class="wxd-history-label">Recent searches:</p>
+      <div id="historyChips" class="wxd-history-chips"></div>
+    </div>
+
     <form class="tool-form" id="toolForm">
 
       <!-- ── Amount Section ── -->
@@ -118,7 +132,20 @@
         </div>
       </div>
 
+      <div id="annualSummary" style="display:none"></div>
       <div class="wxd-scenarios-grid" id="scenariosGrid"></div>
+
+      <div id="orgRecs"></div>
+      <div id="actionCTA" class="wxd-action-cta" style="display:none">
+        <div class="wxd-action-cta-text">
+          <strong>Ready to give?</strong>
+          These tools show impact benchmarks — here's where to act.
+        </div>
+        <div class="wxd-action-btns">
+          <a href="https://www.givewell.org" target="_blank" rel="noopener" class="wxd-action-btn-primary">Explore verified nonprofits →</a>
+          <a href="https://givelink.app" target="_blank" rel="noopener" class="wxd-action-btn-secondary">Donate goods via Givelink →</a>
+        </div>
+      </div>
 
       <div class="wxd-try-another" id="tryAnother">
         <span class="wxd-try-label">Try another amount:</span>
@@ -133,13 +160,252 @@
 
     <footer class="tool-footer">
       Built by <a href="/" target="_blank">Panos Kokmotos</a> · Part of the
-      <a href="/#ai-lab">AI for Social Impact Lab</a> ·
+      <a href="/ai-tools.html">AI for Social Impact Lab</a> ·
       Powered by Claude AI · Scenarios are illustrative benchmarks, not affiliated with specific orgs.
     </footer>
+
+    <!-- ── Embed section ── -->
+    <div class="wxd-embed-wrap">
+      <button class="wxd-embed-toggle" id="embedToggle">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="14" height="14"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/></svg>
+        Embed this tool on your site
+      </button>
+      <div class="wxd-embed-body" id="embedBody">
+        <p class="wxd-embed-desc">Let your donors see what their gift does — embed this calculator on your site for free. Works great on donation pages and impact reports.</p>
+        <div class="wxd-embed-code-wrap">
+          <textarea class="wxd-embed-code" id="embedCode" readonly></textarea>
+          <button class="wxd-embed-copy" id="embedCopy">Copy</button>
+        </div>
+        <p class="wxd-embed-note">The embed auto-selects the cause you have active. Change the cause chip above and re-open this panel to update the URL.</p>
+      </div>
+    </div>
   </main>
 
   <script>
     const WORKER_URL = 'https://ask-panos.panagiotis-kokmotoss.workers.dev/tool';
+
+    // ── Evidence map (cause → [level per card 0..4]) ──
+    // Levels: 'strong' | 'good' | 'emerging'
+    const evidenceMap = {
+      'clean water':                    ['strong','strong','good','good','emerging'],
+      'hunger and food security':       ['strong','strong','good','emerging','good'],
+      'education for underserved youth':['good','good','strong','emerging','emerging'],
+      'climate and environment':        ['good','emerging','good','emerging','emerging'],
+      'animal welfare':                 ['good','good','emerging','emerging','good'],
+      'mental health':                  ['good','good','emerging','good','emerging'],
+      'homeless services':              ['good','strong','good','emerging','good'],
+      "women's empowerment":            ['strong','good','good','emerging','emerging'],
+      'medical research':               ['strong','good','good','emerging','emerging'],
+      'arts and culture':               ['emerging','good','emerging','emerging','emerging'],
+      'disability support':             ['good','good','good','emerging','emerging'],
+      'veterans support':               ['good','good','good','emerging','emerging'],
+      'refugee support':                ['strong','good','good','emerging','good'],
+    };
+
+    const evidenceLabels = {
+      strong:   { icon: '🟢', text: 'Strong evidence' },
+      good:     { icon: '🟡', text: 'Good evidence' },
+      emerging: { icon: '🔵', text: 'Emerging' },
+    };
+
+    // ── Showcase examples (empty state) ──
+    const showcaseExamples = [
+      {
+        label: '$50 · Clean Water',
+        scenarios: [
+          { icon:'🚰', title:'Community Water Filters', stat:'47 families', description:'Provides clean, safe drinking water to 47 rural families for an entire month through low-cost household filter installation.', best:true },
+          { icon:'💧', title:'Well Drilling NGO', stat:'1/100 of a well', description:'Funds a critical share of a deep borehole well that will serve a village of 500 people for 20+ years.', best:false },
+          { icon:'🏥', title:'Water & Sanitation Org', stat:'3 months supply', description:'Delivers 3 months of piped safe water access to a family through municipal water partnership programs.', best:false },
+          { icon:'📦', title:'Emergency Water Relief', stat:'500 liters', description:'Provides emergency clean water sachets to families displaced by flooding or conflict.', best:false },
+          { icon:'🧪', title:'Water Testing Initiative', stat:'25 source tests', description:'Funds water quality tests for 25 rural water sources, flagging contamination before illness spreads.', best:false },
+        ]
+      },
+      {
+        label: '$25 · Hunger',
+        scenarios: [
+          { icon:'🍽️', title:'Local Food Bank', stat:'125 meals', description:'Stocks a food pantry with enough food to provide 125 hot, nutritious meals to families in need this week.', best:true },
+          { icon:'🌱', title:'School Meals Program', stat:'10 school lunches', description:'Feeds a child in need every school day for two full weeks, improving attendance and classroom focus.', best:false },
+          { icon:'🥫', title:'Emergency Food Packs', stat:'5 family boxes', description:'Assembles 5 emergency food boxes with three days of supplies each for a family of four.', best:false },
+          { icon:'🚜', title:'Urban Farm Initiative', stat:'50 lbs produce', description:'Funds 50 pounds of fresh vegetables grown by a community urban farm distributed to low-income households.', best:false },
+          { icon:'🤝', title:'Direct Cash Transfer', stat:'$25 food voucher', description:'Sends a food voucher directly to a family in extreme poverty with zero administrative overhead.', best:false },
+        ]
+      },
+      {
+        label: '$100 · Education',
+        scenarios: [
+          { icon:'📚', title:'School Supplies Drive', stat:'2 student kits', description:'Equips 2 low-income students with a full year\'s worth of notebooks, pens, folders, and backpacks.', best:false },
+          { icon:'💻', title:'Digital Access Program', stat:'1 month tutoring', description:'Funds one month of personalized online tutoring for a student who lacks access to after-school help.', best:false },
+          { icon:'🏫', title:'Girls\' Education Initiative', stat:'¼ school year', description:'Helps cover a quarter of annual fees for a girl in a developing country who would otherwise drop out.', best:true },
+          { icon:'📖', title:'Adult Literacy Program', stat:'4 coaching sessions', description:'Pays for four structured literacy sessions with a trained reading coach for an adult learning to read.', best:false },
+          { icon:'🎓', title:'First-Gen Scholarship Fund', stat:'$100 toward college', description:'Contributes to a scholarship for a first-generation college student, covering textbooks for a semester.', best:false },
+        ]
+      },
+    ];
+
+    function showEmptyState() {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('amount') || params.get('cause')) return; // URL has params — skip
+      try {
+        const raw = localStorage.getItem(HISTORY_KEY);
+        if (raw && JSON.parse(raw).length > 0) return; // has history — skip
+      } catch {}
+
+      const pick = showcaseExamples[Math.floor(Math.random() * showcaseExamples.length)];
+      const grid = document.getElementById('exampleGrid');
+      grid.innerHTML = '';
+      pick.scenarios.forEach((s, i) => {
+        const card = document.createElement('div');
+        card.className = 'wxd-scenario-card';
+        card.style.setProperty('--i', i);
+        if (s.best) card.classList.add('wxd-card-best');
+        card.innerHTML = `
+          ${s.best ? '<span class="wxd-best-badge">★ Best Value</span>' : ''}
+          <div class="wxd-scenario-icon">${s.icon}</div>
+          <div class="wxd-scenario-body">
+            <h3 class="wxd-scenario-title">${s.title}</h3>
+            <p class="wxd-scenario-stat">${s.stat}</p>
+            <p class="wxd-scenario-desc">${s.description}</p>
+          </div>
+        `;
+        grid.appendChild(card);
+        requestAnimationFrame(() => requestAnimationFrame(() => card.classList.add('wxd-scenario-visible')));
+      });
+
+      document.getElementById('emptyStateExample').style.display = '';
+      document.getElementById('emptyStateBanner').addEventListener('click', () => {
+        form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    }
+
+    // ── localStorage history ──
+    const HISTORY_KEY = 'wxd_history';
+
+    function loadHistory() {
+      try {
+        const raw = localStorage.getItem(HISTORY_KEY);
+        const history = raw ? JSON.parse(raw) : [];
+        if (history.length === 0) return;
+        const section = document.getElementById('historySection');
+        const chipsEl = document.getElementById('historyChips');
+        chipsEl.innerHTML = history.map((h, i) =>
+          `<button type="button" class="wxd-chip wxd-history-chip" data-i="${i}">${h.label}</button>`
+        ).join('');
+        section.style.display = '';
+        chipsEl.querySelectorAll('.wxd-history-chip').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const item = history[parseInt(btn.dataset.i)];
+            selectedAmount = item.amount;
+            selectedCause = item.cause;
+            givingMode = item.mode;
+            // Update UI
+            document.querySelectorAll('.wxd-amount-chip').forEach(c => {
+              c.classList.toggle('wxd-chip-active', parseInt(c.dataset.value) === item.amount);
+            });
+            customAmountInput.value = '';
+            if (!document.querySelector('.wxd-amount-chip.wxd-chip-active')) {
+              customAmountInput.value = item.amount;
+            }
+            document.querySelectorAll('.wxd-cause-chip').forEach(c => {
+              c.classList.toggle('wxd-chip-active', c.dataset.value === item.cause);
+            });
+            document.querySelectorAll('.wxd-toggle-btn').forEach(b => {
+              b.classList.toggle('wxd-toggle-active', b.dataset.mode === item.mode);
+            });
+            givingMode = item.mode;
+            updateComparison(item.amount);
+            updateMonthlyNote();
+            submitForm();
+            window.scrollTo({ top: form.offsetTop - 80, behavior: 'smooth' });
+          });
+        });
+      } catch {}
+    }
+
+    function saveToHistory(amount, cause, mode) {
+      try {
+        const raw = localStorage.getItem(HISTORY_KEY);
+        let history = raw ? JSON.parse(raw) : [];
+        const label = `$${amount} · ${cause.split(' ').map(w => w[0].toUpperCase() + w.slice(1)).join(' ')} · ${mode === 'monthly' ? 'Monthly' : 'One-time'}`;
+        // Deduplicate
+        history = history.filter(h => !(h.amount === amount && h.cause === cause && h.mode === mode));
+        history.unshift({ amount, cause, mode, label });
+        history = history.slice(0, 5);
+        localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+        loadHistory();
+      } catch {}
+    }
+
+    // ── Org recommendations map ──
+    const orgMap = {
+      'clean water': [
+        { name: 'charity: water', tagline: 'Funds clean water projects in rural communities', url: 'https://www.charitywater.org', badge: 'Charity Navigator 4★' },
+        { name: 'Evidence Action', tagline: 'Dispensers for Safe Water program', url: 'https://www.evidenceaction.org', badge: 'GiveWell Recommended' },
+        { name: 'Water.org', tagline: 'Microfinancing for water & sanitation access', url: 'https://water.org', badge: 'Charity Navigator 4★' },
+      ],
+      'hunger and food security': [
+        { name: 'GiveDirectly', tagline: 'Direct cash transfers to people in extreme poverty', url: 'https://www.givedirectly.org', badge: 'GiveWell Top Charity' },
+        { name: 'Feeding America', tagline: 'Nationwide network of 200+ food banks', url: 'https://www.feedingamerica.org', badge: 'Charity Navigator 4★' },
+        { name: 'Action Against Hunger', tagline: 'Treats severe malnutrition in crisis zones', url: 'https://www.actionagainsthunger.org', badge: 'BBB Accredited' },
+      ],
+      'education for underserved youth': [
+        { name: 'Teach For America', tagline: 'Recruits leaders to teach in under-resourced schools', url: 'https://www.teachforamerica.org', badge: 'Charity Navigator 4★' },
+        { name: 'Room to Read', tagline: 'Literacy and girls\' education in developing countries', url: 'https://www.roomtoread.org', badge: 'GiveWell Standout' },
+        { name: 'Khan Academy', tagline: 'Free world-class education for anyone, anywhere', url: 'https://www.khanacademy.org', badge: 'Charity Navigator 4★' },
+      ],
+      'climate and environment': [
+        { name: 'Clean Air Task Force', tagline: 'Policy & tech to reduce carbon emissions', url: 'https://www.catf.us', badge: 'Founders Pledge Rec.' },
+        { name: 'Cool Earth', tagline: 'Protects rainforest with local communities', url: 'https://www.coolearth.org', badge: 'Charity Navigator 3★' },
+        { name: 'The Nature Conservancy', tagline: 'Protecting lands and waters worldwide', url: 'https://www.nature.org', badge: 'Charity Navigator 4★' },
+      ],
+      'animal welfare': [
+        { name: 'The Humane Society', tagline: 'Animal protection through advocacy & rescue', url: 'https://www.humanesociety.org', badge: 'Charity Navigator 3★' },
+        { name: 'Animal Equality', tagline: 'Investigates & exposes factory farm conditions', url: 'https://animalequality.org', badge: 'Animal Charity Evaluators Top' },
+        { name: 'GFI (Good Food Institute)', tagline: 'Advancing alternative proteins to reduce suffering', url: 'https://www.gfi.org', badge: 'Animal Charity Evaluators Top' },
+      ],
+      'mental health': [
+        { name: 'Crisis Text Line', tagline: 'Free 24/7 mental health support via text', url: 'https://www.crisistextline.org', badge: 'Charity Navigator 4★' },
+        { name: 'NAMI', tagline: 'Mental illness education, advocacy & support', url: 'https://www.nami.org', badge: 'Charity Navigator 4★' },
+        { name: 'Headspace Health', tagline: 'Meditation & mindfulness for underserved communities', url: 'https://www.headspace.com', badge: 'Widely recognized' },
+      ],
+      'homeless services': [
+        { name: 'Covenant House', tagline: 'Shelter and services for homeless youth', url: 'https://www.covenanthouse.org', badge: 'Charity Navigator 4★' },
+        { name: 'National Alliance to End Homelessness', tagline: 'Policy and research to end homelessness', url: 'https://endhomelessness.org', badge: 'BBB Accredited' },
+        { name: 'Miracle Messages', tagline: 'Reconnecting homeless individuals with loved ones', url: 'https://www.miraclemessages.org', badge: 'Charity Navigator 4★' },
+      ],
+      "women's empowerment": [
+        { name: 'Girl Effect', tagline: 'Media & tech to empower girls in developing countries', url: 'https://www.girleffect.org', badge: 'Widely recognized' },
+        { name: 'Women for Women International', tagline: 'Job training & support for women in conflict zones', url: 'https://www.womenforwomen.org', badge: 'Charity Navigator 4★' },
+        { name: 'Grameen Foundation', tagline: 'Microfinance & mobile tech for women in poverty', url: 'https://grameenfoundation.org', badge: 'Charity Navigator 4★' },
+      ],
+      'medical research': [
+        { name: 'Against Malaria Foundation', tagline: 'Distributes insecticide-treated bed nets', url: 'https://www.againstmalaria.com', badge: 'GiveWell #1 Charity' },
+        { name: 'Johns Hopkins Bloomberg School of Public Health', tagline: 'Leading public health research & training', url: 'https://publichealth.jhu.edu', badge: 'Top institution' },
+        { name: 'SENS Research Foundation', tagline: 'Reversing aging-related diseases through research', url: 'https://www.sens.org', badge: 'Charity Navigator rated' },
+      ],
+      'arts and culture': [
+        { name: 'Americans for the Arts', tagline: 'Advancing arts & arts education across the US', url: 'https://www.americansforthearts.org', badge: 'Charity Navigator rated' },
+        { name: '826 National', tagline: 'Creative writing centers for underserved youth', url: 'https://826national.org', badge: 'Charity Navigator 4★' },
+        { name: 'ArtPlace America', tagline: 'Community development through arts & culture', url: 'https://www.artplaceamerica.org', badge: 'Widely recognized' },
+      ],
+      'disability support': [
+        { name: 'Special Olympics', tagline: 'Sports training & competition for people with disabilities', url: 'https://www.specialolympics.org', badge: 'Charity Navigator 4★' },
+        { name: 'National Disability Rights Network', tagline: 'Legal advocacy for people with disabilities', url: 'https://www.ndrn.org', badge: 'BBB Accredited' },
+        { name: 'Easter Seals', tagline: 'Services for people with disabilities & their families', url: 'https://www.easterseals.com', badge: 'Charity Navigator 3★' },
+      ],
+      'veterans support': [
+        { name: 'Fisher House Foundation', tagline: 'Free lodging for military families near hospitals', url: 'https://www.fisherhouse.org', badge: 'Charity Navigator 4★' },
+        { name: 'Wounded Warrior Project', tagline: 'Programs for injured post-9/11 veterans', url: 'https://www.woundedwarriorproject.org', badge: 'Charity Navigator 3★' },
+        { name: 'Iraq and Afghanistan Veterans of America', tagline: 'Policy advocacy for modern veterans', url: 'https://iava.org', badge: 'Charity Navigator 4★' },
+      ],
+      'refugee support': [
+        { name: 'International Rescue Committee', tagline: 'Emergency relief & resettlement for refugees', url: 'https://www.rescue.org', badge: 'Charity Navigator 4★' },
+        { name: 'UNHCR USA', tagline: 'The UN refugee agency — frontline protection', url: 'https://www.unhcr.org', badge: 'UN Agency' },
+        { name: 'Mercy Corps', tagline: 'Emergency & long-term aid in crisis regions', url: 'https://www.mercycorps.org', badge: 'Charity Navigator 4★' },
+      ],
+    };
+
+    // ── Dig Deeper cache ──
+    const digDeeperCache = {};
 
     // ── State ──
     let selectedAmount = 50;
@@ -302,6 +568,7 @@
       setLoading(true);
       hideError();
       hideResult();
+      document.getElementById('emptyStateExample').style.display = 'none';
       updateURLState();
 
       const isMonthly = givingMode === 'monthly';
@@ -318,6 +585,13 @@ icon: [single emoji that represents this org type]
 title: [org type name, 3-6 words]
 stat: [the key impact number + unit, e.g. "47 families" or "3 months of clean water" or "12 therapy sessions"]
 description: [1 vivid, specific sentence describing what this donation does. Use real-world benchmarks. Start with an action verb.]
+best: [true if most cost-effective, false otherwise]
+---SCENARIO---
+icon: ...
+title: ...
+stat: ...
+description: ...
+best: false
 ---SCENARIO---
 icon: ...
 title: ...
@@ -333,14 +607,12 @@ icon: ...
 title: ...
 stat: ...
 description: ...
----SCENARIO---
-icon: ...
-title: ...
-stat: ...
-description: ...
+best: false
 ---END---
 
 Rules:
+- Exactly one scenario must have best: true — whichever is the most evidence-backed and cost-effective per dollar
+- All others must have best: false
 - stat must be a striking, specific number (not vague)
 - description must start with a verb and be vivid, not generic
 - Use real benchmarks (e.g. $1 = ~5 meals at a food bank, $50 = ~1 month clean water for a family via water purification programs)
@@ -365,6 +637,7 @@ Rules:
         const scenarios = parseScenarios(data.result);
         if (scenarios.length === 0) throw new Error('Could not parse scenarios. Please try again.');
 
+        saveToHistory(selectedAmount, selectedCause, givingMode);
         renderScenarios(scenarios);
       } catch (err) {
         showError('Something went wrong. Please try again.');
@@ -387,6 +660,7 @@ Rules:
           title: get('title') || 'Nonprofit Impact',
           stat: get('stat') || '',
           description: get('description') || '',
+          best: get('best') === 'true',
         };
       }).filter(s => s.title || s.description).slice(0, 5);
     }
@@ -402,17 +676,29 @@ Rules:
         const card = document.createElement('div');
         card.className = 'wxd-scenario-card';
         card.style.setProperty('--i', i);
+        if (scenario.best) card.classList.add('wxd-card-best');
+        const evLevels = evidenceMap[selectedCause] || [];
+        const evLevel = evLevels[i] || 'good';
+        const ev = evidenceLabels[evLevel];
         card.innerHTML = `
+          ${scenario.best ? '<span class="wxd-best-badge">★ Best Value</span>' : ''}
           <div class="wxd-scenario-icon">${scenario.icon}</div>
           <div class="wxd-scenario-body">
             <h3 class="wxd-scenario-title">${escapeHtml(scenario.title)}</h3>
-            <p class="wxd-scenario-stat">${escapeHtml(scenario.stat)}</p>
+            <p class="wxd-scenario-stat" data-stat="${escapeHtml(scenario.stat)}">${escapeHtml(scenario.stat)}</p>
             <p class="wxd-scenario-desc">${escapeHtml(scenario.description)}</p>
+            <span class="wxd-evidence-badge wxd-evidence-${evLevel}">${ev.icon} ${ev.text}</span>
+            <button class="wxd-dig-btn" data-index="${i}">+ Learn more</button>
+            <div class="wxd-dig-content" id="dig-${i}"></div>
           </div>
         `;
         scenariosGrid.appendChild(card);
-        // Trigger animation after paint
-        requestAnimationFrame(() => requestAnimationFrame(() => card.classList.add('wxd-scenario-visible')));
+        // Trigger animation after paint, then counter
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          card.classList.add('wxd-scenario-visible');
+          const statEl = card.querySelector('.wxd-scenario-stat');
+          animateCounter(statEl, scenario.stat, 900 + i * 80);
+        }));
       });
 
       const labelAmount = givingMode === 'monthly'
@@ -421,8 +707,141 @@ Rules:
       const causeName = selectedCause.replace(/and /g, '& ');
       resultLabel.textContent = `What ${labelAmount} does for ${causeName}`;
 
+      renderAnnualSummary(scenarios);
+      renderOrgRecs(selectedCause);
+
+      // Wire up dig-deeper buttons (event delegation)
+      scenariosGrid.addEventListener('click', (e) => {
+        const btn = e.target.closest('.wxd-dig-btn');
+        if (!btn) return;
+        const idx = parseInt(btn.dataset.index);
+        const scenario = scenarios[idx];
+        const panel = document.getElementById('dig-' + idx);
+        if (panel.classList.contains('open')) {
+          panel.classList.remove('open');
+          btn.textContent = '+ Learn more';
+        } else {
+          digDeeper(btn, scenario, idx);
+        }
+      });
+
       result.classList.add('visible');
       result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    // ── Dig Deeper handler ──
+    async function digDeeper(btn, scenario, idx) {
+      const cacheKey = `${scenario.title}|${selectedCause}|${selectedAmount}`;
+      const panel = document.getElementById('dig-' + idx);
+
+      if (digDeeperCache[cacheKey]) {
+        panel.innerHTML = `<div class="wxd-dig-text">${digDeeperCache[cacheKey]}</div>`;
+        panel.classList.add('open');
+        btn.textContent = '− Show less';
+        return;
+      }
+
+      btn.innerHTML = '<span class="wxd-dig-spinner"></span> Loading…';
+      btn.disabled = true;
+
+      const systemPrompt = `You are a nonprofit research expert. In exactly 4 short bullet points, explain:
+• How this type of org typically spends donations (rough % breakdown)
+• What outcomes research shows (1 sentence)
+• One red flag to watch for when choosing this type of org
+• How to find a trustworthy one (1 specific tip)
+
+Be concise. Max 150 words total. Use bullet point "•" for each item.`;
+
+      const userMessage = `Org type: ${scenario.title}\nCause: ${selectedCause}\nContext: $${selectedAmount} donation`;
+
+      try {
+        const res = await fetch(WORKER_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ systemPrompt, userMessage }),
+        });
+        if (!res.ok) throw new Error('error');
+        const data = await res.json();
+        const html = formatDigText(data.result || '');
+        digDeeperCache[cacheKey] = html;
+        panel.innerHTML = `<div class="wxd-dig-text">${html}</div>`;
+        panel.classList.add('open');
+        btn.textContent = '− Show less';
+      } catch {
+        panel.innerHTML = `<div class="wxd-dig-text" style="color:var(--text-muted);font-style:italic">Couldn't load details. Try again.</div>`;
+        panel.classList.add('open');
+        btn.textContent = '− Show less';
+      } finally {
+        btn.disabled = false;
+      }
+    }
+
+    // ── Annual summary ──
+    function renderAnnualSummary(scenarios) {
+      const el = document.getElementById('annualSummary');
+      if (givingMode !== 'monthly') { el.style.display = 'none'; return; }
+      const annual = selectedAmount * 12;
+      const causeName = selectedCause.replace(/and /g, '& ');
+      el.innerHTML = `
+        <div class="wxd-annual-summary">
+          <p class="wxd-annual-summary-title">📅 Your Annual Giving Plan — $${selectedAmount}/month</p>
+          <p class="wxd-annual-summary-body">Over 12 months, you'll contribute <strong>$${annual.toLocaleString()}</strong> to ${causeName}. That's enough to fund multiple of the scenarios below — simultaneously, across different org types — for a full year of sustained impact.</p>
+        </div>
+      `;
+      el.style.display = '';
+    }
+
+    // ── Org recommendations ──
+    function renderOrgRecs(cause) {
+      const orgRecs = document.getElementById('orgRecs');
+      const orgs = orgMap[cause];
+      if (!orgs) { orgRecs.innerHTML = ''; return; }
+
+      orgRecs.innerHTML = `
+        <div class="wxd-org-recs">
+          <p class="wxd-org-recs-title">Where to Give — Highly Rated Orgs for ${cause.replace(/and /g,'& ')}</p>
+          <div class="wxd-org-cards">
+            ${orgs.map(o => `
+              <div class="wxd-org-card">
+                <div class="wxd-org-info">
+                  <p class="wxd-org-name">${o.name}</p>
+                  <p class="wxd-org-tagline">${o.tagline}</p>
+                </div>
+                <div class="wxd-org-right">
+                  <span class="wxd-org-badge">${o.badge}</span>
+                  <a href="${o.url}" target="_blank" rel="noopener" class="wxd-org-donate">Donate →</a>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+      document.getElementById('actionCTA').style.display = '';
+    }
+
+    function formatDigText(text) {
+      return text
+        .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+        .replace(/•/g, '<br>•')
+        .replace(/^\s*<br>/, '')
+        .replace(/\n/g, '<br>');
+    }
+
+    // ── Animate counter ──
+    function animateCounter(el, targetText, duration = 900) {
+      const match = targetText.match(/^([\d,]+)(.*)/);
+      if (!match) { el.textContent = targetText; return; }
+      const end = parseInt(match[1].replace(/,/g, ''));
+      const suffix = match[2];
+      const start = performance.now();
+      const tick = (now) => {
+        const p = Math.min((now - start) / duration, 1);
+        const eased = 1 - Math.pow(1 - p, 4); // easeOutQuart
+        const val = Math.round(eased * end);
+        el.textContent = val.toLocaleString() + suffix;
+        if (p < 1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
     }
 
     function escapeHtml(str) {
@@ -518,7 +937,41 @@ Rules:
     function showError(msg) { errorBox.textContent = msg; errorBox.classList.add('visible'); }
     function hideError() { errorBox.classList.remove('visible'); }
 
+    // ── Embed snippet ──
+    function updateEmbedCode() {
+      const cause = selectedCause || 'clean water';
+      const base = window.location.origin + '/what-would-x-do.html';
+      const url = `${base}?cause=${encodeURIComponent(cause)}`;
+      const code = `<iframe src="${url}" width="100%" height="680" frameborder="0" style="border-radius:12px;border:1px solid rgba(0,0,0,0.1)"></iframe>`;
+      const el = document.getElementById('embedCode');
+      if (el) el.value = code;
+    }
+
+    document.getElementById('embedToggle').addEventListener('click', () => {
+      const body = document.getElementById('embedBody');
+      body.classList.toggle('open');
+      updateEmbedCode();
+    });
+
+    document.getElementById('embedCopy').addEventListener('click', () => {
+      const code = document.getElementById('embedCode').value;
+      navigator.clipboard.writeText(code).then(() => {
+        const btn = document.getElementById('embedCopy');
+        btn.textContent = 'Copied!';
+        setTimeout(() => { btn.textContent = 'Copy'; }, 2000);
+      });
+    });
+
+    // Update embed URL whenever cause changes
+    document.querySelectorAll('.wxd-cause-chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        if (document.getElementById('embedBody').classList.contains('open')) updateEmbedCode();
+      });
+    });
+
     // ── Init ──
+    showEmptyState();
+    loadHistory();
     updateComparison(selectedAmount); // show comparison for default $50
     loadFromURL();
   </script>
