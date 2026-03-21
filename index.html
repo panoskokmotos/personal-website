@@ -114,6 +114,18 @@
       "name": "Universitat Politècnica de Catalunya (UPC Barcelona)",
       "url": "https://www.upc.edu",
       "description": "Erasmus — Technology & Engineering Management"
+    },
+    {
+      "@type": "EducationalOrganization",
+      "name": "Harvard Business School Alumni Network — Athens Chapter",
+      "url": "https://hbsanc.org/events/204353",
+      "description": "Speaker & participant — Harvard Business School Alumni Network Athens"
+    },
+    {
+      "@type": "EducationalOrganization",
+      "name": "University of the Aegean — MBA Programme",
+      "url": "https://mba.aegean.gr/mentores/",
+      "description": "Youngest mentor in the MBA mentorship programme"
     }
   ],
   "award": [
@@ -499,7 +511,7 @@
 
   <!-- PostHog Analytics -->
   <script>
-    !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","").replace("https://","https://assets.")+"posthog.com/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+" (stub)"},o="init capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys getNextSurveyStep onSessionId setPersonPropertiesForFlags".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||(window.posthog=[]));
+    !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.async=!0,p.src=s.api_host+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+" (stub)"},o="init capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys getNextSurveyStep onSessionId setPersonPropertiesForFlags".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||(window.posthog=[]));
     posthog.init("phc_WDGdxSf2xcEbL1c6vbAkrr8LJcJqrodykJKGKhom82L", {
       api_host: "https://us.i.posthog.com",
       person_profiles: "identified_only"
@@ -1025,12 +1037,24 @@
           </div>
           <div class="now-body">
             <h3 class="now-card-title">Podcasts I Live By</h3>
-            <ul class="now-bullets">
-              <li>🚀 <strong>Moonshots</strong> — Peter Diamandis on exponential thinking</li>
-              <li>🔬 <strong>Modern Wisdom</strong> — Chris Williamson</li>
-              <li>⚡ <strong>The Tim Ferriss Show</strong> — systems for world-class performance</li>
-              <li>🧠 <strong>Naval</strong> — wealth, happiness, clear thinking</li>
-            </ul>
+            <div class="podcast-grid">
+              <div class="podcast-item" style="--pod-color:rgba(255,107,53,0.25)">
+                <div class="podcast-art">🚀</div>
+                <div><div class="podcast-name">Moonshots</div><div class="podcast-host">Peter Diamandis</div></div>
+              </div>
+              <div class="podcast-item" style="--pod-color:rgba(99,102,241,0.25)">
+                <div class="podcast-art">🔬</div>
+                <div><div class="podcast-name">Modern Wisdom</div><div class="podcast-host">Chris Williamson</div></div>
+              </div>
+              <div class="podcast-item" style="--pod-color:rgba(16,185,129,0.25)">
+                <div class="podcast-art">⚡</div>
+                <div><div class="podcast-name">Tim Ferriss Show</div><div class="podcast-host">Tim Ferriss</div></div>
+              </div>
+              <div class="podcast-item" style="--pod-color:rgba(139,92,246,0.25)">
+                <div class="podcast-art">🧠</div>
+                <div><div class="podcast-name">Naval</div><div class="podcast-host">Naval Ravikant</div></div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -1587,6 +1611,12 @@
           </div>
         </div>
         </div>
+      </div>
+      <!-- Mobile-only: expand from 3 to 6 visible awards -->
+      <div class="awards-mobile-btn-wrap">
+        <button class="awards-mobile-btn" id="awardsMobileBtn" onclick="toggleAwardsMobile(this)">
+          Show 3 more <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M4 6l4 4 4-4"/></svg>
+        </button>
       </div>
       <div class="awards-show-more-wrap">
         <button class="awards-show-more-btn" id="awardsShowMore" onclick="toggleAwards(this)">

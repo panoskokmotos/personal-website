@@ -4717,3 +4717,52 @@ html[data-theme="light"] .timeline-item.tl-active .tl-card {
 }
 @media (max-width: 900px) { .tweets-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 600px) { .tweets-grid { grid-template-columns: 1fr; } }
+
+/* ── Awards mobile collapse: show 3, expand on tap ── */
+@media (max-width: 640px) {
+  .awards-grid .award-flip:nth-child(n+4) { display: none !important; }
+  .awards-grid.mobile-expanded .award-flip { display: block !important; }
+  .awards-mobile-btn-wrap { display: block; text-align: center; margin-top: 16px; }
+}
+.awards-mobile-btn-wrap { display: none; }
+.awards-mobile-btn {
+  background: rgba(59,110,248,0.08); border: 1px solid rgba(59,110,248,0.25);
+  color: var(--blue); border-radius: 20px; padding: 8px 20px;
+  font-size: 0.82rem; font-weight: 600; cursor: pointer;
+  display: inline-flex; align-items: center; gap: 6px; transition: background 0.2s;
+}
+.awards-mobile-btn:hover { background: rgba(59,110,248,0.15); }
+.awards-mobile-btn svg { transition: transform 0.3s; }
+.awards-mobile-btn.open svg { transform: rotate(180deg); }
+
+/* ── Marquee → static logo grid on mobile ── */
+@media (max-width: 480px) {
+  .marquee-wrap { overflow: visible; }
+  .marquee {
+    animation: none;
+    flex-wrap: wrap;
+    justify-content: center;
+    white-space: normal;
+    transform: none !important;
+  }
+  .marquee-strip:last-child { display: none; }
+  .marquee .logo-img, .marquee .logo-svg { margin: 6px 10px; }
+  .marquee span { border-right: none; padding: 4px 12px; }
+}
+
+/* ── Podcast artwork grid ── */
+.podcast-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px;
+}
+.podcast-item {
+  display: flex; align-items: center; gap: 10px;
+  background: rgba(255,255,255,0.04); border: 1px solid var(--border);
+  border-radius: 10px; padding: 10px 12px;
+}
+.podcast-art {
+  width: 36px; height: 36px; border-radius: 8px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem; background: var(--pod-color, rgba(59,110,248,0.2));
+}
+.podcast-name { font-size: 0.78rem; font-weight: 700; line-height: 1.2; }
+.podcast-host { font-size: 0.7rem; color: var(--text-muted); margin-top: 1px; }

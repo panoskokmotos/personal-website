@@ -791,10 +791,20 @@ function toggleAwards(btn) {
   btn.classList.toggle('open');
   const isOpen = extra.classList.contains('open');
   const textNode = [...btn.childNodes].find(n => n.nodeType === 3);
-  if (textNode) textNode.textContent = isOpen ? 'Show less ' : 'Show all 9 awards ';
+  if (textNode) textNode.textContent = isOpen ? 'Show less ' : 'Show all 18 awards ';
   if (isOpen) {
     extra.querySelectorAll('[data-animate]').forEach(el => {
       setTimeout(() => el.classList.add('visible'), 50);
     });
   }
+}
+
+function toggleAwardsMobile(btn) {
+  const grid = document.querySelector('.awards-grid');
+  if (!grid) return;
+  grid.classList.toggle('mobile-expanded');
+  btn.classList.toggle('open');
+  const isOpen = grid.classList.contains('mobile-expanded');
+  const textNode = [...btn.childNodes].find(n => n.nodeType === 3);
+  if (textNode) textNode.textContent = isOpen ? 'Show less ' : 'Show 3 more ';
 }
