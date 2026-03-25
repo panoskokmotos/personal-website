@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+  OG IMAGE TEMPLATE — AI for Social Impact Lab
+  ─────────────────────────────────────────────
+  1. Open this file in Chrome
+  2. Set browser zoom to 100%
+  3. Open DevTools → toggle device toolbar → set to exactly 1200 × 630
+  4. Screenshot the page (Cmd/Ctrl+Shift+P → "Capture screenshot")
+  5. Save as og-ai-tools.png in the root of this repo
+  6. Done — all tool pages already point to /og-ai-tools.png
+-->
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      width: 1200px;
+      height: 630px;
+      overflow: hidden;
+      background: #0b1120;
+      font-family: 'Plus Jakarta Sans', -apple-system, system-ui, sans-serif;
+      display: flex;
+      align-items: stretch;
+    }
+
+    /* Left panel — main content */
+    .left {
+      flex: 1;
+      padding: 72px 64px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Subtle radial glow */
+    .left::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 70% 80% at 20% 40%, rgba(59,110,248,0.14) 0%, transparent 70%);
+      z-index: -1;
+    }
+
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #3b6ef8;
+    }
+
+    .eyebrow-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #3b6ef8;
+      flex-shrink: 0;
+    }
+
+    .headline {
+      font-size: 64px;
+      font-weight: 800;
+      line-height: 1.05;
+      color: #e8eeff;
+      letter-spacing: -0.02em;
+    }
+
+    .headline span {
+      background: linear-gradient(135deg, #3b6ef8, #7eb3ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .sub {
+      font-size: 22px;
+      color: #8090b8;
+      line-height: 1.5;
+      max-width: 520px;
+    }
+
+    .bottom-row {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+
+    .stat {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .stat-num {
+      font-size: 28px;
+      font-weight: 800;
+      color: #e8eeff;
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #5568a0;
+    }
+
+    .divider {
+      width: 1px;
+      height: 40px;
+      background: rgba(255,255,255,0.1);
+    }
+
+    .brand {
+      margin-left: auto;
+      font-size: 15px;
+      font-weight: 700;
+      color: #5568a0;
+      letter-spacing: 0.02em;
+    }
+
+    /* Right panel — tool grid preview */
+    .right {
+      width: 340px;
+      flex-shrink: 0;
+      padding: 40px 28px 40px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      position: relative;
+    }
+
+    .right::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 1px;
+      background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.08) 20%, rgba(255,255,255,0.08) 80%, transparent);
+    }
+
+    .tool-pill {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 12px;
+      padding: 13px 16px;
+    }
+
+    .tool-icon {
+      font-size: 20px;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+
+    .tool-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: #bfcbee;
+      line-height: 1.3;
+    }
+
+    .chip {
+      margin-left: auto;
+      font-size: 10px;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 99px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      flex-shrink: 0;
+    }
+
+    .chip-d { background: rgba(59,110,248,0.15); color: #7eb3ff; border: 1px solid rgba(59,110,248,0.25); }
+    .chip-v { background: rgba(20,184,166,0.12); color: #2dd4bf; border: 1px solid rgba(20,184,166,0.25); }
+    .chip-n { background: rgba(139,92,246,0.12); color: #a78bfa; border: 1px solid rgba(139,92,246,0.25); }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <div class="left">
+    <div class="eyebrow">
+      <span class="eyebrow-dot"></span>
+      AI for Social Impact Lab
+    </div>
+
+    <div>
+      <div class="headline">
+        <span>Free AI tools</span><br>for giving &amp;<br>social impact.
+      </div>
+    </div>
+
+    <div class="sub">
+      11 tools to make donating smarter, volunteering easier,<br>and nonprofits more effective.
+    </div>
+
+    <div class="bottom-row">
+      <div class="stat">
+        <div class="stat-num">11</div>
+        <div class="stat-label">Tools</div>
+      </div>
+      <div class="divider"></div>
+      <div class="stat">
+        <div class="stat-num">100%</div>
+        <div class="stat-label">Free</div>
+      </div>
+      <div class="divider"></div>
+      <div class="stat">
+        <div class="stat-num">0</div>
+        <div class="stat-label">Login needed</div>
+      </div>
+      <div class="brand">panoskokmotos.com</div>
+    </div>
+  </div>
+
+  <div class="right">
+    <div class="tool-pill">
+      <span class="tool-icon">💸</span>
+      <span class="tool-name">"What Would $X Do?"</span>
+      <span class="chip chip-d">Donors</span>
+    </div>
+    <div class="tool-pill">
+      <span class="tool-icon">❤️</span>
+      <span class="tool-name">"Why Should I Give?"</span>
+      <span class="chip chip-d">Donors</span>
+    </div>
+    <div class="tool-pill">
+      <span class="tool-icon">🧭</span>
+      <span class="tool-name">First-Time Donor Coach</span>
+      <span class="chip chip-d">Donors</span>
+    </div>
+    <div class="tool-pill">
+      <span class="tool-icon">⚖️</span>
+      <span class="tool-name">Charity Comparison Engine</span>
+      <span class="chip chip-d">Donors</span>
+    </div>
+    <div class="tool-pill">
+      <span class="tool-icon">🤝</span>
+      <span class="tool-name">Volunteer Match</span>
+      <span class="chip chip-v">Volunteers</span>
+    </div>
+    <div class="tool-pill">
+      <span class="tool-icon">✍️</span>
+      <span class="tool-name">Impact Story Generator</span>
+      <span class="chip chip-n">Nonprofits</span>
+    </div>
+    <div class="tool-pill">
+      <span class="tool-icon">🗺️</span>
+      <span class="tool-name">Community Needs Map</span>
+      <span class="chip chip-n">Nonprofits</span>
+    </div>
+  </div>
+</body>
+</html>
