@@ -73,6 +73,25 @@
     <h1 class="tool-title">Volunteer Match</h1>
     <p class="tool-desc">Tell AI your skills, availability, and what causes matter to you — it'll match you to the types of nonprofits that need exactly what you offer, and draft an intro email you can send today.</p>
 
+    <!-- ── How it works ── -->
+    <div class="tool-how" aria-label="How this tool works">
+      <div class="tool-how-step">
+        <span class="tool-how-num">Step 1</span>
+        <span class="tool-how-title">Share your skills</span>
+        <span class="tool-how-desc">List your professional skills, hobbies, and availability.</span>
+      </div>
+      <div class="tool-how-step">
+        <span class="tool-how-num">Step 2</span>
+        <span class="tool-how-title">AI finds your matches</span>
+        <span class="tool-how-desc">3 nonprofit types that need exactly what you bring.</span>
+      </div>
+      <div class="tool-how-step">
+        <span class="tool-how-num">Step 3</span>
+        <span class="tool-how-title">Send your email today</span>
+        <span class="tool-how-desc">A warm, ready-to-send intro email — drafted for you.</span>
+      </div>
+    </div>
+
     <form class="tool-form" id="toolForm">
 
       <div class="tool-field">
@@ -266,26 +285,13 @@
       hideError();
       hideResult();
 
-      const systemPrompt = `You are a volunteer placement expert and talented writer. Your job is to:
+      const systemPrompt = `You are a volunteer placement expert and talented writer. Your job is to match a volunteer's skills and availability to 3 ideal nonprofit types, then draft their intro email.
 
-1. Match a volunteer's skills and availability to 3 ideal types of nonprofits
-2. Draft a short, warm, compelling intro email they can send to volunteer coordinators
-
-PART 1 — MATCHES
-For each of 3 org types, write:
-**Match [number]: [Org type name]**
-Why it's a great fit: [1-2 sentences connecting their specific skills to this org's needs]
-What you'd likely do: [1-2 specific volunteer roles or tasks]
-
-PART 2 — DRAFT EMAIL
-Write a ready-to-send intro email. Use the volunteer's first name as the sender. The subject line should be concise and specific. The email should be warm, brief (under 150 words), and include a specific offer of help tied to their skills.
-
-Format the email section clearly with:
-Subject: [subject line]
-
-[email body]
-
-Separate the two parts with this exact text: ---EMAIL---
+Respond with ONLY valid JSON — no markdown, no code fences. Schema:
+{
+  "matches": "Formatted matches text. For each of 3 org types:\n**Match 1: [Org type name]**\nWhy it's a great fit: [1-2 sentences]\nWhat you'd likely do: [1-2 specific roles or tasks]\n\n(repeat for 2 and 3)",
+  "email": "Ready-to-send intro email. Start with: Subject: [concise subject line]\n\n[email body — warm, under 150 words, specific offer tied to their skills]"
+}
 
 Keep tone professional but human. Do NOT name specific real organizations.`;
 
@@ -299,21 +305,32 @@ Generate my 3 nonprofit matches and a draft intro email.`;
 
       try {
         const fullText = await callWorker(systemPrompt, userMessage);
-        const splitIndex = fullText.indexOf('---EMAIL---');
+        let parsed = null;
+        try {
+          const clean = fullText.replace(/^```json\n?|```$/g, '').trim();
+          parsed = JSON.parse(clean);
+        } catch {}
 
-        if (splitIndex !== -1) {
-          matchesBody.innerHTML = formatMarkdown(fullText.slice(0, splitIndex).trim());
-          emailBody.innerHTML = formatMarkdown(fullText.slice(splitIndex + 11).trim());
+        if (parsed && (parsed.matches || parsed.email)) {
+          matchesBody.innerHTML = formatMarkdown((parsed.matches || '').trim());
+          emailBody.innerHTML = parsed.email ? formatMarkdown(parsed.email.trim()) : '<em style="color:var(--text-muted)">Email not generated.</em>';
         } else {
-          matchesBody.innerHTML = formatMarkdown(fullText);
-          emailBody.innerHTML = '<em style="color:var(--text-muted)">Email draft not generated separately — see matches tab.</em>';
+          // Fallback: marker split
+          const splitIndex = fullText.indexOf('---EMAIL---');
+          if (splitIndex !== -1) {
+            matchesBody.innerHTML = formatMarkdown(fullText.slice(0, splitIndex).trim());
+            emailBody.innerHTML = formatMarkdown(fullText.slice(splitIndex + 11).trim());
+          } else {
+            matchesBody.innerHTML = formatMarkdown(fullText);
+            emailBody.innerHTML = '<em style="color:var(--text-muted)">See matches tab.</em>';
+          }
         }
 
         document.getElementById('result').classList.add('visible');
         document.getElementById('result').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         notifyToolUsed(document.title);
       } catch (err) {
-        showError('Something went wrong. Please try again.');
+        if (!err._shown) showError('Something went wrong. Please try again.');
         console.error(err);
       } finally {
         setLoading(false);
@@ -327,6 +344,14 @@ Generate my 3 nonprofit matches and a draft intro email.`;
         setTimeout(() => { copyBtn.textContent = 'Copy All'; }, 2000);
       });
     });
+  </script>
+  <!-- Service Worker registration -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').catch(() => {});
+      });
+    }
   </script>
 </body>
 </html>

@@ -65,6 +65,25 @@
     <h1 class="tool-title">Community Needs Map</h1>
     <p class="tool-desc">You know your community better than any database. Describe what you're seeing on the ground — AI will map the underlying needs, identify patterns, surface gaps, and suggest concrete resources and org types that could help.</p>
 
+    <!-- ── How it works ── -->
+    <div class="tool-how" aria-label="How this tool works">
+      <div class="tool-how-step">
+        <span class="tool-how-num">Step 1</span>
+        <span class="tool-how-title">Describe what you see</span>
+        <span class="tool-how-desc">Share observations about your neighborhood or community.</span>
+      </div>
+      <div class="tool-how-step">
+        <span class="tool-how-num">Step 2</span>
+        <span class="tool-how-title">AI maps the roots</span>
+        <span class="tool-how-desc">Identifies patterns, systemic causes, and gaps.</span>
+      </div>
+      <div class="tool-how-step">
+        <span class="tool-how-num">Step 3</span>
+        <span class="tool-how-title">Know how to act</span>
+        <span class="tool-how-desc">3 tailored steps based on your role in the community.</span>
+      </div>
+    </div>
+
     <form class="tool-form" id="toolForm">
 
       <div class="tool-field">
@@ -238,7 +257,7 @@ Build my community needs analysis.`;
         }
         notifyToolUsed(document.title);
       } catch (err) {
-        showError('Something went wrong. Please try again.');
+        if (!err._shown) showError('Something went wrong. Please try again.');
         console.error(err);
       } finally {
         setLoading(false);
@@ -246,6 +265,14 @@ Build my community needs analysis.`;
     });
 
     initCopyBtn();
+  </script>
+  <!-- Service Worker registration -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').catch(() => {});
+      });
+    }
   </script>
 </body>
 </html>

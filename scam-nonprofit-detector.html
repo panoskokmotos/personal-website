@@ -73,6 +73,25 @@
     <h1 class="tool-title">Scam Nonprofit Detector</h1>
     <p class="tool-desc">Something feel off about a charity you've seen — especially after a disaster or in the news? Describe what you know and AI will flag whether it matches known patterns of fraudulent fundraising, before you give a cent.</p>
 
+    <!-- ── How it works ── -->
+    <div class="tool-how" aria-label="How this tool works">
+      <div class="tool-how-step">
+        <span class="tool-how-num">Step 1</span>
+        <span class="tool-how-title">Describe what you've seen</span>
+        <span class="tool-how-desc">Name the org and check any warning signs you noticed.</span>
+      </div>
+      <div class="tool-how-step">
+        <span class="tool-how-num">Step 2</span>
+        <span class="tool-how-title">AI scans fraud patterns</span>
+        <span class="tool-how-desc">Cross-references against known scam tactics and red flags.</span>
+      </div>
+      <div class="tool-how-step">
+        <span class="tool-how-num">Step 3</span>
+        <span class="tool-how-title">Know if it's safe</span>
+        <span class="tool-how-desc">Get a risk score + exact steps to verify or report.</span>
+      </div>
+    </div>
+
     <form class="tool-form" id="toolForm">
 
       <div class="tool-field">
@@ -253,7 +272,11 @@
 
 IMPORTANT: You are assessing patterns and signals only — you are NOT making a definitive legal determination. Be honest about what you can and can't conclude.
 
-Structure your response as:
+Start your response with EXACTLY these two lines (no other text before them):
+RISK_SCORE: [a number 0-100 where 0=completely safe, 100=definite scam]
+RISK_LEVEL: [Low|Medium|High|Very High]
+
+Then structure the rest as:
 
 **Risk Level: [Low / Medium / High / Very High]**
 [1-2 sentences explaining your overall read]
@@ -286,7 +309,7 @@ Assess the fraud risk and tell me what to do.`;
         _renderScamScore(text);
         notifyToolUsed(document.title);
       } catch (err) {
-        showError('Something went wrong. Please try again.');
+        if (!err._shown) showError('Something went wrong. Please try again.');
         console.error(err);
       } finally {
         setLoading(false);
@@ -300,14 +323,20 @@ Assess the fraud risk and tell me what to do.`;
       if (!wrap) return;
       const lower = text.toLowerCase();
       let level = 'Medium', score = 45, cls = 'scam-risk-medium', desc = 'Some warning signs present — investigate further before donating.';
-      if (lower.includes('risk level: very high') || lower.includes('**risk level: very high') || lower.includes('very high risk')) {
-        level = 'Very High Risk'; score = 92; cls = 'scam-risk-very-high'; desc = 'Multiple strong red flags. Do not donate without thorough verification.';
-      } else if (lower.includes('risk level: high') || lower.includes('**risk level: high')) {
-        level = 'High Risk'; score = 72; cls = 'scam-risk-high'; desc = 'Significant warning signs. Proceed with extreme caution.';
-      } else if (lower.includes('risk level: medium') || lower.includes('**risk level: medium')) {
-        level = 'Medium Risk'; score = 45; cls = 'scam-risk-medium'; desc = 'Some warning signs present — investigate further before donating.';
-      } else if (lower.includes('risk level: low') || lower.includes('**risk level: low')) {
-        level = 'Low Risk'; score = 15; cls = 'scam-risk-low'; desc = 'No major red flags detected — still verify on Charity Navigator.';
+      // Try structured RISK_SCORE line first
+      const scoreMatch = text.match(/RISK_SCORE:\s*(\d+)/i);
+      const levelMatch = text.match(/RISK_LEVEL:\s*(Very High|High|Medium|Low)/i);
+      if (scoreMatch) score = Math.min(100, Math.max(0, parseInt(scoreMatch[1])));
+      if (levelMatch) {
+        const lv = levelMatch[1].toLowerCase();
+        if (lv === 'very high') { level = 'Very High Risk'; cls = 'scam-risk-very-high'; desc = 'Multiple strong red flags. Do not donate without thorough verification.'; if (!scoreMatch) score = 92; }
+        else if (lv === 'high') { level = 'High Risk'; cls = 'scam-risk-high'; desc = 'Significant warning signs. Proceed with extreme caution.'; if (!scoreMatch) score = 72; }
+        else if (lv === 'low')  { level = 'Low Risk'; cls = 'scam-risk-low'; desc = 'No major red flags detected — still verify on Charity Navigator.'; if (!scoreMatch) score = 15; }
+      } else if (!levelMatch) {
+        // Fallback text detection
+        if (lower.includes('very high risk') || lower.includes('risk level: very high')) { level = 'Very High Risk'; cls = 'scam-risk-very-high'; desc = 'Multiple strong red flags. Do not donate without thorough verification.'; if (!scoreMatch) score = 92; }
+        else if (lower.includes('risk level: high')) { level = 'High Risk'; cls = 'scam-risk-high'; desc = 'Significant warning signs.'; if (!scoreMatch) score = 72; }
+        else if (lower.includes('risk level: low'))  { level = 'Low Risk'; cls = 'scam-risk-low'; desc = 'No major red flags.'; if (!scoreMatch) score = 15; }
       }
       const r = 22, circ = 2 * Math.PI * r;
       const offset = circ - (score / 100) * circ;
@@ -334,6 +363,14 @@ Assess the fraud risk and tell me what to do.`;
         const arc = document.getElementById('_scamArcFill');
         if (arc) arc.style.strokeDashoffset = offset;
       }, 80);
+    }
+  </script>
+  <!-- Service Worker registration -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').catch(() => {});
+      });
     }
   </script>
 </body>

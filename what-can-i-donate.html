@@ -73,6 +73,25 @@
     <h1 class="tool-title">"What Can I Donate?"</h1>
     <p class="tool-desc">List the items you have at home — things you no longer use, duplicates, or things in good condition. AI matches them to the types of nonprofits who need them most, and tells you how to donate them.</p>
 
+    <!-- ── How it works ── -->
+    <div class="tool-how" aria-label="How this tool works">
+      <div class="tool-how-step">
+        <span class="tool-how-num">Step 1</span>
+        <span class="tool-how-title">List what you have</span>
+        <span class="tool-how-desc">Type items around your home using the category chips.</span>
+      </div>
+      <div class="tool-how-step">
+        <span class="tool-how-num">Step 2</span>
+        <span class="tool-how-title">AI matches each item</span>
+        <span class="tool-how-desc">Finds the type of org that needs it most, locally.</span>
+      </div>
+      <div class="tool-how-step">
+        <span class="tool-how-num">Step 3</span>
+        <span class="tool-how-title">Know exactly where to go</span>
+        <span class="tool-how-desc">Practical donation tips for every item on your list.</span>
+      </div>
+    </div>
+
     <form class="tool-form" id="toolForm">
 
       <div class="tool-field">
@@ -247,7 +266,7 @@ Match each item to the best type of nonprofit and tell me how to donate it.`;
         showResult(text);
         notifyToolUsed(document.title);
       } catch (err) {
-        showError('Something went wrong. Please try again.');
+        if (!err._shown) showError('Something went wrong. Please try again.');
         console.error(err);
       } finally {
         setLoading(false);
@@ -255,6 +274,14 @@ Match each item to the best type of nonprofit and tell me how to donate it.`;
     });
 
     initCopyBtn();
+  </script>
+  <!-- Service Worker registration -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').catch(() => {});
+      });
+    }
   </script>
 </body>
 </html>

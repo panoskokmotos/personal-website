@@ -1,4 +1,4 @@
-const CACHE_NAME = 'panos-v2';
+const CACHE_NAME = 'panos-v3';
 const OFFLINE_URL = '/offline.html';
 
 const PRECACHE_ASSETS = [
@@ -7,9 +7,11 @@ const PRECACHE_ASSETS = [
   '/style.css',
   '/script.js',
   '/chat.js',
+  '/tool-utils.js',
   '/photo.webp',
   '/offline.html',
   '/manifest.json',
+  '/ai-tools.html',
 ];
 
 // Install: precache core assets
@@ -31,12 +33,17 @@ self.addEventListener('activate', event => {
 });
 
 // Fetch strategy:
+// - Cloudflare Worker API → always network, never cache
 // - HTML → network-first (always get fresh HTML, fallback to cache, then offline page)
 // - Everything else → cache-first (fast, fallback to network)
 self.addEventListener('fetch', event => {
   if (event.request.method !== 'GET') return;
 
   const url = new URL(event.request.url);
+
+  // Never cache Cloudflare Worker API calls
+  if (url.hostname.endsWith('.workers.dev')) return;
+
   const isHTML = event.request.headers.get('accept')?.includes('text/html');
   const isSameOrigin = url.origin === self.location.origin;
 

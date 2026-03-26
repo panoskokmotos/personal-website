@@ -69,6 +69,25 @@
       <strong style="color:var(--text-primary);">Note:</strong> This tool guides you through how to evaluate a nonprofit using public data — it doesn't connect to live databases. For live data, it'll point you to the right sources (Charity Navigator, GuideStar, ProPublica, etc.).
     </div>
 
+    <!-- ── How it works ── -->
+    <div class="tool-how" aria-label="How this tool works">
+      <div class="tool-how-step">
+        <span class="tool-how-num">Step 1</span>
+        <span class="tool-how-title">Enter the org</span>
+        <span class="tool-how-desc">Provide the organization name and any context you have.</span>
+      </div>
+      <div class="tool-how-step">
+        <span class="tool-how-num">Step 2</span>
+        <span class="tool-how-title">AI checks 8 signals</span>
+        <span class="tool-how-desc">Mission clarity, transparency, model, financials, and more.</span>
+      </div>
+      <div class="tool-how-step">
+        <span class="tool-how-num">Step 3</span>
+        <span class="tool-how-title">Get a health score</span>
+        <span class="tool-how-desc">A clear assessment before you commit a single dollar.</span>
+      </div>
+    </div>
+
     <form class="tool-form" id="toolForm">
 
       <div class="tool-field">
@@ -225,7 +244,7 @@ Produce my nonprofit health assessment.`;
         showResult(text);
         notifyToolUsed(document.title);
       } catch (err) {
-        showError('Something went wrong. Please try again.');
+        if (!err._shown) showError('Something went wrong. Please try again.');
         console.error(err);
       } finally {
         setLoading(false);
@@ -233,6 +252,14 @@ Produce my nonprofit health assessment.`;
     });
 
     initCopyBtn();
+  </script>
+  <!-- Service Worker registration -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').catch(() => {});
+      });
+    }
   </script>
 </body>
 </html>

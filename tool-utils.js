@@ -7,6 +7,7 @@
 const TOOL_WORKER_URL    = 'https://ask-panos.panagiotis-kokmotoss.workers.dev/tool';
 const TOOL_NOTIFY_WORKER = 'https://ask-panos.panagiotis-kokmotoss.workers.dev/notify';
 const TOOL_NOTIFY_SECRET = 'panos-notify-2026-xyz';
+const TOOL_PROMPT_VERSION = 2; // bump when system prompts change significantly
 
 /* ── Related tools map ── */
 const _RELATED_TOOLS = {
@@ -115,12 +116,35 @@ async function callWorker(systemPrompt, userMessage) {
   const res = await fetch(TOOL_WORKER_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ systemPrompt, userMessage }),
+    body: JSON.stringify({ systemPrompt, userMessage, promptVersion: TOOL_PROMPT_VERSION }),
   });
+  if (res.status === 429) {
+    _showRateLimitError();
+    const err = new Error('Rate limit exceeded');
+    err._shown = true;
+    throw err;
+  }
   if (!res.ok) throw new Error(`Server error: ${res.status}`);
   const data = await res.json();
   if (data.error) throw new Error(data.error);
   return data.result;
+}
+
+function _showRateLimitError() {
+  let secs = 30;
+  const _update = () => {
+    showError(`You've been using this a lot! Please wait ${secs}s before trying again, or email panagiotis.kokmotoss@gmail.com directly.`);
+  };
+  _update();
+  const _timer = setInterval(() => {
+    secs--;
+    if (secs <= 0) {
+      clearInterval(_timer);
+      hideError();
+    } else {
+      _update();
+    }
+  }, 1000);
 }
 
 function formatMarkdown(text) {
@@ -185,6 +209,8 @@ function setLoading(on) {
   const hasText = !!document.getElementById('loadingText');
   if (on && hasText) startLoadingMessages();
   else if (!on) stopLoadingMessages();
+  if (on) _showLoadingSkeleton();
+  else _removeLoadingSkeleton();
 }
 
 function showError(msg) {
@@ -206,14 +232,46 @@ function showResult(text) {
   resultBody.innerHTML = formatMarkdown(text);
   result.classList.add('visible');
   result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  _removeLoadingSkeleton();
   /* Inject extras after each result show */
-  setTimeout(() => { _injectResultExtras(); }, 60);
+  setTimeout(() => {
+    _injectResultExtras(text);
+    _saveToHistory(text);
+    _renderHistoryBtn();
+  }, 60);
 }
 
-/* Rating + download injected once per result show */
-function _injectResultExtras() {
+/* ── Loading skeleton ── */
+function _showLoadingSkeleton() {
+  let sk = document.getElementById('_loadSkeleton');
+  if (sk) return;
+  sk = document.createElement('div');
+  sk.id = '_loadSkeleton';
+  sk.className = 'tool-skeleton';
+  sk.innerHTML = `
+    <div class="skel-line skel-h"></div>
+    <div class="skel-line skel-full"></div>
+    <div class="skel-line skel-lg"></div>
+    <div class="skel-line skel-md"></div>
+    <div class="skel-line skel-full"></div>
+    <div class="skel-line skel-sm"></div>`;
+  const loading = document.getElementById('loading');
+  if (loading) loading.insertAdjacentElement('afterend', sk);
+}
+function _removeLoadingSkeleton() {
+  const sk = document.getElementById('_loadSkeleton');
+  if (sk) sk.remove();
+}
+
+/* ── All extras injected once per result show ── */
+function _injectResultExtras(text) {
   _injectRating();
   _injectDownloadBtn();
+  _injectPrintBtn();
+  _injectRefineInput();
+  _injectDisclaimer();
+  _injectJourneyCTA(text);
+  _injectEmailCapture();
 }
 
 function hideResult() {
@@ -458,6 +516,240 @@ function initEmbed() {
   });
 }
 
+/* ── Confidence disclaimer ── */
+function _injectDisclaimer() {
+  const result = document.getElementById('result');
+  if (!result || result.querySelector('._disclaimer')) return;
+  const p = document.createElement('p');
+  p.className = 'tool-disclaimer _disclaimer';
+  p.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg> AI-generated analysis. Always verify with official sources before making giving decisions.`;
+  const body = result.querySelector('.tool-result-body');
+  if (body) body.insertAdjacentElement('afterend', p);
+}
+
+/* ── Refine result ── */
+function _injectRefineInput() {
+  const result = document.getElementById('result');
+  if (!result || result.querySelector('#_refineWrap')) return;
+  const wrap = document.createElement('div');
+  wrap.id = '_refineWrap';
+  wrap.className = 'tool-refine';
+  wrap.innerHTML = `
+    <p class="tool-refine-label">Want to adjust anything?</p>
+    <div class="tool-refine-row">
+      <input class="tool-refine-input" id="_refineInput" type="text"
+        placeholder="e.g. make it shorter, focus on climate orgs, add a step about tax deductions…"
+        autocomplete="off" />
+      <button class="tool-refine-btn" id="_refineBtn">Refine →</button>
+    </div>`;
+  const actions = result.querySelector('.tool-result-actions');
+  if (actions) result.insertBefore(wrap, actions);
+  else result.appendChild(wrap);
+
+  document.getElementById('_refineBtn').addEventListener('click', async function() {
+    const instruction = document.getElementById('_refineInput').value.trim();
+    if (!instruction) return;
+    const body = document.getElementById('resultBody');
+    if (!body) return;
+    const originalText = body.innerText;
+    const sysPrompt = `You are a helpful assistant. The user has an AI-generated result and wants to refine it based on their instruction. Keep the same format and structure unless told otherwise. Return only the refined result, no meta-commentary.`;
+    const userMsg = `Original result:\n${originalText}\n\nRefinement instruction: ${instruction}`;
+    this.disabled = true;
+    this.textContent = 'Refining…';
+    setLoading(true);
+    hideResult();
+    try {
+      const text = await callWorker(sysPrompt, userMsg);
+      showResult(text);
+      document.getElementById('_refineInput').value = '';
+    } catch(err) {
+      if (!err._shown) showError('Refinement failed. Please try again.');
+    } finally {
+      setLoading(false);
+      this.disabled = false;
+      this.textContent = 'Refine →';
+    }
+  });
+
+  document.getElementById('_refineInput').addEventListener('keydown', e => {
+    if (e.key === 'Enter') document.getElementById('_refineBtn')?.click();
+  });
+}
+
+/* ── Email capture ── */
+function _injectEmailCapture() {
+  const result = document.getElementById('result');
+  if (!result || result.querySelector('#_emailCapture')) return;
+  const wrap = document.createElement('div');
+  wrap.id = '_emailCapture';
+  wrap.className = 'tool-email-cap';
+  wrap.innerHTML = `
+    <span class="tool-email-cap-label">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M4 4h16v16H4z"/><path d="m4 7 8 6 8-6"/></svg>
+      Email me this result
+    </span>
+    <div class="tool-email-cap-row">
+      <input class="tool-email-cap-input" id="_emailCapInput" type="email" placeholder="your@email.com" autocomplete="email" />
+      <button class="tool-email-cap-btn" id="_emailCapBtn">Send →</button>
+    </div>
+    <p class="tool-email-cap-note">One email, no spam, ever.</p>`;
+  const embed = result.closest('main')?.querySelector('#toolEmbed');
+  if (embed) embed.insertAdjacentElement('beforebegin', wrap);
+  else result.insertAdjacentElement('afterend', wrap);
+
+  document.getElementById('_emailCapBtn').addEventListener('click', async function() {
+    const email = document.getElementById('_emailCapInput').value.trim();
+    if (!email || !email.includes('@')) {
+      document.getElementById('_emailCapInput').focus();
+      return;
+    }
+    const body = document.getElementById('resultBody');
+    const title = document.querySelector('h1.tool-title')?.textContent?.trim() || document.title;
+    this.disabled = true;
+    this.textContent = 'Sending…';
+    try {
+      await fetch('https://ask-panos.panagiotis-kokmotoss.workers.dev/email-result', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, tool: title, result: body?.innerText || '', url: window.location.href }),
+      });
+      this.textContent = '✓ Sent!';
+      document.getElementById('_emailCapInput').value = '';
+    } catch {
+      this.textContent = 'Failed — try again';
+      this.disabled = false;
+    }
+  });
+}
+
+/* ── Inter-tool journey CTAs ── */
+const _JOURNEY_MAP = {
+  '/scam-nonprofit-detector.html':   { url: '/charity-comparison-engine.html',  icon: '⚖️', text: 'Looks clean? Compare it with another charity →' },
+  '/first-time-donor-coach.html':    { url: '/what-would-x-do.html',            icon: '💸', text: 'See exactly what your monthly budget does →' },
+  '/charity-comparison-engine.html': { url: '/nonprofit-health-checker.html',   icon: '🔍', text: 'Now check the health of your favourite →' },
+  '/volunteer-match.html':           { url: '/first-time-donor-coach.html',     icon: '🧭', text: 'Ready to give too? Build your giving plan →' },
+  '/what-would-x-do.html':           { url: '/why-should-i-give.html',          icon: '❤️', text: 'Still unsure why to give? Find your personal reason →' },
+  '/why-should-i-give.html':         { url: '/first-time-donor-coach.html',     icon: '🗓', text: 'Ready to start? Build your first giving plan →' },
+  '/what-can-i-donate.html':         { url: '/what-would-x-do.html',            icon: '💸', text: 'Also have cash to give? See its impact →' },
+  '/nonprofit-health-checker.html':  { url: '/charity-comparison-engine.html',  icon: '⚖️', text: 'Want to compare this to another org? →' },
+  '/neighborhood-giving-map.html':   { url: '/community-needs-map.html',        icon: '📍', text: 'See what community needs exist in that area →' },
+  '/community-needs-map.html':       { url: '/neighborhood-giving-map.html',    icon: '🗺', text: 'Now see where giving flows in that city →' },
+  '/impact-story-generator.html':    { url: '/nonprofit-health-checker.html',   icon: '🔍', text: 'Check your nonprofit's health score →' },
+};
+function _injectJourneyCTA(text) {
+  const result = document.getElementById('result');
+  if (!result || result.querySelector('#_journeyCTA')) return;
+  const cta = _JOURNEY_MAP[window.location.pathname];
+  if (!cta) return;
+  /* For scam detector: only show if result seems low-risk */
+  if (window.location.pathname === '/scam-nonprofit-detector.html') {
+    const lower = (text || '').toLowerCase();
+    if (!lower.includes('low risk') && !lower.includes('risk level: low')) return;
+  }
+  const wrap = document.createElement('div');
+  wrap.id = '_journeyCTA';
+  wrap.className = 'tool-journey-cta';
+  wrap.innerHTML = `
+    <span class="tool-journey-icon">${cta.icon}</span>
+    <span class="tool-journey-text">${cta.text}</span>
+    <a href="${cta.url}" class="tool-journey-link">Go →</a>`;
+  const actions = result.querySelector('.tool-result-actions');
+  if (actions) result.insertBefore(wrap, actions);
+  else result.appendChild(wrap);
+}
+
+/* ── Result history ── */
+const _HIST_KEY = () => 'hist_' + window.location.pathname.replace(/[^a-z0-9]/gi, '_');
+function _saveToHistory(text) {
+  if (!text) return;
+  try {
+    const key = _HIST_KEY();
+    const hist = JSON.parse(localStorage.getItem(key) || '[]');
+    const snippet = text.replace(/<[^>]+>/g, '').slice(0, 120).trim();
+    hist.unshift({ t: Date.now(), snippet, html: document.getElementById('resultBody')?.innerHTML || '' });
+    localStorage.setItem(key, JSON.stringify(hist.slice(0, 5)));
+  } catch {}
+}
+function _renderHistoryBtn() {
+  let btn = document.getElementById('_histBtn');
+  try {
+    const hist = JSON.parse(localStorage.getItem(_HIST_KEY()) || '[]');
+    if (!hist.length) { if (btn) btn.remove(); return; }
+    if (!btn) {
+      btn = document.createElement('button');
+      btn.id = '_histBtn';
+      btn.className = 'tool-hist-btn';
+      const form = document.getElementById('toolForm');
+      if (form) form.insertAdjacentElement('afterend', btn);
+    }
+    btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 106 5.3L3 8"/><path d="M12 7v5l4 2"/></svg> Recent results <span class="tool-hist-badge">${hist.length}</span>`;
+    btn.onclick = _openHistoryDrawer;
+  } catch {}
+}
+function _openHistoryDrawer() {
+  if (document.getElementById('_histDrawer')) { _closeHistoryDrawer(); return; }
+  let hist = [];
+  try { hist = JSON.parse(localStorage.getItem(_HIST_KEY()) || '[]'); } catch {}
+  const overlay = document.createElement('div');
+  overlay.id = '_histOverlay';
+  overlay.className = 'hist-overlay';
+  overlay.addEventListener('click', e => { if (e.target === overlay) _closeHistoryDrawer(); });
+  const drawer = document.createElement('div');
+  drawer.id = '_histDrawer';
+  drawer.className = 'hist-drawer';
+  const ago = t => {
+    const d = Math.round((Date.now() - t) / 1000);
+    if (d < 60) return 'just now';
+    if (d < 3600) return Math.floor(d/60) + 'm ago';
+    if (d < 86400) return Math.floor(d/3600) + 'h ago';
+    return Math.floor(d/86400) + 'd ago';
+  };
+  drawer.innerHTML = `
+    <div class="hist-header">
+      <strong>Past Results</strong>
+      <button class="hist-close" onclick="_closeHistoryDrawer()">✕</button>
+    </div>
+    <div class="hist-list">
+      ${hist.map((h, i) => `
+        <div class="hist-item">
+          <span class="hist-time">${ago(h.t)}</span>
+          <p class="hist-snippet">${h.snippet}…</p>
+          <button class="hist-restore" data-i="${i}">Restore →</button>
+        </div>`).join('')}
+    </div>
+    <button class="hist-clear" id="_histClear">Clear history</button>`;
+  overlay.appendChild(drawer);
+  document.body.appendChild(overlay);
+  requestAnimationFrame(() => { overlay.classList.add('visible'); drawer.classList.add('visible'); });
+
+  drawer.querySelectorAll('.hist-restore').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const h = hist[+btn.dataset.i];
+      const result = document.getElementById('result');
+      const rb = document.getElementById('resultBody');
+      if (result && rb && h.html) {
+        rb.innerHTML = h.html;
+        result.classList.add('visible');
+        result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+      _closeHistoryDrawer();
+    });
+  });
+  document.getElementById('_histClear').addEventListener('click', () => {
+    try { localStorage.removeItem(_HIST_KEY()); } catch {}
+    _closeHistoryDrawer();
+    const btn = document.getElementById('_histBtn');
+    if (btn) btn.remove();
+  });
+}
+function _closeHistoryDrawer() {
+  const overlay = document.getElementById('_histOverlay');
+  if (!overlay) return;
+  overlay.classList.remove('visible');
+  overlay.querySelector('#_histDrawer')?.classList.remove('visible');
+  setTimeout(() => overlay.remove(), 260);
+}
+
 /* ── Download result as .txt ── */
 function _injectDownloadBtn() {
   const copyBtn = document.getElementById('copyBtn');
@@ -479,6 +771,44 @@ function _injectDownloadBtn() {
     a.download = title + '.txt';
     a.click();
     URL.revokeObjectURL(a.href);
+  });
+}
+
+/* ── Print / Save as PDF ── */
+function _injectPrintBtn() {
+  const copyBtn = document.getElementById('copyBtn');
+  if (!copyBtn || document.getElementById('_printBtn')) return;
+  const btn = document.createElement('button');
+  btn.id = '_printBtn';
+  btn.className = 'tool-print-btn';
+  btn.title = 'Print / Save as PDF';
+  btn.setAttribute('aria-label', 'Print result');
+  btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="13" height="13"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg> Print`;
+  const dlBtn = document.getElementById('_dlBtn');
+  if (dlBtn) dlBtn.insertAdjacentElement('afterend', btn);
+  else copyBtn.insertAdjacentElement('afterend', btn);
+  btn.addEventListener('click', () => {
+    const body = document.getElementById('resultBody');
+    const title = document.querySelector('h1.tool-title')?.textContent?.trim() || document.title;
+    if (!body) return;
+    const win = window.open('', '_blank');
+    win.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${title}</title>
+      <style>
+        body { font-family: system-ui, sans-serif; max-width: 720px; margin: 40px auto; padding: 0 24px; color: #1a2e4a; }
+        h1 { font-size: 1.4rem; margin-bottom: 6px; }
+        .meta { font-size: 0.78rem; color: #888; margin-bottom: 24px; }
+        .content { font-size: 0.9rem; line-height: 1.75; }
+        strong { color: #1a2e4a; }
+        @media print { body { margin: 20px; } }
+      </style>
+    </head><body>
+      <h1>${title}</h1>
+      <p class="meta">Generated by panoskokmotos.com · ${new Date().toLocaleDateString()}</p>
+      <div class="content">${body.innerHTML}</div>
+    </body></html>`);
+    win.document.close();
+    win.focus();
+    setTimeout(() => { win.print(); }, 400);
   });
 }
 
@@ -544,4 +874,12 @@ document.addEventListener('DOMContentLoaded', () => {
   initRelatedTools();
   initEmbed();
   initShareableURL();
+  _renderHistoryBtn();
+  /* Ctrl+Enter / Cmd+Enter to submit */
+  document.addEventListener('keydown', e => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+      const btn = document.getElementById('submitBtn');
+      if (btn && !btn.disabled) { e.preventDefault(); btn.click(); }
+    }
+  });
 });

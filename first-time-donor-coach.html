@@ -73,6 +73,25 @@
     <h1 class="tool-title">First-Time Donor Coach</h1>
     <p class="tool-desc">Never donated before and not sure where to start? Tell AI a little about yourself — it'll build you a personalized 5-step giving plan with concrete first moves you can make today.</p>
 
+    <!-- ── How it works ── -->
+    <div class="tool-how" aria-label="How this tool works">
+      <div class="tool-how-step">
+        <span class="tool-how-num">Step 1</span>
+        <span class="tool-how-title">Tell AI about you</span>
+        <span class="tool-how-desc">Share your causes, budget, and biggest hesitation.</span>
+      </div>
+      <div class="tool-how-step">
+        <span class="tool-how-num">Step 2</span>
+        <span class="tool-how-title">AI builds your plan</span>
+        <span class="tool-how-desc">A 5-step giving plan tailored specifically to you.</span>
+      </div>
+      <div class="tool-how-step">
+        <span class="tool-how-num">Step 3</span>
+        <span class="tool-how-title">Start giving today</span>
+        <span class="tool-how-desc">Concrete first moves you can take in the next 10 minutes.</span>
+      </div>
+    </div>
+
     <form class="tool-form" id="toolForm">
 
       <div class="tool-field">
@@ -274,7 +293,7 @@ Build my personalized first-time giving plan.`;
         showResult(text);
         notifyToolUsed(document.title);
       } catch (err) {
-        showError('Something went wrong. Please try again.');
+        if (!err._shown) showError('Something went wrong. Please try again.');
         console.error(err);
       } finally {
         setLoading(false);
@@ -282,6 +301,14 @@ Build my personalized first-time giving plan.`;
     });
 
     initCopyBtn();
+  </script>
+  <!-- Service Worker registration -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').catch(() => {});
+      });
+    }
   </script>
 </body>
 </html>

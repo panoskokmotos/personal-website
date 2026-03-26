@@ -65,6 +65,25 @@
     <h1 class="tool-title">Charity Comparison Engine</h1>
     <p class="tool-desc">Pick a cause and tell AI what matters most to you as a donor — it'll compare the main types of organizations working in that space by effectiveness, overhead, reach, and approach. GiveWell, but in plain English and built around your priorities.</p>
 
+    <!-- ── How it works ── -->
+    <div class="tool-how" aria-label="How this tool works">
+      <div class="tool-how-step">
+        <span class="tool-how-num">Step 1</span>
+        <span class="tool-how-title">Name two options</span>
+        <span class="tool-how-desc">Enter two charities or cause areas you're choosing between.</span>
+      </div>
+      <div class="tool-how-step">
+        <span class="tool-how-num">Step 2</span>
+        <span class="tool-how-title">AI runs the comparison</span>
+        <span class="tool-how-desc">Analyzes mission, model, overhead, and strategic fit.</span>
+      </div>
+      <div class="tool-how-step">
+        <span class="tool-how-num">Step 3</span>
+        <span class="tool-how-title">Make a better choice</span>
+        <span class="tool-how-desc">Walk away with a clear, reasoned giving decision.</span>
+      </div>
+    </div>
+
     <form class="tool-form" id="toolForm">
 
       <div class="tool-field">
@@ -231,7 +250,7 @@ Compare the main org types and approaches in this space.`;
         showResult(text);
         notifyToolUsed(document.title);
       } catch (err) {
-        showError('Something went wrong. Please try again.');
+        if (!err._shown) showError('Something went wrong. Please try again.');
         console.error(err);
       } finally {
         setLoading(false);
@@ -239,6 +258,14 @@ Compare the main org types and approaches in this space.`;
     });
 
     initCopyBtn();
+  </script>
+  <!-- Service Worker registration -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').catch(() => {});
+      });
+    }
   </script>
 </body>
 </html>

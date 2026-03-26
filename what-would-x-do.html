@@ -90,6 +90,25 @@
       <div id="historyChips" class="wxd-history-chips"></div>
     </div>
 
+    <!-- ── How it works ── -->
+    <div class="tool-how" aria-label="How this tool works">
+      <div class="tool-how-step">
+        <span class="tool-how-num">Step 1</span>
+        <span class="tool-how-title">Enter amount + cause</span>
+        <span class="tool-how-desc">Pick any dollar amount and a cause area you care about.</span>
+      </div>
+      <div class="tool-how-step">
+        <span class="tool-how-num">Step 2</span>
+        <span class="tool-how-title">AI models impact</span>
+        <span class="tool-how-desc">Claude analyzes 5 types of orgs and maps real-world outcomes.</span>
+      </div>
+      <div class="tool-how-step">
+        <span class="tool-how-num">Step 3</span>
+        <span class="tool-how-title">See scenarios</span>
+        <span class="tool-how-desc">Get concrete comparisons — meals, trees, tutoring hours, and more.</span>
+      </div>
+    </div>
+
     <form class="tool-form" id="toolForm">
 
       <!-- ── Amount Section ── -->
@@ -676,9 +695,11 @@ Rules:
 - All others must have best: false
 - stat must be a striking, specific number (not vague)
 - description must start with a verb and be vivid, not generic
-- Use real benchmarks (e.g. $1 = ~5 meals at a food bank, $50 = ~1 month clean water for a family via water purification programs)
 - Do NOT name specific real organizations
-- Do NOT add any text before the first ---SCENARIO--- or after ---END---`;
+- Do NOT add any text before the first ---SCENARIO--- or after ---END---
+
+Cause-specific benchmarks to use:
+${_causeContext}`;
 
       const userMessage = isMonthly
         ? `Donation: $${selectedAmount}/month (=$${annualAmount}/year recurring)\nCause: ${selectedCause}\n\nGenerate 5 impact scenarios showing annual impact.`
@@ -702,7 +723,7 @@ Rules:
         renderScenarios(scenarios);
         notifyToolUsed(document.title);
       } catch (err) {
-        showError('Something went wrong. Please try again.');
+        if (!err._shown) showError('Something went wrong. Please try again.');
         console.error(err);
       } finally {
         setLoading(false);
@@ -1091,6 +1112,14 @@ Be concise. Max 150 words total. Use bullet point "•" for each item.`;
     loadHistory();
     updateComparison(selectedAmount); // show comparison for default $50
     loadFromURL();
+  </script>
+  <!-- Service Worker registration -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').catch(() => {});
+      });
+    }
   </script>
 </body>
 </html>

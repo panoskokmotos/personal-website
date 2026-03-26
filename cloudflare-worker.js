@@ -165,6 +165,91 @@ export default {
       }
     }
 
+    // ── /email-result route: send AI result to user's email ──
+    if (url.pathname === '/email-result') {
+      try {
+        const { email, tool, result, url: pageUrl } = await request.json();
+        if (!email || !email.includes('@')) {
+          return new Response(JSON.stringify({ ok: false, error: 'Invalid email' }), {
+            status: 400, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS },
+          });
+        }
+
+        const subject = `Your result from "${tool || 'AI Tool'}" — panoskokmotos.com`;
+        const safeResult = (result || '').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        const bodyHtml = `
+          <div style="font-family:system-ui,sans-serif;max-width:600px;margin:0 auto;padding:24px">
+            <h2 style="color:#1a2e4a;margin-bottom:8px">${(tool || 'Your AI Result').replace(/</g,'&lt;')}</h2>
+            <p style="color:#666;font-size:13px;margin-bottom:20px">From <a href="${pageUrl || 'https://panoskokmotos.com'}" style="color:#3b6ef8">panoskokmotos.com</a></p>
+            <div style="background:#f8f9fc;border:1px solid #e5e7eb;border-radius:10px;padding:20px;font-size:14px;line-height:1.7;white-space:pre-wrap">${safeResult}</div>
+            <p style="color:#999;font-size:12px;margin-top:20px">Sent from <a href="https://panoskokmotos.com/ai-tools.html" style="color:#3b6ef8">Free AI for Social Impact tools</a> by Panos Kokmotos</p>
+          </div>`;
+
+        const mcRes = await fetch('https://api.mailchannels.net/tx/v1/send', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            personalizations: [{ to: [{ email }] }],
+            from: { email: 'tools@panoskokmotos.com', name: 'Panos Kokmotos AI Tools' },
+            subject,
+            content: [
+              { type: 'text/plain', value: result || '' },
+              { type: 'text/html', value: bodyHtml },
+            ],
+          }),
+        });
+
+        const ok = mcRes.status === 202;
+        return new Response(JSON.stringify({ ok }), {
+          status: ok ? 200 : 500,
+          headers: { 'Content-Type': 'application/json', ...CORS_HEADERS },
+        });
+      } catch (err) {
+        return new Response(JSON.stringify({ ok: false, error: 'Email failed' }), {
+          status: 500, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS },
+        });
+      }
+    }
+
+    // ── /api/v1/tool route: versioned Claude call (same as /tool, supports promptVersion) ──
+    if (url.pathname === '/api/v1/tool') {
+      try {
+        const { systemPrompt, userMessage, promptVersion } = await request.json();
+        if (!systemPrompt || !userMessage) {
+          return new Response(JSON.stringify({ error: 'Missing systemPrompt or userMessage' }), {
+            status: 400, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS },
+          });
+        }
+
+        const response = await fetch('https://api.anthropic.com/v1/messages', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': env.ANTHROPIC_API_KEY,
+            'anthropic-version': '2023-06-01',
+          },
+          body: JSON.stringify({
+            model: 'claude-haiku-4-5',
+            max_tokens: 1024,
+            system: systemPrompt,
+            messages: [{ role: 'user', content: userMessage }],
+          }),
+        });
+
+        const data = await response.json();
+        const result = data.content?.[0]?.text ?? 'Sorry, I had trouble responding. Please try again.';
+
+        return new Response(JSON.stringify({ result, promptVersion: promptVersion || 1 }), {
+          headers: { 'Content-Type': 'application/json', ...CORS_HEADERS },
+        });
+      } catch (err) {
+        return new Response(
+          JSON.stringify({ error: 'Something went wrong. Please try again.' }),
+          { status: 500, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
+        );
+      }
+    }
+
     // ── /tool route: generic Claude call for Social Impact AI tools ──
     if (url.pathname === '/tool') {
       try {

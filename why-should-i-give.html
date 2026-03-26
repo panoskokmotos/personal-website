@@ -71,6 +71,25 @@
       <div class="wsig-persona-chips" id="personaChips"></div>
     </div>
 
+    <!-- ── How it works ── -->
+    <div class="tool-how" aria-label="How this tool works">
+      <div class="tool-how-step">
+        <span class="tool-how-num">Step 1</span>
+        <span class="tool-how-title">Share your values</span>
+        <span class="tool-how-desc">Tell AI what you care about — lifestyle, interests, concerns.</span>
+      </div>
+      <div class="tool-how-step">
+        <span class="tool-how-num">Step 2</span>
+        <span class="tool-how-title">AI finds your "why"</span>
+        <span class="tool-how-desc">Connects your existing priorities to causes that align.</span>
+      </div>
+      <div class="tool-how-step">
+        <span class="tool-how-num">Step 3</span>
+        <span class="tool-how-title">Get your narrative</span>
+        <span class="tool-how-desc">A personalized case for giving, in your own terms.</span>
+      </div>
+    </div>
+
     <form class="tool-form" id="toolForm">
 
       <div class="tool-field">
@@ -311,7 +330,7 @@ Write my personalized case for giving.`;
 
       } catch (err) {
         hideResult();
-        showError('Something went wrong. Please try again.');
+        if (!err._shown) showError('Something went wrong. Please try again.');
         console.error(err);
       } finally {
         setLoading(false);
@@ -660,6 +679,14 @@ Max 80 words total. Use • bullets exactly as shown.`;
     // ── Init ──
     restoreProfile();
     showEmptyState();
+  </script>
+  <!-- Service Worker registration -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').catch(() => {});
+      });
+    }
   </script>
 </body>
 </html>

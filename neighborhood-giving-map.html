@@ -73,6 +73,25 @@
     <h1 class="tool-title">Neighborhood Giving Map</h1>
     <p class="tool-desc">Charitable dollars don't flow evenly — they flow to where donors feel comfortable, not where need is highest. Tell AI your city and context, and it'll map the known patterns: where giving concentrates, where giving deserts form, and where your dollars could matter most locally.</p>
 
+    <!-- ── How it works ── -->
+    <div class="tool-how" aria-label="How this tool works">
+      <div class="tool-how-step">
+        <span class="tool-how-num">Step 1</span>
+        <span class="tool-how-title">Enter your city</span>
+        <span class="tool-how-desc">Name your metro area and cause of interest.</span>
+      </div>
+      <div class="tool-how-step">
+        <span class="tool-how-num">Step 2</span>
+        <span class="tool-how-title">AI maps giving flows</span>
+        <span class="tool-how-desc">Where money concentrates vs. where need is highest.</span>
+      </div>
+      <div class="tool-how-step">
+        <span class="tool-how-num">Step 3</span>
+        <span class="tool-how-title">Direct dollars wisely</span>
+        <span class="tool-how-desc">Find the giving deserts where your impact is largest.</span>
+      </div>
+    </div>
+
     <form class="tool-form" id="toolForm">
 
       <div class="tool-field">
@@ -246,7 +265,7 @@ Analyze local giving patterns and where the gaps are.`;
         }
         notifyToolUsed(document.title);
       } catch (err) {
-        showError('Something went wrong. Please try again.');
+        if (!err._shown) showError('Something went wrong. Please try again.');
         console.error(err);
       } finally {
         setLoading(false);
@@ -254,6 +273,14 @@ Analyze local giving patterns and where the gaps are.`;
     });
 
     initCopyBtn();
+  </script>
+  <!-- Service Worker registration -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').catch(() => {});
+      });
+    }
   </script>
 </body>
 </html>

@@ -73,6 +73,25 @@
     <h1 class="tool-title">Impact Story Generator</h1>
     <p class="tool-desc">For nonprofits and fundraisers: input a real beneficiary situation (before &amp; after) plus your program details — AI writes a compelling donor-facing story in 4 formats: full story, email version, social post, and a one-liner.</p>
 
+    <!-- ── How it works ── -->
+    <div class="tool-how" aria-label="How this tool works">
+      <div class="tool-how-step">
+        <span class="tool-how-num">Step 1</span>
+        <span class="tool-how-title">Describe before + after</span>
+        <span class="tool-how-desc">Who was helped? What changed thanks to your program?</span>
+      </div>
+      <div class="tool-how-step">
+        <span class="tool-how-num">Step 2</span>
+        <span class="tool-how-title">AI writes 4 versions</span>
+        <span class="tool-how-desc">Full story, email, social post, and a one-liner.</span>
+      </div>
+      <div class="tool-how-step">
+        <span class="tool-how-num">Step 3</span>
+        <span class="tool-how-title">Publish with confidence</span>
+        <span class="tool-how-desc">Review, personalize, and use across all your channels.</span>
+      </div>
+    </div>
+
     <form class="tool-form" id="toolForm">
 
       <div class="tool-field">
@@ -307,33 +326,43 @@ Generate the 4 impact story formats.`;
       try {
         const text = await callWorker(systemPrompt, userMessage);
 
-        // Parse sections
-        const sections = {
-          story: extractSection(text, '---STORY---', '---EMAIL---'),
-          email: extractSection(text, '---EMAIL---', '---SOCIAL---'),
-          social: extractSection(text, '---SOCIAL---', '---ONELINER---'),
-          oneliner: extractSection(text, '---ONELINER---', null),
-        };
+        // Parse JSON response
+        let sections = null;
+        try {
+          const clean = text.replace(/^```json\n?|```$/g, '').trim();
+          sections = JSON.parse(clean);
+        } catch {}
 
-        // Fallback: if markers not found, put everything in story tab
-        if (!sections.story && !sections.email) {
-          panels.story.innerHTML = formatMarkdown(text);
-          panels.email.innerHTML = '<em style="color:var(--text-muted)">See Full Story tab.</em>';
-          panels.social.innerHTML = '<em style="color:var(--text-muted)">See Full Story tab.</em>';
-          panels.oneliner.innerHTML = '<em style="color:var(--text-muted)">See Full Story tab.</em>';
-        } else {
+        if (sections && (sections.story || sections.email)) {
           Object.keys(panels).forEach(key => {
             panels[key].innerHTML = sections[key]
               ? formatMarkdown(sections[key].trim())
               : '<em style="color:var(--text-muted)">Not generated.</em>';
           });
+        } else {
+          // Fallback to marker-based parsing
+          const storyRaw = extractSection(text, '---STORY---', '---EMAIL---');
+          const emailRaw = extractSection(text, '---EMAIL---', '---SOCIAL---');
+          const socialRaw = extractSection(text, '---SOCIAL---', '---ONELINER---');
+          const onelinerRaw = extractSection(text, '---ONELINER---', null);
+          if (storyRaw || emailRaw) {
+            panels.story.innerHTML = formatMarkdown((storyRaw || text).trim());
+            panels.email.innerHTML = emailRaw ? formatMarkdown(emailRaw.trim()) : '<em style="color:var(--text-muted)">See Full Story tab.</em>';
+            panels.social.innerHTML = socialRaw ? formatMarkdown(socialRaw.trim()) : '<em style="color:var(--text-muted)">See Full Story tab.</em>';
+            panels.oneliner.innerHTML = onelinerRaw ? formatMarkdown(onelinerRaw.trim()) : '<em style="color:var(--text-muted)">See Full Story tab.</em>';
+          } else {
+            panels.story.innerHTML = formatMarkdown(text);
+            ['email','social','oneliner'].forEach(k => {
+              panels[k].innerHTML = '<em style="color:var(--text-muted)">See Full Story tab.</em>';
+            });
+          }
         }
 
         result.classList.add('visible');
         result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         notifyToolUsed(document.title);
       } catch (err) {
-        showError('Something went wrong. Please try again.');
+        if (!err._shown) showError('Something went wrong. Please try again.');
         console.error(err);
       } finally {
         setLoading(false);
@@ -356,6 +385,14 @@ Generate the 4 impact story formats.`;
       const end = text.indexOf(endMarker, contentStart);
       if (end === -1) return text.slice(contentStart);
       return text.slice(contentStart, end);
+    }
+  </script>
+  <!-- Service Worker registration -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').catch(() => {});
+      });
     }
   </script>
 </body>
