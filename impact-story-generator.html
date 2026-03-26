@@ -18,6 +18,46 @@
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:image" content="https://panoskokmotos.com/og-ai-tools.png" />
   <meta name="twitter:creator" content="@panoskokmotoss" />
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is the Impact Story Generator?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "It's a free AI writing tool for nonprofits. You input a beneficiary situation (before and after your program) and AI writes a compelling donor-facing story in 4 formats: full story, email version, social post, and one-liner."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do I need to be a professional writer to use this?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. Just describe the situation in plain language \u2014 AI handles the storytelling. Always review and personalize before publishing."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I use this for grant writing?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. The 'Formal' tone option is optimized for grant reports and institutional donors."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is the generated story ready to publish as-is?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "We recommend humanizing AI-generated content with your own voice and verifying all details before publishing."
+      }
+    }
+  ]
+}
+</script>
 </head>
 <body class="tool-page">
 
@@ -109,6 +149,27 @@
         <button type="button" class="tool-example-chip" data-fill-beneficiary="a 9th grader who was falling behind in school" data-fill-before="Reading at a 5th grade level, at risk of dropping out, disengaged and skipping classes." data-fill-after="Caught up to grade level in 6 months, applied for a summer enrichment program, re-engaged." data-fill-program="one-on-one tutoring twice a week and peer mentorship" data-fill-orgName="">Youth tutoring</button>
         <button type="button" class="tool-example-chip" data-fill-orgName="City Mission Shelter" data-fill-beneficiary="a 52-year-old veteran experiencing homelessness" data-fill-before="Living under a freeway overpass for 14 months. Untreated PTSD. No income or ID." data-fill-after="Placed in transitional housing. Receiving VA benefits. Enrolled in job training program." data-fill-program="emergency shelter, mental health support, and benefits navigation">Homeless shelter</button>
       </div>
+      <div class="tool-field">
+        <label class="tool-label">Story tone</label>
+        <div class="isg-tone-row" id="isgToneRow">
+          <button type="button" class="isg-tone-btn active" data-tone="Heartfelt and emotionally resonant — human first, statistics second. Move the donor.">
+            <span class="isg-tone-icon">❤️</span>
+            <span class="isg-tone-name">Heartfelt</span>
+            <span class="isg-tone-desc">Emotionally resonant, human-first</span>
+          </button>
+          <button type="button" class="isg-tone-btn" data-tone="Professional and formal — appropriate for annual reports, grant reports, and institutional donors. Evidence-forward.">
+            <span class="isg-tone-icon">📋</span>
+            <span class="isg-tone-name">Formal</span>
+            <span class="isg-tone-desc">Annual reports, grant writing</span>
+          </button>
+          <button type="button" class="isg-tone-btn" data-tone="Punchy and social-media ready — short sentences, bold hook, designed to stop the scroll. Optimized for Instagram and LinkedIn.">
+            <span class="isg-tone-icon">📱</span>
+            <span class="isg-tone-name">Social-ready</span>
+            <span class="isg-tone-desc">Stop-the-scroll, Instagram/LinkedIn</span>
+          </button>
+        </div>
+      </div>
+
       <button type="submit" class="tool-submit" id="submitBtn">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
         Generate Impact Story
@@ -170,6 +231,16 @@
     const result = document.getElementById('result');
     const copyBtn = document.getElementById('copyBtn');
 
+    /* ── Tone selector ── */
+    let selectedTone = 'Heartfelt and emotionally resonant — human first, statistics second. Move the donor.';
+    document.getElementById('isgToneRow').addEventListener('click', function(e) {
+      const btn = e.target.closest('.isg-tone-btn');
+      if (!btn) return;
+      this.querySelectorAll('.isg-tone-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      selectedTone = btn.dataset.tone;
+    });
+
     const panels = {
       story: document.getElementById('storyBody'),
       email: document.getElementById('emailBody'),
@@ -216,6 +287,8 @@ A punchy social media post, under 280 characters. Hook in the first 5 words. Can
 
 **ONE-LINER** (after ---ONELINER---):
 A single powerful sentence that captures the transformation. Under 20 words. This is for letterheads, annual reports, and donor stewardship.
+
+Tone: ${selectedTone}
 
 Rules:
 - Never use the beneficiary's real name — use their description or a pseudonym

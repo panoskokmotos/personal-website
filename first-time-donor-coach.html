@@ -18,6 +18,46 @@
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:image" content="https://panoskokmotos.com/og-ai-tools.png" />
   <meta name="twitter:creator" content="@panoskokmotoss" />
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is the First-Time Donor Coach?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "It's a free AI tool that builds a personalized 5-step giving plan for people who have never donated before. You input your causes and budget, and AI walks you through exactly where to start."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do I need experience with donating to use this?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No \u2014 this tool is specifically designed for first-time donors who feel overwhelmed or unsure where to start."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What if I can only give $5 a month?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "That's perfectly fine. The tool works with any budget, including very small amounts."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I know if a charity is legitimate?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The tool covers this in Step 2 \u2014 it teaches you how to vet an organization in under 2 minutes."
+      }
+    }
+  ]
+}
+</script>
 </head>
 <body class="tool-page">
 
@@ -50,19 +90,23 @@
       </div>
 
       <div class="tool-field">
-        <label class="tool-label" for="budget">
-          What monthly amount feels comfortable to start with?
-          <span class="tool-hint"> — be honest, any amount works</span>
-        </label>
-        <select id="budget" class="tool-select" required>
-          <option value="">Select…</option>
-          <option value="$5–$10/month">$5–$10/month</option>
-          <option value="$10–$25/month">$10–$25/month</option>
-          <option value="$25–$50/month">$25–$50/month</option>
-          <option value="$50–$100/month">$50–$100/month</option>
-          <option value="$100+/month">$100+/month</option>
-          <option value="a one-time gift to start">One-time gift to start</option>
-        </select>
+        <label class="tool-label">What monthly amount feels comfortable to start with?</label>
+        <!-- Hidden input carries the value for form serialization -->
+        <input type="hidden" id="budget" value="$20/month" />
+        <div class="fdrc-slider-wrap">
+          <div class="fdrc-slider-display">
+            <span id="fdrcDisplay">$20</span>
+            <span class="fdrc-slider-sub" id="fdrcSub">/month</span>
+          </div>
+          <input type="range" class="fdrc-slider" id="fdrcRange" min="5" max="500" value="20" step="5" />
+          <div class="fdrc-presets">
+            <button type="button" class="fdrc-preset" data-val="10" data-label="$10/month">$10/mo</button>
+            <button type="button" class="fdrc-preset active" data-val="20" data-label="$20/month">$20/mo</button>
+            <button type="button" class="fdrc-preset" data-val="50" data-label="$50/month">$50/mo</button>
+            <button type="button" class="fdrc-preset" data-val="100" data-label="$100/month">$100/mo</button>
+            <button type="button" class="fdrc-preset" data-val="0" data-label="a one-time gift to start">One-time gift</button>
+          </div>
+        </div>
       </div>
 
       <div class="tool-field">
@@ -143,6 +187,38 @@
   <script>
     const form = document.getElementById('toolForm');
 
+    /* ── Budget slider ── */
+    (function() {
+      const range   = document.getElementById('fdrcRange');
+      const display = document.getElementById('fdrcDisplay');
+      const sub     = document.getElementById('fdrcSub');
+      const hidden  = document.getElementById('budget');
+      const presets = document.querySelectorAll('.fdrc-preset');
+
+      function updateDisplay(val) {
+        const isOneTime = val == 0;
+        if (isOneTime) {
+          display.textContent = 'One-time gift';
+          sub.textContent = '';
+          hidden.value = 'a one-time gift to start';
+        } else {
+          display.textContent = '$' + val;
+          sub.textContent = '/month';
+          hidden.value = '$' + val + '/month';
+        }
+        presets.forEach(b => b.classList.toggle('active', +b.dataset.val === +val));
+        if (!isOneTime) range.value = val;
+      }
+
+      range.addEventListener('input', () => updateDisplay(range.value));
+      presets.forEach(btn => {
+        btn.addEventListener('click', () => {
+          updateDisplay(btn.dataset.val);
+          if (+btn.dataset.val > 0) range.value = btn.dataset.val;
+        });
+      });
+    })();
+
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
 
@@ -152,7 +228,7 @@
       const style = document.getElementById('style').value;
 
       if (!causes || !budget) {
-        showError('Please fill in your causes and comfortable budget.');
+        showError('Please fill in your causes and a starting budget.');
         return;
       }
 

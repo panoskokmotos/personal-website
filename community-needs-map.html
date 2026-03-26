@@ -18,6 +18,38 @@
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:image" content="https://panoskokmotos.com/og-ai-tools.png" />
   <meta name="twitter:creator" content="@panoskokmotoss" />
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What does the Community Needs Map do?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "You describe what you observe in your community \u2014 hunger, housing instability, lack of services \u2014 and AI maps the underlying needs, surfaces gaps, and suggests types of organizations that could help."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Who is this tool for?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Residents, nonprofit workers, teachers, community organizers, donors, and local government staff who want to better understand and articulate community needs."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does this use real data about my community?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The AI uses patterns from its training data and your descriptions. For local data, we recommend also consulting your city's open data portal or community foundation reports."
+      }
+    }
+  ]
+}
+</script>
 </head>
 <body class="tool-page">
 
@@ -117,6 +149,10 @@
         <button class="tool-copy-btn" id="copyBtn">Copy</button>
       </div>
       <div class="tool-result-body" id="resultBody"></div>
+      <a class="tool-map-btn" id="toolMapBtn" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="15" height="15"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+        Explore this area on OpenStreetMap
+      </a>
       <div class="tool-result-actions">
         <button class="tool-try-another" id="tryAnotherBtn">← Try another</button>
         <div class="tool-share-group">
@@ -189,6 +225,17 @@ Build my community needs analysis.`;
       try {
         const text = await callWorker(systemPrompt, userMessage);
         showResult(text);
+        /* Wire map button */
+        const mapCity = document.getElementById('location').value.trim();
+        if (mapCity) {
+          const mapBtn = document.getElementById('toolMapBtn');
+          if (mapBtn) {
+            mapBtn.href = 'https://www.openstreetmap.org/search?query=' + encodeURIComponent(mapCity);
+            mapBtn.textContent = '';
+            mapBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="15" height="15"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg> Explore ${mapCity} on OpenStreetMap`;
+            mapBtn.classList.add('visible');
+          }
+        }
         notifyToolUsed(document.title);
       } catch (err) {
         showError('Something went wrong. Please try again.');

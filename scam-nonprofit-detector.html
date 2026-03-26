@@ -18,6 +18,46 @@
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:image" content="https://panoskokmotos.com/og-ai-tools.png" />
   <meta name="twitter:creator" content="@panoskokmotoss" />
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How does the Scam Nonprofit Detector work?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "You describe a charity you've seen \u2014 how you found it, what red flags you noticed \u2014 and AI cross-references it with known fraud patterns to give you a risk assessment."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What are common signs of a fake charity?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "High-pressure tactics, accepting only gift cards or wire transfers, names similar to well-known orgs, no IRS registration, and appearing immediately after a disaster are major red flags."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Where can I verify if a charity is real?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Check the IRS Tax Exempt Organization Search, Charity Navigator, or your state attorney general's charity registry."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can this tool confirm a charity is legitimate?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "It can flag red flags and low-risk signals but cannot definitively confirm legitimacy. Always verify through official sources."
+      }
+    }
+  ]
+}
+</script>
 </head>
 <body class="tool-page">
 
@@ -135,6 +175,8 @@
         <span class="tool-result-label">Scam Signal Assessment</span>
         <button class="tool-copy-btn" id="copyBtn">Copy</button>
       </div>
+      <!-- Score meter injected by JS -->
+      <div id="scamScoreWrap"></div>
       <div class="tool-result-body" id="resultBody"></div>
       <div class="tool-result-actions">
         <button class="tool-try-another" id="tryAnotherBtn">← Try another</button>
@@ -241,6 +283,7 @@ Assess the fraud risk and tell me what to do.`;
       try {
         const text = await callWorker(systemPrompt, userMessage);
         showResult(text);
+        _renderScamScore(text);
         notifyToolUsed(document.title);
       } catch (err) {
         showError('Something went wrong. Please try again.');
@@ -251,6 +294,47 @@ Assess the fraud risk and tell me what to do.`;
     });
 
     initCopyBtn();
+
+    function _renderScamScore(text) {
+      const wrap = document.getElementById('scamScoreWrap');
+      if (!wrap) return;
+      const lower = text.toLowerCase();
+      let level = 'Medium', score = 45, cls = 'scam-risk-medium', desc = 'Some warning signs present — investigate further before donating.';
+      if (lower.includes('risk level: very high') || lower.includes('**risk level: very high') || lower.includes('very high risk')) {
+        level = 'Very High Risk'; score = 92; cls = 'scam-risk-very-high'; desc = 'Multiple strong red flags. Do not donate without thorough verification.';
+      } else if (lower.includes('risk level: high') || lower.includes('**risk level: high')) {
+        level = 'High Risk'; score = 72; cls = 'scam-risk-high'; desc = 'Significant warning signs. Proceed with extreme caution.';
+      } else if (lower.includes('risk level: medium') || lower.includes('**risk level: medium')) {
+        level = 'Medium Risk'; score = 45; cls = 'scam-risk-medium'; desc = 'Some warning signs present — investigate further before donating.';
+      } else if (lower.includes('risk level: low') || lower.includes('**risk level: low')) {
+        level = 'Low Risk'; score = 15; cls = 'scam-risk-low'; desc = 'No major red flags detected — still verify on Charity Navigator.';
+      }
+      const r = 22, circ = 2 * Math.PI * r;
+      const offset = circ - (score / 100) * circ;
+      const strokeColor = cls === 'scam-risk-low' ? '#22c55e' : cls === 'scam-risk-medium' ? '#f59e0b' : cls === 'scam-risk-high' ? '#f97316' : '#ef4444';
+      wrap.innerHTML = `
+        <div class="scam-score-wrap">
+          <div class="scam-score-dial">
+            <svg width="58" height="58" viewBox="0 0 58 58">
+              <circle class="scam-score-dial-track" cx="29" cy="29" r="${r}"/>
+              <circle class="scam-score-dial-fill" cx="29" cy="29" r="${r}"
+                stroke="${strokeColor}"
+                stroke-dasharray="${circ}"
+                stroke-dashoffset="${circ}"
+                id="_scamArcFill"/>
+            </svg>
+            <div class="scam-score-num ${cls}">${score}</div>
+          </div>
+          <div class="scam-score-info">
+            <div class="scam-score-level ${cls}">${level}</div>
+            <div class="scam-score-sub">${desc}</div>
+          </div>
+        </div>`;
+      setTimeout(() => {
+        const arc = document.getElementById('_scamArcFill');
+        if (arc) arc.style.strokeDashoffset = offset;
+      }, 80);
+    }
   </script>
 </body>
 </html>

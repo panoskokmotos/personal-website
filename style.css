@@ -6483,3 +6483,336 @@ html[data-theme="light"] .wcd-cond-chip.active { color: #16a34a; background: rgb
   .wcd-cat { font-size: 0.72rem; padding: 4px 9px; }
   .wcd-cond-chip { font-size: 0.74rem; padding: 4px 11px; }
 }
+
+/* ══════════════════════════════════════════════════════
+   FEATURE ADDITIONS — Phase 4
+   progress bar · download · rating · WhatsApp · sliders · meters
+   ══════════════════════════════════════════════════════ */
+
+/* ── Progress bar (replaces spinner during loading) ── */
+.tool-progress-bar {
+  width: 100%;
+  height: 3px;
+  background: rgba(255,255,255,0.07);
+  border-radius: 99px;
+  overflow: hidden;
+  margin-top: 10px;
+}
+.tool-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), #7eb3fd);
+  border-radius: 99px;
+  width: 0%;
+}
+html[data-theme="light"] .tool-progress-bar { background: rgba(0,0,0,0.07); }
+
+/* ── Download button (next to Copy) ── */
+.tool-download-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  padding: 4px 11px;
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-family: inherit;
+  transition: border-color 0.13s, color 0.13s;
+  margin-left: 6px;
+}
+.tool-download-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ── Result rating (👍 / 👎) ── */
+.tool-rating {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px 14px;
+  border-top: 1px solid var(--border);
+}
+.tool-rating-q {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-right: 2px;
+}
+.tool-rating-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  padding: 4px 10px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: border-color 0.13s, transform 0.1s;
+  font-family: inherit;
+}
+.tool-rating-btn:hover:not(:disabled) { border-color: var(--accent); transform: scale(1.12); }
+.tool-rating-btn:disabled { opacity: 0.5; cursor: default; }
+.tool-rating-thanks {
+  font-size: 0.76rem;
+  color: #22c55e;
+  font-weight: 600;
+  opacity: 0;
+  transition: opacity 0.25s;
+}
+.tool-rating-thanks.visible { opacity: 1; }
+
+/* ── WhatsApp share button ── */
+.tool-share-wa {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: #25d366;
+  color: #fff;
+  border: 1px solid #25d366;
+  border-radius: 8px;
+  padding: 7px 13px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s;
+}
+.tool-share-wa:hover { background: #1db857; border-color: #1db857; }
+
+/* ── Budget slider (first-time donor coach) ── */
+.fdrc-slider-wrap {
+  margin-top: 4px;
+}
+.fdrc-slider-display {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+.fdrc-slider-sub {
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+input[type="range"].fdrc-slider {
+  width: 100%;
+  accent-color: var(--accent);
+  height: 5px;
+  cursor: pointer;
+  margin: 4px 0 8px;
+}
+.fdrc-presets {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 6px;
+}
+.fdrc-preset {
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 99px;
+  padding: 3px 10px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-family: inherit;
+  transition: border-color 0.13s, color 0.13s, background 0.13s;
+}
+.fdrc-preset:hover, .fdrc-preset.active {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(59,110,248,0.08);
+}
+
+/* ── Tone selector (impact story generator) ── */
+.isg-tone-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+.isg-tone-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 14px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: border-color 0.13s, background 0.13s;
+  flex: 1;
+  min-width: 90px;
+}
+.isg-tone-icon { font-size: 1.2rem; }
+.isg-tone-name { font-size: 0.72rem; font-weight: 700; color: var(--text); line-height: 1.2; }
+.isg-tone-desc { font-size: 0.64rem; color: var(--text-muted); text-align: center; line-height: 1.3; }
+.isg-tone-btn:hover { border-color: rgba(59,110,248,0.4); background: rgba(59,110,248,0.04); }
+.isg-tone-btn.active {
+  border-color: var(--accent);
+  background: rgba(59,110,248,0.08);
+}
+.isg-tone-btn.active .isg-tone-name { color: var(--accent); }
+html[data-theme="light"] .isg-tone-btn { background: rgba(0,0,0,0.02); }
+
+/* ── Risk score meter (scam detector) ── */
+.scam-score-wrap {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border);
+}
+.scam-score-dial {
+  position: relative;
+  width: 58px;
+  height: 58px;
+  flex-shrink: 0;
+}
+.scam-score-dial svg { transform: rotate(-90deg); }
+.scam-score-dial-track { fill: none; stroke: rgba(255,255,255,0.08); stroke-width: 5; }
+.scam-score-dial-fill  { fill: none; stroke-width: 5; stroke-linecap: round; transition: stroke-dashoffset 0.8s ease; }
+.scam-score-num {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+.scam-score-info { flex: 1; }
+.scam-score-level {
+  font-size: 1rem;
+  font-weight: 800;
+  margin-bottom: 2px;
+}
+.scam-score-sub {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+.scam-risk-low    { color: #22c55e; }
+.scam-risk-medium { color: #f59e0b; }
+.scam-risk-high   { color: #f97316; }
+.scam-risk-very-high { color: #ef4444; }
+html[data-theme="light"] .scam-score-dial-track { stroke: rgba(0,0,0,0.08); }
+
+/* ── Map explore button (map tools) ── */
+.tool-map-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: rgba(59,110,248,0.08);
+  border: 1px solid rgba(59,110,248,0.25);
+  border-radius: 9px;
+  padding: 8px 16px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--accent);
+  cursor: pointer;
+  font-family: inherit;
+  text-decoration: none;
+  margin: 14px 20px 0;
+  transition: background 0.13s, border-color 0.13s;
+}
+.tool-map-btn:hover { background: rgba(59,110,248,0.14); border-color: rgba(59,110,248,0.4); }
+#toolMapBtn { display: none; }
+#toolMapBtn.visible { display: inline-flex; }
+
+/* ── Volunteer weekday picker ── */
+.vm-days-row {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+.vm-day-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  padding: 5px 9px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-family: inherit;
+  transition: border-color 0.12s, background 0.12s, color 0.12s;
+  min-width: 36px;
+  text-align: center;
+}
+.vm-day-btn:hover { border-color: var(--accent); color: var(--accent); }
+.vm-day-btn.active {
+  border-color: var(--accent);
+  background: rgba(59,110,248,0.1);
+  color: var(--accent);
+}
+.vm-time-row {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+.vm-time-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 99px;
+  padding: 4px 12px;
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-family: inherit;
+  transition: border-color 0.12s, background 0.12s, color 0.12s;
+}
+.vm-time-btn:hover { border-color: var(--accent); color: var(--accent); }
+.vm-time-btn.active {
+  border-color: var(--accent);
+  background: rgba(59,110,248,0.1);
+  color: var(--accent);
+}
+.vm-availability-summary {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-top: 8px;
+  min-height: 1.2em;
+}
+
+/* ── Social proof banner (ai-tools.html) ── */
+.ait-proof-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  padding: 12px 20px;
+  background: rgba(34,197,94,0.07);
+  border: 1px solid rgba(34,197,94,0.15);
+  border-radius: 12px;
+  margin: 14px 0 24px;
+}
+.ait-proof-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+.ait-proof-item strong { color: var(--text); }
+.ait-proof-dot { color: rgba(255,255,255,0.15); font-size: 0.7rem; }
+html[data-theme="light"] .ait-proof-bar { background: rgba(34,197,94,0.05); border-color: rgba(34,197,94,0.12); }
+html[data-theme="light"] .ait-proof-dot { color: rgba(0,0,0,0.15); }
+@media (max-width: 600px) {
+  .ait-proof-bar { gap: 10px; }
+  .ait-proof-dot { display: none; }
+  .tool-share-wa { font-size: 0.74rem; padding: 6px 10px; }
+  .isg-tone-btn { padding: 8px 10px; min-width: 78px; }
+  .vm-days-row { gap: 4px; }
+  .vm-day-btn { padding: 4px 7px; font-size: 0.7rem; min-width: 30px; }
+}

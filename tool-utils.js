@@ -153,6 +153,35 @@ function setLoading(on) {
   const loadingEl = document.getElementById('loading');
   if (btn) btn.disabled = on;
   if (loadingEl) loadingEl.classList.toggle('visible', on);
+
+  /* Progress bar */
+  let pb = document.getElementById('_tpb');
+  if (on) {
+    if (!pb && loadingEl) {
+      pb = document.createElement('div');
+      pb.id = '_tpb';
+      pb.className = 'tool-progress-bar';
+      pb.innerHTML = '<div class="tool-progress-fill" id="_tpbFill"></div>';
+      loadingEl.appendChild(pb);
+    }
+    if (pb) {
+      const fill = pb.querySelector('.tool-progress-fill');
+      fill.style.transition = 'none';
+      fill.style.width = '0%';
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        fill.style.transition = 'width 9s cubic-bezier(0.1,0.4,0.2,1)';
+        fill.style.width = '88%';
+      }));
+    }
+  } else {
+    if (pb) {
+      const fill = pb.querySelector('.tool-progress-fill');
+      fill.style.transition = 'width 0.25s ease';
+      fill.style.width = '100%';
+      setTimeout(() => { pb.remove(); }, 320);
+    }
+  }
+
   const hasText = !!document.getElementById('loadingText');
   if (on && hasText) startLoadingMessages();
   else if (!on) stopLoadingMessages();
@@ -177,6 +206,14 @@ function showResult(text) {
   resultBody.innerHTML = formatMarkdown(text);
   result.classList.add('visible');
   result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  /* Inject extras after each result show */
+  setTimeout(() => { _injectResultExtras(); }, 60);
+}
+
+/* Rating + download injected once per result show */
+function _injectResultExtras() {
+  _injectRating();
+  _injectDownloadBtn();
 }
 
 function hideResult() {
@@ -277,6 +314,21 @@ function initShareBtns() {
         setTimeout(() => { linkBtn.innerHTML = _linkIcon + ' Copy link'; }, 2200);
       });
     });
+  }
+
+  /* Auto-inject WhatsApp share button */
+  const shareGroup = document.querySelector('.tool-share-group');
+  if (shareGroup && !shareGroup.querySelector('#shareWABtn')) {
+    const waBtn = document.createElement('button');
+    waBtn.id = 'shareWABtn';
+    waBtn.className = 'tool-share-wa';
+    waBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M5.077 19.617A11.965 11.965 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10a11.965 11.965 0 01-5.617-1.383L2 22l2.078-4.383z"/></svg> WhatsApp`;
+    waBtn.addEventListener('click', () => {
+      const title = document.querySelector('h1.tool-title')?.textContent?.trim() || document.title;
+      const url   = window.location.href;
+      window.open(`https://wa.me/?text=${encodeURIComponent('Just used this free AI tool for social impact: ' + title + ' — ' + url)}`, '_blank', 'noopener');
+    });
+    shareGroup.insertBefore(waBtn, linkBtn);
   }
 }
 
@@ -406,6 +458,83 @@ function initEmbed() {
   });
 }
 
+/* ── Download result as .txt ── */
+function _injectDownloadBtn() {
+  const copyBtn = document.getElementById('copyBtn');
+  if (!copyBtn || document.getElementById('_dlBtn')) return;
+  const btn = document.createElement('button');
+  btn.id = '_dlBtn';
+  btn.className = 'tool-download-btn';
+  btn.title = 'Download as .txt';
+  btn.setAttribute('aria-label', 'Download result');
+  btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="13" height="13"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Download`;
+  copyBtn.insertAdjacentElement('afterend', btn);
+  btn.addEventListener('click', () => {
+    const body = document.getElementById('resultBody');
+    if (!body) return;
+    const title = (document.querySelector('h1.tool-title')?.textContent || 'result').trim().replace(/[^a-z0-9 ]/gi, '').trim().replace(/\s+/g, '-').toLowerCase();
+    const blob = new Blob([body.innerText], { type: 'text/plain' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = title + '.txt';
+    a.click();
+    URL.revokeObjectURL(a.href);
+  });
+}
+
+/* ── Result rating (👍 / 👎) ── */
+function _injectRating() {
+  const result = document.getElementById('result');
+  if (!result || result.querySelector('#_ratingWrap')) return;
+  const wrap = document.createElement('div');
+  wrap.id = '_ratingWrap';
+  wrap.className = 'tool-rating';
+  wrap.innerHTML = `
+    <span class="tool-rating-q">Was this result helpful?</span>
+    <button class="tool-rating-btn" id="_rateUp" aria-label="Yes, helpful" title="Helpful">👍</button>
+    <button class="tool-rating-btn" id="_rateDown" aria-label="Not helpful" title="Not helpful">👎</button>
+    <span class="tool-rating-thanks" id="_ratingThanks"></span>`;
+  const actions = result.querySelector('.tool-result-actions');
+  if (actions) result.insertBefore(wrap, actions);
+  else result.appendChild(wrap);
+
+  wrap.querySelectorAll('.tool-rating-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const good = this.id === '_rateUp';
+      try { localStorage.setItem('rating_' + window.location.pathname, good ? '1' : '0'); } catch {}
+      if (window.plausible) window.plausible('Tool Rating', { props: { value: good ? 'helpful' : 'not_helpful', tool: window.location.pathname } });
+      wrap.querySelectorAll('.tool-rating-btn').forEach(b => b.disabled = true);
+      const thanks = document.getElementById('_ratingThanks');
+      thanks.textContent = good ? 'Glad it helped! 🙌' : 'Thanks for letting us know.';
+      thanks.classList.add('visible');
+    });
+  });
+}
+
+/* ── Shareable URL — serialize form inputs to URL params ── */
+function initShareableURL() {
+  /* Pre-fill from URL params on page load */
+  const params = new URLSearchParams(window.location.search);
+  if (params.size) {
+    params.forEach((val, key) => {
+      const el = document.getElementById(key);
+      if (el && !['BUTTON','FIELDSET'].includes(el.tagName)) el.value = val;
+    });
+  }
+  /* Serialize form → URL on submit */
+  const form = document.getElementById('toolForm');
+  if (!form) return;
+  form.addEventListener('submit', () => {
+    const p = new URLSearchParams();
+    form.querySelectorAll('input[id], select[id], textarea[id]').forEach(el => {
+      if (el.type === 'checkbox') return; /* skip checkboxes */
+      if (el.value) p.set(el.id, el.value);
+    });
+    const qs = p.toString();
+    if (qs) history.replaceState({}, '', window.location.pathname + '?' + qs);
+  }, { capture: true });
+}
+
 /* ── Auto-init on DOM ready ── */
 document.addEventListener('DOMContentLoaded', () => {
   initExampleChips();
@@ -414,4 +543,5 @@ document.addEventListener('DOMContentLoaded', () => {
   initUsageCounter();
   initRelatedTools();
   initEmbed();
+  initShareableURL();
 });

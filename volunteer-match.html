@@ -18,6 +18,46 @@
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:image" content="https://panoskokmotos.com/og-ai-tools.png" />
   <meta name="twitter:creator" content="@panoskokmotoss" />
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How does Volunteer Match work?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "You enter your skills, availability, and causes you care about \u2014 AI matches you to 3 types of nonprofits that need what you offer, and drafts a ready-to-send intro email."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do I need a lot of free time to volunteer?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. The tool works for any availability \u2014 even a few hours per month or remote-only commitments."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What if I'm not sure what skills I have to offer?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "List anything: your job skills, hobbies, languages you speak, or physical abilities. Every skill has value to some type of organization."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does the tool match me to specific organizations?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "It matches you to types of organizations, not specific ones \u2014 so you have a starting point to search locally."
+      }
+    }
+  ]
+}
+</script>
 </head>
 <body class="tool-page">
 
@@ -50,19 +90,25 @@
       </div>
 
       <div class="tool-field">
-        <label class="tool-label" for="availability">
-          Your availability
-          <span class="tool-hint"> — how much time can you offer?</span>
-        </label>
-        <select id="availability" class="tool-select" required>
-          <option value="">Select…</option>
-          <option value="a few hours per month">A few hours per month</option>
-          <option value="about 4 hours per week on weekends">Weekends only (~4 hrs/week)</option>
-          <option value="about 5-10 hours per week on evenings">Evenings during the week (5–10 hrs/week)</option>
-          <option value="about 10+ hours per week flexible">10+ hours/week (flexible)</option>
-          <option value="one-time project help">One-time project help only</option>
-          <option value="remote/online only">Remote / online only</option>
-        </select>
+        <label class="tool-label">Your availability</label>
+        <input type="hidden" id="availability" value="" />
+        <div class="vm-days-row" id="vmDays">
+          <button type="button" class="vm-day-btn" data-day="Mon">Mon</button>
+          <button type="button" class="vm-day-btn" data-day="Tue">Tue</button>
+          <button type="button" class="vm-day-btn" data-day="Wed">Wed</button>
+          <button type="button" class="vm-day-btn" data-day="Thu">Thu</button>
+          <button type="button" class="vm-day-btn" data-day="Fri">Fri</button>
+          <button type="button" class="vm-day-btn" data-day="Sat">Sat</button>
+          <button type="button" class="vm-day-btn" data-day="Sun">Sun</button>
+        </div>
+        <div class="vm-time-row" id="vmTimes">
+          <button type="button" class="vm-time-btn" data-time="mornings">Mornings</button>
+          <button type="button" class="vm-time-btn" data-time="afternoons">Afternoons</button>
+          <button type="button" class="vm-time-btn" data-time="evenings">Evenings</button>
+          <button type="button" class="vm-time-btn active" data-time="flexible">Flexible</button>
+          <button type="button" class="vm-time-btn" data-time="remote only">Remote only</button>
+        </div>
+        <p class="vm-availability-summary" id="vmSummary">Flexible schedule (please update above)</p>
       </div>
 
       <div class="tool-field">
@@ -165,6 +211,42 @@
     const copyBtn = document.getElementById('copyBtn');
 
     initTabSwitcher();
+
+    /* ── Weekday + time picker ── */
+    (function() {
+      const hiddenAvail = document.getElementById('availability');
+      const summary = document.getElementById('vmSummary');
+      let selectedDays = [];
+      let selectedTime = 'flexible';
+
+      function updateAvailability() {
+        const dayStr = selectedDays.length ? selectedDays.join(', ') : 'any day';
+        const str = dayStr + ', ' + selectedTime;
+        hiddenAvail.value = str;
+        summary.textContent = str.charAt(0).toUpperCase() + str.slice(1);
+      }
+
+      document.getElementById('vmDays').addEventListener('click', e => {
+        const btn = e.target.closest('.vm-day-btn');
+        if (!btn) return;
+        btn.classList.toggle('active');
+        const day = btn.dataset.day;
+        if (btn.classList.contains('active')) selectedDays.push(day);
+        else selectedDays = selectedDays.filter(d => d !== day);
+        updateAvailability();
+      });
+
+      document.getElementById('vmTimes').addEventListener('click', e => {
+        const btn = e.target.closest('.vm-time-btn');
+        if (!btn) return;
+        document.querySelectorAll('.vm-time-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        selectedTime = btn.dataset.time;
+        updateAvailability();
+      });
+
+      updateAvailability();
+    })();
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
