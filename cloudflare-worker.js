@@ -100,7 +100,39 @@ export default {
   async fetch(request, env) {
     // CORS preflight
     if (request.method === 'OPTIONS') {
-      return new Response(null, { headers: CORS_HEADERS });
+      return new Response(null, { headers: { ...CORS_HEADERS, 'Access-Control-Allow-Methods': 'GET, POST, OPTIONS' } });
+    }
+
+    const url = new URL(request.url);
+
+    // ── GET /api/charity-search?q=QUERY — ProPublica nonprofit autocomplete ──
+    if (request.method === 'GET' && url.pathname === '/api/charity-search') {
+      const q = url.searchParams.get('q') || '';
+      if (q.length < 2) {
+        return new Response(JSON.stringify({ organizations: [] }), {
+          headers: { 'Content-Type': 'application/json', ...CORS_HEADERS },
+        });
+      }
+      try {
+        const ppRes = await fetch(
+          `https://projects.propublica.org/nonprofits/api/v2/search.json?q=${encodeURIComponent(q)}`,
+          { headers: { 'Accept': 'application/json' } }
+        );
+        const ppData = await ppRes.json();
+        const orgs = (ppData.organizations || []).slice(0, 8).map(o => ({
+          name: o.name,
+          ein:  o.ein,
+          city: o.city,
+          state: o.state,
+        }));
+        return new Response(JSON.stringify({ organizations: orgs }), {
+          headers: { 'Content-Type': 'application/json', ...CORS_HEADERS },
+        });
+      } catch {
+        return new Response(JSON.stringify({ organizations: [] }), {
+          headers: { 'Content-Type': 'application/json', ...CORS_HEADERS },
+        });
+      }
     }
 
     if (request.method !== 'POST') {
@@ -117,8 +149,6 @@ export default {
         { status: 429, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
       );
     }
-
-    const url = new URL(request.url);
 
     // ── /notify route: send personal email notification ──
     if (url.pathname === '/notify') {

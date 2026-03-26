@@ -22,6 +22,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/style.css" />
   <link rel="icon" href="/favicon.ico" />
+  <link rel="prefetch" href="/what-would-x-do.html" />
+  <link rel="prefetch" href="/why-should-i-give.html" />
+  <link rel="prefetch" href="/first-time-donor-coach.html" />
 </head>
 <body class="tool-page">
 
@@ -34,8 +37,14 @@
 
   <main class="tool-main" style="max-width:860px">
     <p class="tool-eyebrow">Built in Public · Free to Use</p>
-    <h1 class="tool-title" style="font-size:clamp(1.6rem,4vw,2.4rem)">AI for Social Impact — Lab</h1>
-    <p class="tool-desc">Tools I'm building to make giving smarter, volunteering easier, and social impact more accessible. Each app is standalone, free, and powered by Claude AI.</p>
+    <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+      <h1 class="tool-title" style="font-size:clamp(1.6rem,4vw,2.4rem);margin:0">AI for Social Impact — Lab</h1>
+      <span class="ait-streak" id="aitStreak" style="display:none">🔥 <span id="aitStreakDays">1</span>-day streak</span>
+    </div>
+    <p class="tool-desc" style="margin-top:8px">Tools I'm building to make giving smarter, volunteering easier, and social impact more accessible. Each app is standalone, free, and powered by Claude AI.</p>
+    <button class="ait-quiz-trigger" id="aitQuizTrigger" onclick="aitOpenQuiz()" style="display:none;margin-top:0">
+      Not sure where to start? Find your tool →
+    </button>
 
     <!-- ── Social proof bar ── -->
     <div class="ait-proof-bar">
@@ -66,6 +75,16 @@
       </div>
     </div>
 
+
+    <!-- ── Tool of the week banner ── -->
+    <div class="ait-totw" id="aitTotw" style="display:none">
+      <span class="ait-totw-label">Tool of the week</span>
+      <div>
+        <div class="ait-totw-name" id="aitTotwName"></div>
+        <div class="ait-totw-desc" id="aitTotwDesc"></div>
+      </div>
+      <a class="ait-totw-link" id="aitTotwLink" href="#">Try it →</a>
+    </div>
 
     <!-- ── Giving journey progress tracker ── -->
     <div class="ait-journey" id="aitJourney" style="display:none">
@@ -562,6 +581,175 @@
   })();
 
 </script>
+
+<script>
+/* ── Tool of the Week ── */
+(function() {
+  const TOTW = [
+    { name: '"What Would $X Do?"', desc: 'See how your donation compares to real-world impact', url: '/what-would-x-do.html' },
+    { name: 'Donation Tax Estimator', desc: 'Calculate your US or Greek tax savings from giving', url: '/donation-tax-estimator.html' },
+    { name: 'Charity Comparison Engine', desc: 'Compare two causes side-by-side before donating', url: '/charity-comparison-engine.html' },
+    { name: 'Scam Nonprofit Detector', desc: 'Instantly check if a charity is legitimate', url: '/scam-nonprofit-detector.html' },
+    { name: 'Volunteer Match', desc: 'Find the perfect volunteer opportunity for your skills', url: '/volunteer-match.html' },
+    { name: 'Impact Story Generator', desc: 'Create a compelling impact story for your nonprofit', url: '/impact-story-generator.html' },
+    { name: 'First-Time Donor Coach', desc: 'Get personalized guidance for your first donation', url: '/first-time-donor-coach.html' },
+    { name: 'Nonprofit Health Checker', desc: 'Audit any nonprofit\'s transparency and financial health', url: '/nonprofit-health-checker.html' },
+    { name: 'Community Needs Map', desc: 'Discover what your community needs most right now', url: '/community-needs-map.html' },
+    { name: '"Why Should I Give?"', desc: 'Get a personalized answer to overcome donation hesitation', url: '/why-should-i-give.html' },
+    { name: 'Neighborhood Giving Map', desc: 'Find giving opportunities in your neighborhood', url: '/neighborhood-giving-map.html' },
+    { name: '"What Can I Donate?"', desc: 'Discover non-cash donations you didn\'t know you could give', url: '/what-can-i-donate.html' },
+  ];
+  // Rotate weekly based on ISO week number
+  const week = Math.floor((Date.now() / 1000 - 345600) / 604800);
+  const tool = TOTW[week % TOTW.length];
+  const el = document.getElementById('aitTotw');
+  if (el) {
+    document.getElementById('aitTotwName').textContent = tool.name;
+    document.getElementById('aitTotwDesc').textContent = tool.desc;
+    const link = document.getElementById('aitTotwLink');
+    link.href = tool.url;
+    el.style.display = '';
+  }
+})();
+
+/* ── Streak Tracker ── */
+(function() {
+  try {
+    const today = new Date().toDateString();
+    const last = localStorage.getItem('_streak_last');
+    const streak = parseInt(localStorage.getItem('_streak_count') || '0', 10);
+    const yesterday = new Date(Date.now() - 86400000).toDateString();
+    let newStreak = 1;
+    if (last === today) {
+      newStreak = streak;
+    } else if (last === yesterday) {
+      newStreak = streak + 1;
+    }
+    localStorage.setItem('_streak_last', today);
+    localStorage.setItem('_streak_count', newStreak);
+    if (newStreak >= 2) {
+      const el = document.getElementById('aitStreak');
+      if (el) {
+        document.getElementById('aitStreakDays').textContent = newStreak;
+        el.style.display = '';
+      }
+    }
+  } catch {}
+})();
+
+/* ── Start-Here Quiz ── */
+var _quizAnswers = {};
+function aitOpenQuiz() {
+  var overlay = document.getElementById('aitQuizOverlay');
+  if (!overlay) return;
+  overlay.style.display = 'flex';
+  requestAnimationFrame(function() { overlay.classList.add('visible'); });
+}
+function aitCloseQuiz() {
+  var overlay = document.getElementById('aitQuizOverlay');
+  if (!overlay) return;
+  overlay.classList.remove('visible');
+  setTimeout(function() { overlay.style.display = 'none'; _quizAnswers = {}; aitResetQuiz(); }, 250);
+}
+function aitResetQuiz() {
+  document.querySelectorAll('.ait-quiz-step').forEach(function(s) { s.classList.remove('active'); });
+  var first = document.getElementById('aitQuizStep1');
+  if (first) first.classList.add('active');
+  document.querySelectorAll('.ait-quiz-opt').forEach(function(o) { o.classList.remove('selected'); });
+}
+function aitPickRole(role) {
+  _quizAnswers.role = role;
+  document.querySelectorAll('[data-q="role"]').forEach(function(o) {
+    o.classList.toggle('selected', o.dataset.val === role);
+  });
+  setTimeout(function() {
+    document.getElementById('aitQuizStep1').classList.remove('active');
+    document.getElementById('aitQuizStep2').classList.add('active');
+  }, 200);
+}
+function aitPickExp(exp) {
+  _quizAnswers.exp = exp;
+  document.querySelectorAll('[data-q="exp"]').forEach(function(o) {
+    o.classList.toggle('selected', o.dataset.val === exp);
+  });
+  setTimeout(function() { aitShowQuizResult(); }, 200);
+}
+var QUIZ_RECS = {
+  'donor-new':       { icon: '🧭', title: 'Start with First-Time Donor Coach', desc: 'It\'ll guide you through your very first charitable gift step by step.', url: '/first-time-donor-coach.html', cta: 'Open Donor Coach →' },
+  'donor-exp':       { icon: '⚖️', title: 'Try Charity Comparison Engine', desc: 'You\'re ready to do serious due diligence on multiple organizations.', url: '/charity-comparison-engine.html', cta: 'Compare Charities →' },
+  'volunteer-new':   { icon: '🤝', title: 'Use the Volunteer Match Tool', desc: 'Find the perfect volunteer role matched to your skills and schedule.', url: '/volunteer-match.html', cta: 'Find My Match →' },
+  'volunteer-exp':   { icon: '🗺️', title: 'Explore Community Needs Map', desc: 'Identify where your volunteer skills are most needed in your area.', url: '/community-needs-map.html', cta: 'Map My Community →' },
+  'nonprofit-new':   { icon: '✍️', title: 'Generate an Impact Story', desc: 'Create a compelling narrative to share your nonprofit\'s mission.', url: '/impact-story-generator.html', cta: 'Create Story →' },
+  'nonprofit-exp':   { icon: '🔍', title: 'Run the Nonprofit Health Checker', desc: 'Get an honest AI audit of your organization\'s health and credibility.', url: '/nonprofit-health-checker.html', cta: 'Check Health →' },
+};
+function aitShowQuizResult() {
+  var key = _quizAnswers.role + '-' + _quizAnswers.exp;
+  var rec = QUIZ_RECS[key] || QUIZ_RECS['donor-new'];
+  document.getElementById('aitQuizStep2').classList.remove('active');
+  var resStep = document.getElementById('aitQuizStep3');
+  resStep.querySelector('.ait-quiz-result-icon').textContent = rec.icon;
+  resStep.querySelector('.ait-quiz-result-title').textContent = rec.title;
+  resStep.querySelector('.ait-quiz-result-desc').textContent = rec.desc;
+  var cta = resStep.querySelector('.ait-quiz-cta');
+  cta.href = rec.url; cta.textContent = rec.cta;
+  resStep.classList.add('active');
+}
+
+// Show quiz trigger button on first visit
+(function() {
+  try {
+    var visited = parseInt(localStorage.getItem('_ait_visits') || '0', 10) + 1;
+    localStorage.setItem('_ait_visits', visited);
+    if (visited <= 2) {
+      var btn = document.getElementById('aitQuizTrigger');
+      if (btn) btn.style.display = 'inline-flex';
+    }
+  } catch {}
+})();
+</script>
+
+<!-- ── Start-Here Quiz Overlay ── -->
+<div class="ait-quiz-overlay" id="aitQuizOverlay" style="display:none" onclick="if(event.target===this)aitCloseQuiz()">
+  <div class="ait-quiz-modal">
+    <div id="aitQuizStep1" class="ait-quiz-step active">
+      <p class="ait-quiz-q">Who are you?</p>
+      <div class="ait-quiz-opts">
+        <button class="ait-quiz-opt" data-q="role" data-val="donor" onclick="aitPickRole('donor')">🎁 I want to donate to a cause</button>
+        <button class="ait-quiz-opt" data-q="role" data-val="volunteer" onclick="aitPickRole('volunteer')">🤝 I want to volunteer my time</button>
+        <button class="ait-quiz-opt" data-q="role" data-val="nonprofit" onclick="aitPickRole('nonprofit')">🏢 I run / work at a nonprofit</button>
+      </div>
+      <button class="ait-quiz-skip" onclick="aitCloseQuiz()">Skip and browse all tools</button>
+    </div>
+    <div id="aitQuizStep2" class="ait-quiz-step">
+      <p class="ait-quiz-q">How experienced are you?</p>
+      <div class="ait-quiz-opts">
+        <button class="ait-quiz-opt" data-q="exp" data-val="new" onclick="aitPickExp('new')">🌱 Just getting started</button>
+        <button class="ait-quiz-opt" data-q="exp" data-val="exp" onclick="aitPickExp('exp')">⭐ I've done this before</button>
+      </div>
+      <button class="ait-quiz-skip" onclick="aitCloseQuiz()">Skip</button>
+    </div>
+    <div id="aitQuizStep3" class="ait-quiz-step ait-quiz-result">
+      <span class="ait-quiz-result-icon"></span>
+      <div class="ait-quiz-result-title"></div>
+      <div class="ait-quiz-result-desc"></div>
+      <a class="ait-quiz-cta" href="#"></a>
+      <br><button class="ait-quiz-skip" style="margin-top:12px" onclick="aitCloseQuiz()">Browse all tools instead</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Quiz trigger button style ── -->
+<style>
+.ait-quiz-trigger {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 8px 16px; margin-top: 10px;
+  background: rgba(168,85,247,0.12); color: #c084fc;
+  border: 1px solid rgba(168,85,247,0.3); border-radius: 9px;
+  font-family: inherit; font-size: 0.8rem; font-weight: 700;
+  cursor: pointer; transition: background 0.15s;
+}
+.ait-quiz-trigger:hover { background: rgba(168,85,247,0.22); }
+</style>
 
   <!-- ── AI Chat Widget ── -->
   <div class="chat-widget" id="chatWidget">

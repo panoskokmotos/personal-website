@@ -176,6 +176,11 @@ async function callWorker(systemPrompt, userMessage) {
   if (resultBody) resultBody.innerHTML = formatMarkdown(fullText);
   if (resultEl) resultEl.classList.remove('tool-streaming');
 
+  // Save for offline restoration
+  if (fullText && resultBody) {
+    _saveLastResultOffline(fullText, resultBody.innerHTML);
+  }
+
   return fullText;
 }
 
@@ -377,7 +382,11 @@ function _injectResultExtras(text) {
   _injectConfidenceBadge(text);
   _injectRefineInput();
   _injectFollowUpChat();
+  _injectImpactCalculator();
+  _injectFreshnessBadge();
   _injectDisclaimer();
+  _injectSourceLinks();
+  _injectExplainTooltips();
   _injectJourneyCTA(text);
   _injectEmailCapture();
 }
@@ -1297,11 +1306,375 @@ document.addEventListener('DOMContentLoaded', () => {
   _renderHistoryBtn();
   _initAutosave();
   _initPWAPrompt();
+  _initVoiceInput();
+  _initCharityAutocomplete();
+  _initKeyboardShortcutHelper();
+  _restoreOfflineResult();
   /* Ctrl+Enter / Cmd+Enter to submit */
   document.addEventListener('keydown', e => {
     if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
       const btn = document.getElementById('submitBtn');
       if (btn && !btn.disabled) { e.preventDefault(); btn.click(); }
     }
+    /* ? — keyboard shortcut cheat sheet */
+    if (e.key === '?' && !['INPUT','TEXTAREA','SELECT'].includes(document.activeElement?.tagName)) {
+      e.preventDefault();
+      _toggleShortcutModal();
+    }
+    /* Escape — close any open modal/drawer */
+    if (e.key === 'Escape') {
+      _closeHistoryDrawer();
+      _closeShortcutModal();
+    }
+    /* R — focus refine input if result is visible */
+    if (e.key === 'r' && !['INPUT','TEXTAREA','SELECT'].includes(document.activeElement?.tagName)) {
+      const refine = document.getElementById('_refineInput');
+      if (refine) { e.preventDefault(); refine.focus(); }
+    }
   });
 });
+
+/* ══════════════════════════════════════════════
+   Phase 7 — New Feature JS
+   ══════════════════════════════════════════════ */
+
+/* ── #3 Voice Input ── */
+const TOOL_CHARITY_SEARCH_URL = 'https://ask-panos.panagiotis-kokmotoss.workers.dev/api/charity-search';
+
+function _initVoiceInput() {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) return;
+  const targets = document.querySelectorAll('input[type="text"], input:not([type]), textarea');
+  targets.forEach(input => {
+    if (input.closest('.tool-voice-wrap')) return; // already wrapped
+    const wrap = document.createElement('div');
+    wrap.className = 'tool-voice-wrap';
+    input.parentNode.insertBefore(wrap, input);
+    wrap.appendChild(input);
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'tool-voice-btn';
+    btn.title = 'Speak your input';
+    btn.setAttribute('aria-label', 'Voice input');
+    btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>`;
+    wrap.appendChild(btn);
+    let rec = null;
+    btn.addEventListener('click', () => {
+      if (rec) { rec.stop(); rec = null; btn.classList.remove('listening'); return; }
+      rec = new SR();
+      rec.lang = 'en-US';
+      rec.interimResults = false;
+      btn.classList.add('listening');
+      rec.onresult = ev => {
+        input.value = ev.results[0][0].transcript;
+        input.dispatchEvent(new Event('input', { bubbles: true }));
+      };
+      rec.onerror = rec.onend = () => { rec = null; btn.classList.remove('listening'); };
+      rec.start();
+    });
+  });
+}
+
+/* ── #4 Charity Autocomplete (ProPublica API via Worker) ── */
+function _initCharityAutocomplete() {
+  const fieldIds = ['orgName', 'orgNameB', 'cause', 'causeB'];
+  fieldIds.forEach(id => {
+    const input = document.getElementById(id);
+    if (!input) return;
+    // Create dropdown container
+    const dropdown = document.createElement('ul');
+    dropdown.className = 'tool-autocomplete';
+    dropdown.id = id + '_ac';
+    dropdown.setAttribute('role', 'listbox');
+    input.setAttribute('aria-autocomplete', 'list');
+    input.setAttribute('aria-controls', id + '_ac');
+    // Wrap in relative container if not already
+    if (!input.parentElement.style.position) input.parentElement.style.position = 'relative';
+    input.parentElement.appendChild(dropdown);
+
+    let debounceTimer = null;
+    let activeIndex = -1;
+    let currentItems = [];
+
+    const closeDropdown = () => {
+      dropdown.innerHTML = '';
+      dropdown.classList.remove('open');
+      activeIndex = -1;
+    };
+
+    const renderItems = items => {
+      currentItems = items;
+      activeIndex = -1;
+      if (!items.length) { closeDropdown(); return; }
+      dropdown.innerHTML = items.map((o, i) =>
+        `<li class="tool-ac-item" role="option" data-i="${i}" tabindex="-1">
+          <span class="tool-ac-name">${o.name}</span>
+          <span class="tool-ac-meta">${o.city ? o.city + (o.state ? ', ' + o.state : '') : ''} ${o.ein ? '· EIN ' + o.ein : ''}</span>
+        </li>`
+      ).join('');
+      dropdown.classList.add('open');
+      dropdown.querySelectorAll('.tool-ac-item').forEach(li => {
+        li.addEventListener('mousedown', e => {
+          e.preventDefault();
+          input.value = currentItems[+li.dataset.i].name;
+          input.dispatchEvent(new Event('input', { bubbles: true }));
+          closeDropdown();
+        });
+      });
+    };
+
+    input.addEventListener('input', () => {
+      clearTimeout(debounceTimer);
+      const q = input.value.trim();
+      if (q.length < 2) { closeDropdown(); return; }
+      debounceTimer = setTimeout(async () => {
+        try {
+          const res = await fetch(`${TOOL_CHARITY_SEARCH_URL}?q=${encodeURIComponent(q)}`);
+          const data = await res.json();
+          renderItems(data.organizations || []);
+        } catch { closeDropdown(); }
+      }, 300);
+    });
+
+    input.addEventListener('keydown', e => {
+      if (!dropdown.classList.contains('open')) return;
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        activeIndex = Math.min(activeIndex + 1, currentItems.length - 1);
+        dropdown.querySelectorAll('.tool-ac-item')[activeIndex]?.classList.add('active');
+        dropdown.querySelectorAll('.tool-ac-item').forEach((li, i) => li.classList.toggle('active', i === activeIndex));
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        activeIndex = Math.max(activeIndex - 1, 0);
+        dropdown.querySelectorAll('.tool-ac-item').forEach((li, i) => li.classList.toggle('active', i === activeIndex));
+      } else if (e.key === 'Enter' && activeIndex >= 0) {
+        e.preventDefault();
+        input.value = currentItems[activeIndex].name;
+        input.dispatchEvent(new Event('input', { bubbles: true }));
+        closeDropdown();
+      } else if (e.key === 'Escape') {
+        closeDropdown();
+      }
+    });
+
+    document.addEventListener('click', e => {
+      if (!input.contains(e.target) && !dropdown.contains(e.target)) closeDropdown();
+    });
+  });
+}
+
+/* ── #1 Explain tooltip on result headings ── */
+function _injectExplainTooltips() {
+  const body = document.getElementById('resultBody');
+  if (!body) return;
+  body.querySelectorAll('h2, h3, h4').forEach(h => {
+    if (h.querySelector('.tool-explain-btn')) return;
+    const btn = document.createElement('button');
+    btn.className = 'tool-explain-btn';
+    btn.type = 'button';
+    btn.title = 'Explain this section';
+    btn.setAttribute('aria-label', 'Explain this section in plain English');
+    btn.innerHTML = '?';
+    h.appendChild(btn);
+    let tip = null;
+    btn.addEventListener('click', async e => {
+      e.stopPropagation();
+      if (tip) { tip.remove(); tip = null; return; }
+      tip = document.createElement('div');
+      tip.className = 'tool-explain-tip loading';
+      tip.textContent = 'Explaining…';
+      h.insertAdjacentElement('afterend', tip);
+      const sectionText = (() => {
+        let text = '', el = h.nextElementSibling;
+        while (el && !['H2','H3','H4'].includes(el.tagName)) { text += el.textContent + ' '; el = el.nextElementSibling; }
+        return text.trim().slice(0, 600);
+      })();
+      try {
+        const res = await _callWorkerFallback(
+          'You explain jargon and technical terms from nonprofit/charity analysis in plain English. Be brief (2-3 sentences max). Start directly with the explanation — no preamble.',
+          `Section heading: "${h.textContent.replace('?','').trim()}"\nSection content: "${sectionText}"\n\nExplain what this section means in simple terms a first-time donor would understand.`
+        );
+        tip.classList.remove('loading');
+        tip.textContent = res;
+      } catch {
+        tip.textContent = 'Could not load explanation.';
+        tip.classList.remove('loading');
+      }
+    });
+    document.addEventListener('click', e => {
+      if (tip && !h.contains(e.target) && !tip.contains(e.target)) { tip.remove(); tip = null; }
+    }, { once: false });
+  });
+}
+
+/* ── #7 Donation Impact Calculator (nonprofit-health-checker only) ── */
+function _injectImpactCalculator() {
+  if (!window.location.pathname.includes('nonprofit-health-checker')) return;
+  const result = document.getElementById('result');
+  if (!result || result.querySelector('#_impactCalc')) return;
+  const calc = document.createElement('div');
+  calc.id = '_impactCalc';
+  calc.className = 'tool-impact-calc';
+  calc.innerHTML = `
+    <p class="tool-impact-calc-label">💡 Estimate your impact</p>
+    <div class="tool-impact-calc-row">
+      <span class="tool-impact-calc-symbol">$</span>
+      <input class="tool-impact-calc-input" id="_impactAmt" type="number" min="1" max="1000000" placeholder="500" />
+      <button class="tool-impact-calc-btn" id="_impactCalcBtn">Calculate →</button>
+    </div>
+    <div id="_impactResult" class="tool-impact-calc-result" style="display:none"></div>`;
+  const disclaimer = result.querySelector('._disclaimer');
+  if (disclaimer) disclaimer.insertAdjacentElement('beforebegin', calc);
+  else result.appendChild(calc);
+
+  document.getElementById('_impactCalcBtn').addEventListener('click', async function() {
+    const amt = parseFloat(document.getElementById('_impactAmt').value);
+    if (!amt || amt <= 0) return;
+    const orgText = document.getElementById('resultBody')?.innerText?.slice(0, 800) || '';
+    const resEl = document.getElementById('_impactResult');
+    resEl.style.display = '';
+    resEl.textContent = 'Estimating impact…';
+    this.disabled = true;
+    try {
+      const text = await _callWorkerFallback(
+        'You are an expert in nonprofit impact measurement. Based on a charity\'s profile, estimate what a specific donation amount could accomplish. Be specific and optimistic but realistic. Use bullet points. Keep it under 150 words.',
+        `Charity profile:\n${orgText}\n\nDonation amount: $${amt}\n\nWhat could this donation accomplish? Provide 2-3 specific, concrete impact estimates.`
+      );
+      resEl.innerHTML = formatMarkdown(text);
+    } catch {
+      resEl.textContent = 'Could not estimate impact. Try again.';
+    } finally {
+      this.disabled = false;
+    }
+  });
+}
+
+/* ── #15 Freshness Badge ── */
+function _injectFreshnessBadge() {
+  const freshnessPaths = ['/donation-tax-estimator.html', '/nonprofit-health-checker.html', '/scam-nonprofit-detector.html'];
+  if (!freshnessPaths.includes(window.location.pathname)) return;
+  const title = document.querySelector('h1.tool-title');
+  if (!title || title.querySelector('.tool-freshness')) return;
+  const badge = document.createElement('span');
+  badge.className = 'tool-freshness';
+  badge.title = 'Tax data and regulations current as of 2024. Always verify with a tax professional.';
+  badge.textContent = 'Data: 2024';
+  title.appendChild(badge);
+}
+
+/* ── #14 Enhanced Sources Section ── */
+function _injectSourceLinks() {
+  const result = document.getElementById('result');
+  if (!result || result.querySelector('._sources')) return;
+  const body = document.getElementById('resultBody');
+  if (!body) return;
+  // Build relevant source links based on current page
+  const path = window.location.pathname;
+  const sources = [];
+  if (path.includes('nonprofit-health-checker') || path.includes('charity-comparison') || path.includes('scam-nonprofit')) {
+    sources.push({ label: 'Charity Navigator', url: 'https://www.charitynavigator.org' });
+    sources.push({ label: 'IRS Tax Exempt Org Search', url: 'https://apps.irs.gov/app/eos/' });
+    sources.push({ label: 'ProPublica Nonprofit Explorer', url: 'https://projects.propublica.org/nonprofits/' });
+  } else if (path.includes('donation-tax-estimator')) {
+    sources.push({ label: 'IRS Publication 526 (Charitable Contributions)', url: 'https://www.irs.gov/pub/irs-pdf/p526.pdf' });
+    sources.push({ label: 'AADE (Greek Tax Authority)', url: 'https://www.aade.gr' });
+  } else if (path.includes('volunteer-match') || path.includes('what-can-i-donate')) {
+    sources.push({ label: 'VolunteerMatch.org', url: 'https://www.volunteermatch.org' });
+    sources.push({ label: 'Idealist.org', url: 'https://www.idealist.org' });
+  }
+  if (!sources.length) return;
+  const div = document.createElement('div');
+  div.className = 'tool-source-links _sources';
+  div.innerHTML = `<p class="tool-source-links-label">Verify with official sources:</p>
+    <div class="tool-source-links-row">${sources.map(s =>
+      `<a href="${s.url}" target="_blank" rel="noopener noreferrer" class="tool-source-link">${s.label} ↗</a>`
+    ).join('')}</div>`;
+  const disclaimer = result.querySelector('._disclaimer');
+  if (disclaimer) disclaimer.insertAdjacentElement('afterend', div);
+  else result.appendChild(div);
+}
+
+/* ── #18 Keyboard Shortcut Cheat Sheet Modal ── */
+let _shortcutModalOpen = false;
+function _initKeyboardShortcutHelper() {
+  // ? button in top-right corner
+  const btn = document.createElement('button');
+  btn.id = '_kbdHelpBtn';
+  btn.className = 'tool-kbd-help-btn';
+  btn.type = 'button';
+  btn.title = 'Keyboard shortcuts (?)';
+  btn.setAttribute('aria-label', 'Show keyboard shortcuts');
+  btn.innerHTML = '?';
+  document.body.appendChild(btn);
+  btn.addEventListener('click', _toggleShortcutModal);
+}
+function _toggleShortcutModal() {
+  if (_shortcutModalOpen) { _closeShortcutModal(); return; }
+  _openShortcutModal();
+}
+function _openShortcutModal() {
+  if (document.getElementById('_kbdModal')) return;
+  _shortcutModalOpen = true;
+  const overlay = document.createElement('div');
+  overlay.id = '_kbdOverlay';
+  overlay.className = 'kbd-overlay';
+  overlay.addEventListener('click', e => { if (e.target === overlay) _closeShortcutModal(); });
+  const modal = document.createElement('div');
+  modal.id = '_kbdModal';
+  modal.className = 'kbd-modal';
+  modal.innerHTML = `
+    <div class="kbd-modal-header">
+      <strong>Keyboard Shortcuts</strong>
+      <button class="kbd-modal-close" type="button" onclick="_closeShortcutModal()">✕</button>
+    </div>
+    <div class="kbd-rows">
+      <div class="kbd-row"><kbd>Ctrl</kbd><kbd>Enter</kbd><span>Submit form</span></div>
+      <div class="kbd-row"><kbd>R</kbd><span>Focus refine input</span></div>
+      <div class="kbd-row"><kbd>?</kbd><span>Show this help</span></div>
+      <div class="kbd-row"><kbd>Esc</kbd><span>Close modals / drawers</span></div>
+    </div>`;
+  overlay.appendChild(modal);
+  document.body.appendChild(overlay);
+  requestAnimationFrame(() => overlay.classList.add('visible'));
+}
+function _closeShortcutModal() {
+  _shortcutModalOpen = false;
+  const overlay = document.getElementById('_kbdOverlay');
+  if (!overlay) return;
+  overlay.classList.remove('visible');
+  setTimeout(() => overlay.remove(), 200);
+}
+
+/* ── #23 Error Classification ── */
+function _classifyError(err, status) {
+  if (status === 429) return { type: 'rate', msg: "You've been using this a lot! Please wait 60 seconds and try again." };
+  if (status === 503 || status === 502) return { type: 'server', msg: 'The AI service is temporarily overloaded. Please try again in a moment.' };
+  if (!navigator.onLine || err?.message?.includes('fetch') || err?.message?.includes('network')) {
+    return { type: 'offline', msg: "You appear to be offline. Your last result has been restored below." };
+  }
+  return { type: 'generic', msg: 'Something went wrong. Please try again or simplify your query.' };
+}
+
+/* ── #25 Offline Result Cache ── */
+const _OFFLINE_KEY = () => 'offline_result_' + window.location.pathname.replace(/[^a-z0-9]/gi, '_');
+function _saveLastResultOffline(text, htmlStr) {
+  try {
+    localStorage.setItem(_OFFLINE_KEY(), JSON.stringify({ text, html: htmlStr, t: Date.now() }));
+  } catch {}
+}
+function _restoreOfflineResult() {
+  if (navigator.onLine) return;
+  try {
+    const saved = JSON.parse(localStorage.getItem(_OFFLINE_KEY()) || 'null');
+    if (!saved) return;
+    const result = document.getElementById('result');
+    const body = document.getElementById('resultBody');
+    if (!result || !body) return;
+    const banner = document.createElement('div');
+    banner.className = 'tool-offline-banner';
+    banner.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M1 1l22 22M16.72 11.06A10.94 10.94 0 0 1 19 12.55M5 12.55a10.94 10.94 0 0 1 5.17-2.39M10.71 5.05A16 16 0 0 1 22.56 9M1.42 9a15.91 15.91 0 0 1 4.7-2.88M8.53 16.11a6 6 0 0 1 6.95 0M12 20h.01"/></svg> You're offline — showing your last saved result`;
+    body.innerHTML = saved.html;
+    result.insertAdjacentElement('beforebegin', banner);
+    result.classList.add('visible');
+  } catch {}
+}

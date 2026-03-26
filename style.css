@@ -7699,3 +7699,318 @@ html[data-theme="light"] .ait-leaderboard { background: rgba(0,0,0,0.02); }
   padding: 8px 12px;
   outline: none;
 }
+
+/* ══════════════════════════════════════════════
+   Phase 7 — Feature CSS
+   ══════════════════════════════════════════════ */
+
+/* ── content-visibility for ait-card (perf) ── */
+.ait-card { content-visibility: auto; contain-intrinsic-size: 0 260px; }
+
+/* ── #3 Voice input button ── */
+.tool-voice-wrap { position: relative; display: flex; align-items: center; }
+.tool-voice-wrap input,
+.tool-voice-wrap textarea { flex: 1; }
+.tool-voice-btn {
+  position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+  background: none; border: none; cursor: pointer; padding: 4px;
+  color: var(--text-muted); transition: color 0.15s;
+  line-height: 1; border-radius: 4px;
+}
+.tool-voice-btn:hover { color: var(--accent); }
+.tool-voice-btn.listening { color: #f87171; animation: tool-blink 0.6s step-start infinite; }
+
+/* ── #4 Charity autocomplete dropdown ── */
+.tool-autocomplete {
+  position: absolute; top: 100%; left: 0; right: 0; z-index: 200;
+  background: #1a1d2e; border: 1px solid var(--border);
+  border-top: none; border-radius: 0 0 10px 10px;
+  list-style: none; margin: 0; padding: 4px 0;
+  max-height: 260px; overflow-y: auto;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+  display: none;
+}
+.tool-autocomplete.open { display: block; }
+.tool-ac-item {
+  padding: 9px 13px; cursor: pointer;
+  display: flex; flex-direction: column; gap: 2px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.tool-ac-item:last-child { border-bottom: none; }
+.tool-ac-item:hover, .tool-ac-item.active { background: rgba(59,110,248,0.1); }
+.tool-ac-name { font-size: 0.82rem; font-weight: 600; color: var(--text); }
+.tool-ac-meta { font-size: 0.7rem; color: var(--text-muted); }
+
+/* ── #1 Explain tooltip ── */
+.tool-explain-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 16px; height: 16px; border-radius: 50%;
+  background: rgba(59,110,248,0.15); border: 1px solid rgba(59,110,248,0.3);
+  color: var(--accent); font-size: 0.62rem; font-weight: 800;
+  cursor: pointer; margin-left: 7px; vertical-align: middle;
+  line-height: 1; transition: background 0.15s;
+  flex-shrink: 0;
+}
+.tool-explain-btn:hover { background: rgba(59,110,248,0.3); }
+.tool-explain-tip {
+  background: rgba(59,110,248,0.08); border: 1px solid rgba(59,110,248,0.2);
+  border-radius: 8px; padding: 10px 14px; margin: 6px 0 10px;
+  font-size: 0.78rem; color: var(--text); line-height: 1.55;
+  animation: fadeIn 0.2s ease;
+}
+.tool-explain-tip.loading { color: var(--text-muted); font-style: italic; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+
+/* ── #7 Impact calculator ── */
+.tool-impact-calc {
+  margin: 16px 0; padding: 14px 16px;
+  background: rgba(34,197,94,0.06); border: 1px solid rgba(34,197,94,0.2);
+  border-radius: 10px;
+}
+.tool-impact-calc-label {
+  font-size: 0.78rem; font-weight: 700; color: #4ade80; margin-bottom: 10px;
+}
+.tool-impact-calc-row {
+  display: flex; align-items: center; gap: 8px;
+}
+.tool-impact-calc-symbol {
+  font-size: 0.9rem; font-weight: 700; color: var(--text-muted);
+}
+.tool-impact-calc-input {
+  width: 120px; background: rgba(255,255,255,0.06);
+  border: 1px solid var(--border); border-radius: 8px;
+  color: var(--text); font-family: var(--font); font-size: 0.85rem;
+  padding: 7px 10px; outline: none;
+}
+.tool-impact-calc-input:focus { border-color: #4ade80; }
+.tool-impact-calc-btn {
+  padding: 7px 14px; background: rgba(34,197,94,0.2);
+  color: #4ade80; border: 1px solid rgba(34,197,94,0.3);
+  border-radius: 8px; font-family: var(--font); font-size: 0.8rem;
+  font-weight: 700; cursor: pointer; transition: background 0.15s;
+}
+.tool-impact-calc-btn:hover { background: rgba(34,197,94,0.3); }
+.tool-impact-calc-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.tool-impact-calc-result {
+  margin-top: 12px; font-size: 0.8rem; line-height: 1.6; color: var(--text);
+  border-top: 1px solid rgba(34,197,94,0.15); padding-top: 10px;
+}
+
+/* ── #15 Freshness badge ── */
+.tool-freshness {
+  display: inline-flex; align-items: center;
+  font-size: 0.62rem; font-weight: 700;
+  padding: 2px 8px; border-radius: 99px;
+  background: rgba(251,191,36,0.1); color: #fbbf24;
+  border: 1px solid rgba(251,191,36,0.25);
+  margin-left: 10px; vertical-align: middle; cursor: help;
+}
+
+/* ── #14 Source links ── */
+.tool-source-links {
+  margin: 12px 0; padding: 10px 14px;
+  background: rgba(255,255,255,0.03); border: 1px solid var(--border);
+  border-radius: 8px;
+}
+.tool-source-links-label {
+  font-size: 0.72rem; font-weight: 700; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 7px;
+}
+.tool-source-links-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.tool-source-link {
+  font-size: 0.75rem; font-weight: 600; color: var(--accent);
+  text-decoration: none; padding: 3px 9px;
+  background: rgba(59,110,248,0.08); border: 1px solid rgba(59,110,248,0.2);
+  border-radius: 6px; transition: background 0.15s;
+}
+.tool-source-link:hover { background: rgba(59,110,248,0.16); }
+
+/* ── #18 Keyboard shortcut help button ── */
+.tool-kbd-help-btn {
+  position: fixed; bottom: 22px; right: 22px; z-index: 800;
+  width: 32px; height: 32px; border-radius: 50%;
+  background: rgba(255,255,255,0.07); border: 1px solid var(--border);
+  color: var(--text-muted); font-size: 0.9rem; font-weight: 700;
+  cursor: pointer; line-height: 1;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.15s, color 0.15s;
+}
+.tool-kbd-help-btn:hover { background: rgba(255,255,255,0.12); color: var(--text); }
+.kbd-overlay {
+  position: fixed; inset: 0; z-index: 9000;
+  background: rgba(0,0,0,0.55); backdrop-filter: blur(4px);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; transition: opacity 0.2s;
+}
+.kbd-overlay.visible { opacity: 1; }
+.kbd-modal {
+  background: #1a1d2e; border: 1px solid var(--border);
+  border-radius: 14px; padding: 0; width: 320px; max-width: calc(100vw - 32px);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+}
+.kbd-modal-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 18px; border-bottom: 1px solid var(--border);
+}
+.kbd-modal-header strong { font-size: 0.9rem; color: var(--text); }
+.kbd-modal-close {
+  background: none; border: none; cursor: pointer;
+  color: var(--text-muted); font-size: 1.1rem; line-height: 1;
+}
+.kbd-rows { padding: 12px 18px 16px; display: flex; flex-direction: column; gap: 10px; }
+.kbd-row {
+  display: flex; align-items: center; gap: 6px; font-size: 0.8rem; color: var(--text-muted);
+}
+.kbd-row kbd {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 28px; padding: 2px 6px; border-radius: 5px;
+  background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12);
+  font-family: var(--font); font-size: 0.72rem; font-weight: 700; color: var(--text);
+}
+.kbd-row span { margin-left: 4px; }
+
+/* ── #23 Offline banner ── */
+.tool-offline-banner {
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 14px; margin-bottom: 12px;
+  background: rgba(251,191,36,0.1); border: 1px solid rgba(251,191,36,0.3);
+  border-radius: 8px; font-size: 0.78rem; font-weight: 600; color: #fbbf24;
+}
+
+/* ── #17 Sticky result + #19 Two-column desktop layout ── */
+@media (min-width: 960px) {
+  .tool-wrap {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 0 32px;
+    max-width: 1200px;
+    align-items: start;
+  }
+  .tool-wrap > form,
+  .tool-wrap > .tool-form-outer { grid-column: 1; grid-row: 1 / 99; }
+  .tool-wrap > #result { grid-column: 2; grid-row: 1 / 99; }
+  /* When result is hidden, form takes full width */
+  .tool-wrap > #result:not(.visible) {
+    display: none;
+  }
+  .tool-wrap:not(:has(#result.visible)) > form,
+  .tool-wrap:not(:has(#result.visible)) > .tool-form-outer {
+    grid-column: 1 / 3;
+  }
+}
+@media (min-width: 1100px) {
+  .tool-wrap > #result.visible {
+    position: sticky;
+    top: 24px;
+    max-height: calc(100vh - 48px);
+    overflow-y: auto;
+  }
+}
+
+/* ── #20 Drag-to-resize comparison columns ── */
+.cmp-drag-handle {
+  width: 6px; cursor: col-resize;
+  background: var(--border); border-radius: 3px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-muted); font-size: 10px; user-select: none;
+  flex-shrink: 0; transition: background 0.15s;
+}
+.cmp-drag-handle:hover { background: var(--accent); }
+.cmp-grid-resizable {
+  display: flex; gap: 0; margin-top: 8px;
+  align-items: stretch;
+}
+.cmp-grid-resizable .cmp-col { flex: 1 1 0; min-width: 120px; overflow: hidden; }
+
+/* ── #5/#6 Print / PDF styles ── */
+@media print {
+  body { background: #fff !important; color: #1a2e4a !important; font-size: 11pt; }
+  .tool-nav, .chat-widget, .tool-examples, .tool-refine, .tool-result-actions,
+  .tool-rating, .tool-followup, .tool-deep-btn, .tool-ask-btn,
+  .tool-hist-btn, .tool-back, .tool-how, .tool-email-cap,
+  .tool-kbd-help-btn, .pwa-banner, .tool-toast, ._disclaimer + *,
+  nav, footer, header, .ait-lb, .ait-journey, script { display: none !important; }
+  #result { box-shadow: none !important; border: none !important; }
+  #resultBody { max-height: none !important; overflow: visible !important; }
+  .tool-wrap { grid-template-columns: 1fr !important; max-width: 100% !important; }
+  a[href]::after { content: " (" attr(href) ")"; font-size: 0.75em; color: #666; }
+  h1, h2, h3 { page-break-after: avoid; color: #1a2e4a !important; }
+  @page { margin: 2cm; }
+}
+
+/* ── #21 Tool of week banner (ai-tools.html) ── */
+.ait-totw {
+  display: flex; align-items: center; gap: 14px;
+  padding: 12px 18px; margin-bottom: 20px;
+  background: linear-gradient(135deg, rgba(168,85,247,0.12), rgba(59,110,248,0.08));
+  border: 1px solid rgba(168,85,247,0.3); border-radius: 12px;
+}
+.ait-totw-label {
+  font-size: 0.62rem; font-weight: 800; text-transform: uppercase;
+  letter-spacing: 0.08em; color: #c084fc; flex-shrink: 0;
+}
+.ait-totw-name { font-size: 0.85rem; font-weight: 700; color: var(--text); }
+.ait-totw-desc { font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; }
+.ait-totw-link {
+  margin-left: auto; flex-shrink: 0; padding: 6px 14px;
+  background: rgba(168,85,247,0.2); color: #c084fc;
+  border: 1px solid rgba(168,85,247,0.3); border-radius: 8px;
+  font-size: 0.78rem; font-weight: 700; text-decoration: none;
+  transition: background 0.15s;
+  white-space: nowrap;
+}
+.ait-totw-link:hover { background: rgba(168,85,247,0.35); }
+
+/* ── Streak badge ── */
+.ait-streak {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 4px 10px; border-radius: 99px;
+  background: rgba(251,113,20,0.12); border: 1px solid rgba(251,113,20,0.25);
+  font-size: 0.75rem; font-weight: 700; color: #fb923c;
+}
+
+/* ── #11 Start-here quiz overlay ── */
+.ait-quiz-overlay {
+  position: fixed; inset: 0; z-index: 9500;
+  background: rgba(0,0,0,0.7); backdrop-filter: blur(6px);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; transition: opacity 0.3s;
+}
+.ait-quiz-overlay.visible { opacity: 1; }
+.ait-quiz-modal {
+  background: #1a1d2e; border: 1px solid var(--border);
+  border-radius: 16px; padding: 28px 28px 24px;
+  width: 420px; max-width: calc(100vw - 32px);
+  box-shadow: 0 24px 80px rgba(0,0,0,0.6);
+}
+.ait-quiz-step { display: none; }
+.ait-quiz-step.active { display: block; }
+.ait-quiz-q { font-size: 1rem; font-weight: 700; color: var(--text); margin-bottom: 16px; }
+.ait-quiz-opts { display: flex; flex-direction: column; gap: 9px; }
+.ait-quiz-opt {
+  display: flex; align-items: center; gap: 10px;
+  padding: 11px 14px; border-radius: 10px;
+  border: 1.5px solid var(--border); cursor: pointer;
+  font-size: 0.83rem; font-weight: 600; color: var(--text);
+  background: transparent; font-family: var(--font);
+  text-align: left; transition: border-color 0.15s, background 0.15s;
+}
+.ait-quiz-opt:hover { border-color: var(--accent); background: rgba(59,110,248,0.08); }
+.ait-quiz-opt.selected { border-color: var(--accent); background: rgba(59,110,248,0.12); color: var(--accent); }
+.ait-quiz-skip {
+  margin-top: 14px; font-size: 0.75rem; color: var(--text-muted);
+  background: none; border: none; cursor: pointer; font-family: var(--font); padding: 0;
+}
+.ait-quiz-skip:hover { color: var(--text); }
+.ait-quiz-result { text-align: center; }
+.ait-quiz-result-icon { font-size: 2.5rem; display: block; margin-bottom: 10px; }
+.ait-quiz-result-title { font-size: 1rem; font-weight: 800; color: var(--text); margin-bottom: 6px; }
+.ait-quiz-result-desc { font-size: 0.82rem; color: var(--text-muted); margin-bottom: 18px; }
+.ait-quiz-cta {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 11px 22px; background: var(--accent); color: #fff;
+  border-radius: 10px; font-size: 0.85rem; font-weight: 700;
+  text-decoration: none; transition: background 0.15s;
+}
+.ait-quiz-cta:hover { background: #2d5de8; }
