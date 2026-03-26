@@ -12,6 +12,7 @@ const PRECACHE_ASSETS = [
   '/offline.html',
   '/manifest.json',
   '/ai-tools.html',
+  '/donation-tax-estimator.html',
 ];
 
 // Install: precache core assets

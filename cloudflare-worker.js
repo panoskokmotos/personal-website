@@ -168,7 +168,7 @@ export default {
     // ── /email-result route: send AI result to user's email ──
     if (url.pathname === '/email-result') {
       try {
-        const { email, tool, result, url: pageUrl } = await request.json();
+        const { email, tool, result, url: pageUrl, subscribe } = await request.json();
         if (!email || !email.includes('@')) {
           return new Response(JSON.stringify({ ok: false, error: 'Invalid email' }), {
             status: 400, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS },
@@ -182,7 +182,8 @@ export default {
             <h2 style="color:#1a2e4a;margin-bottom:8px">${(tool || 'Your AI Result').replace(/</g,'&lt;')}</h2>
             <p style="color:#666;font-size:13px;margin-bottom:20px">From <a href="${pageUrl || 'https://panoskokmotos.com'}" style="color:#3b6ef8">panoskokmotos.com</a></p>
             <div style="background:#f8f9fc;border:1px solid #e5e7eb;border-radius:10px;padding:20px;font-size:14px;line-height:1.7;white-space:pre-wrap">${safeResult}</div>
-            <p style="color:#999;font-size:12px;margin-top:20px">Sent from <a href="https://panoskokmotos.com/ai-tools.html" style="color:#3b6ef8">Free AI for Social Impact tools</a> by Panos Kokmotos</p>
+            ${subscribe ? '<p style="background:#e8f5e9;border-radius:6px;padding:8px 14px;font-size:13px;color:#1a7a2e;margin-top:16px">✓ You\'ve subscribed to Panos\'s monthly social-impact digest.</p>' : ''}
+          <p style="color:#999;font-size:12px;margin-top:20px">Sent from <a href="https://panoskokmotos.com/ai-tools.html" style="color:#3b6ef8">Free AI for Social Impact tools</a> by Panos Kokmotos</p>
           </div>`;
 
         const mcRes = await fetch('https://api.mailchannels.net/tx/v1/send', {
@@ -200,6 +201,16 @@ export default {
         });
 
         const ok = mcRes.status === 202;
+
+        // Notify Panos if someone subscribed to the digest
+        if (ok && subscribe && env.NOTIFY_SECRET) {
+          fetch(`https://${url.hostname}/notify`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ secret: env.NOTIFY_SECRET, event: 'New Digest Subscriber', data: { email, tool } }),
+          }).catch(() => {});
+        }
+
         return new Response(JSON.stringify({ ok }), {
           status: ok ? 200 : 500,
           headers: { 'Content-Type': 'application/json', ...CORS_HEADERS },
@@ -211,7 +222,126 @@ export default {
       }
     }
 
-    // ── /api/v1/tool route: versioned Claude call (same as /tool, supports promptVersion) ──
+    // ── /api/v1/stream route: streaming Claude call (text chunks as plain text) ──
+    if (url.pathname === '/api/v1/stream') {
+      try {
+        const { systemPrompt, userMessage } = await request.json();
+        if (!systemPrompt || !userMessage) {
+          return new Response(JSON.stringify({ error: 'Missing params' }), {
+            status: 400, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS },
+          });
+        }
+
+        const anthropicRes = await fetch('https://api.anthropic.com/v1/messages', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': env.ANTHROPIC_API_KEY,
+            'anthropic-version': '2023-06-01',
+          },
+          body: JSON.stringify({
+            model: 'claude-haiku-4-5',
+            max_tokens: 1024,
+            stream: true,
+            system: systemPrompt,
+            messages: [{ role: 'user', content: userMessage }],
+          }),
+        });
+
+        if (!anthropicRes.ok) {
+          const errData = await anthropicRes.json().catch(() => ({}));
+          return new Response(JSON.stringify({ error: errData.error?.message || 'Anthropic error' }), {
+            status: anthropicRes.status, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS },
+          });
+        }
+
+        const { readable, writable } = new TransformStream();
+        const writer = writable.getWriter();
+        const encoder = new TextEncoder();
+
+        // Parse SSE stream from Anthropic, forward only text deltas
+        (async () => {
+          try {
+            const reader = anthropicRes.body.getReader();
+            const decoder = new TextDecoder();
+            let buffer = '';
+            while (true) {
+              const { done, value } = await reader.read();
+              if (done) break;
+              buffer += decoder.decode(value, { stream: true });
+              const lines = buffer.split('\n');
+              buffer = lines.pop(); // keep incomplete line
+              for (const line of lines) {
+                if (!line.startsWith('data: ')) continue;
+                const data = line.slice(6).trim();
+                if (data === '[DONE]') continue;
+                try {
+                  const evt = JSON.parse(data);
+                  if (evt.type === 'content_block_delta' && evt.delta?.type === 'text_delta') {
+                    await writer.write(encoder.encode(evt.delta.text));
+                  }
+                } catch {}
+              }
+            }
+          } catch {}
+          await writer.close().catch(() => {});
+        })();
+
+        return new Response(readable, {
+          headers: {
+            'Content-Type': 'text/plain; charset=utf-8',
+            'Cache-Control': 'no-cache',
+            'X-Accel-Buffering': 'no',
+            ...CORS_HEADERS,
+          },
+        });
+      } catch (err) {
+        return new Response(JSON.stringify({ error: 'Streaming failed' }), {
+          status: 500, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS },
+        });
+      }
+    }
+
+    // ── /api/v2/tool route: enhanced Claude Sonnet call ("Go Deeper") ──
+    if (url.pathname === '/api/v2/tool') {
+      try {
+        const { systemPrompt, userMessage } = await request.json();
+        if (!systemPrompt || !userMessage) {
+          return new Response(JSON.stringify({ error: 'Missing params' }), {
+            status: 400, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS },
+          });
+        }
+
+        const response = await fetch('https://api.anthropic.com/v1/messages', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': env.ANTHROPIC_API_KEY,
+            'anthropic-version': '2023-06-01',
+          },
+          body: JSON.stringify({
+            model: 'claude-sonnet-4-6',
+            max_tokens: 2048,
+            system: systemPrompt,
+            messages: [{ role: 'user', content: userMessage }],
+          }),
+        });
+
+        const data = await response.json();
+        const result = data.content?.[0]?.text ?? 'Sorry, enhancement failed. Please try again.';
+
+        return new Response(JSON.stringify({ result }), {
+          headers: { 'Content-Type': 'application/json', ...CORS_HEADERS },
+        });
+      } catch (err) {
+        return new Response(
+          JSON.stringify({ error: 'Enhancement failed.' }),
+          { status: 500, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
+        );
+      }
+    }
+
+    // ── /api/v1/tool route: versioned Claude call with optional KV caching ──
     if (url.pathname === '/api/v1/tool') {
       try {
         const { systemPrompt, userMessage, promptVersion } = await request.json();
@@ -219,6 +349,22 @@ export default {
           return new Response(JSON.stringify({ error: 'Missing systemPrompt or userMessage' }), {
             status: 400, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS },
           });
+        }
+
+        // KV cache check (24h TTL — only if TOOL_CACHE KV namespace is bound)
+        let cacheKey = null;
+        if (env.TOOL_CACHE) {
+          const hashBuf = await crypto.subtle.digest('SHA-256',
+            new TextEncoder().encode(`v${promptVersion || 1}|${systemPrompt}|${userMessage}`)
+          );
+          cacheKey = 'tc:' + Array.from(new Uint8Array(hashBuf))
+            .map(b => b.toString(16).padStart(2, '0')).join('');
+          const cached = await env.TOOL_CACHE.get(cacheKey);
+          if (cached) {
+            return new Response(JSON.stringify({ result: cached, cached: true, promptVersion: promptVersion || 1 }), {
+              headers: { 'Content-Type': 'application/json', ...CORS_HEADERS },
+            });
+          }
         }
 
         const response = await fetch('https://api.anthropic.com/v1/messages', {
@@ -238,6 +384,11 @@ export default {
 
         const data = await response.json();
         const result = data.content?.[0]?.text ?? 'Sorry, I had trouble responding. Please try again.';
+
+        // Store in KV cache
+        if (env.TOOL_CACHE && cacheKey) {
+          await env.TOOL_CACHE.put(cacheKey, result, { expirationTtl: 86400 }).catch(() => {});
+        }
 
         return new Response(JSON.stringify({ result, promptVersion: promptVersion || 1 }), {
           headers: { 'Content-Type': 'application/json', ...CORS_HEADERS },

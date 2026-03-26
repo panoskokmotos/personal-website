@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Donation Tax Estimator — How Much Do You Save? (US & Greece)</title>
+  <meta name="description" content="Find out exactly how much tax you save when you donate in the US or Greece. Instant AI-powered calculation with breakdown by income bracket, filing status, and giving amount." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/style.css" />
+  <script src="/tool-utils.js"></script>
+  <link rel="icon" href="/favicon.ico" />
+  <meta name="robots" content="index, follow, max-image-preview:large" />
+  <link rel="canonical" href="https://panoskokmotos.com/donation-tax-estimator.html" />
+  <meta property="og:url" content="https://panoskokmotos.com/donation-tax-estimator.html" />
+  <meta property="og:image" content="https://panoskokmotos.com/og-ai-tools.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://panoskokmotos.com/og-ai-tools.png" />
+  <meta name="twitter:creator" content="@panoskokmotoss" />
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How much can I deduct for charitable donations in the US?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "In the US, cash donations to qualified charities are deductible up to 60% of your AGI if you itemize. You must exceed the standard deduction ($14,600 single / $29,200 married in 2024) for itemizing to benefit you."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How does Greece's charity tax credit work?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "In Greece, donations to recognized charities and public benefit foundations earn a direct 20% tax credit on the donated amount. The credit is capped at your total income tax liability for the year."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the 'effective cost' of a donation?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The effective cost is how much the donation actually costs you after tax savings. For example, a $100 donation in the 22% US tax bracket costs only $78 after deduction — you 'get back' $22 in tax savings."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is this official tax advice?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. This tool gives educational estimates based on current tax law. Always consult a qualified tax professional for your specific situation."
+      }
+    }
+  ]
+}
+</script>
+</head>
+<body class="tool-page">
+
+  <header class="tool-header">
+    <a href="/ai-tools.html" class="tool-back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      AI for Social Impact Lab
+    </a>
+  </header>
+
+  <main class="tool-main">
+    <p class="tool-eyebrow">AI for Social Impact · Free Tool</p>
+    <h1 class="tool-title">Donation Tax Estimator</h1>
+    <p class="tool-desc">Donating in the US or Greece? Find out exactly how much tax you save, what your donation actually costs after the benefit, and whether itemizing makes sense for you. No tax jargon — just clear numbers.</p>
+
+    <!-- ── How it works ── -->
+    <div class="tool-how" aria-label="How this tool works">
+      <div class="tool-how-step">
+        <span class="tool-how-num">Step 1</span>
+        <span class="tool-how-title">Enter your details</span>
+        <span class="tool-how-desc">Country, income, filing status, and donation amount.</span>
+      </div>
+      <div class="tool-how-step">
+        <span class="tool-how-num">Step 2</span>
+        <span class="tool-how-title">AI calculates your savings</span>
+        <span class="tool-how-desc">Based on current 2024/2025 tax law for your country.</span>
+      </div>
+      <div class="tool-how-step">
+        <span class="tool-how-num">Step 3</span>
+        <span class="tool-how-title">Know your real cost</span>
+        <span class="tool-how-desc">See effective donation cost, tax savings, and giving tips.</span>
+      </div>
+    </div>
+
+    <form class="tool-form" id="toolForm">
+
+      <div class="tool-field">
+        <label class="tool-label" for="country">Country</label>
+        <div class="dte-country-chips" id="countryChips">
+          <button type="button" class="dte-country-chip active" data-country="US">🇺🇸 United States</button>
+          <button type="button" class="dte-country-chip" data-country="GR">🇬🇷 Greece</button>
+        </div>
+        <input type="hidden" id="country" value="US" />
+      </div>
+
+      <!-- US-only fields -->
+      <div id="usFields">
+        <div class="tool-field">
+          <label class="tool-label" for="filingStatus">Filing status</label>
+          <select id="filingStatus" class="tool-select">
+            <option value="single">Single</option>
+            <option value="married filing jointly">Married filing jointly</option>
+            <option value="head of household">Head of household</option>
+            <option value="married filing separately">Married filing separately</option>
+          </select>
+        </div>
+
+        <div class="tool-field">
+          <label class="tool-label" for="income">Annual gross income (USD)</label>
+          <select id="income" class="tool-select" required>
+            <option value="">Select income range…</option>
+            <option value="25000">Under $30,000</option>
+            <option value="45000">$30,000 – $60,000</option>
+            <option value="75000">$60,000 – $90,000</option>
+            <option value="115000">$90,000 – $140,000</option>
+            <option value="175000">$140,000 – $200,000</option>
+            <option value="250000">$200,000 – $300,000</option>
+            <option value="400000">$300,000 – $500,000</option>
+            <option value="600000">Over $500,000</option>
+          </select>
+        </div>
+
+        <div class="tool-field">
+          <label class="tool-label" for="otherDeductions">
+            Other itemized deductions (optional)
+            <span class="tool-hint"> — mortgage interest, state taxes, etc.</span>
+          </label>
+          <select id="otherDeductions" class="tool-select">
+            <option value="0">None / not sure</option>
+            <option value="5000">~$5,000 (e.g. small mortgage)</option>
+            <option value="10000">~$10,000 (e.g. mortgage + state taxes)</option>
+            <option value="20000">~$20,000 (e.g. large mortgage)</option>
+            <option value="30000">~$30,000+</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Greece-only fields -->
+      <div id="grFields" style="display:none">
+        <div class="tool-field">
+          <label class="tool-label" for="incomeGR">Annual taxable income (€)</label>
+          <select id="incomeGR" class="tool-select">
+            <option value="">Select income range…</option>
+            <option value="12000">Under €15,000</option>
+            <option value="20000">€15,000 – €25,000</option>
+            <option value="32000">€25,000 – €40,000</option>
+            <option value="55000">€40,000 – €70,000</option>
+            <option value="85000">€70,000 – €100,000</option>
+            <option value="130000">Over €100,000</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="tool-field">
+        <label class="tool-label" for="donationAmount">
+          Donation amount
+          <span class="tool-hint" id="currencyHint"> — in USD</span>
+        </label>
+        <div class="dte-amount-wrap">
+          <span class="dte-currency-symbol" id="currencySymbol">$</span>
+          <input id="donationAmount" class="tool-input dte-amount-input" type="number"
+            min="1" max="500000" placeholder="e.g. 500" required />
+        </div>
+      </div>
+
+      <div class="tool-field">
+        <label class="tool-label" for="donationType">Type of donation</label>
+        <select id="donationType" class="tool-select">
+          <option value="cash or credit card to a registered charity">Cash / credit card to a registered charity</option>
+          <option value="stock or appreciated assets">Stock or appreciated assets</option>
+          <option value="donor-advised fund contribution">Donor-advised fund (DAF)</option>
+          <option value="payroll giving through employer">Payroll giving through employer</option>
+          <option value="in-kind donation of goods">In-kind goods donation</option>
+        </select>
+      </div>
+
+      <div class="tool-examples">
+        <span class="tool-examples-label">Try an example:</span>
+        <button type="button" class="tool-example-chip" data-fill-country="US" data-fill-income="75000" data-fill-filingStatus="single" data-fill-donationAmount="500" data-fill-donationType="cash or credit card to a registered charity">US: $500 gift</button>
+        <button type="button" class="tool-example-chip" data-fill-country="US" data-fill-income="175000" data-fill-filingStatus="married filing jointly" data-fill-donationAmount="5000" data-fill-otherDeductions="20000" data-fill-donationType="stock or appreciated assets">US: $5K stock</button>
+        <button type="button" class="tool-example-chip" data-fill-country="GR" data-fill-incomeGR="32000" data-fill-donationAmount="300" data-fill-donationType="cash or credit card to a registered charity">Greece: €300</button>
+      </div>
+
+      <button type="submit" class="tool-submit" id="submitBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        Calculate My Tax Savings
+      </button>
+    </form>
+
+    <div class="tool-loading" id="loading">
+      <div class="tool-spinner"></div>
+      <span id="loadingText">Calculating your tax savings…</span>
+    </div>
+
+    <div class="tool-error" id="errorBox"></div>
+
+    <div class="tool-result" id="result">
+      <div class="tool-result-header">
+        <span class="tool-result-label">Your Tax Savings Breakdown</span>
+        <button class="tool-copy-btn" id="copyBtn">Copy</button>
+      </div>
+      <div class="tool-result-body" id="resultBody"></div>
+      <div class="tool-result-actions">
+        <button class="tool-try-another" id="tryAnotherBtn">← Try another</button>
+        <div class="tool-share-group">
+          <button class="tool-share-x" id="shareXBtn"><svg viewBox="0 0 24 24" fill="currentColor" width="13" height="13"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.746l7.73-8.835L1.254 2.25H8.08l4.258 5.622L18.245 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg> Share on X</button>
+          <button class="tool-share-link" id="shareLinkBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="13" height="13"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg> Copy link</button>
+        </div>
+      </div>
+    </div>
+
+    <footer class="tool-footer">
+      Built by <a href="/" target="_blank">Panos Kokmotos</a> · Part of the
+      <a href="/ai-tools.html">AI for Social Impact Lab</a> ·
+      Powered by Claude AI · Not financial or legal advice
+    </footer>
+    <div class="tool-usage-count" id="toolUsageCount"></div>
+    <div class="tool-related-wrap" id="toolRelated"></div>
+    <div class="tool-embed-wrap" id="toolEmbed"></div>
+  </main>
+
+  <!-- ── AI Chat Widget ── -->
+  <div class="chat-widget" id="chatWidget">
+    <button class="chat-toggle" id="chatToggle" aria-label="Chat with Panos AI">
+      <svg class="chat-icon-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      <svg class="chat-icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      <span class="chat-badge">AI</span>
+    </button>
+    <div class="chat-panel" id="chatPanel">
+      <div class="chat-header">
+        <div class="chat-header-info">
+          <picture>
+            <source srcset="/photo.webp" type="image/webp" />
+            <img src="/photo.jpg" alt="Panos Kokmotos" class="chat-avatar" />
+          </picture>
+          <div class="chat-header-text">
+            <strong>Ask Panos</strong>
+            <span><span class="chat-status-dot"></span>AI · Usually replies instantly</span>
+          </div>
+        </div>
+        <div class="chat-header-actions">
+          <button class="chat-new-btn" id="chatNewChat" title="New conversation" aria-label="Start new conversation">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="15" height="15"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          </button>
+          <button class="chat-close-btn" id="chatClose" aria-label="Close chat">✕</button>
+        </div>
+      </div>
+      <div class="chat-messages" id="chatMessages">
+        <div class="chat-msg bot">
+          <p>👋 Hi! I'm Panos's AI. Have tax questions about your donation? Ask me anything!</p>
+        </div>
+      </div>
+      <div class="chat-starters" id="chatStarters">
+        <p class="chat-starters-label">Quick questions</p>
+        <button class="chat-starter-chip" onclick="useChatStarter(this)">
+          <span class="csc-icon">💰</span>
+          <span class="csc-text">What's a donor-advised fund?</span>
+          <svg class="csc-arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+        </button>
+        <button class="chat-starter-chip" onclick="useChatStarter(this)">
+          <span class="csc-icon">📋</span>
+          <span class="csc-text">Is it worth itemizing my deductions?</span>
+          <svg class="csc-arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+        </button>
+        <button class="chat-starter-chip" onclick="useChatStarter(this)">
+          <span class="csc-icon">🏦</span>
+          <span class="csc-text">How does donating stock work?</span>
+          <svg class="csc-arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+        </button>
+      </div>
+      <div class="chat-input-wrap">
+        <input type="text" id="chatInput" placeholder="Ask about tax-smart giving…" autocomplete="off" />
+        <button id="chatSend" aria-label="Send">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+        </button>
+      </div>
+      <p class="chat-note">Powered by <a href="https://anthropic.com" target="_blank" rel="noopener">Claude AI</a></p>
+    </div>
+  </div>
+
+  <script>
+    // Country toggle
+    document.querySelectorAll('.dte-country-chip').forEach(chip => {
+      chip.addEventListener('click', function() {
+        document.querySelectorAll('.dte-country-chip').forEach(c => c.classList.remove('active'));
+        this.classList.add('active');
+        const country = this.dataset.country;
+        document.getElementById('country').value = country;
+        document.getElementById('usFields').style.display = country === 'US' ? '' : 'none';
+        document.getElementById('grFields').style.display = country === 'GR' ? '' : 'none';
+        document.getElementById('currencySymbol').textContent = country === 'GR' ? '€' : '$';
+        document.getElementById('currencyHint').textContent = country === 'GR' ? ' — in EUR' : ' — in USD';
+      });
+    });
+
+    // Example chip country switching
+    document.querySelectorAll('.tool-example-chip').forEach(chip => {
+      chip.addEventListener('click', function() {
+        if (this.dataset.fillCountry) {
+          const c = this.dataset.fillCountry;
+          document.querySelectorAll('.dte-country-chip').forEach(ch => {
+            ch.classList.toggle('active', ch.dataset.country === c);
+          });
+          document.getElementById('country').value = c;
+          document.getElementById('usFields').style.display = c === 'US' ? '' : 'none';
+          document.getElementById('grFields').style.display = c === 'GR' ? '' : 'none';
+          document.getElementById('currencySymbol').textContent = c === 'GR' ? '€' : '$';
+          document.getElementById('currencyHint').textContent = c === 'GR' ? ' — in EUR' : ' — in USD';
+        }
+      });
+    });
+
+    document.getElementById('toolForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const country = document.getElementById('country').value;
+      const donationAmount = document.getElementById('donationAmount').value.trim();
+      const donationType = document.getElementById('donationType').value;
+
+      if (!donationAmount || isNaN(donationAmount) || +donationAmount <= 0) {
+        showError('Please enter a valid donation amount.');
+        return;
+      }
+
+      let incomeInfo, systemPrompt, userMessage;
+
+      if (country === 'US') {
+        const income = document.getElementById('income').value;
+        const filingStatus = document.getElementById('filingStatus').value;
+        const otherDeductions = document.getElementById('otherDeductions').value;
+        if (!income) { showError('Please select an income range.'); return; }
+
+        systemPrompt = `You are a US tax education expert specializing in charitable giving. Provide clear, accurate estimates based on 2024 US federal tax law. Always include a disclaimer that this is for educational purposes only.
+
+US 2024 TAX DATA (use these exact figures):
+Standard deductions: Single $14,600 | MFJ $29,200 | HoH $21,900 | MFS $14,600
+Federal tax brackets (single): 10% up to $11,600 | 12% $11,601-$47,150 | 22% $47,151-$100,525 | 24% $100,526-$191,950 | 32% $191,951-$243,725 | 35% $243,726-$609,350 | 37% over $609,350
+For MFJ, double the bracket thresholds.
+Cash donation deductibility limit: 60% of AGI.
+Special stock donation rule: deduct full fair market value, avoid capital gains.
+DAF: same deduction as cash but deferred distribution.
+
+IMPORTANT: Calculate whether itemizing makes financial sense given their other deductions. Show the math clearly.`;
+
+        userMessage = `Country: United States
+Filing status: ${filingStatus}
+Estimated annual gross income: $${parseInt(income).toLocaleString()}
+Other annual itemized deductions (mortgage interest, state taxes, etc.): $${parseInt(otherDeductions).toLocaleString()}
+Donation amount: $${parseFloat(donationAmount).toLocaleString()}
+Donation type: ${donationType}
+
+Please calculate and explain:
+1. My estimated marginal tax bracket
+2. Whether itemizing makes financial sense for me (compare total itemized vs standard deduction)
+3. If itemizing makes sense: my estimated federal tax savings and the effective cost of this donation
+4. If not itemizing: how much more I'd need to donate for it to make sense, or alternative strategies (bunching, DAF)
+5. One key tip to maximize tax efficiency for my giving level`;
+      } else {
+        // Greece
+        const incomeGR = document.getElementById('incomeGR').value;
+        if (!incomeGR) { showError('Please select an income range.'); return; }
+
+        systemPrompt = `You are a Greek tax education expert specializing in charitable giving. Provide clear, accurate estimates based on 2024/2025 Greek tax law. Always include a disclaimer that this is for educational purposes only and laws change.
+
+GREEK TAX LAW FOR DONATIONS (2024):
+- Direct tax credit: 20% of the donated amount is deducted directly from your tax liability (not from income)
+- The credit cannot exceed your total income tax liability for the year
+- Qualified recipients: Recognized Greek non-profit organizations, public benefit foundations, Greek state, municipalities, universities, hospitals
+- Documentation required: Receipts from the organization
+- No AGI percentage cap (unlike US), but limited by actual tax owed
+- Greek income tax brackets: 9% on first €10,000 | 22% €10,001-€20,000 | 28% €20,001-€30,000 | 36% €30,001-€40,000 | 44% over €40,000
+
+EXAMPLE: €200 donation → €40 direct tax credit (you owe €40 less in taxes). The donation effectively costs you €160.`;
+
+        userMessage = `Country: Greece
+Estimated annual taxable income: €${parseInt(incomeGR).toLocaleString()}
+Donation amount: €${parseFloat(donationAmount).toLocaleString()}
+Donation type: ${donationType}
+
+Please calculate and explain:
+1. My estimated Greek income tax bracket and approximate annual tax liability
+2. My tax credit (20% of donation amount)
+3. The effective cost of this donation after the tax credit
+4. Whether the credit is fully usable (check against estimated tax liability)
+5. Any tips specific to Greek donors — how to maximize impact and documentation needed`;
+      }
+
+      setLoading(true);
+      hideError();
+      hideResult();
+
+      try {
+        const text = await callWorker(systemPrompt, userMessage);
+        showResult(text);
+        notifyToolUsed(document.title);
+      } catch (err) {
+        if (!err._shown) showError('Something went wrong. Please try again.');
+      } finally {
+        setLoading(false);
+      }
+    });
+
+    initCopyBtn();
+  </script>
+  <script src="/chat.js"></script>
+  <!-- Service Worker registration -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').catch(() => {});
+      });
+    }
+  </script>
+</body>
+</html>

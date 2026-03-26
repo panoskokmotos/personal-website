@@ -5,6 +5,8 @@
 
 /* ── Constants ── */
 const TOOL_WORKER_URL    = 'https://ask-panos.panagiotis-kokmotoss.workers.dev/api/v1/tool';
+const TOOL_STREAM_URL    = 'https://ask-panos.panagiotis-kokmotoss.workers.dev/api/v1/stream';
+const TOOL_DEEP_URL      = 'https://ask-panos.panagiotis-kokmotoss.workers.dev/api/v2/tool';
 const TOOL_NOTIFY_WORKER = 'https://ask-panos.panagiotis-kokmotoss.workers.dev/notify';
 const TOOL_NOTIFY_SECRET = 'panos-notify-2026-xyz';
 const TOOL_PROMPT_VERSION = 2; // bump when system prompts change significantly
@@ -113,6 +115,71 @@ function stopLoadingMessages() {
 
 /* ── Core API ── */
 async function callWorker(systemPrompt, userMessage) {
+  // Use streaming endpoint — progressively renders result body in real-time
+  let res;
+  try {
+    res = await fetch(TOOL_STREAM_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ systemPrompt, userMessage }),
+    });
+  } catch {
+    // Network error — fall back to non-streaming
+    return _callWorkerFallback(systemPrompt, userMessage);
+  }
+
+  if (res.status === 429) {
+    _showRateLimitError();
+    const err = new Error('Rate limit exceeded');
+    err._shown = true;
+    throw err;
+  }
+  if (!res.ok) throw new Error(`Server error: ${res.status}`);
+
+  const reader = res.body.getReader();
+  const decoder = new TextDecoder();
+  let fullText = '';
+  let firstChunk = true;
+  let pendingRender = false;
+
+  const resultBody = document.getElementById('resultBody');
+  const resultEl   = document.getElementById('result');
+
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    const chunk = decoder.decode(value, { stream: true });
+    fullText += chunk;
+
+    if (firstChunk) {
+      firstChunk = false;
+      // Hide loading state as soon as text starts arriving
+      _removeLoadingSkeleton();
+      stopLoadingMessages();
+      if (resultEl && resultBody) {
+        resultEl.classList.add('visible', 'tool-streaming');
+        resultEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }
+
+    // Throttle DOM updates to animation frames
+    if (resultBody && !pendingRender) {
+      pendingRender = true;
+      requestAnimationFrame(() => {
+        resultBody.innerHTML = formatMarkdown(fullText);
+        pendingRender = false;
+      });
+    }
+  }
+
+  // Final render — remove streaming cursor class
+  if (resultBody) resultBody.innerHTML = formatMarkdown(fullText);
+  if (resultEl) resultEl.classList.remove('tool-streaming');
+
+  return fullText;
+}
+
+async function _callWorkerFallback(systemPrompt, userMessage) {
   const res = await fetch(TOOL_WORKER_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -156,11 +223,16 @@ function formatMarkdown(text) {
 function notifyToolUsed(toolName) {
   /* Increment local counter */
   const key = 'tuc_' + window.location.pathname.replace(/[^a-z0-9]/gi, '_');
+  let newCount = 1;
   try {
     const n = parseInt(localStorage.getItem(key) || '0', 10);
-    localStorage.setItem(key, n + 1);
+    newCount = n + 1;
+    localStorage.setItem(key, newCount);
   } catch {}
   _renderUsageCount();
+
+  /* Milestone toast */
+  if ([1, 5, 10, 25].includes(newCount)) _showMilestoneToast(newCount, toolName);
 
   /* Fire-and-forget notification */
   if (!TOOL_NOTIFY_SECRET) return;
@@ -169,6 +241,30 @@ function notifyToolUsed(toolName) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ secret: TOOL_NOTIFY_SECRET, event: 'AI Tool Used', data: { tool: toolName } }),
   }).catch(() => {});
+}
+
+function _showMilestoneToast(count, toolName) {
+  const msgs = {
+    1:  { text: 'First use! Welcome to AI for Social Impact 🎉', color: '#3b6ef8' },
+    5:  { text: 'You\'ve used this 5 times! Sharing helps nonprofits find this tool 🙌', color: '#7c3aed' },
+    10: { text: '10 uses! You\'re a power user. Tell a friend? 🚀', color: '#059669' },
+    25: { text: '25 uses! You\'re an impact champion 🏆', color: '#d97706' },
+  };
+  const m = msgs[count];
+  if (!m) return;
+  const toast = document.createElement('div');
+  toast.className = 'tool-toast';
+  toast.style.cssText = `--toast-color:${m.color}`;
+  toast.innerHTML = `<span class="tool-toast-text">${m.text}</span>
+    <button class="tool-toast-close" aria-label="Dismiss">✕</button>`;
+  document.body.appendChild(toast);
+  requestAnimationFrame(() => toast.classList.add('visible'));
+  const close = () => {
+    toast.classList.remove('visible');
+    setTimeout(() => toast.remove(), 320);
+  };
+  toast.querySelector('.tool-toast-close').addEventListener('click', close);
+  setTimeout(close, 5000);
 }
 
 /* ── Standard UI helpers (complex tools override with local versions) ── */
@@ -229,16 +325,23 @@ function showResult(text) {
   const result     = document.getElementById('result');
   const resultBody = document.getElementById('resultBody');
   if (!result || !resultBody) return;
-  resultBody.innerHTML = formatMarkdown(text);
-  result.classList.add('visible');
-  result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  // If streaming already rendered the content, just ensure it's visible
+  if (!result.classList.contains('visible')) {
+    resultBody.innerHTML = formatMarkdown(text);
+    result.classList.add('visible');
+    result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  } else {
+    // Streaming rendered it; do a clean final render if needed
+    resultBody.innerHTML = formatMarkdown(text);
+  }
+  result.classList.remove('tool-streaming');
   _removeLoadingSkeleton();
   /* Inject extras after each result show */
   setTimeout(() => {
     _injectResultExtras(text);
     _saveToHistory(text);
     _renderHistoryBtn();
-  }, 60);
+  }, 80);
 }
 
 /* ── Loading skeleton ── */
@@ -268,7 +371,12 @@ function _injectResultExtras(text) {
   _injectRating();
   _injectDownloadBtn();
   _injectPrintBtn();
+  _injectShareCard();
+  _injectGoDeeperBtn();
+  _injectAskAbout();
+  _injectConfidenceBadge(text);
   _injectRefineInput();
+  _injectFollowUpChat();
   _injectDisclaimer();
   _injectJourneyCTA(text);
   _injectEmailCapture();
@@ -551,6 +659,9 @@ function _injectRefineInput() {
     if (!instruction) return;
     const body = document.getElementById('resultBody');
     if (!body) return;
+    // Save current state for undo (feature 6)
+    _lastResultHTML = body.innerHTML;
+    _lastResultText = body.innerText;
     const originalText = body.innerText;
     const sysPrompt = `You are a helpful assistant. The user has an AI-generated result and wants to refine it based on their instruction. Keep the same format and structure unless told otherwise. Return only the refined result, no meta-commentary.`;
     const userMsg = `Original result:\n${originalText}\n\nRefinement instruction: ${instruction}`;
@@ -562,6 +673,22 @@ function _injectRefineInput() {
       const text = await callWorker(sysPrompt, userMsg);
       showResult(text);
       document.getElementById('_refineInput').value = '';
+      // Inject undo button
+      const refineWrap = document.getElementById('_refineWrap');
+      if (refineWrap && !refineWrap.querySelector('#_undoBtn')) {
+        const undoBtn = document.createElement('button');
+        undoBtn.id = '_undoBtn';
+        undoBtn.className = 'tool-undo-btn';
+        undoBtn.textContent = '← Undo refine';
+        undoBtn.addEventListener('click', () => {
+          if (_lastResultHTML && body) {
+            body.innerHTML = _lastResultHTML;
+            _lastResultHTML = null;
+            undoBtn.remove();
+          }
+        });
+        refineWrap.appendChild(undoBtn);
+      }
     } catch(err) {
       if (!err._shown) showError('Refinement failed. Please try again.');
     } finally {
@@ -576,7 +703,7 @@ function _injectRefineInput() {
   });
 }
 
-/* ── Email capture ── */
+/* ── Email capture with newsletter opt-in ── */
 function _injectEmailCapture() {
   const result = document.getElementById('result');
   if (!result || result.querySelector('#_emailCapture')) return;
@@ -592,28 +719,30 @@ function _injectEmailCapture() {
       <input class="tool-email-cap-input" id="_emailCapInput" type="email" placeholder="your@email.com" autocomplete="email" />
       <button class="tool-email-cap-btn" id="_emailCapBtn">Send →</button>
     </div>
-    <p class="tool-email-cap-note">One email, no spam, ever.</p>`;
+    <label class="tool-email-cap-sub">
+      <input type="checkbox" id="_subCheck" />
+      Also send me Panos's monthly social-impact giving tips
+    </label>
+    <p class="tool-email-cap-note">One email. No spam. Unsubscribe anytime.</p>`;
   const embed = result.closest('main')?.querySelector('#toolEmbed');
   if (embed) embed.insertAdjacentElement('beforebegin', wrap);
   else result.insertAdjacentElement('afterend', wrap);
 
   document.getElementById('_emailCapBtn').addEventListener('click', async function() {
     const email = document.getElementById('_emailCapInput').value.trim();
-    if (!email || !email.includes('@')) {
-      document.getElementById('_emailCapInput').focus();
-      return;
-    }
+    if (!email || !email.includes('@')) { document.getElementById('_emailCapInput').focus(); return; }
     const body = document.getElementById('resultBody');
     const title = document.querySelector('h1.tool-title')?.textContent?.trim() || document.title;
+    const subscribe = document.getElementById('_subCheck')?.checked || false;
     this.disabled = true;
     this.textContent = 'Sending…';
     try {
       await fetch('https://ask-panos.panagiotis-kokmotoss.workers.dev/email-result', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, tool: title, result: body?.innerText || '', url: window.location.href }),
+        body: JSON.stringify({ email, tool: title, result: body?.innerText || '', url: window.location.href, subscribe }),
       });
-      this.textContent = '✓ Sent!';
+      this.textContent = subscribe ? '✓ Sent + subscribed!' : '✓ Sent!';
       document.getElementById('_emailCapInput').value = '';
     } catch {
       this.textContent = 'Failed — try again';
@@ -865,6 +994,297 @@ function initShareableURL() {
   }, { capture: true });
 }
 
+/* ── Feature 2: Autosave form inputs ── */
+function _initAutosave() {
+  const form = document.getElementById('toolForm');
+  if (!form) return;
+  const key = 'draft_' + window.location.pathname.replace(/[^a-z0-9]/gi, '_');
+  try {
+    const saved = JSON.parse(localStorage.getItem(key) || '{}');
+    Object.keys(saved).forEach(id => {
+      const el = document.getElementById(id);
+      if (el && !['BUTTON'].includes(el.tagName) && el.type !== 'hidden' && el.type !== 'checkbox') {
+        el.value = saved[id];
+      }
+    });
+  } catch {}
+  form.addEventListener('input', () => {
+    try {
+      const data = {};
+      form.querySelectorAll('input[id]:not([type=hidden]):not([type=button]):not([type=checkbox]):not([type=submit]), textarea[id], select[id]').forEach(el => {
+        if (el.value) data[el.id] = el.value;
+      });
+      localStorage.setItem(key, JSON.stringify(data));
+    } catch {}
+  });
+  form.addEventListener('submit', () => {
+    try { localStorage.removeItem(key); } catch {}
+  }, { capture: true });
+}
+
+/* ── Feature 3: Multi-turn follow-up chat below result ── */
+function _injectFollowUpChat() {
+  const result = document.getElementById('result');
+  if (!result || result.querySelector('#_followChat')) return;
+  const wrap = document.createElement('div');
+  wrap.id = '_followChat';
+  wrap.className = 'tool-followup';
+  wrap.innerHTML = `
+    <p class="tool-followup-label">💬 Ask a follow-up question</p>
+    <div class="tool-followup-thread" id="_followThread"></div>
+    <div class="tool-followup-row">
+      <input class="tool-followup-input" id="_followInput" type="text"
+        placeholder="e.g. What if my budget doubles? Can you simplify this?" autocomplete="off" />
+      <button class="tool-followup-btn" id="_followBtn">Ask →</button>
+    </div>`;
+  const emailCap = result.closest('main')?.querySelector('#_emailCapture');
+  if (emailCap) emailCap.insertAdjacentElement('beforebegin', wrap);
+  else result.insertAdjacentElement('afterend', wrap);
+
+  const thread  = document.getElementById('_followThread');
+  const input   = document.getElementById('_followInput');
+  const btn     = document.getElementById('_followBtn');
+  let followHistory = []; // conversation context
+
+  const addBubble = (role, text) => {
+    const div = document.createElement('div');
+    div.className = `fup-bubble fup-${role}`;
+    div.innerHTML = role === 'user' ? `<span>${text.replace(/</g,'&lt;')}</span>` : formatMarkdown(text);
+    thread.appendChild(div);
+    thread.scrollTop = thread.scrollHeight;
+    return div;
+  };
+
+  const ask = async () => {
+    const q = input.value.trim();
+    if (!q) return;
+    input.value = '';
+    btn.disabled = true;
+    addBubble('user', q);
+    const loading = addBubble('bot', '<span class="fup-dots"><span></span><span></span><span></span></span>');
+    followHistory.push(q);
+    const originalResult = document.getElementById('resultBody')?.innerText || '';
+    const ctx = `The user previously received this AI-generated result:\n\n${originalResult}\n\nAnswer their follow-up question concisely and helpfully. Keep the same context and expertise.`;
+    const followMsg = followHistory.length === 1 ? q : `Previous follow-ups: ${followHistory.slice(0,-1).join(' | ')}\n\nNew question: ${q}`;
+    try {
+      const text = await _callWorkerFallback(ctx, followMsg);
+      loading.innerHTML = formatMarkdown(text);
+    } catch(err) {
+      loading.innerHTML = 'Sorry, try again.';
+    } finally {
+      btn.disabled = false;
+      input.focus();
+    }
+  };
+
+  btn.addEventListener('click', ask);
+  input.addEventListener('keydown', e => { if (e.key === 'Enter') ask(); });
+}
+
+/* ── Feature 6: Undo last refine ── */
+let _lastResultHTML = null;
+let _lastResultText = null;
+// Patched into _injectRefineInput's refine click — see below in _injectRefineInput
+
+/* ── Feature 9: Ask Panos's AI about the org/topic ── */
+function _injectAskAbout() {
+  const paths = ['/scam-nonprofit-detector.html', '/charity-comparison-engine.html', '/nonprofit-health-checker.html'];
+  if (!paths.includes(window.location.pathname)) return;
+  const result = document.getElementById('result');
+  if (!result || result.querySelector('#_askChatBtn')) return;
+
+  // Extract the subject from the primary input field
+  const orgInput = document.getElementById('orgName') || document.getElementById('cause') || document.getElementById('orgInfo');
+  const subject = orgInput?.value?.trim();
+  if (!subject) return;
+
+  const btn = document.createElement('button');
+  btn.id = '_askChatBtn';
+  btn.className = 'tool-ask-btn';
+  btn.innerHTML = `💬 Ask AI about "${subject.slice(0, 40)}${subject.length > 40 ? '…' : ''}"`;
+  btn.addEventListener('click', () => {
+    const widget = document.getElementById('chatWidget');
+    const inp = document.getElementById('chatInput');
+    if (!widget || !inp) return;
+    widget.classList.add('open');
+    inp.value = `Tell me about "${subject}" — what do you know about it and is it worth supporting?`;
+    inp.focus();
+    const send = document.getElementById('chatSend');
+    if (send) send.click();
+  });
+  const actions = result.querySelector('.tool-result-actions');
+  if (actions) result.insertBefore(btn, actions);
+  else result.appendChild(btn);
+}
+
+/* ── Feature 10: Confidence badge ── */
+function _injectConfidenceBadge(text) {
+  const result = document.getElementById('result');
+  if (!result || result.querySelector('._confBadge')) return;
+  const lower = (text || '').toLowerCase();
+  const hiWords = ['research shows','evidence suggests','studies confirm','data indicates','proven','well-established','according to'];
+  const loWords = ['may vary','might','uncertain','it\'s possible','could be','difficult to verify','unclear'];
+  const hi = hiWords.filter(w => lower.includes(w)).length;
+  const lo = loWords.filter(w => lower.includes(w)).length;
+  let label, color;
+  if (hi >= 2) { label = '📊 Research-backed'; color = '#16a34a'; }
+  else if (lo >= 3) { label = '⚠️ Estimates may vary'; color = '#d97706'; }
+  else { label = '🤖 AI analysis'; color = '#6b7280'; }
+  const header = result.querySelector('.tool-result-header');
+  if (!header) return;
+  const badge = document.createElement('span');
+  badge.className = '_confBadge';
+  badge.style.cssText = `display:inline-flex;align-items:center;gap:4px;font-size:0.69rem;padding:2px 8px;background:${color}16;color:${color};border-radius:10px;font-weight:600;border:1px solid ${color}30;margin-left:8px;`;
+  badge.textContent = label;
+  header.querySelector('.tool-result-label')?.insertAdjacentElement('afterend', badge);
+}
+
+/* ── Feature 11: PWA install prompt ── */
+let _pwaPrompt = null;
+function _initPWAPrompt() {
+  if (!document.getElementById('toolForm')) return; // only on tool pages
+  window.addEventListener('beforeinstallprompt', e => {
+    e.preventDefault();
+    _pwaPrompt = e;
+    try {
+      const visits = parseInt(localStorage.getItem('_tv') || '0') + 1;
+      localStorage.setItem('_tv', visits);
+      if (visits >= 2 && !localStorage.getItem('_pwaDone')) _showPWABanner();
+    } catch {}
+  });
+}
+function _showPWABanner() {
+  if (document.getElementById('_pwaBanner')) return;
+  const banner = document.createElement('div');
+  banner.id = '_pwaBanner';
+  banner.className = 'pwa-banner';
+  banner.innerHTML = `<span class="pwa-banner-text">📱 Add to home screen — use all 11 tools offline</span>
+    <button class="pwa-banner-btn" id="_pwaInstall">Install</button>
+    <button class="pwa-banner-x" id="_pwaDismiss" aria-label="Dismiss">✕</button>`;
+  document.body.appendChild(banner);
+  requestAnimationFrame(() => banner.classList.add('visible'));
+  document.getElementById('_pwaInstall').addEventListener('click', async () => {
+    if (_pwaPrompt) {
+      _pwaPrompt.prompt();
+      const result = await _pwaPrompt.userChoice;
+      if (result.outcome === 'accepted') { try { localStorage.setItem('_pwaDone','1'); } catch {} }
+    }
+    banner.remove();
+  });
+  document.getElementById('_pwaDismiss').addEventListener('click', () => {
+    try { localStorage.setItem('_pwaDone','1'); } catch {}
+    banner.classList.remove('visible');
+    setTimeout(() => banner.remove(), 300);
+  });
+}
+
+/* ── Feature 13: Shareable result card (canvas image) ── */
+function _injectShareCard() {
+  const copyBtn = document.getElementById('copyBtn');
+  if (!copyBtn || document.getElementById('_cardBtn')) return;
+  const btn = document.createElement('button');
+  btn.id = '_cardBtn';
+  btn.className = 'tool-card-btn';
+  btn.title = 'Download as shareable image';
+  btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="13" height="13"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg> Save image`;
+  const dlBtn = document.getElementById('_dlBtn');
+  (dlBtn || copyBtn).insertAdjacentElement('afterend', btn);
+  btn.addEventListener('click', () => {
+    const body = document.getElementById('resultBody');
+    const title = document.querySelector('h1.tool-title')?.textContent?.trim() || document.title;
+    if (!body) return;
+    const snippet = body.innerText.slice(0, 280).trim() + (body.innerText.length > 280 ? '…' : '');
+    const W = 1200, H = 630;
+    const canvas = document.createElement('canvas');
+    canvas.width = W; canvas.height = H;
+    const ctx = canvas.getContext('2d');
+    // Background
+    ctx.fillStyle = '#0f172a';
+    ctx.fillRect(0, 0, W, H);
+    // Accent strip
+    const grad = ctx.createLinearGradient(0, 0, W, 0);
+    grad.addColorStop(0, '#3b6ef8'); grad.addColorStop(1, '#7c3aed');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, H - 8, W, 8);
+    // Tool label
+    ctx.fillStyle = '#3b6ef8';
+    ctx.font = '600 18px system-ui,sans-serif';
+    ctx.fillText('AI for Social Impact · panoskokmotos.com', 60, 60);
+    // Title
+    ctx.fillStyle = '#f8fafc';
+    ctx.font = '700 44px system-ui,sans-serif';
+    const titleWords = title.split(' ');
+    let line = ''; let ty = 130;
+    for (const w of titleWords) {
+      const test = line + (line ? ' ' : '') + w;
+      if (ctx.measureText(test).width > W - 120) { ctx.fillText(line, 60, ty); ty += 56; line = w; }
+      else line = test;
+    }
+    if (line) ctx.fillText(line, 60, ty);
+    // Snippet
+    ctx.fillStyle = '#94a3b8';
+    ctx.font = '400 22px system-ui,sans-serif';
+    const words = snippet.split(' ');
+    let sLine = ''; let sy = ty + 70;
+    for (const w of words) {
+      const test = sLine + (sLine ? ' ' : '') + w;
+      if (ctx.measureText(test).width > W - 120) {
+        ctx.fillText(sLine, 60, sy); sy += 34; sLine = w;
+        if (sy > H - 80) { ctx.fillText(sLine + '…', 60, sy); break; }
+      } else sLine = test;
+    }
+    if (sy <= H - 80 && sLine) ctx.fillText(sLine, 60, sy);
+    // Download
+    const a = document.createElement('a');
+    a.href = canvas.toDataURL('image/png');
+    a.download = (title.replace(/[^a-z0-9 ]/gi,'').trim().replace(/\s+/g,'-').toLowerCase() || 'result') + '-card.png';
+    a.click();
+  });
+}
+
+/* ── Feature 22: Go Deeper with Claude Sonnet ── */
+const _DEEP_PATHS = ['/impact-story-generator.html', '/volunteer-match.html', '/charity-comparison-engine.html', '/why-should-i-give.html'];
+function _injectGoDeeperBtn() {
+  if (!_DEEP_PATHS.includes(window.location.pathname)) return;
+  const result = document.getElementById('result');
+  if (!result || result.querySelector('#_deepBtn')) return;
+  const btn = document.createElement('button');
+  btn.id = '_deepBtn';
+  btn.className = 'tool-deep-btn';
+  btn.innerHTML = `✨ Go Deeper <span class="deep-badge">Claude Sonnet</span>`;
+  const actions = result.querySelector('.tool-result-actions');
+  if (actions) result.insertBefore(btn, actions);
+  else result.appendChild(btn);
+  btn.addEventListener('click', async function() {
+    const body = document.getElementById('resultBody');
+    if (!body) return;
+    const current = body.innerText;
+    const title = document.querySelector('h1.tool-title')?.textContent?.trim() || document.title;
+    const sys = `You are a world-class expert in "${title}". The user has an AI-generated result they want to deepen. Substantially expand it: add specific examples, research citations, actionable steps, nuance, and depth. Keep the same structure but make it 2x richer and more useful.`;
+    const msg = `Here is the current result:\n\n${current}\n\nPlease provide a significantly enhanced, more comprehensive version.`;
+    btn.disabled = true;
+    btn.innerHTML = '✨ Enhancing…';
+    setLoading(true);
+    hideResult();
+    try {
+      const res = await fetch(TOOL_DEEP_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ systemPrompt: sys, userMessage: msg }),
+      });
+      if (!res.ok) throw new Error();
+      const data = await res.json();
+      showResult(data.result || data.text || '');
+    } catch {
+      if (!window._lastShownErr) showError('Enhancement failed. Please try again.');
+    } finally {
+      setLoading(false);
+      btn.disabled = false;
+      btn.innerHTML = `✨ Go Deeper <span class="deep-badge">Claude Sonnet</span>`;
+    }
+  });
+}
+
 /* ── Auto-init on DOM ready ── */
 document.addEventListener('DOMContentLoaded', () => {
   initExampleChips();
@@ -875,6 +1295,8 @@ document.addEventListener('DOMContentLoaded', () => {
   initEmbed();
   initShareableURL();
   _renderHistoryBtn();
+  _initAutosave();
+  _initPWAPrompt();
   /* Ctrl+Enter / Cmd+Enter to submit */
   document.addEventListener('keydown', e => {
     if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {

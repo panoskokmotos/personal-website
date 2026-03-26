@@ -274,6 +274,66 @@ Analyze local giving patterns and where the gaps are.`;
 
     initCopyBtn();
   </script>
+
+  <!-- ── AI Chat Widget ── -->
+  <div class="chat-widget" id="chatWidget">
+    <button class="chat-toggle" id="chatToggle" aria-label="Chat with Panos AI">
+      <svg class="chat-icon-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      <svg class="chat-icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      <span class="chat-badge">AI</span>
+    </button>
+    <div class="chat-panel" id="chatPanel">
+      <div class="chat-header">
+        <div class="chat-header-info">
+          <picture>
+            <source srcset="/photo.webp" type="image/webp" />
+            <img src="/photo.jpg" alt="Panos Kokmotos" class="chat-avatar" />
+          </picture>
+          <div class="chat-header-text">
+            <strong>Ask Panos</strong>
+            <span><span class="chat-status-dot"></span>AI · Usually replies instantly</span>
+          </div>
+        </div>
+        <div class="chat-header-actions">
+          <button class="chat-new-btn" id="chatNewChat" title="New conversation" aria-label="Start new conversation">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="15" height="15"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          </button>
+          <button class="chat-close-btn" id="chatClose" aria-label="Close chat">✕</button>
+        </div>
+      </div>
+      <div class="chat-messages" id="chatMessages">
+        <div class="chat-msg bot">
+          <p>👋 Hi! I'm Panos's AI. Ask me about his work, Givelink, or the social impact tools!</p>
+        </div>
+      </div>
+      <div class="chat-starters" id="chatStarters">
+        <p class="chat-starters-label">Quick questions</p>
+        <button class="chat-starter-chip" onclick="useChatStarter(this)">
+          <span class="csc-icon">🚀</span>
+          <span class="csc-text">How does Givelink work?</span>
+          <svg class="csc-arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+        </button>
+        <button class="chat-starter-chip" onclick="useChatStarter(this)">
+          <span class="csc-icon">📅</span>
+          <span class="csc-text">How can I book a call?</span>
+          <svg class="csc-arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+        </button>
+        <button class="chat-starter-chip" onclick="useChatStarter(this)">
+          <span class="csc-icon">🏆</span>
+          <span class="csc-text">What is Panos known for?</span>
+          <svg class="csc-arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+        </button>
+      </div>
+      <div class="chat-input-wrap">
+        <input type="text" id="chatInput" placeholder="Ask about Givelink, social impact, Panos…" autocomplete="off" />
+        <button id="chatSend" aria-label="Send">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+        </button>
+      </div>
+      <p class="chat-note">Powered by <a href="https://anthropic.com" target="_blank" rel="noopener">Claude AI</a></p>
+    </div>
+  </div>
+  <script src="/chat.js"></script>
   <!-- Service Worker registration -->
   <script>
     if ('serviceWorker' in navigator) {
