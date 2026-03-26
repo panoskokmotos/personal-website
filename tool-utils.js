@@ -1243,7 +1243,7 @@ function _injectShareCard() {
 }
 
 /* ── Feature 22: Go Deeper with Claude Sonnet ── */
-const _DEEP_PATHS = ['/impact-story-generator.html', '/volunteer-match.html', '/charity-comparison-engine.html', '/why-should-i-give.html'];
+const _DEEP_PATHS = ['/impact-story-generator.html', '/volunteer-match.html', '/charity-comparison-engine.html', '/why-should-i-give.html', '/donation-tax-estimator.html'];
 function _injectGoDeeperBtn() {
   if (!_DEEP_PATHS.includes(window.location.pathname)) return;
   const result = document.getElementById('result');
