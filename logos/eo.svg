@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 48" fill="none">
+  <!-- E in dark navy -->
+  <text x="0" y="39" font-family="Montserrat,Arial Black,Arial,sans-serif" font-size="44" font-weight="900" fill="#1B1F3B">E</text>
+  <!-- O formed by concentric coloured arcs (outer → inner) -->
+  <!-- Outer red arc -->
+  <path d="M60,4 A20,20 0 1,1 59.9,4" fill="none" stroke="#E8263D" stroke-width="5" stroke-linecap="round"/>
+  <!-- Orange -->
+  <path d="M60,9 A15,15 0 1,1 59.9,9" fill="none" stroke="#F47B20" stroke-width="4.5" stroke-linecap="round"/>
+  <!-- Yellow -->
+  <path d="M60,13.5 A10.5,10.5 0 1,1 59.9,13.5" fill="none" stroke="#F5C400" stroke-width="4" stroke-linecap="round"/>
+  <!-- Green -->
+  <path d="M60,17.5 A6.5,6.5 0 1,1 59.9,17.5" fill="none" stroke="#2EBF7B" stroke-width="3.5" stroke-linecap="round"/>
+  <!-- Teal centre -->
+  <circle cx="60" cy="24" r="3" fill="#00B4D8"/>
+</svg>

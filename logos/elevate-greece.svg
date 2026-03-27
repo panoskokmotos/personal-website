@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 230 68" fill="none">
+  <!-- ELEVATE -->
+  <text x="0" y="26" font-family="Montserrat,Arial Black,Arial,sans-serif" font-size="22" font-weight="900" fill="#003087">EL</text>
+  <!-- Three upward chevrons forming the V in ELEVATE -->
+  <polyline points="43,7 47,17 51,7"  fill="none" stroke="#0099CC" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <polyline points="47,7 51,17 55,7"  fill="none" stroke="#00AEEF" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <polyline points="51,7 55,17 59,7"  fill="none" stroke="#55CCEE" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="57" y="26" font-family="Montserrat,Arial Black,Arial,sans-serif" font-size="22" font-weight="900" fill="#003087">ATE</text>
+  <!-- BETA badge -->
+  <rect x="116" y="5" width="34" height="16" rx="8" fill="#00AEEF"/>
+  <text x="133" y="17.5" font-family="Arial,sans-serif" font-size="10" font-weight="700" fill="white" text-anchor="middle">BETA</text>
+  <!-- GREECE -->
+  <text x="0" y="50" font-family="Montserrat,Arial Black,Arial,sans-serif" font-size="22" font-weight="900" fill="#003087">GREECE</text>
+  <!-- national startup point -->
+  <text x="0" y="64" font-family="Arial,Helvetica,sans-serif" font-size="10.5" fill="#00AEEF" letter-spacing="0.2">national startup point</text>
+</svg>

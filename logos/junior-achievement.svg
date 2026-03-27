@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 52" fill="none">
+  <!-- Geometric diamond / kite shapes (two interlocked, dark + light teal) -->
+  <!-- Left dark-teal triangle (top-left pointing right) -->
+  <polygon points="2,26 22,4 22,26" fill="#2A7F7F"/>
+  <!-- Right dark-teal triangle (bottom-right) -->
+  <polygon points="22,26 22,48 42,26" fill="#2A7F7F"/>
+  <!-- Light teal top-right kite -->
+  <polygon points="22,4 42,26 22,26" fill="#3BBCB0"/>
+  <!-- Light teal bottom-left kite -->
+  <polygon points="2,26 22,26 22,48" fill="#3BBCB0"/>
+  <!-- White dividers (thin) for separation -->
+  <line x1="2" y1="26" x2="42" y2="26" stroke="white" stroke-width="1.2"/>
+  <line x1="22" y1="4"  x2="22" y2="48" stroke="white" stroke-width="1.2"/>
+  <!-- "Junior" text -->
+  <text x="52" y="22" font-family="Montserrat,Arial,sans-serif" font-size="15" font-weight="600" fill="#2A7F7F">Junior</text>
+  <!-- "Achievement" text -->
+  <text x="52" y="40" font-family="Montserrat,Arial,sans-serif" font-size="15" font-weight="600" fill="#2A7F7F">Achievement</text>
+  <!-- TM mark -->
+  <text x="168" y="23" font-family="Arial,sans-serif" font-size="8" fill="#2A7F7F">™</text>
+</svg>

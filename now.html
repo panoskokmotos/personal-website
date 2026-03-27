@@ -37,8 +37,8 @@
   <!-- DNS prefetch for external domains -->
   <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css?v=20260321b" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
   <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png" />
   <link rel="icon" type="image/png" sizes="180x180" href="assets/favicon-180.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon-180.png" />
@@ -50,7 +50,7 @@
     !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.async=!0,p.src=s.api_host+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+" (stub)"},o="init capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys getNextSurveyStep onSessionId setPersonPropertiesForFlags".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||(window.posthog=[]));
     posthog.init("phc_WDGdxSf2xcEbL1c6vbAkrr8LJcJqrodykJKGKhom82L", {
       api_host: "https://t.panoskokmotos.com",
-      ui_host: "https://eu.posthog.com",
+      ui_host: "https://us.posthog.com",
       person_profiles: "identified_only"
     });
   </script>
@@ -95,6 +95,7 @@
         <li><a href="/watch.html" class="nav-link">Watch</a></li>
         <li><a href="/books.html" class="nav-link">Books</a></li>
         <li><a href="/now.html" class="nav-link">Now</a></li>
+        <li><a href="/beliefs.html" class="nav-link">Beliefs</a></li>
         <li><a href="/#contact" class="nav-cta">Let's Talk →</a></li>
       </ul>
       <div class="nav-controls">
@@ -115,6 +116,7 @@
           <li><a href="/watch.html">Watch</a></li>
           <li><a href="/books.html">Books</a></li>
           <li><a href="/now.html">Now</a></li>
+          <li><a href="/beliefs.html">Beliefs</a></li>
           <li><a href="/#contact">Let's Talk</a></li>
         </ul>
         <div class="nav-mobile-socials">
@@ -199,47 +201,19 @@
             <div class="podcast-grid" style="margin-top:10px;">
               <div class="podcast-item" style="--pod-color:rgba(255,107,53,0.25)">
                 <div class="podcast-art">🚀</div>
-                <div class="podcast-info">
-                  <div class="podcast-name">Moonshots</div>
-                  <div class="podcast-host">Peter Diamandis</div>
-                  <div class="podcast-platform-links">
-                    <a href="https://podcasts.apple.com/us/podcast/moonshots-with-peter-h-diamandis/id1456551992" target="_blank" rel="noopener" class="pod-platform-link" title="Apple Podcasts"><svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.6 0 12 0zm0 4.8c1.98 0 3.6 1.62 3.6 3.6S13.98 12 12 12s-3.6-1.62-3.6-3.6S10.02 4.8 12 4.8zm0 14.64c-3 0-5.64-1.56-7.2-3.9.6-1.98 4.38-3.06 7.2-3.06 2.82 0 6.6 1.08 7.2 3.06-1.56 2.34-4.2 3.9-7.2 3.9z"/></svg> Apple</a>
-                    <a href="https://open.spotify.com/search/Moonshots%20Peter%20Diamandis/podcasts" target="_blank" rel="noopener" class="pod-platform-link pod-spotify" title="Spotify"><svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.6 0 12 0zm5.52 17.28c-.24.36-.6.48-.96.24-2.64-1.6-5.88-1.96-9.72-1.08-.36.12-.72-.12-.84-.48-.12-.36.12-.72.48-.84 4.2-.96 7.8-.6 10.68 1.2.36.24.48.6.36.96zm1.44-3.36c-.24.36-.72.48-1.08.24-2.96-1.84-7.56-2.36-11.04-1.32-.48.12-.96-.12-1.08-.6-.12-.48.12-.96.6-1.08C10.08 10 15.12 10.6 18.6 12.6c.36.24.48.84.36 1.32zm.12-3.48C15.6 8.4 8.76 8.16 5.16 9.24c-.6.12-1.2-.24-1.32-.72-.12-.6.24-1.2.72-1.32 4.2-1.2 11.16-.96 15.36 1.56.48.24.72.84.48 1.44-.24.48-.96.6-1.44.36z"/></svg> Spotify</a>
-                  </div>
-                </div>
+                <div><div class="podcast-name">Moonshots</div><div class="podcast-host">Peter Diamandis</div></div>
               </div>
               <div class="podcast-item" style="--pod-color:rgba(99,102,241,0.25)">
                 <div class="podcast-art">🔬</div>
-                <div class="podcast-info">
-                  <div class="podcast-name">Modern Wisdom</div>
-                  <div class="podcast-host">Chris Williamson</div>
-                  <div class="podcast-platform-links">
-                    <a href="https://podcasts.apple.com/us/podcast/modern-wisdom/id1347973549" target="_blank" rel="noopener" class="pod-platform-link" title="Apple Podcasts"><svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.6 0 12 0zm0 4.8c1.98 0 3.6 1.62 3.6 3.6S13.98 12 12 12s-3.6-1.62-3.6-3.6S10.02 4.8 12 4.8zm0 14.64c-3 0-5.64-1.56-7.2-3.9.6-1.98 4.38-3.06 7.2-3.06 2.82 0 6.6 1.08 7.2 3.06-1.56 2.34-4.2 3.9-7.2 3.9z"/></svg> Apple</a>
-                    <a href="https://open.spotify.com/search/Modern%20Wisdom%20Chris%20Williamson/podcasts" target="_blank" rel="noopener" class="pod-platform-link pod-spotify" title="Spotify"><svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.6 0 12 0zm5.52 17.28c-.24.36-.6.48-.96.24-2.64-1.6-5.88-1.96-9.72-1.08-.36.12-.72-.12-.84-.48-.12-.36.12-.72.48-.84 4.2-.96 7.8-.6 10.68 1.2.36.24.48.6.36.96zm1.44-3.36c-.24.36-.72.48-1.08.24-2.96-1.84-7.56-2.36-11.04-1.32-.48.12-.96-.12-1.08-.6-.12-.48.12-.96.6-1.08C10.08 10 15.12 10.6 18.6 12.6c.36.24.48.84.36 1.32zm.12-3.48C15.6 8.4 8.76 8.16 5.16 9.24c-.6.12-1.2-.24-1.32-.72-.12-.6.24-1.2.72-1.32 4.2-1.2 11.16-.96 15.36 1.56.48.24.72.84.48 1.44-.24.48-.96.6-1.44.36z"/></svg> Spotify</a>
-                  </div>
-                </div>
+                <div><div class="podcast-name">Modern Wisdom</div><div class="podcast-host">Chris Williamson</div></div>
               </div>
               <div class="podcast-item" style="--pod-color:rgba(16,185,129,0.25)">
                 <div class="podcast-art">⚡</div>
-                <div class="podcast-info">
-                  <div class="podcast-name">Tim Ferriss Show</div>
-                  <div class="podcast-host">Tim Ferriss</div>
-                  <div class="podcast-platform-links">
-                    <a href="https://podcasts.apple.com/us/podcast/the-tim-ferriss-show/id863897795" target="_blank" rel="noopener" class="pod-platform-link" title="Apple Podcasts"><svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.6 0 12 0zm0 4.8c1.98 0 3.6 1.62 3.6 3.6S13.98 12 12 12s-3.6-1.62-3.6-3.6S10.02 4.8 12 4.8zm0 14.64c-3 0-5.64-1.56-7.2-3.9.6-1.98 4.38-3.06 7.2-3.06 2.82 0 6.6 1.08 7.2 3.06-1.56 2.34-4.2 3.9-7.2 3.9z"/></svg> Apple</a>
-                    <a href="https://open.spotify.com/search/Tim%20Ferriss%20Show/podcasts" target="_blank" rel="noopener" class="pod-platform-link pod-spotify" title="Spotify"><svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.6 0 12 0zm5.52 17.28c-.24.36-.6.48-.96.24-2.64-1.6-5.88-1.96-9.72-1.08-.36.12-.72-.12-.84-.48-.12-.36.12-.72.48-.84 4.2-.96 7.8-.6 10.68 1.2.36.24.48.6.36.96zm1.44-3.36c-.24.36-.72.48-1.08.24-2.96-1.84-7.56-2.36-11.04-1.32-.48.12-.96-.12-1.08-.6-.12-.48.12-.96.6-1.08C10.08 10 15.12 10.6 18.6 12.6c.36.24.48.84.36 1.32zm.12-3.48C15.6 8.4 8.76 8.16 5.16 9.24c-.6.12-1.2-.24-1.32-.72-.12-.6.24-1.2.72-1.32 4.2-1.2 11.16-.96 15.36 1.56.48.24.72.84.48 1.44-.24.48-.96.6-1.44.36z"/></svg> Spotify</a>
-                  </div>
-                </div>
+                <div><div class="podcast-name">Tim Ferriss Show</div><div class="podcast-host">Tim Ferriss</div></div>
               </div>
               <div class="podcast-item" style="--pod-color:rgba(139,92,246,0.25)">
                 <div class="podcast-art">🧠</div>
-                <div class="podcast-info">
-                  <div class="podcast-name">Naval</div>
-                  <div class="podcast-host">Naval Ravikant</div>
-                  <div class="podcast-platform-links">
-                    <a href="https://podcasts.apple.com/us/podcast/naval/id1454097755" target="_blank" rel="noopener" class="pod-platform-link" title="Apple Podcasts"><svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.6 0 12 0zm0 4.8c1.98 0 3.6 1.62 3.6 3.6S13.98 12 12 12s-3.6-1.62-3.6-3.6S10.02 4.8 12 4.8zm0 14.64c-3 0-5.64-1.56-7.2-3.9.6-1.98 4.38-3.06 7.2-3.06 2.82 0 6.6 1.08 7.2 3.06-1.56 2.34-4.2 3.9-7.2 3.9z"/></svg> Apple</a>
-                    <a href="https://open.spotify.com/search/Naval%20Ravikant%20podcast/podcasts" target="_blank" rel="noopener" class="pod-platform-link pod-spotify" title="Spotify"><svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.6 0 12 0zm5.52 17.28c-.24.36-.6.48-.96.24-2.64-1.6-5.88-1.96-9.72-1.08-.36.12-.72-.12-.84-.48-.12-.36.12-.72.48-.84 4.2-.96 7.8-.6 10.68 1.2.36.24.48.6.36.96zm1.44-3.36c-.24.36-.72.48-1.08.24-2.96-1.84-7.56-2.36-11.04-1.32-.48.12-.96-.12-1.08-.6-.12-.48.12-.96.6-1.08C10.08 10 15.12 10.6 18.6 12.6c.36.24.48.84.36 1.32zm.12-3.48C15.6 8.4 8.76 8.16 5.16 9.24c-.6.12-1.2-.24-1.32-.72-.12-.6.24-1.2.72-1.32 4.2-1.2 11.16-.96 15.36 1.56.48.24.72.84.48 1.44-.24.48-.96.6-1.44.36z"/></svg> Spotify</a>
-                  </div>
-                </div>
+                <div><div class="podcast-name">Naval</div><div class="podcast-host">Naval Ravikant</div></div>
               </div>
             </div>
           </div>
@@ -250,6 +224,10 @@
       <!-- Footer note -->
       <div class="now-page-footer-note" data-animate>
         <p>If something here resonates, I'd genuinely love to hear from you → <a href="mailto:panagiotis.kokmotoss@gmail.com">panagiotis.kokmotoss@gmail.com</a></p>
+      </div>
+      <div style="text-align:center;margin:48px 0 0">
+        <p style="color:var(--text-muted);margin-bottom:16px;font-size:0.95rem">Want to know the full story?</p>
+        <a href="/#about" class="btn btn-secondary">Read about me →</a>
       </div>
     </div>
   </section>
@@ -336,7 +314,7 @@
       <p class="chat-note">Powered by <a href="https://anthropic.com" target="_blank" rel="noopener">Claude AI</a></p>
     </div>
   </div>
-  <script src="script.js?v=20260321"></script>
-  <script src="chat.js?v=20260321"></script>
+  <script src="script.js"></script>
+  <script src="chat.js"></script>
 </body>
 </html>

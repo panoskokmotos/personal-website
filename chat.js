@@ -108,10 +108,36 @@ function showFollowUpChips() {
   starters.classList.remove('hidden');
 }
 
+// ── C. Smart Contact Router — PostHog intent detection ──
+const INTENT_PATTERNS = [
+  { type: 'investor',    re: /\b(invest|investor|funding|raise|seed|round|equity|vc|venture|capital)\b/i },
+  { type: 'speaking',    re: /\b(speak|speaker|keynote|talk|event|conference|panel|present)\b/i },
+  { type: 'partnership', re: /\b(partner|partnership|collab|collaboration|integrate|csr|nonprofit|charity)\b/i },
+  { type: 'media',       re: /\b(press|media|interview|feature|journalist|reporter|article|coverage)\b/i },
+  { type: 'hiring',      re: /\b(job|hire|hiring|join|team|role|position)\b/i },
+];
+
+function detectAndTrackIntent(text) {
+  if (typeof posthog === 'undefined') return;
+  for (const { type, re } of INTENT_PATTERNS) {
+    if (re.test(text)) {
+      posthog.capture('contact_intent', {
+        type,
+        query: text.slice(0, 120),
+        page: window.location.pathname,
+      });
+      break;
+    }
+  }
+}
+
 // ── Send message ──
 async function sendMessage() {
   const text = chatInput.value.trim();
   if (!text) return;
+
+  // Track contact intent silently
+  detectAndTrackIntent(text);
 
   chatInput.value = '';
   chatSend.disabled = true;
@@ -242,3 +268,53 @@ if (chatSizeToggle && chatWidget) {
     updateSizeToggleUI(isLg);
   });
 }
+
+// ── D. Voice Input (Web Speech API) ──
+(function initVoiceInput() {
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const micBtn = document.getElementById('chatMic');
+  if (!SpeechRecognition || !micBtn) return;
+
+  // Show the mic button only when API is available
+  micBtn.style.display = '';
+
+  let recognition = null;
+  let listening = false;
+
+  function startListening() {
+    if (listening) { stopListening(); return; }
+
+    recognition = new SpeechRecognition();
+    recognition.lang = 'en-US';
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.onstart = () => {
+      listening = true;
+      micBtn.classList.add('mic-listening');
+      micBtn.setAttribute('aria-label', 'Listening… click to stop');
+      chatInput.placeholder = 'Listening…';
+    };
+
+    recognition.onresult = (e) => {
+      const transcript = e.results[0][0].transcript;
+      chatInput.value = transcript;
+      chatInput.focus();
+    };
+
+    recognition.onerror = () => stopListening();
+    recognition.onend  = () => stopListening();
+
+    recognition.start();
+  }
+
+  function stopListening() {
+    listening = false;
+    micBtn.classList.remove('mic-listening');
+    micBtn.setAttribute('aria-label', 'Voice input');
+    chatInput.placeholder = 'Ask about Givelink, my journey, speaking…';
+    if (recognition) { try { recognition.stop(); } catch (e) {} recognition = null; }
+  }
+
+  micBtn.addEventListener('click', startListening);
+})();

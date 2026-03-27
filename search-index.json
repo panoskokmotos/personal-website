@@ -1,0 +1,296 @@
+[
+  {
+    "id": "hero",
+    "title": "Panos Kokmotos",
+    "snippet": "Forbes 30 Under 30 Greece. WEF Global Shaper San Francisco. Co-Founder & COO of Givelink. Advocate. Changemaker. Builder. Based in San Francisco, USA and Athens/Patras, Greece.",
+    "url": "/",
+    "category": "Home"
+  },
+  {
+    "id": "about",
+    "title": "About Panos",
+    "snippet": "Greek entrepreneur who co-founded Givelink in 2022. Studied Mechanical Engineering at University of Patras (Top 3%). Erasmus at UPC Barcelona. WEF Global Shaper in San Francisco. Reads 40+ books per year. Trains for HYROX and triathlons.",
+    "url": "/#about",
+    "category": "About"
+  },
+  {
+    "id": "givelink",
+    "title": "Givelink — In-Kind Donation Platform",
+    "snippet": "Givelink is an in-kind donation platform co-founded by Panos in 2022. Donors shop the exact goods nonprofits need. 100K+ lives impacted, $220K+ in donations, 8,500+ donations processed, 100+ nonprofit partners. Raised €200K pre-seed. Scaling globally from San Francisco.",
+    "url": "/#projects",
+    "category": "Projects"
+  },
+  {
+    "id": "podcast",
+    "title": "Entrepreneurship Talks — Podcast",
+    "snippet": "Entrepreneurship Talks is a podcast co-founded by Panos in 2020. 60+ episodes, 350,000+ views, 5+ live events, $100K+ grant secured. Available on Spotify, Apple Podcasts and YouTube. Long-form conversations with founders, investors, and changemakers.",
+    "url": "/#projects",
+    "category": "Podcast"
+  },
+  {
+    "id": "awards",
+    "title": "Awards & Recognition",
+    "snippet": "Forbes 30 Under 30 Greece 2024. WEF Global Shaper San Francisco Hub. Top 4 Europe GSEA 2023. 2× Best University Startup Greece. European Young Innovators Top 15 Social Entrepreneurship. Pappajohn Business Plan Competition Winner. Circle Future Leaders Fellow. Pegasus Angel Accelerator Fellow. Mensa Member.",
+    "url": "/#journey",
+    "category": "Awards"
+  },
+  {
+    "id": "contact",
+    "title": "Contact & Book a Call",
+    "snippet": "Book a 30-minute call at tidycal.com/givelink/panos. Email panagiotis.kokmotoss@gmail.com. LinkedIn: /in/panoskokmotos. Twitter: @panoskokmotoss. Open to partnerships, speaking, investment conversations, and connecting with founders.",
+    "url": "/#contact",
+    "category": "Contact"
+  },
+  {
+    "id": "speaking",
+    "title": "Speaking Engagements",
+    "snippet": "Panos speaks on entrepreneurship, social impact, in-kind giving, AI, and the future of philanthropy. Has spoken at Forbes events, university events, startup competitions, and community forums across Europe and the US. Book via email or tidycal.",
+    "url": "/#contact",
+    "category": "Speaking"
+  },
+  {
+    "id": "invest",
+    "title": "Invest in or Partner with Givelink",
+    "snippet": "Givelink is actively expanding in the US market. Open to conversations with aligned investors and strategic partners — especially nonprofits, foundations, and corporate CSR teams. Book a call or email to start a conversation.",
+    "url": "/#contact",
+    "category": "Contact"
+  },
+  {
+    "id": "books",
+    "title": "Books That Shaped Panos",
+    "snippet": "Panos reads 40+ books a year across science, philosophy, AI, and entrepreneurship. Key books: Fabric of Reality, Beginning of Infinity, Life 3.0, Singularity Is Near, Naval Almanack, Tao Te Ching, Discourses, Meditations, Tools of Titans, Zero to One, Lean Startup, Shoe Dog.",
+    "url": "/books.html",
+    "category": "Books"
+  },
+  {
+    "id": "book-fabric",
+    "title": "The Fabric of Reality — David Deutsch",
+    "snippet": "Reality is understood by connecting ideas across disciplines. Good explanations survive serious criticism. Progress starts with better questions. Deepened Panos's systems thinking and cross-disciplinary curiosity.",
+    "url": "/books.html",
+    "category": "Books"
+  },
+  {
+    "id": "book-infinity",
+    "title": "The Beginning of Infinity — David Deutsch",
+    "snippet": "Knowledge grows through bold conjectures and criticism. Progress is open-ended when reason is protected. Good explanations are hard to vary. Shaped Panos's conviction that there are no unsolvable problems, only bad explanations.",
+    "url": "/books.html",
+    "category": "Books"
+  },
+  {
+    "id": "book-life30",
+    "title": "Life 3.0 — Max Tegmark",
+    "snippet": "AI outcomes depend on proactive design, not passive optimism. Alignment matters as much as capability. Long-term thinking is essential. Shaped Panos's urgency around responsible AI for social impact.",
+    "url": "/books.html",
+    "category": "Books"
+  },
+  {
+    "id": "book-singularity",
+    "title": "The Singularity Is Near — Ray Kurzweil",
+    "snippet": "Technological change compounds faster than intuition predicts. Adapting early to exponential trends creates strategic advantage. Human-centred innovation should scale capability without losing values. Embrace of exponential thinking.",
+    "url": "/books.html",
+    "category": "Books"
+  },
+  {
+    "id": "book-naval",
+    "title": "The Almanack of Naval Ravikant — Eric Jorgenson",
+    "snippet": "Play long-term games with long-term people. Read what you love until you love to read. Happiness is a skill you can train. Naval shaped Panos's life philosophy on wealth, happiness, leverage, and serendipity.",
+    "url": "/books.html",
+    "category": "Books"
+  },
+  {
+    "id": "book-tao",
+    "title": "Tao Te Ching — Lao Tzu",
+    "snippet": "Nature does not hurry, yet everything is accomplished. Knowing yourself is true wisdom. Letting go of ego unlocks potential. Shaped Panos's calm under pressure and belief in effortless action.",
+    "url": "/books.html",
+    "category": "Books"
+  },
+  {
+    "id": "book-stoic",
+    "title": "Discourses — Epictetus",
+    "snippet": "It's not what happens to you, but how you react. No one is free who is not master of themselves. Wealth is having few wants. Shaped Panos's stoic resilience when facing setbacks.",
+    "url": "/books.html",
+    "category": "Books"
+  },
+  {
+    "id": "book-meditations",
+    "title": "Meditations — Marcus Aurelius",
+    "snippet": "You have power over your mind, not outside events. The obstacle is the way. Be a good person, don't just argue about it. Shaped Panos's bias for action and inner discipline.",
+    "url": "/books.html",
+    "category": "Books"
+  },
+  {
+    "id": "book-titans",
+    "title": "Tools of Titans — Tim Ferriss",
+    "snippet": "World-class performance comes from repeatable daily systems. Energy and focus are strategic assets. Learn across disciplines. Shaped Panos's routines around training, reading, and reflection.",
+    "url": "/books.html",
+    "category": "Books"
+  },
+  {
+    "id": "book-zerotone",
+    "title": "Zero to One — Peter Thiel",
+    "snippet": "Build unique value instead of competing in crowded markets. Distribution matters as much as product. Bold contrarian thinking unlocks outsized opportunity. Shaped Panos's conviction that Givelink must be 10x better.",
+    "url": "/books.html",
+    "category": "Books"
+  },
+  {
+    "id": "book-lean",
+    "title": "The Lean Startup — Eric Ries",
+    "snippet": "Test assumptions fast before over-investing. Validated learning guides priorities. Iteration speed is a long-term advantage. Shaped Panos's ship fast, learn faster approach to building.",
+    "url": "/books.html",
+    "category": "Books"
+  },
+  {
+    "id": "book-shoeDog",
+    "title": "Shoe Dog — Phil Knight",
+    "snippet": "Building iconic companies requires resilience through chaos. Mission-aligned teams outperform when resources are tight. Conviction and consistency matter more than short-term comfort. Shaped Panos's stamina and belief that the hardest stretches matter most.",
+    "url": "/books.html",
+    "category": "Books"
+  },
+  {
+    "id": "beliefs",
+    "title": "12 Beliefs That Shape How Panos Works",
+    "snippet": "Real impact is always specific. Your mental model is your most important asset. Constraints are instructions. Cold emails still work. Comfort is the enemy of good stories. Ships beat plans. Serendipity is engineered, not random. Most people underestimate what 10 years of compounding looks like.",
+    "url": "/beliefs.html",
+    "category": "Beliefs"
+  },
+  {
+    "id": "belief-impact",
+    "title": "Belief: Real impact is always specific",
+    "snippet": "Vague missions help no one. Givelink doesn't fight poverty — it makes sure a specific shelter gets the exact sleeping bags it needs.",
+    "url": "/beliefs.html",
+    "category": "Beliefs"
+  },
+  {
+    "id": "belief-mental-model",
+    "title": "Belief: Mental model is your most important asset",
+    "snippet": "Reads 40 books a year not for information, but to build a more accurate map of how the world works.",
+    "url": "/beliefs.html",
+    "category": "Beliefs"
+  },
+  {
+    "id": "belief-constraints",
+    "title": "Belief: Constraints are instructions",
+    "snippet": "Limitations are not obstacles; they are design briefs. The best solutions almost always come from working within tight constraints.",
+    "url": "/beliefs.html",
+    "category": "Beliefs"
+  },
+  {
+    "id": "belief-curious",
+    "title": "Belief: The best founders are deeply curious, not just ambitious",
+    "snippet": "Ambition without curiosity produces noise. Curiosity without ambition produces interesting people who change nothing.",
+    "url": "/beliefs.html",
+    "category": "Beliefs"
+  },
+  {
+    "id": "belief-cold-email",
+    "title": "Belief: Cold emails still work",
+    "snippet": "Every meaningful opportunity Panos has had started with an email to someone he had no right to contact.",
+    "url": "/beliefs.html",
+    "category": "Beliefs"
+  },
+  {
+    "id": "belief-comfort",
+    "title": "Belief: Comfort is the enemy of good stories",
+    "snippet": "The things Panos is most proud of are the ones that scared him most.",
+    "url": "/beliefs.html",
+    "category": "Beliefs"
+  },
+  {
+    "id": "belief-exercise",
+    "title": "Belief: Exercise more than you think you need to",
+    "snippet": "The mind and body aren't separate systems. Training is thinking. Panos trains for HYROX and triathlons.",
+    "url": "/beliefs.html",
+    "category": "Beliefs"
+  },
+  {
+    "id": "belief-ships",
+    "title": "Belief: Ships beat plans",
+    "snippet": "A working prototype beats a perfect roadmap. The market will tell you things no spreadsheet can.",
+    "url": "/beliefs.html",
+    "category": "Beliefs"
+  },
+  {
+    "id": "belief-serendipity",
+    "title": "Belief: Serendipity is engineered, not random",
+    "snippet": "The best things in life started with an unexpected conversation. Put yourself in rooms where luck can find you.",
+    "url": "/beliefs.html",
+    "category": "Beliefs"
+  },
+  {
+    "id": "belief-compounding",
+    "title": "Belief: Underestimate what 10 years of compounding looks like",
+    "snippet": "Boring consistency in the right direction produces extraordinary results. The compounding is invisible until it isn't.",
+    "url": "/beliefs.html",
+    "category": "Beliefs"
+  },
+  {
+    "id": "belief-marry",
+    "title": "Belief: The person you marry is the most important career decision",
+    "snippet": "Who you build your life with shapes your energy, your risk tolerance, and your ceiling.",
+    "url": "/beliefs.html",
+    "category": "Beliefs"
+  },
+  {
+    "id": "now",
+    "title": "What Panos Is Working On Now",
+    "snippet": "Scaling Givelink globally from San Francisco toward 100M people mission. WEF Global Shaper SF. Executive Board Social Impact SF. Entrepreneurship Talks strategic leadership. Training for HYROX and triathlons. Reading 40+ books per year.",
+    "url": "/now.html",
+    "category": "Now"
+  },
+  {
+    "id": "watch",
+    "title": "Watch — Entrepreneurship Talks Videos",
+    "snippet": "Watch Entrepreneurship Talks episodes on YouTube. Long-form conversations with founders, investors, and changemakers. 350K+ views, 60+ episodes.",
+    "url": "/watch.html",
+    "category": "Watch"
+  },
+  {
+    "id": "naval",
+    "title": "Naval Ravikant — Panos's Life Mentor & Role Model",
+    "snippet": "Naval shaped how Panos thinks about wealth, happiness, leverage, and what it means to live well. Maximizing serendipity — putting yourself in rooms where luck can find you.",
+    "url": "/#about",
+    "category": "About"
+  },
+  {
+    "id": "wef-shaper",
+    "title": "WEF Global Shaper — San Francisco Hub",
+    "snippet": "Panos is a World Economic Forum Global Shaper at the San Francisco Hub since December 2025. Also serves on the Executive Board of Social Impact SF.",
+    "url": "/#journey",
+    "category": "Milestones"
+  },
+  {
+    "id": "education",
+    "title": "Education — University of Patras & UPC Barcelona",
+    "snippet": "M.Eng Mechanical Engineering, University of Patras — Top 3% of class, GPA 3.5. Erasmus at Universitat Politècnica de Catalunya (UPC Barcelona) studying Technology and Engineering Management.",
+    "url": "/#journey",
+    "category": "Education"
+  },
+  {
+    "id": "hobbies",
+    "title": "Hobbies — HYROX, CrossFit, Triathlon, Trail Running, Piano, Chess",
+    "snippet": "Panos trains for HYROX and triathlons at a competitive level. Also into trail running, piano, and chess. Reads 40+ books per year across physics, AI, philosophy, and entrepreneurship.",
+    "url": "/#about",
+    "category": "About"
+  },
+  {
+    "id": "faq-givelink",
+    "title": "FAQ: What is Givelink and how does it work?",
+    "snippet": "Givelink lets donors shop the specific goods nonprofits need most — from food to hygiene products — with step-by-step delivery tracking, photo confirmation, and real impact stories. Instead of cash donations, you give exactly what's needed.",
+    "url": "/#faq",
+    "category": "FAQ"
+  },
+  {
+    "id": "faq-booking",
+    "title": "FAQ: How can I book a call with Panos?",
+    "snippet": "Book a 30-minute call directly at tidycal.com/givelink/panos. Panos is open to conversations about Givelink partnerships, speaking invitations, podcast appearances, and connecting with founders working on hard problems.",
+    "url": "/#faq",
+    "category": "FAQ"
+  },
+  {
+    "id": "faq-podcast",
+    "title": "FAQ: What is Entrepreneurship Talks?",
+    "snippet": "Entrepreneurship Talks is a long-form podcast and community Panos co-founded in 2020. 60+ episodes, 350K+ views, 5+ live events, $100K+ grant secured. Listen on Spotify or YouTube.",
+    "url": "/#faq",
+    "category": "FAQ"
+  }
+]

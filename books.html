@@ -38,8 +38,8 @@
   <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
   <link rel="dns-prefetch" href="https://covers.openlibrary.org" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css?v=20260321b" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
   <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png" />
   <link rel="icon" type="image/png" sizes="180x180" href="assets/favicon-180.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon-180.png" />
@@ -51,7 +51,7 @@
     !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.async=!0,p.src=s.api_host+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+" (stub)"},o="init capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys getNextSurveyStep onSessionId setPersonPropertiesForFlags".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||(window.posthog=[]));
     posthog.init("phc_WDGdxSf2xcEbL1c6vbAkrr8LJcJqrodykJKGKhom82L", {
       api_host: "https://t.panoskokmotos.com",
-      ui_host: "https://eu.posthog.com",
+      ui_host: "https://us.posthog.com",
       person_profiles: "identified_only"
     });
   </script>
@@ -96,6 +96,7 @@
         <li><a href="/watch.html" class="nav-link">Watch</a></li>
         <li><a href="/books.html" class="nav-link">Books</a></li>
         <li><a href="/now.html" class="nav-link">Now</a></li>
+        <li><a href="/beliefs.html" class="nav-link">Beliefs</a></li>
         <li><a href="/#contact" class="nav-cta">Let's Talk →</a></li>
       </ul>
       <div class="nav-controls">
@@ -116,6 +117,7 @@
           <li><a href="/watch.html">Watch</a></li>
           <li><a href="/books.html">Books</a></li>
           <li><a href="/now.html">Now</a></li>
+          <li><a href="/beliefs.html">Beliefs</a></li>
           <li><a href="/#contact">Let's Talk</a></li>
         </ul>
         <div class="nav-mobile-socials">
@@ -135,7 +137,7 @@
     <div class="container">
       <p class="section-eyebrow">Reading</p>
       <h1 class="section-heading">Books That Shaped Me</h1>
-      <p class="books-sub" style="max-width:640px;margin:0 auto;">Every year, I read almost <strong>40 books</strong>. Physics, philosophy, biology, entrepreneurship — the ones I keep coming back to.</p>
+      <p class="books-sub" style="max-width:640px;margin:0 auto;">Every year, I read almost <strong>40 books</strong>. Physics, philosophy, biology, entrepreneurship — the ones I keep coming back to. These books shaped <a href="/beliefs.html" style="color:var(--blue);border-bottom:1px solid rgba(59,110,248,0.4);">how I think and what I believe →</a></p>
     </div>
   </section>
 
@@ -190,40 +192,32 @@
         </div>
       </div>
 
-      <!-- ── Filter Tabs ── -->
-      <div class="books-filter-tabs" id="booksFilterTabs">
-        <button class="bft-tab active" data-filter="all">All</button>
-        <button class="bft-tab" data-filter="science">Science &amp; Future</button>
-        <button class="bft-tab" data-filter="philosophy">Philosophy &amp; Mindset</button>
-        <button class="bft-tab" data-filter="entrepreneurship">Entrepreneurship &amp; Execution</button>
-      </div>
-
       <div class="books-categories">
-        <div class="books-category" data-animate data-category="science">
+        <div class="books-category" data-animate>
           <h3 class="books-category-title">Science &amp; Future</h3>
           <div class="books-grid">
-            <div class="book-card" data-animate><div class="book-cover-wrap skeleton-wrap"><img src="https://covers.openlibrary.org/b/isbn/9780140146905-L.jpg" alt="The Fabric of Reality cover" class="book-cover-img" loading="lazy" onerror="this.onerror=null;this.src='https://books.google.com/books/content?vid=ISBN9780140146905&printsec=frontcover&img=1&zoom=3'" /></div><div class="book-body"><h4>The Fabric of Reality</h4><p class="book-author">David Deutsch</p><ul class="book-highlights"><li>Reality is understood by connecting ideas across disciplines.</li><li>Good explanations are testable and survive serious criticism.</li><li>Progress starts when we challenge limits with better questions.</li></ul><a href="https://x.com/intent/tweet?text=Reality+is+understood+by+connecting+ideas+across+disciplines.+via+%40panoskokmotoss&url=https%3A%2F%2Fpanoskokmotos.com%2Fbooks.html" target="_blank" rel="noopener" class="book-share-x">Share on 𝕏</a><button class="book-ask-ai" onclick="var b=this.closest('.book-body');chatOpenWithBook(b.querySelector('h4').textContent,b.querySelector('.book-author').textContent)">💬 How did this shape me?</button></div></div>
-            <div class="book-card" data-animate><div class="book-cover-wrap skeleton-wrap"><img src="https://covers.openlibrary.org/b/isbn/9780143121350-L.jpg" alt="The Beginning of Infinity cover" class="book-cover-img" loading="lazy" onerror="this.onerror=null;this.src='https://books.google.com/books/content?vid=ISBN9780143121350&printsec=frontcover&img=1&zoom=3'" /></div><div class="book-body"><h4>The Beginning of Infinity</h4><p class="book-author">David Deutsch</p><ul class="book-highlights"><li>Knowledge is built through bold conjectures and criticism.</li><li>Progress is open-ended when societies protect reason and freedom.</li><li>Good explanations are hard to vary and unlock better decisions.</li></ul><a href="https://x.com/intent/tweet?text=Good+explanations+are+hard+to+vary+and+unlock+better+decisions.+via+%40panoskokmotoss&url=https%3A%2F%2Fpanoskokmotos.com%2Fbooks.html" target="_blank" rel="noopener" class="book-share-x">Share on 𝕏</a><button class="book-ask-ai" onclick="var b=this.closest('.book-body');chatOpenWithBook(b.querySelector('h4').textContent,b.querySelector('.book-author').textContent)">💬 How did this shape me?</button></div></div>
-            <div class="book-card" data-animate><div class="book-cover-wrap skeleton-wrap"><img src="https://covers.openlibrary.org/b/isbn/9781101970317-L.jpg" alt="Life 3.0 cover" class="book-cover-img" loading="lazy" onerror="this.onerror=null;this.src='https://books.google.com/books/content?vid=ISBN9781101970317&printsec=frontcover&img=1&zoom=3'" /></div><div class="book-body"><h4>Life 3.0</h4><p class="book-author">Max Tegmark</p><ul class="book-highlights"><li>AI outcomes depend on proactive design, not passive optimism.</li><li>Alignment and governance matter as much as technical performance.</li><li>Long-term thinking is essential when building powerful systems.</li></ul><a href="https://x.com/intent/tweet?text=AI+outcomes+depend+on+proactive+design%2C+not+passive+optimism.+via+%40panoskokmotoss&url=https%3A%2F%2Fpanoskokmotos.com%2Fbooks.html" target="_blank" rel="noopener" class="book-share-x">Share on 𝕏</a><button class="book-ask-ai" onclick="var b=this.closest('.book-body');chatOpenWithBook(b.querySelector('h4').textContent,b.querySelector('.book-author').textContent)">💬 How did this shape me?</button></div></div>
-            <div class="book-card" data-animate><div class="book-cover-wrap skeleton-wrap"><img src="https://covers.openlibrary.org/b/isbn/9780143037880-L.jpg" alt="The Singularity Is Near cover" class="book-cover-img" loading="lazy" onerror="this.onerror=null;this.src='https://books.google.com/books/content?vid=ISBN9780143037880&printsec=frontcover&img=1&zoom=3'" /></div><div class="book-body"><h4>The Singularity Is Near</h4><p class="book-author">Ray Kurzweil</p><ul class="book-highlights"><li>Technological change often compounds faster than intuition predicts.</li><li>Adapting early to exponential trends creates strategic advantage.</li><li>Human-centered innovation should scale capability without losing values.</li></ul><a href="https://x.com/intent/tweet?text=Technological+change+compounds+faster+than+intuition+predicts.+via+%40panoskokmotoss&url=https%3A%2F%2Fpanoskokmotos.com%2Fbooks.html" target="_blank" rel="noopener" class="book-share-x">Share on 𝕏</a><button class="book-ask-ai" onclick="var b=this.closest('.book-body');chatOpenWithBook(b.querySelector('h4').textContent,b.querySelector('.book-author').textContent)">💬 How did this shape me?</button></div></div>
+            <div class="book-card" data-animate><div class="book-cover-wrap skeleton-wrap"><img src="https://covers.openlibrary.org/b/isbn/9780140146905-L.jpg" alt="The Fabric of Reality cover" class="book-cover-img" loading="lazy" onerror="this.onerror=null;this.src='https://books.google.com/books/content?vid=ISBN9780140146905&printsec=frontcover&img=1&zoom=3'" /></div><div class="book-body"><h4>The Fabric of Reality</h4><p class="book-author">David Deutsch</p><ul class="book-highlights"><li>Reality is understood by connecting ideas across disciplines.</li><li>Good explanations are testable and survive serious criticism.</li><li>Progress starts when we challenge limits with better questions.</li></ul><a href="https://x.com/intent/tweet?text=Reality+is+understood+by+connecting+ideas+across+disciplines.+via+%40panoskokmotoss&url=https%3A%2F%2Fpanoskokmotos.com%2Fbooks.html" target="_blank" rel="noopener" class="book-share-x">Share on 𝕏</a></div></div>
+            <div class="book-card" data-animate><div class="book-cover-wrap skeleton-wrap"><img src="https://covers.openlibrary.org/b/isbn/9780143121350-L.jpg" alt="The Beginning of Infinity cover" class="book-cover-img" loading="lazy" onerror="this.onerror=null;this.src='https://books.google.com/books/content?vid=ISBN9780143121350&printsec=frontcover&img=1&zoom=3'" /></div><div class="book-body"><h4>The Beginning of Infinity</h4><p class="book-author">David Deutsch</p><ul class="book-highlights"><li>Knowledge is built through bold conjectures and criticism.</li><li>Progress is open-ended when societies protect reason and freedom.</li><li>Good explanations are hard to vary and unlock better decisions.</li></ul><a href="https://x.com/intent/tweet?text=Good+explanations+are+hard+to+vary+and+unlock+better+decisions.+via+%40panoskokmotoss&url=https%3A%2F%2Fpanoskokmotos.com%2Fbooks.html" target="_blank" rel="noopener" class="book-share-x">Share on 𝕏</a></div></div>
+            <div class="book-card" data-animate><div class="book-cover-wrap skeleton-wrap"><img src="https://covers.openlibrary.org/b/isbn/9781101970317-L.jpg" alt="Life 3.0 cover" class="book-cover-img" loading="lazy" onerror="this.onerror=null;this.src='https://books.google.com/books/content?vid=ISBN9781101970317&printsec=frontcover&img=1&zoom=3'" /></div><div class="book-body"><h4>Life 3.0</h4><p class="book-author">Max Tegmark</p><ul class="book-highlights"><li>AI outcomes depend on proactive design, not passive optimism.</li><li>Alignment and governance matter as much as technical performance.</li><li>Long-term thinking is essential when building powerful systems.</li></ul><a href="https://x.com/intent/tweet?text=AI+outcomes+depend+on+proactive+design%2C+not+passive+optimism.+via+%40panoskokmotoss&url=https%3A%2F%2Fpanoskokmotos.com%2Fbooks.html" target="_blank" rel="noopener" class="book-share-x">Share on 𝕏</a></div></div>
+            <div class="book-card" data-animate><div class="book-cover-wrap skeleton-wrap"><img src="https://covers.openlibrary.org/b/isbn/9780143037880-L.jpg" alt="The Singularity Is Near cover" class="book-cover-img" loading="lazy" onerror="this.onerror=null;this.src='https://books.google.com/books/content?vid=ISBN9780143037880&printsec=frontcover&img=1&zoom=3'" /></div><div class="book-body"><h4>The Singularity Is Near</h4><p class="book-author">Ray Kurzweil</p><ul class="book-highlights"><li>Technological change often compounds faster than intuition predicts.</li><li>Adapting early to exponential trends creates strategic advantage.</li><li>Human-centered innovation should scale capability without losing values.</li></ul><a href="https://x.com/intent/tweet?text=Technological+change+compounds+faster+than+intuition+predicts.+via+%40panoskokmotoss&url=https%3A%2F%2Fpanoskokmotos.com%2Fbooks.html" target="_blank" rel="noopener" class="book-share-x">Share on 𝕏</a></div></div>
           </div>
         </div>
-        <div class="books-category" data-animate data-category="philosophy">
+        <div class="books-category" data-animate>
           <h3 class="books-category-title">Philosophy &amp; Mindset</h3>
           <div class="books-grid">
-            <div class="book-card" data-animate><div class="book-cover-wrap skeleton-wrap"><img src="https://covers.openlibrary.org/b/isbn/9781544514215-L.jpg" alt="The Almanack of Naval Ravikant cover" class="book-cover-img" loading="lazy" onerror="this.onerror=null;this.src='https://books.google.com/books/content?vid=ISBN9781544514215&printsec=frontcover&img=1&zoom=3'" /></div><div class="book-body"><h4>The Almanack of Naval Ravikant</h4><p class="book-author">Eric Jorgenson</p><ul class="book-highlights"><li>"Play long-term games with long-term people."</li><li>"Read what you love until you love to read."</li><li>"Happiness is a skill you can train."</li></ul><a href="https://x.com/intent/tweet?text=%22Play+long-term+games+with+long-term+people.%22+%E2%80%94+Naval+Ravikant+(via+%40panoskokmotoss)&url=https%3A%2F%2Fpanoskokmotos.com%2Fbooks.html" target="_blank" rel="noopener" class="book-share-x">Share on 𝕏</a><button class="book-ask-ai" onclick="var b=this.closest('.book-body');chatOpenWithBook(b.querySelector('h4').textContent,b.querySelector('.book-author').textContent)">💬 How did this shape me?</button></div></div>
-            <div class="book-card" data-animate><div class="book-cover-wrap skeleton-wrap"><img src="https://covers.openlibrary.org/b/isbn/9780061142666-L.jpg" alt="Tao Te Ching cover" class="book-cover-img" loading="lazy" onerror="this.onerror=null;this.src='https://books.google.com/books/content?vid=ISBN9780061142666&printsec=frontcover&img=1&zoom=3'" /></div><div class="book-body"><h4>Tao Te Ching</h4><p class="book-author">Lao Tzu</p><ul class="book-highlights"><li>"Nature does not hurry, yet everything is accomplished."</li><li>"Knowing others is intelligence; knowing yourself is true wisdom."</li><li>"When I let go of what I am, I become what I might be."</li></ul><a href="https://x.com/intent/tweet?text=Nature+does+not+hurry%2C+yet+everything+is+accomplished.+%E2%80%94+Lao+Tzu+via+%40panoskokmotoss&url=https%3A%2F%2Fpanoskokmotos.com%2Fbooks.html" target="_blank" rel="noopener" class="book-share-x">Share on 𝕏</a><button class="book-ask-ai" onclick="var b=this.closest('.book-body');chatOpenWithBook(b.querySelector('h4').textContent,b.querySelector('.book-author').textContent)">💬 How did this shape me?</button></div></div>
-            <div class="book-card" data-animate><div class="book-cover-wrap skeleton-wrap"><img src="https://covers.openlibrary.org/b/isbn/9780140449464-L.jpg" alt="Discourses cover" class="book-cover-img" loading="lazy" onerror="this.onerror=null;this.src='https://books.google.com/books/content?vid=ISBN9780140449464&printsec=frontcover&img=1&zoom=3'" /></div><div class="book-body"><h4>Discourses</h4><p class="book-author">Epictetus</p><ul class="book-highlights"><li>"It's not what happens to you, but how you react to it."</li><li>"No man is free who is not master of himself."</li><li>"Wealth consists not in having great possessions, but in having few wants."</li></ul><a href="https://x.com/intent/tweet?text=It%27s+not+what+happens+to+you%2C+but+how+you+react+to+it.+%E2%80%94+Epictetus+via+%40panoskokmotoss&url=https%3A%2F%2Fpanoskokmotos.com%2Fbooks.html" target="_blank" rel="noopener" class="book-share-x">Share on 𝕏</a><button class="book-ask-ai" onclick="var b=this.closest('.book-body');chatOpenWithBook(b.querySelector('h4').textContent,b.querySelector('.book-author').textContent)">💬 How did this shape me?</button></div></div>
-            <div class="book-card" data-animate><div class="book-cover-wrap skeleton-wrap"><img src="https://covers.openlibrary.org/b/isbn/9780140449334-L.jpg" alt="Meditations cover" class="book-cover-img" loading="lazy" onerror="this.onerror=null;this.src='https://books.google.com/books/content?vid=ISBN9780140449334&printsec=frontcover&img=1&zoom=3'" /></div><div class="book-body"><h4>Meditations</h4><p class="book-author">Marcus Aurelius</p><ul class="book-highlights"><li>"You have power over your mind — not outside events."</li><li>"The obstacle is the way."</li><li>"Waste no more time arguing what a good man should be. Be one."</li></ul><a href="https://x.com/intent/tweet?text=%22You+have+power+over+your+mind+%E2%80%94+not+outside+events.%22+%E2%80%94+Marcus+Aurelius+(via+%40panoskokmotoss)&url=https%3A%2F%2Fpanoskokmotos.com%2Fbooks.html" target="_blank" rel="noopener" class="book-share-x">Share on 𝕏</a><button class="book-ask-ai" onclick="var b=this.closest('.book-body');chatOpenWithBook(b.querySelector('h4').textContent,b.querySelector('.book-author').textContent)">💬 How did this shape me?</button></div></div>
+            <div class="book-card" data-animate><div class="book-cover-wrap skeleton-wrap"><img src="https://covers.openlibrary.org/b/isbn/9781544514215-L.jpg" alt="The Almanack of Naval Ravikant cover" class="book-cover-img" loading="lazy" onerror="this.onerror=null;this.src='https://books.google.com/books/content?vid=ISBN9781544514215&printsec=frontcover&img=1&zoom=3'" /></div><div class="book-body"><h4>The Almanack of Naval Ravikant</h4><p class="book-author">Eric Jorgenson</p><ul class="book-highlights"><li>"Play long-term games with long-term people."</li><li>"Read what you love until you love to read."</li><li>"Happiness is a skill you can train."</li></ul><a href="https://x.com/intent/tweet?text=%22Play+long-term+games+with+long-term+people.%22+%E2%80%94+Naval+Ravikant+(via+%40panoskokmotoss)&url=https%3A%2F%2Fpanoskokmotos.com%2Fbooks.html" target="_blank" rel="noopener" class="book-share-x">Share on 𝕏</a></div></div>
+            <div class="book-card" data-animate><div class="book-cover-wrap skeleton-wrap"><img src="https://covers.openlibrary.org/b/isbn/9780061142666-L.jpg" alt="Tao Te Ching cover" class="book-cover-img" loading="lazy" onerror="this.onerror=null;this.src='https://books.google.com/books/content?vid=ISBN9780061142666&printsec=frontcover&img=1&zoom=3'" /></div><div class="book-body"><h4>Tao Te Ching</h4><p class="book-author">Lao Tzu</p><ul class="book-highlights"><li>"Nature does not hurry, yet everything is accomplished."</li><li>"Knowing others is intelligence; knowing yourself is true wisdom."</li><li>"When I let go of what I am, I become what I might be."</li></ul><a href="https://x.com/intent/tweet?text=Nature+does+not+hurry%2C+yet+everything+is+accomplished.+%E2%80%94+Lao+Tzu+via+%40panoskokmotoss&url=https%3A%2F%2Fpanoskokmotos.com%2Fbooks.html" target="_blank" rel="noopener" class="book-share-x">Share on 𝕏</a></div></div>
+            <div class="book-card" data-animate><div class="book-cover-wrap skeleton-wrap"><img src="https://covers.openlibrary.org/b/isbn/9780140449464-L.jpg" alt="Discourses cover" class="book-cover-img" loading="lazy" onerror="this.onerror=null;this.src='https://books.google.com/books/content?vid=ISBN9780140449464&printsec=frontcover&img=1&zoom=3'" /></div><div class="book-body"><h4>Discourses</h4><p class="book-author">Epictetus</p><ul class="book-highlights"><li>"It's not what happens to you, but how you react to it."</li><li>"No man is free who is not master of himself."</li><li>"Wealth consists not in having great possessions, but in having few wants."</li></ul><a href="https://x.com/intent/tweet?text=It%27s+not+what+happens+to+you%2C+but+how+you+react+to+it.+%E2%80%94+Epictetus+via+%40panoskokmotoss&url=https%3A%2F%2Fpanoskokmotos.com%2Fbooks.html" target="_blank" rel="noopener" class="book-share-x">Share on 𝕏</a></div></div>
+            <div class="book-card" data-animate><div class="book-cover-wrap skeleton-wrap"><img src="https://covers.openlibrary.org/b/isbn/9780140449334-L.jpg" alt="Meditations cover" class="book-cover-img" loading="lazy" onerror="this.onerror=null;this.src='https://books.google.com/books/content?vid=ISBN9780140449334&printsec=frontcover&img=1&zoom=3'" /></div><div class="book-body"><h4>Meditations</h4><p class="book-author">Marcus Aurelius</p><ul class="book-highlights"><li>"You have power over your mind — not outside events."</li><li>"The obstacle is the way."</li><li>"Waste no more time arguing what a good man should be. Be one."</li></ul><a href="https://x.com/intent/tweet?text=%22You+have+power+over+your+mind+%E2%80%94+not+outside+events.%22+%E2%80%94+Marcus+Aurelius+(via+%40panoskokmotoss)&url=https%3A%2F%2Fpanoskokmotos.com%2Fbooks.html" target="_blank" rel="noopener" class="book-share-x">Share on 𝕏</a></div></div>
           </div>
         </div>
-        <div class="books-category" data-animate data-category="entrepreneurship">
+        <div class="books-category" data-animate>
           <h3 class="books-category-title">Entrepreneurship &amp; Execution</h3>
           <div class="books-grid">
-            <div class="book-card" data-animate><div class="book-cover-wrap skeleton-wrap"><img src="https://covers.openlibrary.org/b/isbn/9781328683786-L.jpg" alt="Tools of Titans cover" class="book-cover-img" loading="lazy" onerror="this.onerror=null;this.src='https://books.google.com/books/content?vid=ISBN9781328683786&printsec=frontcover&img=1&zoom=3'" /></div><div class="book-body"><h4>Tools of Titans</h4><p class="book-author">Tim Ferriss</p><ul class="book-highlights"><li>World-class performance is built from repeatable daily systems.</li><li>Energy, focus, and reflection are strategic assets for founders.</li><li>Learning from many disciplines sharpens judgment under pressure.</li></ul><a href="https://x.com/intent/tweet?text=World-class+performance+is+built+from+repeatable+daily+systems.+via+%40panoskokmotoss&url=https%3A%2F%2Fpanoskokmotos.com%2Fbooks.html" target="_blank" rel="noopener" class="book-share-x">Share on 𝕏</a><button class="book-ask-ai" onclick="var b=this.closest('.book-body');chatOpenWithBook(b.querySelector('h4').textContent,b.querySelector('.book-author').textContent)">💬 How did this shape me?</button></div></div>
-            <div class="book-card" data-animate><div class="book-cover-wrap skeleton-wrap"><img src="https://covers.openlibrary.org/b/isbn/9780804139298-L.jpg" alt="Zero to One cover" class="book-cover-img" loading="lazy" onerror="this.onerror=null;this.src='https://books.google.com/books/content?vid=ISBN9780804139298&printsec=frontcover&img=1&zoom=3'" /></div><div class="book-body"><h4>Zero to One</h4><p class="book-author">Peter Thiel</p><ul class="book-highlights"><li>Build unique value instead of competing in crowded markets.</li><li>Strong distribution is as important as strong product design.</li><li>Bold, contrarian thinking can unlock outsized opportunity.</li></ul><a href="https://x.com/intent/tweet?text=%22Build+unique+value+instead+of+competing+in+crowded+markets.%22+%E2%80%94+Peter+Thiel+%7C+via+%40panoskokmotoss&url=https%3A%2F%2Fpanoskokmotos.com%2Fbooks.html" target="_blank" rel="noopener" class="book-share-x">Share on 𝕏</a><button class="book-ask-ai" onclick="var b=this.closest('.book-body');chatOpenWithBook(b.querySelector('h4').textContent,b.querySelector('.book-author').textContent)">💬 How did this shape me?</button></div></div>
-            <div class="book-card" data-animate><div class="book-cover-wrap skeleton-wrap"><img src="https://covers.openlibrary.org/b/isbn/9780307887894-L.jpg" alt="The Lean Startup cover" class="book-cover-img" loading="lazy" onerror="this.onerror=null;this.src='https://books.google.com/books/content?vid=ISBN9780307887894&printsec=frontcover&img=1&zoom=3'" /></div><div class="book-body"><h4>The Lean Startup</h4><p class="book-author">Eric Ries</p><ul class="book-highlights"><li>Test assumptions fast before over-investing in execution.</li><li>Validated learning should guide product and growth priorities.</li><li>Iteration speed can become a long-term competitive advantage.</li></ul><a href="https://x.com/intent/tweet?text=Test+assumptions+fast+before+over-investing+in+execution.+via+%40panoskokmotoss&url=https%3A%2F%2Fpanoskokmotos.com%2Fbooks.html" target="_blank" rel="noopener" class="book-share-x">Share on 𝕏</a><button class="book-ask-ai" onclick="var b=this.closest('.book-body');chatOpenWithBook(b.querySelector('h4').textContent,b.querySelector('.book-author').textContent)">💬 How did this shape me?</button></div></div>
-            <div class="book-card" data-animate><div class="book-cover-wrap skeleton-wrap"><img src="https://covers.openlibrary.org/b/isbn/9780062457738-L.jpg" alt="Shoe Dog cover" class="book-cover-img" loading="lazy" onerror="this.onerror=null;this.src='https://books.google.com/books/content?vid=ISBN9780062457738&printsec=frontcover&img=1&zoom=3'" /></div><div class="book-body"><h4>Shoe Dog</h4><p class="book-author">Phil Knight</p><ul class="book-highlights"><li>Building iconic companies requires resilience through chaos.</li><li>Mission-aligned teams can outperform when resources are tight.</li><li>Conviction and consistency matter more than short-term comfort.</li></ul><a href="https://x.com/intent/tweet?text=Building+iconic+companies+requires+resilience+through+chaos.+via+%40panoskokmotoss&url=https%3A%2F%2Fpanoskokmotos.com%2Fbooks.html" target="_blank" rel="noopener" class="book-share-x">Share on 𝕏</a><button class="book-ask-ai" onclick="var b=this.closest('.book-body');chatOpenWithBook(b.querySelector('h4').textContent,b.querySelector('.book-author').textContent)">💬 How did this shape me?</button></div></div>
+            <div class="book-card" data-animate><div class="book-cover-wrap skeleton-wrap"><img src="https://covers.openlibrary.org/b/isbn/9781328683786-L.jpg" alt="Tools of Titans cover" class="book-cover-img" loading="lazy" onerror="this.onerror=null;this.src='https://books.google.com/books/content?vid=ISBN9781328683786&printsec=frontcover&img=1&zoom=3'" /></div><div class="book-body"><h4>Tools of Titans</h4><p class="book-author">Tim Ferriss</p><ul class="book-highlights"><li>World-class performance is built from repeatable daily systems.</li><li>Energy, focus, and reflection are strategic assets for founders.</li><li>Learning from many disciplines sharpens judgment under pressure.</li></ul><a href="https://x.com/intent/tweet?text=World-class+performance+is+built+from+repeatable+daily+systems.+via+%40panoskokmotoss&url=https%3A%2F%2Fpanoskokmotos.com%2Fbooks.html" target="_blank" rel="noopener" class="book-share-x">Share on 𝕏</a></div></div>
+            <div class="book-card" data-animate><div class="book-cover-wrap skeleton-wrap"><img src="https://covers.openlibrary.org/b/isbn/9780804139298-L.jpg" alt="Zero to One cover" class="book-cover-img" loading="lazy" onerror="this.onerror=null;this.src='https://books.google.com/books/content?vid=ISBN9780804139298&printsec=frontcover&img=1&zoom=3'" /></div><div class="book-body"><h4>Zero to One</h4><p class="book-author">Peter Thiel</p><ul class="book-highlights"><li>Build unique value instead of competing in crowded markets.</li><li>Strong distribution is as important as strong product design.</li><li>Bold, contrarian thinking can unlock outsized opportunity.</li></ul><a href="https://x.com/intent/tweet?text=%22Build+unique+value+instead+of+competing+in+crowded+markets.%22+%E2%80%94+Peter+Thiel+%7C+via+%40panoskokmotoss&url=https%3A%2F%2Fpanoskokmotos.com%2Fbooks.html" target="_blank" rel="noopener" class="book-share-x">Share on 𝕏</a></div></div>
+            <div class="book-card" data-animate><div class="book-cover-wrap skeleton-wrap"><img src="https://covers.openlibrary.org/b/isbn/9780307887894-L.jpg" alt="The Lean Startup cover" class="book-cover-img" loading="lazy" onerror="this.onerror=null;this.src='https://books.google.com/books/content?vid=ISBN9780307887894&printsec=frontcover&img=1&zoom=3'" /></div><div class="book-body"><h4>The Lean Startup</h4><p class="book-author">Eric Ries</p><ul class="book-highlights"><li>Test assumptions fast before over-investing in execution.</li><li>Validated learning should guide product and growth priorities.</li><li>Iteration speed can become a long-term competitive advantage.</li></ul><a href="https://x.com/intent/tweet?text=Test+assumptions+fast+before+over-investing+in+execution.+via+%40panoskokmotoss&url=https%3A%2F%2Fpanoskokmotos.com%2Fbooks.html" target="_blank" rel="noopener" class="book-share-x">Share on 𝕏</a></div></div>
+            <div class="book-card" data-animate><div class="book-cover-wrap skeleton-wrap"><img src="https://covers.openlibrary.org/b/isbn/9780062457738-L.jpg" alt="Shoe Dog cover" class="book-cover-img" loading="lazy" onerror="this.onerror=null;this.src='https://books.google.com/books/content?vid=ISBN9780062457738&printsec=frontcover&img=1&zoom=3'" /></div><div class="book-body"><h4>Shoe Dog</h4><p class="book-author">Phil Knight</p><ul class="book-highlights"><li>Building iconic companies requires resilience through chaos.</li><li>Mission-aligned teams can outperform when resources are tight.</li><li>Conviction and consistency matter more than short-term comfort.</li></ul><a href="https://x.com/intent/tweet?text=Building+iconic+companies+requires+resilience+through+chaos.+via+%40panoskokmotoss&url=https%3A%2F%2Fpanoskokmotos.com%2Fbooks.html" target="_blank" rel="noopener" class="book-share-x">Share on 𝕏</a></div></div>
           </div>
         </div>
       </div>
@@ -323,61 +317,39 @@
       <p class="chat-note">Powered by <a href="https://anthropic.com" target="_blank" rel="noopener">Claude AI</a></p>
     </div>
   </div>
-  <script src="script.js?v=20260321"></script>
-  <script src="chat.js?v=20260321"></script>
+  <script src="script.js?v=2"></script>
+  <script src="chat.js?v=2"></script>
   <script>
-    // ── Book Filter Tabs ──
-    (function() {
-      var tabs = document.querySelectorAll('.bft-tab');
-      var categories = document.querySelectorAll('.books-category[data-category]');
-      tabs.forEach(function(tab) {
-        tab.addEventListener('click', function() {
-          var filter = this.getAttribute('data-filter');
-          tabs.forEach(function(t) { t.classList.remove('active'); });
-          this.classList.add('active');
-          categories.forEach(function(cat) {
-            if (filter === 'all' || cat.getAttribute('data-category') === filter) {
-              cat.style.display = '';
-            } else {
-              cat.style.display = 'none';
-            }
-          });
-        });
-      });
-    })();
-
-    // ── Book Read Toggle ──
-    (function() {
-      var READ_KEY = 'books_read_v1';
-      function getRead() {
-        try { return JSON.parse(localStorage.getItem(READ_KEY)) || {}; } catch(e) { return {}; }
+    // ── Book AI: inject "Chat with AI" button into each book card ──
+    function injectBookAIBtn(card, titleSel, authorSel) {
+      var titleEl = card.querySelector(titleSel);
+      var authorEl = card.querySelector(authorSel);
+      var title = titleEl ? titleEl.textContent.trim() : '';
+      var author = authorEl ? authorEl.textContent.trim() : '';
+      if (!title) return;
+      var btn = document.createElement('button');
+      btn.className = 'book-ai-btn';
+      btn.setAttribute('aria-label', 'Chat about ' + title + ' with AI');
+      btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>How did this shape me?</span>';
+      btn.onclick = function() {
+        if (typeof window.chatOpenWithBook === 'function') {
+          window.chatOpenWithBook(title, author);
+        }
+      };
+      var footer = card.querySelector('.book-footer');
+      if (footer) footer.insertBefore(btn, footer.firstChild);
+      else {
+        var shareBtn = card.querySelector('.book-share-x');
+        if (shareBtn) shareBtn.parentNode.insertBefore(btn, shareBtn);
+        else card.appendChild(btn);
       }
-      function saveRead(obj) {
-        try { localStorage.setItem(READ_KEY, JSON.stringify(obj)); } catch(e) {}
-      }
-      document.querySelectorAll('.book-card').forEach(function(card) {
-        var titleEl = card.querySelector('h4');
-        if (!titleEl) return;
-        var key = titleEl.textContent.trim();
-        var read = getRead();
-        var btn = document.createElement('button');
-        btn.className = 'book-read-toggle' + (read[key] ? ' read' : '');
-        btn.setAttribute('aria-label', 'Mark as read');
-        btn.innerHTML = read[key] ? '✓ Read' : '+ I\'ve read this';
-        btn.onclick = function() {
-          var r = getRead();
-          r[key] = !r[key];
-          saveRead(r);
-          btn.className = 'book-read-toggle' + (r[key] ? ' read' : '');
-          btn.innerHTML = r[key] ? '✓ Read' : '+ I\'ve read this';
-          card.classList.toggle('book-card-read', !!r[key]);
-        };
-        if (read[key]) card.classList.add('book-card-read');
-        var askAi = card.querySelector('.book-ask-ai');
-        if (askAi) askAi.parentNode.insertBefore(btn, askAi.nextSibling);
-        else card.querySelector('.book-body').appendChild(btn);
-      });
-    })();
+    }
+    document.querySelectorAll('.book-card').forEach(function(card) {
+      injectBookAIBtn(card, 'h4', '.book-author');
+    });
+    document.querySelectorAll('.bnr-card').forEach(function(card) {
+      injectBookAIBtn(card, 'h4.bnr-title', '.bnr-author');
+    });
   </script>
 </body>
 </html>

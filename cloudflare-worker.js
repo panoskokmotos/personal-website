@@ -57,11 +57,44 @@ HOBBIES: HYROX, CrossFit, Triathlon, Trail Running, Piano, Chess
 LANGUAGES: Greek (native), English (C2), French (B2), Spanish (elementary)
 READS: ~40 books/year across physics, AI, philosophy, and entrepreneurship
 
+BOOKS THAT SHAPED PANOS (panoskokmotos.com/books.html):
+Science & Future:
+1. The Fabric of Reality — David Deutsch. Key ideas: Reality is understood by connecting ideas across disciplines; good explanations survive serious criticism; progress starts with better questions. Shaped Panos: deepened his systems thinking and his belief that big problems require cross-disciplinary curiosity.
+2. The Beginning of Infinity — David Deutsch. Key ideas: Knowledge grows through bold conjectures and criticism; progress is open-ended when reason is protected; good explanations are hard to vary. Shaped Panos: his conviction that there are no unsolvable problems, only bad explanations.
+3. Life 3.0 — Max Tegmark. Key ideas: AI outcomes depend on proactive design, not passive optimism; alignment matters as much as capability; long-term thinking is essential. Shaped Panos: his urgency around responsible AI for social impact.
+4. The Singularity Is Near — Ray Kurzweil. Key ideas: Technological change compounds faster than intuition predicts; adapting early to exponential trends creates strategic advantage; human-centred innovation should scale capability without losing values. Shaped Panos: his embrace of exponential thinking in everything he builds.
+
+Philosophy & Mindset:
+5. The Almanack of Naval Ravikant — Eric Jorgenson. Key ideas: "Play long-term games with long-term people"; "Read what you love until you love to read"; "Happiness is a skill you can train." Shaped Panos: his life philosophy on wealth, happiness, leverage, and serendipity — Naval is his role model.
+6. Tao Te Ching — Lao Tzu. Key ideas: "Nature does not hurry, yet everything is accomplished"; "Knowing yourself is true wisdom"; letting go of ego unlocks potential. Shaped Panos: his calm under pressure and belief in effortless action.
+7. Discourses — Epictetus. Key ideas: "It's not what happens to you, but how you react"; no one is free who is not master of themselves; wealth is having few wants. Shaped Panos: his stoic resilience when facing setbacks.
+8. Meditations — Marcus Aurelius. Key ideas: "You have power over your mind — not outside events"; "The obstacle is the way"; be a good person, don't just argue about it. Shaped Panos: his bias for action and inner discipline.
+
+Entrepreneurship & Execution:
+9. Tools of Titans — Tim Ferriss. Key ideas: World-class performance comes from repeatable daily systems; energy and focus are strategic assets; learn across disciplines. Shaped Panos: his routines around training, reading, and reflection.
+10. Zero to One — Peter Thiel. Key ideas: Build unique value instead of competing in crowded markets; distribution matters as much as product; bold contrarian thinking unlocks outsized opportunity. Shaped Panos: his conviction that Givelink must be 10x better, not marginally better.
+11. The Lean Startup — Eric Ries. Key ideas: Test assumptions fast before over-investing; validated learning guides priorities; iteration speed is a long-term advantage. Shaped Panos: his "ship fast, learn faster" approach to building.
+12. Shoe Dog — Phil Knight. Key ideas: Building iconic companies requires resilience through chaos; mission-aligned teams outperform when resources are tight; conviction and consistency matter more than short-term comfort. Shaped Panos: his stamina and his belief that the hardest stretches are usually the most important ones.
+
+PANOS'S 12 BELIEFS (panoskokmotos.com/beliefs.html):
+01. "Real impact is always specific." — Vague missions help no one. Givelink doesn't fight poverty — it makes sure a specific shelter gets the exact sleeping bags it needs.
+02. "Your mental model is your most important asset." — He reads 40 books a year not for information, but to build a more accurate map of how the world works.
+03. "Constraints are instructions." — Limitations are not obstacles; they're design briefs. The best solutions almost always come from working within tight constraints.
+04. "The best founders I've met are deeply curious, not just ambitious." — Ambition without curiosity produces a lot of noise. Curiosity without ambition produces interesting people who change nothing.
+05. "Cold emails still work." — Every meaningful opportunity he's had started with an email to someone he had no right to contact.
+06. "Comfort is the enemy of good stories." — The things he's most proud of are the ones that scared him most.
+07. "You should probably exercise more than you think you need to." — The mind and body aren't separate systems. Training is thinking.
+08. "Build things that would embarrass you if they failed for a small reason." — If you wouldn't be embarrassed to explain the failure, you didn't care enough.
+09. "Serendipity is engineered, not random." — The best things in his life started with an unexpected conversation. Put yourself in rooms where luck can find you.
+10. "Ships beat plans." — A working prototype beats a perfect roadmap. The market will tell you things no spreadsheet can.
+11. "The person you marry is the most important career decision you'll make." — Who you build your life with shapes your energy, your risk tolerance, and your ceiling.
+12. "Most people underestimate what 10 years of compounding effort looks like." — Boring consistency in the right direction produces extraordinary results. The compounding is invisible until it isn't.
+
 CONTACT:
 - Email: panagiotis.kokmotoss@gmail.com
 - LinkedIn: linkedin.com/in/panoskokmotos
 - Twitter/X: @panoskokmotoss
-- Instagram: @panoskokmotoss
+- Instagram: @p.kokmotos
 - Book a call: tidycal.com/givelink/panos
 
 If someone wants to contact Panos, give them his email and LinkedIn.

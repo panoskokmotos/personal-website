@@ -65,9 +65,9 @@
   <link rel="dns-prefetch" href="https://esm.sh" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://formspree.io" />
-  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
-  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" /></noscript>
-  <link rel="stylesheet" href="style.css?v=20260321b" />
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" /></noscript>
+  <link rel="stylesheet" href="style.css?v=4" />
   <link rel="shortcut icon" href="/favicon.ico" />
   <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png" />
   <link rel="icon" type="image/png" sizes="180x180" href="/assets/favicon-180.png" />
@@ -515,7 +515,7 @@
     !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.async=!0,p.src=s.api_host+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+" (stub)"},o="init capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys getNextSurveyStep onSessionId setPersonPropertiesForFlags".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||(window.posthog=[]));
     posthog.init("phc_WDGdxSf2xcEbL1c6vbAkrr8LJcJqrodykJKGKhom82L", {
       api_host: "https://t.panoskokmotos.com",
-      ui_host: "https://eu.posthog.com",
+      ui_host: "https://us.posthog.com",
       person_profiles: "identified_only"
     });
   </script>
@@ -606,6 +606,11 @@
         <li><a href="#contact" class="nav-cta">Let's Talk →</a></li>
       </ul>
       <div class="nav-controls">
+        <button class="nav-search-btn" id="navSearchBtn" aria-label="Search site" title="Search (⌘K)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <span>Search</span>
+          <span class="ns-shortcut"><kbd>⌘</kbd><kbd>K</kbd></span>
+        </button>
         <button class="hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
       </div>
     </div>
@@ -761,12 +766,12 @@
           </div>
           <div class="logo-divider"></div>
           <div class="logo-item">
-            <svg viewBox="0 0 40 22" fill="currentColor" class="logo-svg logo-eo" role="img" aria-label="Entrepreneurs Organization"><text x="0" y="16" font-size="14" font-weight="900" font-family="Arial, sans-serif">EO</text></svg>
-            <span class="logo-sub">Entrepreneurs' Org</span>
+            <img src="logos/eo.svg" alt="Entrepreneurs' Organization" class="logo-img" width="72" height="48" loading="lazy" />
+            <span class="logo-sub">GSEA Top 16</span>
           </div>
           <div class="logo-divider"></div>
           <div class="logo-item">
-            <svg viewBox="0 0 80 22" fill="currentColor" class="logo-svg logo-ja" role="img" aria-label="JA Europe — National 1st Place"><text x="0" y="15" font-size="10" font-weight="800" letter-spacing="0.5" font-family="Arial, sans-serif">JA EUROPE</text></svg>
+            <img src="logos/junior-achievement.svg" alt="Junior Achievement" class="logo-img" width="110" height="38" loading="lazy" />
             <span class="logo-sub">National 1st Place</span>
           </div>
           <div class="logo-divider"></div>
@@ -786,8 +791,7 @@
           </div>
           <div class="logo-divider"></div>
           <div class="logo-item">
-            <svg viewBox="0 0 70 22" fill="currentColor" class="logo-svg logo-elevate" role="img" aria-label="Elevate Greece"><text x="0" y="15" font-size="10" font-weight="800" letter-spacing="0.3" font-family="Arial, sans-serif">ELEVATE GR</text></svg>
-            <span class="logo-sub">Greece</span>
+            <img src="logos/elevate-greece.svg" alt="Elevate Greece — National Startup Point" class="logo-img" width="110" height="44" loading="lazy" />
           </div>
           <div class="logo-divider"></div>
           <div class="logo-item">
@@ -827,12 +831,12 @@
           </div>
           <div class="logo-divider"></div>
           <div class="logo-item">
-            <svg viewBox="0 0 40 22" fill="currentColor" class="logo-svg logo-eo" aria-hidden="true"><text x="0" y="16" font-size="14" font-weight="900" font-family="Arial, sans-serif">EO</text></svg>
-            <span class="logo-sub">Entrepreneurs' Org</span>
+            <img src="logos/eo.svg" alt="" class="logo-img" width="72" height="48" loading="lazy" aria-hidden="true" />
+            <span class="logo-sub">GSEA Top 16</span>
           </div>
           <div class="logo-divider"></div>
           <div class="logo-item">
-            <svg viewBox="0 0 80 22" fill="currentColor" class="logo-svg logo-ja" aria-hidden="true"><text x="0" y="15" font-size="10" font-weight="800" letter-spacing="0.5" font-family="Arial, sans-serif">JA EUROPE</text></svg>
+            <img src="logos/junior-achievement.svg" alt="" class="logo-img" width="110" height="38" loading="lazy" aria-hidden="true" />
             <span class="logo-sub">National 1st Place</span>
           </div>
           <div class="logo-divider"></div>
@@ -852,8 +856,7 @@
           </div>
           <div class="logo-divider"></div>
           <div class="logo-item">
-            <svg viewBox="0 0 70 22" fill="currentColor" class="logo-svg logo-elevate" aria-hidden="true"><text x="0" y="15" font-size="10" font-weight="800" letter-spacing="0.3" font-family="Arial, sans-serif">ELEVATE GR</text></svg>
-            <span class="logo-sub">Greece</span>
+            <img src="logos/elevate-greece.svg" alt="" class="logo-img" width="110" height="44" loading="lazy" aria-hidden="true" />
           </div>
           <div class="logo-divider"></div>
           <div class="logo-item">
@@ -1029,25 +1032,28 @@
           <div class="now-body">
             <h3 class="now-card-title">Podcasts I Live By</h3>
             <div class="podcast-grid">
-              <a class="podcast-item" style="--pod-color:rgba(255,107,53,0.25)" href="https://podcasts.apple.com/us/podcast/moonshots-with-peter-h-diamandis/id1456551992" target="_blank" rel="noopener">
+              <div class="podcast-item" style="--pod-color:rgba(255,107,53,0.25)">
                 <div class="podcast-art">🚀</div>
                 <div><div class="podcast-name">Moonshots</div><div class="podcast-host">Peter Diamandis</div></div>
-              </a>
-              <a class="podcast-item" style="--pod-color:rgba(99,102,241,0.25)" href="https://podcasts.apple.com/us/podcast/modern-wisdom/id1347973549" target="_blank" rel="noopener">
+              </div>
+              <div class="podcast-item" style="--pod-color:rgba(99,102,241,0.25)">
                 <div class="podcast-art">🔬</div>
                 <div><div class="podcast-name">Modern Wisdom</div><div class="podcast-host">Chris Williamson</div></div>
-              </a>
-              <a class="podcast-item" style="--pod-color:rgba(16,185,129,0.25)" href="https://podcasts.apple.com/us/podcast/the-tim-ferriss-show/id863897795" target="_blank" rel="noopener">
+              </div>
+              <div class="podcast-item" style="--pod-color:rgba(16,185,129,0.25)">
                 <div class="podcast-art">⚡</div>
                 <div><div class="podcast-name">Tim Ferriss Show</div><div class="podcast-host">Tim Ferriss</div></div>
-              </a>
-              <a class="podcast-item" style="--pod-color:rgba(139,92,246,0.25)" href="https://podcasts.apple.com/us/podcast/naval/id1454097755" target="_blank" rel="noopener">
+              </div>
+              <div class="podcast-item" style="--pod-color:rgba(139,92,246,0.25)">
                 <div class="podcast-art">🧠</div>
                 <div><div class="podcast-name">Naval</div><div class="podcast-host">Naval Ravikant</div></div>
-              </a>
+              </div>
             </div>
           </div>
         </div>
+      </div>
+      <div style="text-align:center;margin-top:32px">
+        <a href="/now.html" class="btn btn-secondary">See what I'm doing right now →</a>
       </div>
     </div>
   </section>
@@ -1895,50 +1901,6 @@
     </div>
   </section>
 
-  <!-- ── Testimonials ── -->
-  <section id="testimonials" class="section-dark">
-    <div class="container">
-      <p class="section-eyebrow">What People Say</p>
-      <h2 class="section-heading">Testimonials</h2>
-      <div class="testimonials-grid">
-
-        <div class="testimonial-card" data-animate>
-          <p class="testimonial-quote">Panos is one of the most mission-driven founders I've met. He turns constraints into creativity and never loses sight of the people he's building for.</p>
-          <div class="testimonial-author">
-            <div class="testimonial-avatar testimonial-avatar-placeholder">A</div>
-            <div>
-              <strong>Coming Soon</strong>
-              <span>Mentor / Investor</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="testimonial-card" data-animate>
-          <p class="testimonial-quote">Working with Panos is a masterclass in resourcefulness. He asks better questions than almost anyone I know, and he actually acts on the answers.</p>
-          <div class="testimonial-author">
-            <div class="testimonial-avatar testimonial-avatar-placeholder">B</div>
-            <div>
-              <strong>Coming Soon</strong>
-              <span>Collaborator</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="testimonial-card" data-animate>
-          <p class="testimonial-quote">Givelink proves that impact doesn't require scale first — it requires specificity. Panos understood this before most in the space.</p>
-          <div class="testimonial-author">
-            <div class="testimonial-avatar testimonial-avatar-placeholder">C</div>
-            <div>
-              <strong>Coming Soon</strong>
-              <span>Partner Organization</span>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
   <!-- ── Education ── -->
   <section id="education" class="section-alt">
     <div class="container">
@@ -1972,29 +1934,29 @@
         <a href="https://panoskokmotos.substack.com" target="_blank" rel="noopener" class="blog-card" data-animate>
           <div class="blog-card-top">
             <span class="blog-tag">🚀 Entrepreneurship</span>
-            <span class="blog-read">5 min read</span>
+            <span class="blog-tag">✍️ Coming Soon</span>
           </div>
           <h3>How We Built Givelink from a Napkin Idea to Forbes 30 Under 30</h3>
-          <p>The raw, honest story of building a social impact startup with no money, no network, and everything to prove.</p>
-          <span class="blog-cta">Read on Substack →</span>
+          <p>I'm working on this piece — subscribe on Substack to get it when it's live.</p>
+          <span class="blog-cta">Subscribe to get it →</span>
         </a>
         <a href="https://panoskokmotos.substack.com" target="_blank" rel="noopener" class="blog-card" data-animate>
           <div class="blog-card-top">
             <span class="blog-tag">🤖 AI &amp; Future</span>
-            <span class="blog-read">4 min read</span>
+            <span class="blog-tag">✍️ Coming Soon</span>
           </div>
           <h3>Why Every Founder Needs to Understand AI Right Now</h3>
-          <p>AI is not a feature. It's a paradigm shift. The founders who ignore it will be disrupted by the ones who don't.</p>
-          <span class="blog-cta">Read on Substack →</span>
+          <p>I'm working on this piece — subscribe on Substack to get it when it's live.</p>
+          <span class="blog-cta">Subscribe to get it →</span>
         </a>
         <a href="https://panoskokmotos.substack.com" target="_blank" rel="noopener" class="blog-card" data-animate>
           <div class="blog-card-top">
             <span class="blog-tag">📚 Learning</span>
-            <span class="blog-read">3 min read</span>
+            <span class="blog-tag">✍️ Coming Soon</span>
           </div>
           <h3>The Google Map Theory of Learning: Read 40 Books a Year</h3>
-          <p>Your mind is like a map. The more areas you explore, the better your decisions become. Here's my reading system.</p>
-          <span class="blog-cta">Read on Substack →</span>
+          <p>I'm working on this piece — subscribe on Substack to get it when it's live.</p>
+          <span class="blog-cta">Subscribe to get it →</span>
         </a>
         <a href="https://www.investinginkindnessproject.com/blog/panos-kokmotos-bridging-ancient-wisdom-and-modern-kindness" target="_blank" rel="noopener" class="blog-card" data-animate>
           <div class="blog-card-top">
@@ -2036,7 +1998,7 @@
           <div class="email-capture-text">
             <span class="ec-eyebrow">📬 Newsletter</span>
             <h3>Get thoughts on startups, impact &amp; AI directly in your inbox</h3>
-            <p>Join 500+ readers who get Panos's occasional notes — no fluff, just signal.</p>
+            <p>I write when I have something worth saying — not on a schedule. Join the readers who'd rather wait for signal than get flooded with noise.</p>
           </div>
           <form class="email-capture-form" action="https://formspree.io/f/mdawlrqa" method="POST">
             <input type="hidden" name="_subject" value="New newsletter subscriber from panoskokmotos.com" />
@@ -2090,12 +2052,14 @@
           <p>Bold people working on hard problems. If you're building something you believe in, I'd love to hear about it.</p>
         </div>
       </div>
-      <div style="text-align:center;margin-top:36px">
+      <div style="text-align:center;margin-top:36px;display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
         <a href="https://tidycal.com/givelink/panos" target="_blank" rel="noopener" class="btn btn-primary">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
           &nbsp;Book a Call with Panos
         </a>
+        <a href="#contact" class="btn btn-secondary">Send a Message →</a>
       </div>
+      <p style="text-align:center;margin-top:20px;color:var(--text-muted);font-size:0.88rem;max-width:560px;margin-left:auto;margin-right:auto">Probably <em>not</em> the right fit if you're looking for a warm intro without context, a free advisor without skin in the game, or validation for an idea you haven't stress-tested yet.</p>
       <!-- Inline booking calendar -->
       <div class="tidycal-wrap">
         <button class="tidycal-toggle" id="tidycalToggle" aria-expanded="false">
@@ -2158,6 +2122,8 @@
         <div class="for-you-item">You found something here that made you think "I want to know this person"</div>
         <div class="for-you-item">You're a founder navigating a hard moment and need to talk to someone who gets it</div>
         <div class="for-you-item">You Googled me before a meeting and wanted to understand what actually drives me</div>
+        <div class="for-you-item">You're Greek (or from Southern Europe) and building something ambitious outside your comfort zone</div>
+        <div class="for-you-item">You've been told your idea is too idealistic — and you kept building it anyway</div>
       </div>
       <p class="for-you-not">It's probably <em>not</em> for you if you want a polished pitch deck — that's <a href="https://givelink.app" target="_blank" rel="noopener">Givelink.app</a>.</p>
     </div>
@@ -2171,31 +2137,31 @@
       <div class="faq-list" id="faqList">
         <div class="faq-item" data-animate>
           <button class="faq-q" aria-expanded="false">What is Givelink and how does it work?<span class="faq-chevron" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" width="10" height="10"><polyline points="3 5 8 11 13 5"/></svg></span></button>
-          <div class="faq-a"><p>Givelink is an in-kind donation platform that lets donors shop the specific goods nonprofits need most — from food to hygiene products — with step-by-step delivery tracking, photo confirmation, and real impact stories. Instead of cash donations, you give exactly what's needed, eliminating waste and ensuring 100% impact traceability. <a href="https://givelink.app/en" target="_blank" rel="noopener">Visit givelink.app →</a></p></div>
+          <div class="faq-a"><p>Givelink is an in-kind donation platform that lets donors shop the specific goods nonprofits need most — from food to hygiene products — with step-by-step delivery tracking, photo confirmation, and real impact stories. Instead of cash donations, you give exactly what's needed, eliminating waste and ensuring 100% impact traceability. <a href="https://givelink.app/en" target="_blank" rel="noopener">Visit givelink.app →</a></p><button class="faq-followup-btn" onclick="faqOpenChat('What makes Givelink different from other donation platforms?')">Ask a follow-up <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><path d="M3 8h10M9 4l4 4-4 4"/></svg></button></div>
         </div>
         <div class="faq-item" data-animate>
           <button class="faq-q" aria-expanded="false">How can I book a call or meeting with Panos?<span class="faq-chevron" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" width="10" height="10"><polyline points="3 5 8 11 13 5"/></svg></span></button>
-          <div class="faq-a"><p>You can book a 30-minute call directly at <a href="https://tidycal.com/givelink/panos" target="_blank" rel="noopener">tidycal.com/givelink/panos</a>. Panos is open to conversations about Givelink partnerships, speaking invitations, podcast appearances, and connecting with founders working on hard problems.</p></div>
+          <div class="faq-a"><p>You can book a 30-minute call directly at <a href="https://tidycal.com/givelink/panos" target="_blank" rel="noopener">tidycal.com/givelink/panos</a>. Panos is open to conversations about Givelink partnerships, speaking invitations, podcast appearances, and connecting with founders working on hard problems.</p><button class="faq-followup-btn" onclick="faqOpenChat('What topics is Panos most excited to talk about on a call?')">Ask a follow-up <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><path d="M3 8h10M9 4l4 4-4 4"/></svg></button></div>
         </div>
         <div class="faq-item" data-animate>
           <button class="faq-q" aria-expanded="false">What is Entrepreneurship Talks?<span class="faq-chevron" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" width="10" height="10"><polyline points="3 5 8 11 13 5"/></svg></span></button>
-          <div class="faq-a"><p>Entrepreneurship Talks is a long-form podcast and community Panos co-founded in 2020, featuring conversations with founders, investors, and changemakers. With 60+ episodes, 350K+ views, 5+ live events, and a $100K+ grant secured, it has become one of Greece's leading entrepreneurship media platforms. Listen on <a href="https://open.spotify.com/show/3R2F6kjvzVh1QXmTvmUQEu" target="_blank" rel="noopener">Spotify</a> or <a href="https://www.youtube.com/@Entrepreneurship_Talks" target="_blank" rel="noopener">YouTube</a>.</p></div>
+          <div class="faq-a"><p>Entrepreneurship Talks is a long-form podcast and community Panos co-founded in 2020, featuring conversations with founders, investors, and changemakers. With 60+ episodes, 350K+ views, 5+ live events, and a $100K+ grant secured, it has become one of Greece's leading entrepreneurship media platforms. Listen on <a href="https://open.spotify.com/show/3R2F6kjvzVh1QXmTvmUQEu" target="_blank" rel="noopener">Spotify</a> or <a href="https://www.youtube.com/@Entrepreneurship_Talks" target="_blank" rel="noopener">YouTube</a>.</p><button class="faq-followup-btn" onclick="faqOpenChat('Who are the most memorable guests on Entrepreneurship Talks?')">Ask a follow-up <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><path d="M3 8h10M9 4l4 4-4 4"/></svg></button></div>
         </div>
         <div class="faq-item" data-animate>
           <button class="faq-q" aria-expanded="false">Is Panos available for speaking engagements?<span class="faq-chevron" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" width="10" height="10"><polyline points="3 5 8 11 13 5"/></svg></span></button>
-          <div class="faq-a"><p>Yes — Panos speaks on entrepreneurship, social impact, in-kind giving, AI, and the future of philanthropy. He has spoken at university events, startup competitions, and community forums across Europe and the US. Reach out via <a href="mailto:panagiotis.kokmotoss@gmail.com">email</a> or <a href="https://tidycal.com/givelink/panos" target="_blank" rel="noopener">book a call</a> to discuss your event.</p></div>
+          <div class="faq-a"><p>Yes — Panos speaks on entrepreneurship, social impact, in-kind giving, AI, and the future of philanthropy. He has spoken at university events, startup competitions, and community forums across Europe and the US. Reach out via <a href="mailto:panagiotis.kokmotoss@gmail.com">email</a> or <a href="https://tidycal.com/givelink/panos" target="_blank" rel="noopener">book a call</a> to discuss your event.</p><button class="faq-followup-btn" onclick="faqOpenChat('What speaking topics is Panos most passionate about?')">Ask a follow-up <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><path d="M3 8h10M9 4l4 4-4 4"/></svg></button></div>
         </div>
         <div class="faq-item" data-animate>
           <button class="faq-q" aria-expanded="false">What awards and recognition has Panos received?<span class="faq-chevron" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" width="10" height="10"><polyline points="3 5 8 11 13 5"/></svg></span></button>
-          <div class="faq-a"><p>Panos has been named to <strong>Forbes 30 Under 30 Greece 2024</strong>, recognized as a <strong>WEF Global Shaper</strong> (San Francisco Hub), reached <strong>Top 4 in Europe at GSEA 2023</strong>, won the <strong>Pappajohn Business Plan Competition</strong>, and was selected among Europe's <strong>Top 15 Young Innovators</strong> by World Summit Awards Global, among other recognitions.</p></div>
+          <div class="faq-a"><p>Panos has been named to <strong>Forbes 30 Under 30 Greece 2024</strong>, recognized as a <strong>WEF Global Shaper</strong> (San Francisco Hub), reached <strong>Top 4 in Europe at GSEA 2023</strong>, won the <strong>Pappajohn Business Plan Competition</strong>, and was selected among Europe's <strong>Top 15 Young Innovators</strong> by World Summit Awards Global, among other recognitions.</p><button class="faq-followup-btn" onclick="faqOpenChat('Which award meant the most to Panos and why?')">Ask a follow-up <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><path d="M3 8h10M9 4l4 4-4 4"/></svg></button></div>
         </div>
         <div class="faq-item" data-animate>
           <button class="faq-q" aria-expanded="false">Where is Panos based?<span class="faq-chevron" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" width="10" height="10"><polyline points="3 5 8 11 13 5"/></svg></span></button>
-          <div class="faq-a"><p>Panos splits his time between <strong>San Francisco, USA</strong> (where he's scaling Givelink and active in the WEF Global Shapers SF Hub) and <strong>Athens/Patras, Greece</strong> (where Entrepreneurship Talks and key partnerships are based). He's available for remote conversations globally and in-person meetings in both locations.</p></div>
+          <div class="faq-a"><p>Panos splits his time between <strong>San Francisco, USA</strong> (where he's scaling Givelink and active in the WEF Global Shapers SF Hub) and <strong>Athens/Patras, Greece</strong> (where Entrepreneurship Talks and key partnerships are based). He's available for remote conversations globally and in-person meetings in both locations.</p><button class="faq-followup-btn" onclick="faqOpenChat('What is Panos focused on right now in San Francisco?')">Ask a follow-up <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><path d="M3 8h10M9 4l4 4-4 4"/></svg></button></div>
         </div>
         <div class="faq-item" data-animate>
           <button class="faq-q" aria-expanded="false">How can I invest in or partner with Givelink?<span class="faq-chevron" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" width="10" height="10"><polyline points="3 5 8 11 13 5"/></svg></span></button>
-          <div class="faq-a"><p>Givelink is actively expanding in the US market and is open to conversations with aligned investors and strategic partners — especially nonprofits, foundations, and corporate CSR teams. If you believe in the future of in-kind giving, <a href="https://tidycal.com/givelink/panos" target="_blank" rel="noopener">book a call</a> or email <a href="mailto:panagiotis.kokmotoss@gmail.com">panagiotis.kokmotoss@gmail.com</a> to start a conversation.</p></div>
+          <div class="faq-a"><p>Givelink is actively expanding in the US market and is open to conversations with aligned investors and strategic partners — especially nonprofits, foundations, and corporate CSR teams. If you believe in the future of in-kind giving, <a href="https://tidycal.com/givelink/panos" target="_blank" rel="noopener">book a call</a> or email <a href="mailto:panagiotis.kokmotoss@gmail.com">panagiotis.kokmotoss@gmail.com</a> to start a conversation.</p><button class="faq-followup-btn" onclick="faqOpenChat('What stage is Givelink at and what is the investment opportunity?')">Ask a follow-up <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><path d="M3 8h10M9 4l4 4-4 4"/></svg></button></div>
         </div>
       </div>
     </div>
@@ -2336,6 +2302,9 @@
       </div>
       <div class="chat-input-wrap">
         <input type="text" id="chatInput" placeholder="Ask about Givelink, my journey, speaking…" autocomplete="off" />
+        <button id="chatMic" aria-label="Voice input" title="Speak your question" style="display:none">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+        </button>
         <button id="chatSend" aria-label="Send">
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
         </button>
@@ -2356,9 +2325,22 @@
     </a>
   </div>
 
-  <script src="script.js?v=20260321"></script>
-  <script src="chat.js?v=20260321"></script>
-  <!-- FAQ accordion -->
+  <!-- ── Site Search Modal ── -->
+  <div class="ss-overlay" id="siteSearchOverlay" role="dialog" aria-modal="true" aria-label="Site search">
+    <div class="ss-modal">
+      <div class="ss-input-row">
+        <svg class="ss-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input type="text" id="ssInput" placeholder="Search Givelink, books, beliefs, contact…" autocomplete="off" spellcheck="false" />
+        <div class="ss-kbd"><kbd>Esc</kbd></div>
+      </div>
+      <div id="ssResults"></div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+  <script src="chat.js"></script>
+  <script src="search.js"></script>
+  <!-- FAQ accordion + follow-up chat launcher -->
   <script>
     document.querySelectorAll('.faq-q').forEach(btn => {
       btn.addEventListener('click', () => {
@@ -2374,6 +2356,24 @@
         }
       });
     });
+
+    // Open chat pre-seeded with an FAQ follow-up question
+    function faqOpenChat(question) {
+      const widget = document.getElementById('chatWidget');
+      const input  = document.getElementById('chatInput');
+      if (!widget || !input) return;
+      if (!widget.classList.contains('open')) {
+        document.getElementById('chatToggle').click();
+      }
+      setTimeout(() => {
+        input.value = question;
+        input.focus();
+        input.select();
+        // Hide starters so the pre-filled question is clearly visible
+        const starters = document.getElementById('chatStarters');
+        if (starters) starters.classList.add('hidden');
+      }, widget.classList.contains('open') ? 0 : 320);
+    }
   </script>
   <!-- Service Worker registration -->
   <script>
