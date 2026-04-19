@@ -149,8 +149,9 @@ export default {
       try {
         const ppRes = await fetch(
           `https://projects.propublica.org/nonprofits/api/v2/search.json?q=${encodeURIComponent(q)}`,
-          { headers: { 'Accept': 'application/json' } }
+          { headers: { 'Accept': 'application/json' }, signal: AbortSignal.timeout(10000) }
         );
+        if (!ppRes.ok) throw new Error(`ProPublica ${ppRes.status}`);
         const ppData = await ppRes.json();
         const orgs = (ppData.organizations || []).slice(0, 8).map(o => ({
           name: o.name,
@@ -162,7 +163,8 @@ export default {
           headers: { 'Content-Type': 'application/json', ...CORS_HEADERS },
         });
       } catch {
-        return new Response(JSON.stringify({ organizations: [] }), {
+        return new Response(JSON.stringify({ organizations: [], error: 'search_unavailable' }), {
+          status: 503,
           headers: { 'Content-Type': 'application/json', ...CORS_HEADERS },
         });
       }
@@ -186,7 +188,8 @@ export default {
     // ── /notify route: send personal email notification ──
     if (url.pathname === '/notify') {
       try {
-        const { secret, event, data } = await request.json();
+        const secret = request.headers.get('Authorization') || '';
+        const { event, data } = await request.json();
 
         // Validate secret to prevent abuse
         if (!env.NOTIFY_SECRET || secret !== env.NOTIFY_SECRET) {
@@ -269,8 +272,8 @@ export default {
         if (ok && subscribe && env.NOTIFY_SECRET) {
           fetch(`https://${url.hostname}/notify`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ secret: env.NOTIFY_SECRET, event: 'New Digest Subscriber', data: { email, tool } }),
+            headers: { 'Content-Type': 'application/json', 'Authorization': env.NOTIFY_SECRET },
+            body: JSON.stringify({ event: 'New Digest Subscriber', data: { email, tool } }),
           }).catch(() => {});
         }
 

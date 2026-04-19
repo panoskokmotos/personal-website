@@ -50,6 +50,16 @@ function saveHistory() {
   } catch (e) {}
 }
 
+// ── Offline / reconnect banner ──
+function showChatOfflineBanner() {
+  const banner = document.getElementById('chatOfflineBanner');
+  if (banner) banner.hidden = false;
+}
+function hideChatOfflineBanner() {
+  const banner = document.getElementById('chatOfflineBanner');
+  if (banner) banner.hidden = true;
+}
+
 // ── Toggle open/close ──
 function openChat() {
   chatWidget.classList.add('open');
@@ -162,21 +172,27 @@ async function sendMessage() {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ messages }),
+      signal: AbortSignal.timeout(15000),
     });
 
     const data = await res.json();
-    const reply = data.text || 'Sorry, I had trouble responding. Please try again.';
+    const reply = (data && data.text) || 'Sorry, I had trouble responding. Please try again.';
 
     thinkingEl.remove();
+    hideChatOfflineBanner();
     addMessage('bot', reply);
     messages.push({ role: 'assistant', content: reply });
     saveHistory();
 
     // Always show follow-up chips after every bot reply
     showFollowUpChips();
-  } catch {
+  } catch (err) {
     thinkingEl.remove();
-    addMessage('bot', 'Connection error. Email panagiotis.kokmotoss@gmail.com directly!');
+    const isTimeout = err.name === 'TimeoutError' || err.name === 'AbortError';
+    addMessage('bot', isTimeout
+      ? 'Request timed out — the server took too long. Please try again.'
+      : 'Connection error. Email panagiotis.kokmotoss@gmail.com directly!');
+    showChatOfflineBanner();
   } finally {
     chatSend.disabled = false;
     chatInput.focus();

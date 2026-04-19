@@ -2215,6 +2215,7 @@
           <span class="form-success-icon">✓</span>
           Message sent! I'll get back to you soon.
         </div>
+        <div class="form-error" id="formError" role="alert" aria-live="assertive" hidden></div>
       </form>
     </div>
   </section>
@@ -2276,6 +2277,10 @@
         <div class="chat-msg bot">
           <p>👋 Hi! I'm Panos's AI assistant. Ask me anything about his work, Givelink, the podcast, or how to get in touch!</p>
         </div>
+      </div>
+      <div class="chat-offline-banner" id="chatOfflineBanner" hidden>
+        <span>Connection issue —</span>
+        <button class="chat-retry-btn" onclick="sendMessage()">Retry</button>
       </div>
       <div class="chat-starters" id="chatStarters">
         <p class="chat-starters-label">Ask me anything</p>

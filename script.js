@@ -384,31 +384,44 @@ if (contactForm) {
       page: location.href,
       time: new Date().toISOString(),
     };
+    const errorEl = document.getElementById('formError');
+    function showFormError(msg) {
+      if (!errorEl) return;
+      errorEl.textContent = msg;
+      errorEl.hidden = false;
+      errorEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+    function resetBtn() {
+      btn.disabled = false;
+      btn.classList.remove('btn-loading');
+      btn.innerHTML = originalHTML;
+    }
     try {
       const res = await fetch(contactForm.action, {
         method: 'POST',
         body: formData,
         headers: { 'Accept': 'application/json' },
+        signal: AbortSignal.timeout(10000),
       });
       if (res.ok) {
         contactForm.reset();
         btn.innerHTML = '✓ Sent!';
         btn.classList.remove('btn-loading');
+        if (errorEl) errorEl.hidden = true;
         success.classList.add('visible');
         success.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         // Fire-and-forget: notify Panos via worker
         sendSiteNotification('Contact Form Submission', notifData);
       } else {
-        btn.disabled = false;
-        btn.classList.remove('btn-loading');
-        btn.innerHTML = originalHTML;
-        alert('Something went wrong. Please try again.');
+        resetBtn();
+        showFormError('Something went wrong. Please try again.');
       }
-    } catch {
-      btn.disabled = false;
-      btn.classList.remove('btn-loading');
-      btn.innerHTML = originalHTML;
-      alert('Network error. Please email panagiotis.kokmotoss@gmail.com directly.');
+    } catch (err) {
+      resetBtn();
+      const isTimeout = err.name === 'TimeoutError' || err.name === 'AbortError';
+      showFormError(isTimeout
+        ? 'Request timed out. Please try again or email panagiotis.kokmotoss@gmail.com directly.'
+        : 'Network error. Please email panagiotis.kokmotoss@gmail.com directly.');
     }
   });
 }
@@ -934,7 +947,7 @@ function sendSiteNotification(event, data) {
   if (!NOTIFY_SECRET) return; // disabled until secret is configured
   fetch(NOTIFY_WORKER, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ secret: NOTIFY_SECRET, event, data }),
-  }).catch(() => {}); // silent fail — never block the UI
+    headers: { "Content-Type": "application/json", "Authorization": NOTIFY_SECRET },
+    body: JSON.stringify({ event, data }),
+  }).catch(err => console.warn('[notify] failed:', err.message));
 }

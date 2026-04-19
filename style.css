@@ -4,6 +4,8 @@
 
 /* ── Reset & Tokens ── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*:focus { outline: none; }
+*:focus-visible { outline: 2px solid #6090ff; outline-offset: 3px; border-radius: 3px; }
 
 :root {
   /* Dark mode is the default — light mode overrides these in html[data-theme="light"] */
@@ -16,7 +18,7 @@
   --blue-light:  #6090ff;
   --gold:        #f4a924;
   --text:        rgba(255,255,255,0.88);
-  --text-muted:  rgba(255,255,255,0.48);
+  --text-muted:  rgba(255,255,255,0.62);
   --text-light:  rgba(255,255,255,0.7);
   --border:      rgba(255,255,255,0.08);
   --border-dark: rgba(255,255,255,0.08);
@@ -427,14 +429,14 @@ body.nav-open { overflow: hidden; position: fixed; width: 100%; }
 }
 
 .hero-sub {
-  font-size: 1rem; color: rgba(255,255,255,0.55);
+  font-size: 1rem; color: rgba(255,255,255,0.72);
   margin-bottom: 28px;
 }
 .hero-link { color: rgba(255,255,255,0.9); border-bottom: 1px solid rgba(255,255,255,0.3); }
 .hero-link:hover { color: #fff; border-color: #fff; }
 
 .hero-quote {
-  font-size: 0.95rem; color: rgba(255,255,255,0.45);
+  font-size: 0.95rem; color: rgba(255,255,255,0.62);
   font-style: italic; line-height: 1.6;
   max-width: 520px; margin: 0 auto 16px;
 }
@@ -603,7 +605,7 @@ body.nav-open { overflow: hidden; position: fixed; width: 100%; }
 }
 .tl-badge.current { background: rgba(59,110,248,0.2); color: var(--blue-light); border: 1px solid rgba(59,110,248,0.3); }
 
-.tl-card > p { font-size: 0.9rem; color: rgba(255,255,255,0.55); margin-bottom: 12px; }
+.tl-card > p { font-size: 0.9rem; color: rgba(255,255,255,0.72); margin-bottom: 12px; }
 
 .tl-bullets { margin-bottom: 14px; }
 .tl-bullets li {
@@ -798,7 +800,7 @@ body.nav-open { overflow: hidden; position: fixed; width: 100%; }
 .cc-icon { font-size: 1.5rem; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
 .cc-icon-linkedin { color: #0A66C2; }
 .contact-card strong { display: block; font-size: 0.8rem; font-weight: 700; color: rgba(255,255,255,0.9); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px; }
-.contact-card p { font-size: 0.85rem; color: rgba(255,255,255,0.45); margin: 0; }
+.contact-card p { font-size: 0.85rem; color: rgba(255,255,255,0.62); margin: 0; }
 
 /* ─────────────────────────────────────────
    FOOTER
@@ -2010,6 +2012,33 @@ html[data-theme="light"] .nav-logo { border-color: rgba(15,30,61,0.2); }
   display: flex; align-items: center; justify-content: center;
   font-size: 0.75rem; flex-shrink: 0;
 }
+
+.form-error {
+  display: block;
+  padding: 14px 18px; margin-top: 16px;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  border-radius: 12px;
+  font-size: 0.9rem; color: #f87171; font-weight: 500;
+  animation: success-in 0.3s ease both;
+}
+.form-error[hidden] { display: none; }
+
+.chat-offline-banner {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 14px; margin: 4px 12px;
+  background: rgba(239,68,68,0.1);
+  border: 1px solid rgba(239,68,68,0.3);
+  border-radius: 8px;
+  font-size: 0.8rem; color: #f87171;
+}
+.chat-retry-btn {
+  background: none; border: 1px solid rgba(239,68,68,0.5);
+  color: #f87171; font-size: 0.78rem; font-weight: 600;
+  border-radius: 5px; padding: 2px 8px; cursor: pointer;
+  margin-left: auto; transition: background 0.2s;
+}
+.chat-retry-btn:hover { background: rgba(239,68,68,0.15); }
 
 /* light mode inputs */
 html[data-theme="light"] .contact-form input,

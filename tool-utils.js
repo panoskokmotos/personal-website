@@ -122,9 +122,14 @@ async function callWorker(systemPrompt, userMessage) {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ systemPrompt, userMessage }),
+      signal: AbortSignal.timeout(20000),
     });
-  } catch {
-    // Network error — fall back to non-streaming
+  } catch (err) {
+    if (err.name === 'TimeoutError' || err.name === 'AbortError') {
+      showError('Request timed out. The server took too long — please try again.');
+      const e = new Error('Timeout'); e._shown = true; throw e;
+    }
+    // Other network error — fall back to non-streaming
     return _callWorkerFallback(systemPrompt, userMessage);
   }
 
@@ -189,6 +194,7 @@ async function _callWorkerFallback(systemPrompt, userMessage) {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ systemPrompt, userMessage, promptVersion: TOOL_PROMPT_VERSION }),
+    signal: AbortSignal.timeout(20000),
   });
   if (res.status === 429) {
     _showRateLimitError();
@@ -243,9 +249,9 @@ function notifyToolUsed(toolName) {
   if (!TOOL_NOTIFY_SECRET) return;
   fetch(TOOL_NOTIFY_WORKER, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ secret: TOOL_NOTIFY_SECRET, event: 'AI Tool Used', data: { tool: toolName } }),
-  }).catch(() => {});
+    headers: { 'Content-Type': 'application/json', 'Authorization': TOOL_NOTIFY_SECRET },
+    body: JSON.stringify({ event: 'AI Tool Used', data: { tool: toolName } }),
+  }).catch(err => console.warn('[notify] tool ping failed:', err.message));
 }
 
 function _showMilestoneToast(count, toolName) {
