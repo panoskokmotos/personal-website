@@ -405,6 +405,9 @@ function _injectResultExtras(text) {
   _injectScrollToTop();
   _injectJourneyCTA(text);
   _injectEmailCapture();
+  _injectQualityRating();
+  _injectChangelogChip();
+  _injectPrintExportBtn();
 }
 
 function hideResult() {
@@ -1765,15 +1768,20 @@ window._openHistoryDrawerWithSaved = function(startTab) {
       <button class="hist-restore" data-src="hist" data-i="${i}">Restore →</button>
     </div>`).join('') || '<p class="hist-empty">No recent results yet.</p>';
 
-  const renderSaved = () => saved.map((s, i) => `
+  const renderSaved = (filter) => {
+    const items = filter
+      ? saved.filter(s => s.name.toLowerCase().includes(filter.toLowerCase()))
+      : saved;
+    return items.map((s, i) => `
     <div class="hist-item">
       <span class="hist-time">${ago(s.t)}</span>
       <p class="hist-snippet hist-saved-name">${s.name}</p>
       <div class="hist-item-actions">
-        <button class="hist-restore" data-src="saved" data-i="${i}">Restore →</button>
-        <button class="hist-del-btn" data-i="${i}" title="Delete">✕</button>
+        <button class="hist-restore" data-src="saved" data-i="${saved.indexOf(s)}">Restore →</button>
+        <button class="hist-del-btn" data-i="${saved.indexOf(s)}" title="Delete">✕</button>
       </div>
-    </div>`).join('') || '<p class="hist-empty">No saved results yet. Use the "Save" button on any result.</p>';
+    </div>`).join('') || `<p class="hist-empty">${filter ? 'No matches found.' : 'No saved results yet. Use the "Save" button on any result.'}</p>`;
+  };
 
   const activeTab = startTab || 'recent';
   drawer.innerHTML = `
@@ -1784,6 +1792,10 @@ window._openHistoryDrawerWithSaved = function(startTab) {
       </div>
       <button class="hist-close" onclick="_closeHistoryDrawer()">✕</button>
     </div>
+    <div id="_histSearchWrap" style="padding:0 14px 10px;display:${activeTab==='saved'?'block':'none'}">
+      <input id="_histSearch" type="search" placeholder="Search saved results…"
+        style="width:100%;box-sizing:border-box;padding:6px 10px;border-radius:6px;border:1px solid var(--border);background:var(--bg-alt);color:var(--text);font-family:var(--font);font-size:0.8rem;outline:none"/>
+    </div>
     <div class="hist-list" id="_histList">
       ${activeTab === 'recent' ? renderRecent() : renderSaved()}
     </div>
@@ -1793,13 +1805,25 @@ window._openHistoryDrawerWithSaved = function(startTab) {
   document.body.appendChild(overlay);
   requestAnimationFrame(() => { overlay.classList.add('visible'); drawer.classList.add('visible'); });
 
+  // Search input for saved tab
+  const searchInput = drawer.querySelector('#_histSearch');
+  if (searchInput) {
+    searchInput.addEventListener('input', () => {
+      document.getElementById('_histList').innerHTML = renderSaved(searchInput.value);
+      wireRestoreButtons('saved');
+    });
+  }
+
   // Tab switching
   drawer.querySelectorAll('.hist-tab').forEach(tab => {
     tab.addEventListener('click', () => {
       drawer.querySelectorAll('.hist-tab').forEach(t => t.classList.remove('active'));
       tab.classList.add('active');
       const t = tab.dataset.tab;
-      document.getElementById('_histList').innerHTML = t === 'recent' ? renderRecent() : renderSaved();
+      const searchWrap = document.getElementById('_histSearchWrap');
+      if (searchWrap) searchWrap.style.display = t === 'saved' ? 'block' : 'none';
+      const q = t === 'saved' && searchInput ? searchInput.value : '';
+      document.getElementById('_histList').innerHTML = t === 'recent' ? renderRecent() : renderSaved(q);
       document.getElementById('_histClear').textContent = t === 'recent' ? 'Clear recent' : 'Clear saved';
       wireRestoreButtons(t);
     });
@@ -1932,3 +1956,235 @@ function _injectScrollToTop() {
     body.scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
 }
+
+/* ═══════════════════════════════════════════════════════
+   PHASE 9B — Self-Improving Mechanisms
+   ═══════════════════════════════════════════════════════ */
+
+/* S6: Result quality rating (thumbs up / down) */
+function _injectQualityRating() {
+  const result = document.getElementById('result');
+  if (!result || result.querySelector('#_qualityRating')) return;
+  const path = location.pathname;
+  const voteKey  = 'qvote_' + path.replace(/[^a-z0-9]/gi, '_');
+  const scoresRaw = localStorage.getItem('quality_scores');
+  const scores   = scoresRaw ? JSON.parse(scoresRaw) : {};
+  const vote     = localStorage.getItem(voteKey);
+  const upCount  = (scores[path] || {}).up || 0;
+
+  const bar = document.createElement('div');
+  bar.id = '_qualityRating';
+  bar.className = 'ait-quality-bar';
+  bar.innerHTML = `
+    <span style="font-size:0.72rem;color:var(--text-muted)">Was this helpful?</span>
+    <button class="ait-quality-btn${vote === 'up'   ? ' voted-up'   : ''}" id="_qUp"   aria-label="Yes, helpful"    ${vote ? 'disabled' : ''}>👍</button>
+    <button class="ait-quality-btn${vote === 'down' ? ' voted-down' : ''}" id="_qDown" aria-label="No, not helpful" ${vote ? 'disabled' : ''}>👎</button>
+    ${upCount >= 3 ? `<span class="ait-quality-count">${upCount} found this helpful</span>` : ''}
+  `;
+
+  const body = document.getElementById('resultBody');
+  if (body) body.insertAdjacentElement('afterend', bar);
+
+  function castVote(v) {
+    if (localStorage.getItem(voteKey)) return;
+    localStorage.setItem(voteKey, v);
+    const sc = JSON.parse(localStorage.getItem('quality_scores') || '{}');
+    if (!sc[path]) sc[path] = { up: 0, down: 0 };
+    sc[path][v === 'up' ? 'up' : 'down']++;
+    localStorage.setItem('quality_scores', JSON.stringify(sc));
+    bar.querySelector('#_qUp').disabled   = true;
+    bar.querySelector('#_qDown').disabled = true;
+    if (v === 'up')   bar.querySelector('#_qUp').classList.add('voted-up');
+    if (v === 'down') bar.querySelector('#_qDown').classList.add('voted-down');
+  }
+  bar.querySelector('#_qUp').addEventListener('click',   () => castVote('up'));
+  bar.querySelector('#_qDown').addEventListener('click', () => castVote('down'));
+}
+
+/* S7: "Welcome back" context strip above form */
+function _injectReturnUserContext() {
+  if (document.getElementById('_returnCtx')) return;
+  const path     = location.pathname;
+  const savedKey = 'saved_' + path;
+  const histKey  = 'hist_' + path.replace(/[^a-z0-9]/gi, '_');
+  let saved = [], hist = [];
+  try { saved = JSON.parse(localStorage.getItem(savedKey) || '[]'); } catch {}
+  try { hist  = JSON.parse(localStorage.getItem(histKey)  || '[]'); } catch {}
+  if (saved.length === 0 && hist.length === 0) return;
+
+  const form = document.getElementById('toolForm') || document.querySelector('.tool-form');
+  if (!form) return;
+
+  const parts = [];
+  if (hist.length  > 0) parts.push(`${hist.length} previous result${hist.length > 1 ? 's' : ''}`);
+  if (saved.length > 0) parts.push(`${saved.length} saved`);
+
+  const note = document.createElement('div');
+  note.id = '_returnCtx';
+  note.className = 'ait-personalized-note';
+  note.innerHTML = `↩ Welcome back! You have ${parts.join(' &amp; ')} here. <button onclick="window._openHistoryDrawerWithSaved&&window._openHistoryDrawerWithSaved('recent')" style="background:none;border:none;color:var(--blue-light);font-weight:700;cursor:pointer;padding:0;font-family:inherit;font-size:inherit">View →</button>`;
+  form.insertAdjacentElement('beforebegin', note);
+}
+
+/* ═══════════════════════════════════════════════════════
+   PHASE 9C — UI/UX Polish
+   ═══════════════════════════════════════════════════════ */
+
+/* U1: Form state persistence via sessionStorage */
+function initFormPersistence() {
+  const form = document.getElementById('toolForm') || document.querySelector('.tool-form');
+  if (!form) return;
+  const key = 'form_' + location.pathname;
+  try {
+    const saved = JSON.parse(sessionStorage.getItem(key) || 'null');
+    if (saved) {
+      Object.entries(saved).forEach(([id, val]) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        if (el.tagName === 'SELECT' || el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+          el.value = val;
+          if (el.tagName === 'SELECT') el.dispatchEvent(new Event('change'));
+        }
+      });
+    }
+  } catch {}
+  form.addEventListener('input', () => {
+    try {
+      const state = {};
+      form.querySelectorAll('input[id], select[id], textarea[id]').forEach(el => {
+        state[el.id] = el.value;
+      });
+      sessionStorage.setItem(key, JSON.stringify(state));
+    } catch {}
+  });
+}
+
+/* U5: Keyboard accessibility for example chips */
+function _upgradeExampleChipKeyboard() {
+  document.querySelectorAll('.tool-example-chip').forEach(chip => {
+    if (chip.dataset.kbUpgraded) return;
+    chip.dataset.kbUpgraded = '1';
+    if (!chip.getAttribute('tabindex')) chip.setAttribute('tabindex', '0');
+    chip.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); chip.click(); }
+    });
+  });
+}
+
+/* U6: Light / dark mode toggle */
+function initThemeToggle() {
+  const stored = localStorage.getItem('theme');
+  if (stored) document.documentElement.setAttribute('data-theme', stored);
+
+  const header = document.querySelector('.tool-header');
+  if (!header || header.querySelector('#_themeBtn')) return;
+
+  const btn = document.createElement('button');
+  btn.id = '_themeBtn';
+  btn.setAttribute('aria-label', 'Toggle light/dark mode');
+  btn.style.cssText = 'background:none;border:1px solid var(--border);border-radius:99px;padding:5px 11px;cursor:pointer;font-size:0.8rem;color:var(--text-muted);transition:background 0.15s,color 0.15s;line-height:1;margin-left:auto;';
+  const current = () => document.documentElement.getAttribute('data-theme') || 'dark';
+  btn.textContent = current() === 'dark' ? '☀️ Light' : '🌙 Dark';
+  btn.addEventListener('click', () => {
+    const next = current() === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('theme', next);
+    btn.textContent = next === 'dark' ? '☀️ Light' : '🌙 Dark';
+  });
+  header.style.display = 'flex';
+  header.style.alignItems = 'center';
+  header.appendChild(btn);
+}
+
+/* U8: Offline / online banner */
+function initOfflineBanner() {
+  if (document.getElementById('_offlineBanner')) return;
+  const banner = document.createElement('div');
+  banner.id = '_offlineBanner';
+  banner.className = 'ait-offline-banner';
+  banner.setAttribute('role', 'status');
+  banner.textContent = '📡 You\'re offline — AI features require an internet connection. Cached content is still available.';
+  document.body.prepend(banner);
+  const update = () => banner.classList.toggle('visible', !navigator.onLine);
+  update();
+  window.addEventListener('online', update);
+  window.addEventListener('offline', update);
+}
+
+/* ═══════════════════════════════════════════════════════
+   PHASE 9D — New Features
+   ═══════════════════════════════════════════════════════ */
+
+/* N5: Auto-expiring "Updated" chip on results (shows 14 days after launch) */
+function _injectChangelogChip() {
+  const LAUNCH = new Date('2025-05-02');
+  if ((Date.now() - LAUNCH) / 86400000 > 14) return;
+  const header = document.querySelector('.tool-result-header');
+  if (!header || header.querySelector('#_changelogChip')) return;
+  const chip = document.createElement('span');
+  chip.id = '_changelogChip';
+  chip.style.cssText = 'font-size:0.63rem;font-weight:800;padding:2px 8px;border-radius:99px;background:rgba(34,197,94,0.15);color:#4ade80;border:1px solid rgba(34,197,94,0.3);text-transform:uppercase;letter-spacing:0.05em;flex-shrink:0;';
+  chip.textContent = '✨ Updated';
+  const actions = header.querySelector('.tool-result-actions');
+  if (actions) actions.insertAdjacentElement('beforebegin', chip);
+}
+
+/* N3: Print / PDF export (CSS already handles layout; this adds the button) */
+function _injectPrintExportBtn() {
+  const result = document.getElementById('result');
+  if (!result || result.querySelector('#_printExportBtn')) return;
+  const actions = result.querySelector('.tool-result-actions');
+  if (!actions) return;
+  const btn = document.createElement('button');
+  btn.id = '_printExportBtn';
+  btn.className = 'tool-copy-btn';
+  btn.setAttribute('aria-label', 'Export as PDF');
+  btn.textContent = 'Export PDF';
+  btn.addEventListener('click', () => window.print());
+  actions.appendChild(btn);
+}
+
+/* U4: Progressive disclosure for advanced fields */
+function initProgressiveDisclosure(advancedFieldIds, label) {
+  if (!advancedFieldIds || advancedFieldIds.length === 0) return;
+  const first = document.getElementById(advancedFieldIds[0]);
+  if (!first) return;
+  const wrapper = first.closest('.tool-field');
+  if (!wrapper) return;
+
+  const container = document.createElement('div');
+  container.className = 'tool-advanced-fields collapsed';
+
+  const toggle = document.createElement('button');
+  toggle.type = 'button';
+  toggle.className = 'tool-advanced-toggle';
+  toggle.setAttribute('aria-expanded', 'false');
+  toggle.innerHTML = `<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="13" height="13"><polyline points="6 9 12 15 18 9"/></svg> ${label || 'Advanced options'}`;
+
+  advancedFieldIds.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const field = el.closest('.tool-field') || el.closest('.tool-row') || el.parentElement;
+    if (field && !container.contains(field)) container.appendChild(field);
+  });
+
+  wrapper.parentNode.insertBefore(toggle, wrapper.nextSibling);
+  wrapper.parentNode.insertBefore(container, toggle.nextSibling);
+
+  toggle.addEventListener('click', () => {
+    const isOpen = container.classList.contains('expanded');
+    container.classList.toggle('collapsed', isOpen);
+    container.classList.toggle('expanded', !isOpen);
+    toggle.classList.toggle('open', !isOpen);
+    toggle.setAttribute('aria-expanded', String(!isOpen));
+  });
+}
+
+/* ─── Auto-init block: runs on every tool page ─── */
+document.addEventListener('DOMContentLoaded', () => {
+  initFormPersistence();
+  initOfflineBanner();
+  initThemeToggle();
+  _injectReturnUserContext();
+  _upgradeExampleChipKeyboard();
+});

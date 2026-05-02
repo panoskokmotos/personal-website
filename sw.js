@@ -1,4 +1,4 @@
-const CACHE_NAME = 'panos-v5';
+const CACHE_NAME = 'panos-v6';
 const OFFLINE_URL = '/offline.html';
 
 const PRECACHE_ASSETS = [

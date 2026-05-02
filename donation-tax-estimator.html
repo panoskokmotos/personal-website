@@ -28,7 +28,7 @@
       "name": "How much can I deduct for charitable donations in the US?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "In the US, cash donations to qualified charities are deductible up to 60% of your AGI if you itemize. You must exceed the standard deduction ($14,600 single / $29,200 married in 2024) for itemizing to benefit you."
+        "text": "In the US, cash donations to qualified charities are deductible up to 60% of your AGI if you itemize. You must exceed the standard deduction ($14,600 single / $29,200 married in 2025) for itemizing to benefit you."
       }
     },
     {
@@ -85,7 +85,7 @@
       <div class="tool-how-step">
         <span class="tool-how-num">Step 2</span>
         <span class="tool-how-title">AI calculates your savings</span>
-        <span class="tool-how-desc">Based on current 2024/2025 tax law for your country.</span>
+        <span class="tool-how-desc">Based on current 2025 tax law for your country.</span>
       </div>
       <div class="tool-how-step">
         <span class="tool-how-num">Step 3</span>
@@ -291,6 +291,9 @@
   </div>
 
   <script>
+    const TAX_YEAR = 2025;
+    const TAX_YEAR_LABEL = '2025';
+
     // Country toggle
     document.querySelectorAll('.dte-country-chip').forEach(chip => {
       chip.addEventListener('click', function() {
@@ -346,11 +349,11 @@
         const otherDeductions = document.getElementById('otherDeductions').value;
         if (!income) { showError('Please select an income range.'); return; }
 
-        systemPrompt = `You are a US tax education expert specializing in charitable giving. Provide clear, accurate estimates based on 2024 US federal tax law. Always include a disclaimer that this is for educational purposes only.
+        systemPrompt = `You are a US tax education expert specializing in charitable giving. Provide clear, accurate estimates based on ${TAX_YEAR_LABEL} US federal tax law. Always include a disclaimer that this is for educational purposes only.
 
-US 2024 TAX DATA (use these exact figures):
-Standard deductions: Single $14,600 | MFJ $29,200 | HoH $21,900 | MFS $14,600
-Federal tax brackets (single): 10% up to $11,600 | 12% $11,601-$47,150 | 22% $47,151-$100,525 | 24% $100,526-$191,950 | 32% $191,951-$243,725 | 35% $243,726-$609,350 | 37% over $609,350
+US ${TAX_YEAR_LABEL} TAX DATA (use these exact figures):
+Standard deductions: Single $15,000 | MFJ $30,000 | HoH $22,500 | MFS $15,000
+Federal tax brackets (single): 10% up to $11,925 | 12% $11,926-$48,475 | 22% $48,476-$103,350 | 24% $103,351-$197,300 | 32% $197,301-$250,525 | 35% $250,526-$626,350 | 37% over $626,350
 For MFJ, double the bracket thresholds.
 Cash donation deductibility limit: 60% of AGI.
 Special stock donation rule: deduct full fair market value, avoid capital gains.
@@ -376,9 +379,9 @@ Please calculate and explain:
         const incomeGR = document.getElementById('incomeGR').value;
         if (!incomeGR) { showError('Please select an income range.'); return; }
 
-        systemPrompt = `You are a Greek tax education expert specializing in charitable giving. Provide clear, accurate estimates based on 2024/2025 Greek tax law. Always include a disclaimer that this is for educational purposes only and laws change.
+        systemPrompt = `You are a Greek tax education expert specializing in charitable giving. Provide clear, accurate estimates based on ${TAX_YEAR_LABEL} Greek tax law. Always include a disclaimer that this is for educational purposes only and laws change.
 
-GREEK TAX LAW FOR DONATIONS (2024):
+GREEK TAX LAW FOR DONATIONS (${TAX_YEAR_LABEL}):
 - Direct tax credit: 20% of the donated amount is deducted directly from your tax liability (not from income)
 - The credit cannot exceed your total income tax liability for the year
 - Qualified recipients: Recognized Greek non-profit organizations, public benefit foundations, Greek state, municipalities, universities, hospitals

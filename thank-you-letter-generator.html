@@ -243,6 +243,15 @@
       <div class="tool-loading-spinner"></div>
       <p id="loadingText">Writing your letter…</p>
     </div>
+
+    <footer class="tool-footer">
+      Built by <a href="/" target="_blank">Panos Kokmotos</a> · Part of the
+      <a href="/ai-tools.html">AI for Social Impact Lab</a> ·
+      Powered by Claude AI · Always have your legal counsel review donor acknowledgment letters.
+    </footer>
+    <div class="tool-usage-count" id="toolUsageCount"></div>
+    <div class="tool-related-wrap" id="toolRelated"></div>
+    <div class="tool-embed-wrap" id="toolEmbed"></div>
   </main>
 
   <!-- AI Chat Widget -->
@@ -354,6 +363,8 @@ ${needsIRS ? '(Gift is $250+, include IRS acknowledgment language)' : ''}`;
     }
 
     initCopyBtn();
+    initUsageCounter();
+    initRelatedTools();
   </script>
 
   <script>

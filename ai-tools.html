@@ -340,172 +340,13 @@
 
   </main>
 
-  <style>
-    /* ── Section wrappers ── */
-    .ait-section + .ait-section { margin-top: 40px; }
-    .ait-section { transition: opacity 0.22s ease; }
-    .ait-section-hidden { opacity: 0.2; pointer-events: none; }
-
-    /* ── Section headers ── */
-    .ait-section-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 16px;
-      padding-bottom: 12px;
-      border-bottom: 1px solid var(--border);
-    }
-    .ait-section-header-left { display: flex; align-items: center; gap: 10px; }
-    .ait-section-icon {
-      width: 30px;
-      height: 30px;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1rem;
-      flex-shrink: 0;
-    }
-    .ait-section-title { font-size: 0.85rem; font-weight: 800; color: var(--navy); letter-spacing: 0.01em; }
-    .ait-section-count {
-      font-size: 0.68rem;
-      font-weight: 700;
-      padding: 2px 8px;
-      border-radius: 99px;
-      background: rgba(255,255,255,0.07);
-      border: 1px solid var(--border);
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-    }
-
-    /* ── Stat strip ── */
-    .ait-stat-strip {
-      display: flex;
-      align-items: center;
-      margin-bottom: 36px;
-      background: var(--bg-alt);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 18px 28px;
-      width: fit-content;
-    }
-    .ait-stat { display: flex; flex-direction: column; align-items: center; padding: 0 24px; }
-    .ait-stat:first-child { padding-left: 0; }
-    .ait-stat:last-child  { padding-right: 0; }
-    .ait-stat-number { font-size: 1.5rem; font-weight: 800; color: var(--navy); line-height: 1; }
-    .ait-stat-label  { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin-top: 4px; }
-    .ait-stat-divider { width: 1px; height: 32px; background: var(--border); flex-shrink: 0; }
-
-    /* ── Filter tabs ── */
-    .ait-tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 32px; }
-    .ait-tab {
-      font-family: var(--font);
-      font-size: 0.82rem;
-      font-weight: 700;
-      padding: 7px 16px;
-      border-radius: 99px;
-      border: 1px solid var(--border);
-      background: transparent;
-      color: var(--text-muted);
-      cursor: pointer;
-      transition: background 0.18s, color 0.18s, border-color 0.18s;
-    }
-    .ait-tab:hover:not(.ait-tab-active) {
-      background: rgba(255,255,255,0.06);
-      color: var(--navy);
-      border-color: rgba(255,255,255,0.16);
-    }
-    .ait-tab-active { background: var(--blue); color: #fff; border-color: var(--blue); }
-    .ait-tab:focus-visible { outline: 2px solid var(--blue-light); outline-offset: 2px; }
-
-    /* ── Grid ── */
-    .ait-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-      gap: 14px;
-      margin-bottom: 4px;
-    }
-
-    /* ── Cards ── */
-    .ait-card {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 20px;
-      text-decoration: none;
-      color: inherit;
-      transition: border-color 0.18s, box-shadow 0.18s, transform 0.15s;
-      position: relative;
-    }
-    .ait-card:hover {
-      border-color: rgba(59,110,248,0.4);
-      box-shadow: 0 6px 28px rgba(0,0,0,0.3);
-      transform: translateY(-2px);
-    }
-    .ait-card-featured {
-      border-color: rgba(59,110,248,0.3);
-      background: rgba(59,110,248,0.06);
-    }
-    .ait-card-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 4px;
-    }
-
-    /* ── Emoji circle ── */
-    .ait-emoji-wrap {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.4rem;
-      flex-shrink: 0;
-      line-height: 1;
-    }
-
-    /* ── Category chips ── */
-    .ait-chip { font-size: 0.63rem; font-weight: 800; padding: 3px 9px; border-radius: 99px; text-transform: uppercase; letter-spacing: 0.05em; }
-    .ait-chip-donors     { background: rgba(59,110,248,0.12);  color: var(--blue-light); border: 1px solid rgba(59,110,248,0.25); }
-    .ait-chip-volunteers { background: rgba(20,184,166,0.12);  color: #2dd4bf;           border: 1px solid rgba(20,184,166,0.25); }
-    .ait-chip-nonprofits { background: rgba(139,92,246,0.12);  color: #a78bfa;           border: 1px solid rgba(139,92,246,0.25); }
-
-    /* ── Card text ── */
-    .ait-card-title { font-size: 0.95rem; font-weight: 700; color: var(--navy); line-height: 1.3; margin: 0; }
-    .ait-card-desc  { font-size: 0.8rem; color: var(--text-muted); line-height: 1.6; flex: 1; margin: 0; }
-    .ait-cta        { font-size: 0.78rem; font-weight: 700; color: var(--blue-light); margin-top: 4px; }
-
-    /* ── Footer ── */
-    .ait-footer-note {
-      margin-top: 48px;
-      padding-top: 24px;
-      border-top: 1px solid var(--border);
-      font-size: 0.82rem;
-      color: var(--text-muted);
-      line-height: 1.7;
-    }
-    .ait-footer-note a       { color: var(--blue-light); text-decoration: none; }
-    .ait-footer-note a:hover { text-decoration: underline; }
-
-    /* ── Mobile ── */
-    @media (max-width: 500px) {
-      .ait-grid        { grid-template-columns: 1fr; }
-      .ait-stat-strip  { padding: 14px 18px; }
-      .ait-stat        { padding: 0 14px; }
-      .ait-stat-number { font-size: 1.25rem; }
-    }
-  </style>
+  <div aria-live="polite" aria-atomic="true" class="sr-only" id="aitFilterAnnounce" style="position:absolute;left:-9999px;height:1px;overflow:hidden;"></div>
 
   <script>
     (function () {
       var tabs     = document.querySelectorAll('.ait-tab');
       var sections = document.querySelectorAll('.ait-section');
+      var announce = document.getElementById('aitFilterAnnounce');
       tabs.forEach(function (tab) {
         tab.addEventListener('click', function () {
           tabs.forEach(function (t) {
@@ -515,13 +356,16 @@
           tab.classList.add('ait-tab-active');
           tab.setAttribute('aria-selected', 'true');
           var filter = tab.getAttribute('data-filter');
+          var visible = 0;
           sections.forEach(function (s) {
             if (filter === 'all' || s.getAttribute('data-category') === filter) {
               s.classList.remove('ait-section-hidden');
+              visible++;
             } else {
               s.classList.add('ait-section-hidden');
             }
           });
+          if (announce) announce.textContent = 'Showing ' + tab.textContent.trim() + ' tools';
         });
       });
     })();
@@ -664,6 +508,100 @@
       }
     }
   } catch {}
+})();
+
+/* ── S1: Adaptive Popular Badges ── */
+(function() {
+  const SEEDS = {
+    '/what-would-x-do.html':           2847,
+    '/why-should-i-give.html':         1923,
+    '/first-time-donor-coach.html':    1456,
+    '/charity-comparison-engine.html': 1289,
+    '/nonprofit-health-checker.html':  1034,
+    '/scam-nonprofit-detector.html':   978,
+    '/volunteer-match.html':           1102,
+    '/what-can-i-donate.html':         834,
+    '/impact-story-generator.html':    672,
+    '/community-needs-map.html':       589,
+    '/neighborhood-giving-map.html':   543,
+    '/grant-finder.html':              312,
+    '/thank-you-letter-generator.html': 198,
+    '/donation-tax-estimator.html':    445,
+  };
+  const scored = Array.from(document.querySelectorAll('.ait-card[href]')).map(card => {
+    const path = new URL(card.getAttribute('href'), location.origin).pathname;
+    const local = parseInt(localStorage.getItem('tuc_' + path.replace(/[^a-z0-9]/gi,'_')) || '0', 10);
+    return { card, score: (SEEDS[path] || 0) + local };
+  }).sort((a,b) => b.score - a.score);
+
+  scored.slice(0, 3).forEach(({ card }) => {
+    const top = card.querySelector('.ait-card-top');
+    if (!top || top.querySelector('.ait-badge-popular,.ait-badge-hot,.ait-badge-pick')) return;
+    const badge = document.createElement('span');
+    badge.className = 'ait-badge ait-badge-popular';
+    badge.textContent = '🔥 Popular';
+    top.appendChild(badge);
+  });
+})();
+
+/* ── S2: Continue Where You Left Off ── */
+(function() {
+  const NAMES = {
+    '/what-would-x-do.html':           '"What Would $X Do?"',
+    '/why-should-i-give.html':         '"Why Should I Give?"',
+    '/first-time-donor-coach.html':    'First-Time Donor Coach',
+    '/charity-comparison-engine.html': 'Charity Comparison',
+    '/nonprofit-health-checker.html':  'Nonprofit Health Checker',
+    '/scam-nonprofit-detector.html':   'Scam Detector',
+    '/volunteer-match.html':           'Volunteer Match',
+    '/what-can-i-donate.html':         'What Can I Donate?',
+    '/impact-story-generator.html':    'Impact Story Generator',
+    '/community-needs-map.html':       'Community Needs Map',
+    '/neighborhood-giving-map.html':   'Neighborhood Giving Map',
+    '/grant-finder.html':              'Grant Finder',
+    '/thank-you-letter-generator.html': 'Thank You Letter Generator',
+    '/donation-tax-estimator.html':    'Donation Tax Estimator',
+  };
+  const used = Object.keys(NAMES).filter(path => {
+    const key = 'tuc_' + path.replace(/[^a-z0-9]/gi,'_');
+    return parseInt(localStorage.getItem(key) || '0', 10) > 0;
+  });
+  if (used.length < 2) return;
+
+  const wrap = document.createElement('div');
+  wrap.className = 'ait-personalized-note';
+  wrap.style.marginBottom = '20px';
+  wrap.innerHTML = '↩ Continue where you left off: ' +
+    used.slice(-4).reverse().map(p =>
+      `<a href="${p}" style="color:var(--blue-light);font-weight:700;text-decoration:none;margin-right:10px;">${NAMES[p]}</a>`
+    ).join('') + `<span style="font-size:0.72rem;color:var(--text-muted)">(${used.length} tools used)</span>`;
+
+  const tabs = document.querySelector('.ait-tabs');
+  if (tabs) tabs.parentNode.insertBefore(wrap, tabs);
+})();
+
+/* ── S4: Tools-Tried stat in stat strip ── */
+(function() {
+  const toolPaths = [
+    '/what-would-x-do.html','/why-should-i-give.html','/first-time-donor-coach.html',
+    '/charity-comparison-engine.html','/nonprofit-health-checker.html','/scam-nonprofit-detector.html',
+    '/volunteer-match.html','/what-can-i-donate.html','/impact-story-generator.html',
+    '/community-needs-map.html','/neighborhood-giving-map.html','/donation-tax-estimator.html',
+    '/grant-finder.html','/thank-you-letter-generator.html',
+  ];
+  const tried = toolPaths.filter(p =>
+    parseInt(localStorage.getItem('tuc_' + p.replace(/[^a-z0-9]/gi,'_')) || '0', 10) > 0
+  ).length;
+  if (tried === 0) return;
+  const strip = document.querySelector('.ait-stat-strip');
+  if (!strip) return;
+  const divider = document.createElement('div');
+  divider.className = 'ait-stat-divider';
+  const stat = document.createElement('div');
+  stat.className = 'ait-stat';
+  stat.innerHTML = `<span class="ait-stat-number">${tried}<span style="font-size:0.95rem;color:var(--text-muted);font-weight:600">/${toolPaths.length}</span></span><span class="ait-stat-label">Tried</span>`;
+  strip.appendChild(divider);
+  strip.appendChild(stat);
 })();
 
 /* ── Start-Here Quiz ── */

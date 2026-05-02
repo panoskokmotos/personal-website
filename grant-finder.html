@@ -228,6 +228,15 @@
       <div class="tool-loading-spinner"></div>
       <p id="loadingText">Searching grant databases…</p>
     </div>
+
+    <footer class="tool-footer">
+      Built by <a href="/" target="_blank">Panos Kokmotos</a> · Part of the
+      <a href="/ai-tools.html">AI for Social Impact Lab</a> ·
+      Powered by Claude AI · Suggestions are AI-generated; always verify with funders directly.
+    </footer>
+    <div class="tool-usage-count" id="toolUsageCount"></div>
+    <div class="tool-related-wrap" id="toolRelated"></div>
+    <div class="tool-embed-wrap" id="toolEmbed"></div>
   </main>
 
   <!-- AI Chat Widget -->
@@ -330,6 +339,9 @@ Please identify the best grant opportunities for this organization.`;
     }
 
     initCopyBtn();
+    initProgressiveDisclosure(['orgSize', 'grantType'], 'Advanced options');
+    initUsageCounter();
+    initRelatedTools();
   </script>
 
   <script>
