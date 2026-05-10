@@ -9,11 +9,11 @@
   <meta property="og:description" content="11 free AI tools built to make giving smarter, volunteering easier, and social impact more accessible." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://panoskokmotos.com/ai-tools.html" />
-  <meta property="og:image" content="https://panoskokmotos.com/og-ai-tools.png" />
+  <meta property="og:image" content="https://panoskokmotos.com/og-image.png" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="AI for Social Impact — Free Tools by Panos Kokmotos" />
   <meta name="twitter:description" content="11 free AI tools to make giving smarter, volunteering easier, and social impact more accessible." />
-  <meta name="twitter:image" content="https://panoskokmotos.com/og-ai-tools.png" />
+  <meta name="twitter:image" content="https://panoskokmotos.com/og-image.png" />
   <meta name="twitter:creator" content="@panoskokmotoss" />
   <meta name="robots" content="index, follow, max-image-preview:large" />
   <link rel="canonical" href="https://panoskokmotos.com/ai-tools.html" />
@@ -378,6 +378,7 @@
             }
           });
           if (announce) announce.textContent = 'Showing ' + tab.textContent.trim() + ' tools';
+          if (window.plausible) plausible('Tab Switch', { props: { tab: filter } });
         });
       });
     })();
@@ -542,6 +543,7 @@
     '/grant-finder.html':              312,
     '/thank-you-letter-generator.html': 198,
     '/donation-tax-estimator.html':    445,
+    '/giving-plan.html':               87,
   };
   const scored = Array.from(document.querySelectorAll('.ait-card[href]')).map(card => {
     const path = new URL(card.getAttribute('href'), location.origin).pathname;
@@ -576,6 +578,7 @@
     '/grant-finder.html':              'Grant Finder',
     '/thank-you-letter-generator.html': 'Thank You Letter Generator',
     '/donation-tax-estimator.html':    'Donation Tax Estimator',
+    '/giving-plan.html':               'Giving Plan Builder',
   };
   const used = Object.keys(NAMES).filter(path => {
     const key = 'tuc_' + path.replace(/[^a-z0-9]/gi,'_');
@@ -602,7 +605,7 @@
     '/charity-comparison-engine.html','/nonprofit-health-checker.html','/scam-nonprofit-detector.html',
     '/volunteer-match.html','/what-can-i-donate.html','/impact-story-generator.html',
     '/community-needs-map.html','/neighborhood-giving-map.html','/donation-tax-estimator.html',
-    '/grant-finder.html','/thank-you-letter-generator.html',
+    '/grant-finder.html','/thank-you-letter-generator.html','/giving-plan.html',
   ];
   const tried = toolPaths.filter(p =>
     parseInt(localStorage.getItem('tuc_' + p.replace(/[^a-z0-9]/gi,'_')) || '0', 10) > 0

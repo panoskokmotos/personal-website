@@ -135,13 +135,19 @@ function stopLoadingMessages() {
 async function callWorker(systemPrompt, userMessage) {
   // Use streaming endpoint — progressively renders result body in real-time
   let res;
+  const _ctrl = new AbortController();
+  const _tid = setTimeout(() => _ctrl.abort(), 30000);
   try {
     res = await fetch(TOOL_STREAM_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ systemPrompt, userMessage }),
+      signal: _ctrl.signal,
     });
-  } catch {
+    clearTimeout(_tid);
+  } catch (e) {
+    clearTimeout(_tid);
+    if (e.name === 'AbortError') throw new Error('Request timed out. Please try again.');
     // Network error — fall back to non-streaming
     return _callWorkerFallback(systemPrompt, userMessage);
   }
@@ -203,11 +209,22 @@ async function callWorker(systemPrompt, userMessage) {
 }
 
 async function _callWorkerFallback(systemPrompt, userMessage) {
-  const res = await fetch(TOOL_WORKER_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ systemPrompt, userMessage, promptVersion: TOOL_PROMPT_VERSION }),
-  });
+  const ctrl = new AbortController();
+  const tid = setTimeout(() => ctrl.abort(), 30000);
+  let res;
+  try {
+    res = await fetch(TOOL_WORKER_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ systemPrompt, userMessage, promptVersion: TOOL_PROMPT_VERSION }),
+      signal: ctrl.signal,
+    });
+    clearTimeout(tid);
+  } catch (e) {
+    clearTimeout(tid);
+    if (e.name === 'AbortError') throw new Error('Request timed out. Please try again.');
+    throw e;
+  }
   if (res.status === 429) {
     _showRateLimitError();
     const err = new Error('Rate limit exceeded');
@@ -503,6 +520,7 @@ function initShareBtns() {
         `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`,
         '_blank', 'noopener,width=600,height=420'
       );
+      if (window.plausible) plausible('Share', { props: { method: 'twitter', tool: window.location.pathname } });
     });
   }
 
@@ -528,8 +546,38 @@ function initShareBtns() {
       const title = document.querySelector('h1.tool-title')?.textContent?.trim() || document.title;
       const url   = window.location.href;
       window.open(`https://wa.me/?text=${encodeURIComponent('Just used this free AI tool for social impact: ' + title + ' — ' + url)}`, '_blank', 'noopener');
+      if (window.plausible) plausible('Share', { props: { method: 'whatsapp', tool: window.location.pathname } });
     });
     shareGroup.insertBefore(waBtn, linkBtn);
+
+    /* LinkedIn share */
+    if (!shareGroup.querySelector('#shareLIBtn')) {
+      const liBtn = document.createElement('button');
+      liBtn.id = 'shareLIBtn';
+      liBtn.className = 'tool-share-wa';
+      liBtn.innerHTML = `<svg aria-hidden="true" viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg> LinkedIn`;
+      liBtn.addEventListener('click', () => {
+        const url = window.location.href;
+        window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`, '_blank', 'noopener,width=600,height=500');
+        if (window.plausible) plausible('Share', { props: { method: 'linkedin', tool: window.location.pathname } });
+      });
+      shareGroup.appendChild(liBtn);
+    }
+
+    /* Email share */
+    if (!shareGroup.querySelector('#shareEmailBtn')) {
+      const emailBtn = document.createElement('button');
+      emailBtn.id = 'shareEmailBtn';
+      emailBtn.className = 'tool-share-wa';
+      emailBtn.innerHTML = `<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="14" height="14"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 7L2 7"/></svg> Email`;
+      emailBtn.addEventListener('click', () => {
+        const title = document.querySelector('h1.tool-title')?.textContent?.trim() || document.title;
+        const url   = window.location.href;
+        window.location.href = `mailto:?subject=${encodeURIComponent(title)}&body=${encodeURIComponent('Thought you might find this useful: ' + url)}`;
+        if (window.plausible) plausible('Share', { props: { method: 'email', tool: window.location.pathname } });
+      });
+      shareGroup.appendChild(emailBtn);
+    }
   }
 }
 

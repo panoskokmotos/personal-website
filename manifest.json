@@ -1,14 +1,23 @@
 {
   "name": "Panos Kokmotos",
-  "short_name": "Panos Kokmotos",
-  "description": "Co-Founder & COO of Givelink. Forbes 30 Under 30 Greece. WEF Global Shaper.",
-  "start_url": "/",
+  "short_name": "Panos",
+  "description": "AI tools for social impact. Free giving tools by Panos Kokmotos.",
+  "start_url": "/ai-tools.html",
   "display": "standalone",
   "background_color": "#0b0f1a",
   "theme_color": "#3b6ef8",
   "orientation": "portrait-primary",
+  "categories": ["productivity", "lifestyle", "finance"],
   "icons": [
     { "src": "assets/favicon-32.png",  "sizes": "32x32",   "type": "image/png" },
-    { "src": "assets/favicon-180.png", "sizes": "180x180", "type": "image/png", "purpose": "any maskable" }
+    { "src": "assets/favicon-180.png", "sizes": "180x180", "type": "image/png", "purpose": "any maskable" },
+    { "src": "assets/favicon-180.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "assets/favicon-180.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ],
+  "shortcuts": [
+    { "name": "AI Tools Hub",        "url": "/ai-tools.html",              "description": "Browse all 15 social-impact tools" },
+    { "name": "Donation Estimator",  "url": "/donation-tax-estimator.html","description": "Calculate your tax savings" },
+    { "name": "Giving Plan",         "url": "/giving-plan.html",           "description": "Build your personalized giving plan" },
+    { "name": "Why Should I Give?",  "url": "/why-should-i-give.html",     "description": "Find your giving motivation" }
   ]
 }
