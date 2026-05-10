@@ -60,7 +60,7 @@
     <!-- ── Stat strip ── -->
     <div class="ait-stat-strip">
       <div class="ait-stat">
-        <span class="ait-stat-number">14</span>
+        <span class="ait-stat-number">15</span>
         <span class="ait-stat-label">Tools</span>
       </div>
       <div class="ait-stat-divider"></div>
@@ -122,7 +122,7 @@
         <div class="ait-section-header-left">
           <span class="ait-section-icon" style="background:rgba(59,110,248,0.15)">💙</span>
           <span class="ait-section-title">For Donors</span>
-          <span class="ait-section-count">7 tools</span>
+          <span class="ait-section-count">8 tools</span>
         </div>
       </div>
       <div class="ait-grid">
@@ -212,6 +212,18 @@
           <h2 class="ait-card-title">Donation Tax Estimator</h2>
           <p class="ait-card-desc">🇺🇸 US & 🇬🇷 Greece. Enter your income + donation amount → get your exact tax savings, effective cost, and whether itemizing is worth it.</p>
           <span class="ait-cta">Calculate savings →</span>
+          <span class="ait-try-btn">Try it free →</span>
+        </a>
+
+        <a href="/giving-plan.html" class="ait-card ait-card-featured">
+          <div class="ait-card-top">
+            <span class="ait-chip ait-chip-donors">Donors</span>
+            <span class="ait-emoji-wrap" style="background:rgba(59,110,248,0.15)">🗺️</span>
+            <span class="ait-badge ait-badge-new">✨ New</span>
+          </div>
+          <h2 class="ait-card-title">Build Your Giving Plan</h2>
+          <p class="ait-card-desc">5-step wizard → personalised annual giving strategy: the right causes, the right amounts, a tax-smart structure, and tools to track your impact.</p>
+          <span class="ait-cta">Build my plan →</span>
           <span class="ait-try-btn">Try it free →</span>
         </a>
 
@@ -380,7 +392,7 @@
       '/charity-comparison-engine.html','/nonprofit-health-checker.html','/scam-nonprofit-detector.html',
       '/volunteer-match.html','/what-can-i-donate.html','/impact-story-generator.html',
       '/community-needs-map.html','/neighborhood-giving-map.html','/donation-tax-estimator.html',
-      '/grant-finder.html','/thank-you-letter-generator.html',
+      '/grant-finder.html','/thank-you-letter-generator.html','/giving-plan.html',
     ];
     const tried = toolPaths.filter(p => {
       const key = 'tuc_' + p.replace(/[^a-z0-9]/gi, '_');
@@ -417,6 +429,7 @@
       '/neighborhood-giving-map.html':   543,
       '/grant-finder.html':              312,
       '/thank-you-letter-generator.html': 198,
+      '/giving-plan.html':               87,
     };
     const NAMES = {
       '/what-would-x-do.html':           '"What Would $X Do?"',
@@ -432,6 +445,7 @@
       '/neighborhood-giving-map.html':   'Neighborhood Giving Map',
       '/grant-finder.html':              'Grant Finder',
       '/thank-you-letter-generator.html': 'Thank You Letter Generator',
+      '/giving-plan.html':               'Giving Plan Builder',
     };
     const entries = Object.keys(SEEDS).map(path => {
       const key = 'tuc_' + path.replace(/[^a-z0-9]/gi, '_');
@@ -471,6 +485,7 @@
     { name: '"What Can I Donate?"', desc: 'Discover non-cash donations you didn\'t know you could give', url: '/what-can-i-donate.html' },
     { name: 'Grant Finder', desc: 'Find 6–8 relevant grant opportunities for your nonprofit', url: '/grant-finder.html' },
     { name: 'Thank You Letter Generator', desc: 'Write a personalized donor acknowledgment letter in seconds', url: '/thank-you-letter-generator.html' },
+    { name: 'Giving Plan Builder', desc: 'Build a complete personalized annual giving strategy in 5 steps', url: '/giving-plan.html' },
   ];
   // Rotate weekly based on ISO week number
   const week = Math.floor((Date.now() / 1000 - 345600) / 604800);

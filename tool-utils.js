@@ -78,6 +78,11 @@ const _RELATED_TOOLS = {
     { url: '/impact-story-generator.html',    icon: '✍️',  name: 'Impact Story Generator',  chip: 'Nonprofits', cls: 'tuc-n' },
     { url: '/nonprofit-health-checker.html',  icon: '🔍',  name: 'Nonprofit Health Checker', chip: 'Donors',     cls: 'tuc-d' },
   ],
+  '/giving-plan.html': [
+    { url: '/what-would-x-do.html',           icon: '💸',  name: '"What Would $X Do?"',      chip: 'Donors',     cls: 'tuc-d' },
+    { url: '/donation-tax-estimator.html',    icon: '💸',  name: 'Donation Tax Estimator',   chip: 'Donors',     cls: 'tuc-d' },
+    { url: '/first-time-donor-coach.html',    icon: '🧭',  name: 'First-Time Donor Coach',   chip: 'Donors',     cls: 'tuc-d' },
+  ],
 };
 
 /* ── Usage counter seeds ── */
@@ -95,6 +100,7 @@ const _USAGE_SEEDS = {
   '/neighborhood-giving-map.html':    543,
   '/grant-finder.html':               312,
   '/thank-you-letter-generator.html': 198,
+  '/giving-plan.html':               87,
 };
 
 /* ── Loading messages ── */
@@ -408,6 +414,7 @@ function _injectResultExtras(text) {
   _injectQualityRating();
   _injectChangelogChip();
   _injectPrintExportBtn();
+  _injectCompareBtn();
 }
 
 function hideResult() {
@@ -1145,26 +1152,33 @@ function _injectAskAbout() {
   else result.appendChild(btn);
 }
 
-/* ── Feature 10: Confidence badge ── */
+/* ── Feature 10: Confidence badge (color-coded with tooltip) ── */
 function _injectConfidenceBadge(text) {
   const result = document.getElementById('result');
   if (!result || result.querySelector('._confBadge')) return;
   const lower = (text || '').toLowerCase();
-  const hiWords = ['research shows','evidence suggests','studies confirm','data indicates','proven','well-established','according to'];
-  const loWords = ['may vary','might','uncertain','it\'s possible','could be','difficult to verify','unclear'];
+  const hiWords = ['research shows','evidence suggests','studies confirm','data indicates','proven','well-established','according to','based on data'];
+  const loWords = ['may vary','might','uncertain','it\'s possible','could be','difficult to verify','unclear','approximate'];
   const hi = hiWords.filter(w => lower.includes(w)).length;
   const lo = loWords.filter(w => lower.includes(w)).length;
-  let label, color;
-  if (hi >= 2) { label = '📊 Research-backed'; color = '#16a34a'; }
-  else if (lo >= 3) { label = '⚠️ Estimates may vary'; color = '#d97706'; }
-  else { label = '🤖 AI analysis'; color = '#6b7280'; }
+
+  let label, color, tip, icon;
+  if (hi >= 2)      { label = 'Research-backed'; icon = '📊'; color = '#16a34a'; tip = 'This result references established research or evidence-based data.'; }
+  else if (lo >= 3) { label = 'Estimates vary';  icon = '⚠️'; color = '#d97706'; tip = 'Some figures in this result are estimates. Verify specifics with authoritative sources.'; }
+  else              { label = 'AI analysis';     icon = '🤖'; color = '#6b7280'; tip = 'AI-generated analysis based on training data. Use as a starting point, not a final answer.'; }
+
   const header = result.querySelector('.tool-result-header');
   if (!header) return;
   const badge = document.createElement('span');
   badge.className = '_confBadge';
-  badge.style.cssText = `display:inline-flex;align-items:center;gap:4px;font-size:0.69rem;padding:2px 8px;background:${color}16;color:${color};border-radius:10px;font-weight:600;border:1px solid ${color}30;margin-left:8px;`;
-  badge.textContent = label;
-  header.querySelector('.tool-result-label')?.insertAdjacentElement('afterend', badge);
+  badge.title = tip;
+  badge.setAttribute('role', 'img');
+  badge.setAttribute('aria-label', label + ': ' + tip);
+  badge.style.cssText = `display:inline-flex;align-items:center;gap:5px;font-size:0.69rem;padding:3px 9px;background:${color}18;color:${color};border-radius:10px;font-weight:700;border:1px solid ${color}35;cursor:help;`;
+  badge.innerHTML = `${icon} ${label}`;
+  const actions = header.querySelector('.tool-result-actions');
+  if (actions) actions.insertAdjacentElement('beforebegin', badge);
+  else header.appendChild(badge);
 }
 
 /* ── Feature 11: PWA install prompt ── */
@@ -1206,10 +1220,48 @@ function _showPWABanner() {
   });
 }
 
-/* ── Feature 13: Shareable result card (canvas image) ── */
+/* ── Feature 13: Shareable result card + copy link + Web Share ── */
 function _injectShareCard() {
   const copyBtn = document.getElementById('copyBtn');
   if (!copyBtn || document.getElementById('_cardBtn')) return;
+
+  /* Copy shareable link button */
+  const linkBtn = document.createElement('button');
+  linkBtn.id = '_copyLinkBtn';
+  linkBtn.className = 'tool-copy-btn';
+  linkBtn.title = 'Copy shareable link (L)';
+  linkBtn.textContent = '🔗 Link';
+  linkBtn.addEventListener('click', () => {
+    const url = window.location.href.split('?')[0] + (window.location.search || '');
+    navigator.clipboard.writeText(url).then(() => {
+      linkBtn.textContent = '✓ Copied!';
+      setTimeout(() => { linkBtn.textContent = '🔗 Link'; }, 1800);
+    }).catch(() => {
+      linkBtn.textContent = '🔗 Link';
+    });
+  });
+  copyBtn.insertAdjacentElement('afterend', linkBtn);
+
+  /* Native Web Share (mobile) */
+  if (navigator.share) {
+    const shareBtn = document.createElement('button');
+    shareBtn.id = '_nativeShareBtn';
+    shareBtn.className = 'tool-copy-btn';
+    shareBtn.title = 'Share';
+    shareBtn.innerHTML = `<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="13" height="13"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg> Share`;
+    shareBtn.addEventListener('click', () => {
+      const title = document.querySelector('h1.tool-title')?.textContent?.trim() || document.title;
+      const body  = document.getElementById('resultBody');
+      navigator.share({
+        title,
+        text: body?.innerText?.slice(0, 300) || '',
+        url: window.location.href,
+      }).catch(() => {});
+    });
+    linkBtn.insertAdjacentElement('afterend', shareBtn);
+  }
+
+  /* Canvas image download */
   const btn = document.createElement('button');
   btn.id = '_cardBtn';
   btn.className = 'tool-card-btn';
@@ -1647,14 +1699,67 @@ function _openShortcutModal() {
       <button class="kbd-modal-close" type="button" onclick="_closeShortcutModal()">✕</button>
     </div>
     <div class="kbd-rows">
+      <div class="kbd-section-label">Form</div>
       <div class="kbd-row"><kbd>Ctrl</kbd><kbd>Enter</kbd><span>Submit form</span></div>
+      <div class="kbd-row"><kbd>Esc</kbd><span>Clear / close</span></div>
+      <div class="kbd-section-label">Result</div>
+      <div class="kbd-row"><kbd>C</kbd><span>Copy result to clipboard</span></div>
+      <div class="kbd-row"><kbd>S</kbd><span>Save to bookmarks</span></div>
+      <div class="kbd-row"><kbd>H</kbd><span>Open history drawer</span></div>
+      <div class="kbd-row"><kbd>L</kbd><span>Copy shareable link</span></div>
+      <div class="kbd-row"><kbd>P</kbd><span>Print / Export PDF</span></div>
       <div class="kbd-row"><kbd>R</kbd><span>Focus refine input</span></div>
+      <div class="kbd-section-label">Navigation</div>
       <div class="kbd-row"><kbd>?</kbd><span>Show this help</span></div>
-      <div class="kbd-row"><kbd>Esc</kbd><span>Close modals / drawers</span></div>
+      <div class="kbd-row"><kbd>D</kbd><span>Toggle dark / light mode</span></div>
     </div>`;
   overlay.appendChild(modal);
   document.body.appendChild(overlay);
   requestAnimationFrame(() => overlay.classList.add('visible'));
+}
+
+/* Global keyboard shortcuts dispatcher */
+function _initKeyboardShortcuts() {
+  document.addEventListener('keydown', e => {
+    const tag = document.activeElement?.tagName;
+    if (['INPUT','TEXTAREA','SELECT'].includes(tag)) return;
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    switch (e.key) {
+      case '?': e.preventDefault(); _toggleShortcutModal(); break;
+      case 'c': case 'C': {
+        const copyBtn = document.getElementById('copyBtn');
+        if (copyBtn && document.getElementById('result')?.classList.contains('visible')) { e.preventDefault(); copyBtn.click(); }
+        break;
+      }
+      case 's': case 'S': {
+        const saveBtn = document.getElementById('_saveBookmarkBtn');
+        if (saveBtn) { e.preventDefault(); saveBtn.click(); }
+        break;
+      }
+      case 'h': case 'H': {
+        if (document.getElementById('_histBtn')) { e.preventDefault(); window._openHistoryDrawerWithSaved?.('recent'); }
+        break;
+      }
+      case 'l': case 'L': {
+        const linkBtn = document.getElementById('_copyLinkBtn');
+        if (linkBtn) { e.preventDefault(); linkBtn.click(); }
+        break;
+      }
+      case 'p': case 'P': {
+        if (document.getElementById('result')?.classList.contains('visible')) { e.preventDefault(); window.print(); }
+        break;
+      }
+      case 'd': case 'D': {
+        document.getElementById('_themeBtn')?.click();
+        break;
+      }
+      case 'Escape': {
+        _closeShortcutModal();
+        window._closeHistoryDrawer?.();
+        break;
+      }
+    }
+  });
 }
 function _closeShortcutModal() {
   _shortcutModalOpen = false;
@@ -2180,6 +2285,114 @@ function initProgressiveDisclosure(advancedFieldIds, label) {
   });
 }
 
+/* ═══════════════════════════════════════════════════════
+   PHASE 10 — New Features
+   ═══════════════════════════════════════════════════════ */
+
+/* #5 Embed branding — inject CSS vars from ?accent=&bg= URL params */
+function _initEmbedBranding() {
+  const params = new URLSearchParams(window.location.search);
+  const accent = params.get('accent');
+  const bg     = params.get('bg');
+  const radius = params.get('radius');
+  if (!accent && !bg && !radius) return;
+  const root = document.documentElement;
+  if (accent) { root.style.setProperty('--blue',      '#' + accent.replace('#','')); }
+  if (bg)     { root.style.setProperty('--bg',        '#' + bg.replace('#',''));
+                root.style.setProperty('--bg-alt',    '#' + bg.replace('#','') + 'cc'); }
+  if (radius) { root.style.setProperty('--radius',    radius + 'px'); }
+  /* hide chrome not useful in embed */
+  const isEmbed = params.get('embed') === '1';
+  if (isEmbed) {
+    document.querySelector('.tool-header')?.remove();
+    document.querySelector('.chat-widget')?.remove();
+    document.querySelectorAll('.tool-footer, #toolRelated, #toolEmbed, #toolUsageCount')
+      .forEach(el => el.remove());
+  }
+}
+
+/* #4 Comparison mode — A/B split of two results */
+let _compareResultA = null;
+function _injectCompareBtn() {
+  const result = document.getElementById('result');
+  if (!result || result.querySelector('#_compareBtn')) return;
+  const actions = result.querySelector('.tool-result-actions');
+  if (!actions) return;
+  const btn = document.createElement('button');
+  btn.id = '_compareBtn';
+  btn.className = 'tool-copy-btn';
+  btn.title = 'Compare with a different input';
+  btn.textContent = '⚡ Compare';
+  btn.addEventListener('click', () => {
+    const body = document.getElementById('resultBody');
+    if (!body) return;
+    _compareResultA = { html: body.innerHTML, text: body.innerText };
+    result.classList.remove('visible');
+    const form = document.getElementById('toolForm') || document.querySelector('.tool-form');
+    if (form) {
+      form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      const note = document.createElement('div');
+      note.id = '_compareNote';
+      note.className = 'ait-personalized-note';
+      note.innerHTML = '⚡ <strong>Compare mode</strong> — Result A is saved. Fill in different inputs and submit to see them side by side. <button id="_compareCancelBtn" style="background:none;border:none;color:var(--blue-light);font-weight:700;cursor:pointer;padding:0;font-family:inherit;font-size:inherit">Cancel</button>';
+      form.insertAdjacentElement('beforebegin', note);
+      document.getElementById('_compareCancelBtn')?.addEventListener('click', () => {
+        _compareResultA = null;
+        note.remove();
+      });
+    }
+  });
+  actions.insertAdjacentElement('beforebegin', btn);
+}
+
+function _showCompareView(htmlA, htmlB) {
+  const existing = document.getElementById('_compareView');
+  if (existing) existing.remove();
+  const view = document.createElement('div');
+  view.id = '_compareView';
+  view.className = 'tool-compare-view';
+  view.innerHTML = `
+    <div class="tool-compare-header">
+      <h3>⚡ Comparison</h3>
+      <button class="tool-copy-btn" id="_compareCloseBtn">Close</button>
+    </div>
+    <div class="tool-compare-panels">
+      <div class="tool-compare-panel">
+        <div class="tool-compare-label">Result A</div>
+        <div class="tool-compare-body">${htmlA}</div>
+      </div>
+      <div class="tool-compare-panel">
+        <div class="tool-compare-label">Result B</div>
+        <div class="tool-compare-body">${htmlB}</div>
+      </div>
+    </div>`;
+  const main = document.querySelector('main.tool-main');
+  if (main) main.appendChild(view);
+  else document.body.appendChild(view);
+  view.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  document.getElementById('_compareCloseBtn')?.addEventListener('click', () => view.remove());
+}
+
+/* Hook into showResult to intercept compare mode */
+const _origShowResult = window.showResult;
+if (typeof showResult === 'function') {
+  const _wrappedShowResult = showResult;
+  window.showResult = function(text) {
+    _wrappedShowResult.call(this, text);
+    if (_compareResultA) {
+      const note = document.getElementById('_compareNote');
+      note?.remove();
+      setTimeout(() => {
+        const body = document.getElementById('resultBody');
+        if (body && _compareResultA) {
+          _showCompareView(_compareResultA.html, body.innerHTML);
+          _compareResultA = null;
+        }
+      }, 100);
+    }
+  };
+}
+
 /* ─── Auto-init block: runs on every tool page ─── */
 document.addEventListener('DOMContentLoaded', () => {
   initFormPersistence();
@@ -2187,4 +2400,8 @@ document.addEventListener('DOMContentLoaded', () => {
   initThemeToggle();
   _injectReturnUserContext();
   _upgradeExampleChipKeyboard();
+  initShareableURL();
+  _initKeyboardShortcutHelper();
+  _initKeyboardShortcuts();
+  _initEmbedBranding();
 });

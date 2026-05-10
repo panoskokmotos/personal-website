@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Build Your Giving Plan — AI-Powered Personalized Giving Strategy</title>
+  <meta name="description" content="Answer 5 questions and get a complete, personalized annual giving plan — the right causes, the right amounts, the right strategy for you." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/style.css" />
+  <script src="/tool-utils.js"></script>
+  <link rel="icon" href="/favicon.ico" />
+  <meta name="robots" content="index, follow, max-image-preview:large" />
+  <link rel="canonical" href="https://panoskokmotos.com/giving-plan.html" />
+  <meta property="og:url" content="https://panoskokmotos.com/giving-plan.html" />
+  <meta property="og:title" content="Build Your Giving Plan — AI-Powered Personalized Giving Strategy" />
+  <meta property="og:description" content="Answer 5 questions and get a complete personalized annual giving plan in seconds." />
+  <meta property="og:image" content="https://panoskokmotos.com/og-ai-tools.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://panoskokmotos.com/og-ai-tools.png" />
+  <meta name="twitter:creator" content="@panoskokmotoss" />
+  <link rel="prefetch" href="/what-would-x-do.html" />
+  <link rel="prefetch" href="/donation-tax-estimator.html" />
+  <link rel="prefetch" href="/why-should-i-give.html" />
+
+  <style>
+    /* ── Wizard step indicator ── */
+    .gp-steps {
+      display: flex; gap: 0; margin-bottom: 36px;
+      counter-reset: step;
+    }
+    .gp-step {
+      flex: 1; display: flex; flex-direction: column; align-items: center;
+      position: relative;
+    }
+    .gp-step + .gp-step::before {
+      content: ''; position: absolute; top: 14px; right: 50%; left: -50%;
+      height: 2px; background: var(--border); z-index: 0;
+    }
+    .gp-step.done + .gp-step::before { background: var(--blue); }
+    .gp-step-dot {
+      width: 28px; height: 28px; border-radius: 50%;
+      border: 2px solid var(--border); background: var(--bg-alt);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.72rem; font-weight: 800; color: var(--text-muted);
+      position: relative; z-index: 1; transition: all 0.2s;
+    }
+    .gp-step.active .gp-step-dot { border-color: var(--blue); background: var(--blue); color: #fff; }
+    .gp-step.done   .gp-step-dot { border-color: var(--blue); background: var(--blue); color: #fff; }
+    .gp-step-label {
+      font-size: 0.65rem; font-weight: 700; color: var(--text-muted);
+      margin-top: 6px; text-align: center; text-transform: uppercase; letter-spacing: 0.04em;
+    }
+    .gp-step.active .gp-step-label { color: var(--navy); }
+
+    /* ── Step panels ── */
+    .gp-panel { display: none; }
+    .gp-panel.active { display: block; }
+
+    /* ── Navigation ── */
+    .gp-nav { display: flex; gap: 10px; margin-top: 24px; }
+    .gp-btn-back {
+      padding: 10px 20px; border-radius: 8px; border: 1px solid var(--border);
+      background: transparent; color: var(--text-muted); font-family: var(--font);
+      font-weight: 700; font-size: 0.88rem; cursor: pointer; transition: background 0.15s;
+    }
+    .gp-btn-back:hover { background: rgba(255,255,255,0.06); }
+    .gp-btn-next {
+      padding: 10px 24px; border-radius: 8px; border: none;
+      background: var(--blue); color: #fff; font-family: var(--font);
+      font-weight: 700; font-size: 0.88rem; cursor: pointer;
+      transition: opacity 0.15s, transform 0.15s;
+    }
+    .gp-btn-next:hover { opacity: 0.88; transform: translateY(-1px); }
+
+    /* ── Option cards (cause selects) ── */
+    .gp-cause-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 10px; margin-top: 12px;
+    }
+    .gp-cause-card {
+      padding: 14px 16px; border-radius: 10px;
+      border: 1.5px solid var(--border); background: var(--bg-alt);
+      cursor: pointer; transition: border-color 0.15s, background 0.15s;
+      user-select: none;
+    }
+    .gp-cause-card:hover  { border-color: rgba(59,110,248,0.4); }
+    .gp-cause-card.selected { border-color: var(--blue); background: rgba(59,110,248,0.09); }
+    .gp-cause-icon { font-size: 1.4rem; margin-bottom: 6px; }
+    .gp-cause-name { font-size: 0.8rem; font-weight: 700; color: var(--navy); }
+
+    /* ── Plan result header ── */
+    .gp-plan-header {
+      background: linear-gradient(135deg, rgba(59,110,248,0.12), rgba(124,58,237,0.08));
+      border: 1px solid rgba(59,110,248,0.2);
+      border-radius: var(--radius); padding: 24px; margin-bottom: 24px;
+    }
+    .gp-plan-title { font-size: 1.1rem; font-weight: 800; color: var(--navy); margin: 0 0 6px; }
+    .gp-plan-subtitle { font-size: 0.82rem; color: var(--text-muted); margin: 0; }
+  </style>
+</head>
+<body class="tool-page">
+
+  <header class="tool-header">
+    <a href="/ai-tools.html" class="tool-back">
+      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      AI for Social Impact Lab
+    </a>
+  </header>
+
+  <main class="tool-main">
+    <p class="tool-eyebrow">AI for Social Impact · Free Tool · For Donors</p>
+    <h1 class="tool-title">Build Your Giving Plan</h1>
+    <p class="tool-desc">Answer 5 quick questions and get a complete, personalised annual giving strategy — the right causes, the right amounts, a tax-smart structure, and the tools to track your impact.</p>
+
+    <div class="tool-wrap">
+      <div class="tool-form-outer" id="wizardOuter">
+
+        <!-- Step indicator -->
+        <div class="gp-steps" id="gpSteps">
+          <div class="gp-step active" data-step="1">
+            <div class="gp-step-dot">1</div>
+            <span class="gp-step-label">You</span>
+          </div>
+          <div class="gp-step" data-step="2">
+            <div class="gp-step-dot">2</div>
+            <span class="gp-step-label">Causes</span>
+          </div>
+          <div class="gp-step" data-step="3">
+            <div class="gp-step-dot">3</div>
+            <span class="gp-step-label">Budget</span>
+          </div>
+          <div class="gp-step" data-step="4">
+            <div class="gp-step-dot">4</div>
+            <span class="gp-step-label">Style</span>
+          </div>
+          <div class="gp-step" data-step="5">
+            <div class="gp-step-dot">5</div>
+            <span class="gp-step-label">Goals</span>
+          </div>
+        </div>
+
+        <!-- Step 1: Who are you? -->
+        <div class="gp-panel active" id="gpStep1">
+          <h2 style="font-size:1.05rem;font-weight:700;color:var(--navy);margin:0 0 6px">Who are you giving as?</h2>
+          <p style="font-size:0.84rem;color:var(--text-muted);margin:0 0 18px">This shapes your tax strategy and giving vehicle.</p>
+          <div class="tool-field">
+            <label class="tool-label" for="gpRole">Your role</label>
+            <select id="gpRole" class="tool-select">
+              <option value="individual">Individual / personal</option>
+              <option value="family">Family (giving together)</option>
+              <option value="professional">Professional (high-income)</option>
+              <option value="small-biz">Small business owner</option>
+              <option value="foundation">Private foundation / DAF holder</option>
+            </select>
+          </div>
+          <div class="tool-field">
+            <label class="tool-label" for="gpLocation">Country / region</label>
+            <select id="gpLocation" class="tool-select">
+              <option value="US">🇺🇸 United States</option>
+              <option value="GR">🇬🇷 Greece</option>
+              <option value="UK">🇬🇧 United Kingdom</option>
+              <option value="EU">🇪🇺 EU (other)</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="tool-field">
+            <label class="tool-label" for="gpMotivation">What drives your giving?</label>
+            <select id="gpMotivation" class="tool-select">
+              <option value="impact">Maximising measurable impact</option>
+              <option value="values">Causes I personally care about</option>
+              <option value="community">Supporting my local community</option>
+              <option value="legacy">Building a giving legacy</option>
+              <option value="tax">Tax efficiency first</option>
+              <option value="unsure">Not sure yet — help me figure it out</option>
+            </select>
+          </div>
+          <div class="gp-nav">
+            <button class="gp-btn-next" onclick="gpNext(1)">Next →</button>
+          </div>
+        </div>
+
+        <!-- Step 2: Cause areas -->
+        <div class="gp-panel" id="gpStep2">
+          <h2 style="font-size:1.05rem;font-weight:700;color:var(--navy);margin:0 0 6px">Which causes call to you?</h2>
+          <p style="font-size:0.84rem;color:var(--text-muted);margin:0 0 4px">Pick up to 3. We'll build your plan around these.</p>
+          <div class="gp-cause-grid" id="gpCauseGrid">
+            <div class="gp-cause-card" data-cause="Education & Youth">
+              <div class="gp-cause-icon">📚</div>
+              <div class="gp-cause-name">Education &amp; Youth</div>
+            </div>
+            <div class="gp-cause-card" data-cause="Health & Medical">
+              <div class="gp-cause-icon">🏥</div>
+              <div class="gp-cause-name">Health &amp; Medical</div>
+            </div>
+            <div class="gp-cause-card" data-cause="Environment & Climate">
+              <div class="gp-cause-icon">🌍</div>
+              <div class="gp-cause-name">Environment &amp; Climate</div>
+            </div>
+            <div class="gp-cause-card" data-cause="Poverty & Housing">
+              <div class="gp-cause-icon">🏠</div>
+              <div class="gp-cause-name">Poverty &amp; Housing</div>
+            </div>
+            <div class="gp-cause-card" data-cause="Food Security">
+              <div class="gp-cause-icon">🍽️</div>
+              <div class="gp-cause-name">Food Security</div>
+            </div>
+            <div class="gp-cause-card" data-cause="Animal Welfare">
+              <div class="gp-cause-icon">🐾</div>
+              <div class="gp-cause-name">Animal Welfare</div>
+            </div>
+            <div class="gp-cause-card" data-cause="Arts & Culture">
+              <div class="gp-cause-icon">🎨</div>
+              <div class="gp-cause-name">Arts &amp; Culture</div>
+            </div>
+            <div class="gp-cause-card" data-cause="Social Justice">
+              <div class="gp-cause-icon">⚖️</div>
+              <div class="gp-cause-name">Social Justice</div>
+            </div>
+            <div class="gp-cause-card" data-cause="Mental Health">
+              <div class="gp-cause-icon">🧠</div>
+              <div class="gp-cause-name">Mental Health</div>
+            </div>
+            <div class="gp-cause-card" data-cause="International Development">
+              <div class="gp-cause-icon">🌐</div>
+              <div class="gp-cause-name">Global Development</div>
+            </div>
+            <div class="gp-cause-card" data-cause="Effective Altruism">
+              <div class="gp-cause-icon">📊</div>
+              <div class="gp-cause-name">Most Effective Causes</div>
+            </div>
+            <div class="gp-cause-card" data-cause="Local Community">
+              <div class="gp-cause-icon">🏘️</div>
+              <div class="gp-cause-name">Local Community</div>
+            </div>
+          </div>
+          <div id="gpCauseError" style="display:none;color:#f87171;font-size:0.8rem;margin-top:10px">Please select at least one cause.</div>
+          <div class="gp-nav">
+            <button class="gp-btn-back" onclick="gpBack(2)">← Back</button>
+            <button class="gp-btn-next" onclick="gpNext(2)">Next →</button>
+          </div>
+        </div>
+
+        <!-- Step 3: Budget -->
+        <div class="gp-panel" id="gpStep3">
+          <h2 style="font-size:1.05rem;font-weight:700;color:var(--navy);margin:0 0 6px">What's your giving budget?</h2>
+          <p style="font-size:0.84rem;color:var(--text-muted);margin:0 0 18px">We'll show you how to structure and stretch it.</p>
+          <div class="tool-field">
+            <label class="tool-label" for="gpBudget">Annual giving budget</label>
+            <select id="gpBudget" class="tool-select">
+              <option value="under $500">Under $500 / year</option>
+              <option value="$500–$2,000" selected>$500 – $2,000 / year</option>
+              <option value="$2,000–$10,000">$2,000 – $10,000 / year</option>
+              <option value="$10,000–$50,000">$10,000 – $50,000 / year</option>
+              <option value="$50,000–$250,000">$50,000 – $250,000 / year</option>
+              <option value="over $250,000">$250,000+ / year</option>
+            </select>
+          </div>
+          <div class="tool-field">
+            <label class="tool-label" for="gpFrequency">Preferred giving cadence</label>
+            <select id="gpFrequency" class="tool-select">
+              <option value="monthly recurring">Monthly recurring (best for nonprofits)</option>
+              <option value="quarterly">Quarterly lump sums</option>
+              <option value="annual lump sum">One annual gift</option>
+              <option value="event-driven">Event-driven (disasters, campaigns)</option>
+              <option value="mix">Mix of recurring + event-driven</option>
+            </select>
+          </div>
+          <div class="tool-field">
+            <label class="tool-label" for="gpGiftType">Gift types you're open to</label>
+            <select id="gpGiftType" class="tool-select">
+              <option value="cash only">Cash / card only</option>
+              <option value="cash and stock">Cash + appreciated stock</option>
+              <option value="cash, stock, and DAF">Cash + stock + DAF</option>
+              <option value="any including goods and volunteering">All types including goods &amp; time</option>
+            </select>
+          </div>
+          <div class="gp-nav">
+            <button class="gp-btn-back" onclick="gpBack(3)">← Back</button>
+            <button class="gp-btn-next" onclick="gpNext(3)">Next →</button>
+          </div>
+        </div>
+
+        <!-- Step 4: Giving style -->
+        <div class="gp-panel" id="gpStep4">
+          <h2 style="font-size:1.05rem;font-weight:700;color:var(--navy);margin:0 0 6px">How do you like to give?</h2>
+          <p style="font-size:0.84rem;color:var(--text-muted);margin:0 0 18px">This shapes which organisations and strategies we recommend.</p>
+          <div class="tool-field">
+            <label class="tool-label" for="gpStyle">Giving style</label>
+            <select id="gpStyle" class="tool-select">
+              <option value="direct to orgs I trust">Direct to orgs I already trust</option>
+              <option value="evidence-based highly rated">Evidence-based (GiveWell / Charity Navigator rated)</option>
+              <option value="local focus">Local community focus</option>
+              <option value="international global health">Global health / international</option>
+              <option value="systems change">Systems change &amp; advocacy</option>
+              <option value="mix">I want a balanced mix</option>
+            </select>
+          </div>
+          <div class="tool-field">
+            <label class="tool-label" for="gpInvolvement">How involved do you want to be?</label>
+            <select id="gpInvolvement" class="tool-select">
+              <option value="set and forget">Set-and-forget (automate it)</option>
+              <option value="annual review">Annual review of my portfolio</option>
+              <option value="quarterly active">Quarterly — actively engaged</option>
+              <option value="very hands-on">Very hands-on (volunteer, visit orgs)</option>
+            </select>
+          </div>
+          <div class="gp-nav">
+            <button class="gp-btn-back" onclick="gpBack(4)">← Back</button>
+            <button class="gp-btn-next" onclick="gpNext(4)">Next →</button>
+          </div>
+        </div>
+
+        <!-- Step 5: Goals -->
+        <div class="gp-panel" id="gpStep5">
+          <h2 style="font-size:1.05rem;font-weight:700;color:var(--navy);margin:0 0 6px">What does success look like?</h2>
+          <p style="font-size:0.84rem;color:var(--text-muted);margin:0 0 18px">One last thing — helps us set the right targets in your plan.</p>
+          <div class="tool-field">
+            <label class="tool-label" for="gpGoal">Your primary giving goal this year</label>
+            <textarea id="gpGoal" class="tool-textarea" rows="3"
+              placeholder="e.g. I want to give $5,000 this year, split across 2–3 causes I trust, in a tax-efficient way, and feel like my money is actually making a difference."></textarea>
+          </div>
+          <div class="tool-field">
+            <label class="tool-label" for="gpChallenge">Biggest challenge or concern?</label>
+            <select id="gpChallenge" class="tool-select">
+              <option value="not knowing which orgs to trust">Not knowing which orgs to trust</option>
+              <option value="not knowing how much is enough">Not knowing how much is enough</option>
+              <option value="tax complexity">Tax complexity / optimisation</option>
+              <option value="staying consistent over time">Staying consistent over time</option>
+              <option value="measuring impact">Measuring whether I'm making a difference</option>
+              <option value="family disagreement on causes">Family disagreement on causes</option>
+            </select>
+          </div>
+
+          <div id="errorBox" class="tool-error" style="display:none">
+            <p id="errorText"></p>
+          </div>
+
+          <div class="gp-nav">
+            <button class="gp-btn-back" onclick="gpBack(5)">← Back</button>
+            <button class="gp-btn-next" id="submitBtn" onclick="gpSubmit()">
+              ✨ Build My Giving Plan
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Result -->
+      <div id="result" class="tool-result">
+        <div class="tool-result-header">
+          <h2 class="tool-result-title">Your Giving Plan</h2>
+          <div class="tool-result-actions">
+            <button class="tool-copy-btn" id="copyBtn">Copy</button>
+          </div>
+        </div>
+        <div id="resultBody" class="tool-result-body"></div>
+        <button class="tool-try-another" id="tryAnotherBtn">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 106 5.3L3 8"/></svg>
+          Rebuild plan
+        </button>
+      </div>
+    </div>
+
+    <!-- Loading -->
+    <div id="loading" class="tool-loading" style="display:none">
+      <div class="tool-loading-spinner"></div>
+      <p id="loadingText">Building your personalised giving plan…</p>
+    </div>
+
+    <footer class="tool-footer">
+      Built by <a href="/" target="_blank">Panos Kokmotos</a> · Part of the
+      <a href="/ai-tools.html">AI for Social Impact Lab</a> ·
+      Powered by Claude AI · For educational purposes — not financial or tax advice.
+    </footer>
+    <div class="tool-usage-count" id="toolUsageCount"></div>
+    <div class="tool-related-wrap" id="toolRelated"></div>
+    <div class="tool-embed-wrap" id="toolEmbed"></div>
+  </main>
+
+  <!-- AI Chat Widget -->
+  <div class="chat-widget" id="chatWidget">
+    <button class="chat-toggle" id="chatToggle" aria-label="Chat with Panos AI">
+      <svg class="chat-icon-open" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      <svg class="chat-icon-close" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      <span class="chat-badge">AI</span>
+    </button>
+    <div class="chat-panel" id="chatPanel">
+      <div class="chat-header">
+        <div class="chat-header-info">
+          <picture>
+            <source srcset="/photo.webp" type="image/webp" />
+            <img src="/photo.jpg" alt="Panos Kokmotos" class="chat-avatar" />
+          </picture>
+          <div class="chat-header-text">
+            <strong>Ask Panos</strong>
+            <span><span class="chat-status-dot"></span>AI · Usually replies instantly</span>
+          </div>
+        </div>
+      </div>
+      <div class="chat-messages" id="chatMessages">
+        <p>👋 Hi! I'm Panos's AI. Ask me about giving plans, impact, or social good!</p>
+      </div>
+      <div class="chat-starters" id="chatStarters">
+        <button class="chat-starter">How much should I give?</button>
+        <button class="chat-starter">What's the most impactful cause?</button>
+        <button class="chat-starter">How does a DAF work?</button>
+      </div>
+      <div class="chat-input-wrap">
+        <input type="text" id="chatInput" placeholder="Ask about giving, impact, Panos…" />
+        <button id="chatSend" aria-label="Send">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+  <script src="/chat.js"></script>
+
+  <script>
+    let _currentStep = 1;
+    const _totalSteps = 5;
+    const _selectedCauses = new Set();
+
+    const LOADING_MSGS = [
+      'Analysing your values and goals…',
+      'Matching you to the best causes…',
+      'Calculating your tax strategy…',
+      'Building your impact portfolio…',
+      'Personalising your action plan…',
+    ];
+
+    /* Cause card selection */
+    document.querySelectorAll('.gp-cause-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const cause = card.dataset.cause;
+        if (card.classList.contains('selected')) {
+          card.classList.remove('selected');
+          _selectedCauses.delete(cause);
+        } else if (_selectedCauses.size < 3) {
+          card.classList.add('selected');
+          _selectedCauses.add(cause);
+        }
+        document.getElementById('gpCauseError').style.display = 'none';
+      });
+    });
+
+    function gpUpdateSteps(step) {
+      document.querySelectorAll('.gp-step').forEach(el => {
+        const n = +el.dataset.step;
+        el.classList.toggle('active', n === step);
+        el.classList.toggle('done',   n < step);
+      });
+    }
+
+    function gpNext(from) {
+      if (from === 2 && _selectedCauses.size === 0) {
+        document.getElementById('gpCauseError').style.display = 'block';
+        return;
+      }
+      document.getElementById('gpStep' + from).classList.remove('active');
+      const next = from + 1;
+      document.getElementById('gpStep' + next).classList.add('active');
+      _currentStep = next;
+      gpUpdateSteps(next);
+      document.querySelector('.tool-form-outer')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function gpBack(from) {
+      document.getElementById('gpStep' + from).classList.remove('active');
+      const prev = from - 1;
+      document.getElementById('gpStep' + prev).classList.add('active');
+      _currentStep = prev;
+      gpUpdateSteps(prev);
+    }
+
+    async function gpSubmit() {
+      const role        = document.getElementById('gpRole').value;
+      const location    = document.getElementById('gpLocation').value;
+      const motivation  = document.getElementById('gpMotivation').value;
+      const causes      = [..._selectedCauses].join(', ');
+      const budget      = document.getElementById('gpBudget').value;
+      const frequency   = document.getElementById('gpFrequency').value;
+      const giftType    = document.getElementById('gpGiftType').value;
+      const style       = document.getElementById('gpStyle').value;
+      const involvement = document.getElementById('gpInvolvement').value;
+      const goal        = document.getElementById('gpGoal').value.trim();
+      const challenge   = document.getElementById('gpChallenge').value;
+
+      if (!goal) {
+        document.getElementById('gpGoal').focus();
+        return;
+      }
+
+      const systemPrompt = `You are an expert philanthropy advisor specialising in personalised giving plans. You combine evidence-based giving methodology (GiveWell, EA), tax-smart strategies, and donor psychology to create practical, motivating giving plans.
+
+Build a complete Annual Giving Plan structured as follows:
+
+## Your Giving Profile
+(1-2 sentences summarising their donor identity and motivation)
+
+## Recommended Cause Portfolio
+For each of their chosen causes (${causes}), give:
+- **Cause: [Name]** — [% of budget] — [Why this matches them]
+- 2-3 specific highly-rated orgs to consider (real orgs with real track records)
+- Suggested gift size given their budget
+
+## Giving Structure & Tax Strategy
+- Recommended gift vehicle (cash / stock / DAF / bunching) for their location (${location})
+- Timing strategy (when to give for maximum tax advantage)
+- Whether recurring vs lump-sum makes sense for their budget
+- One tax tip specific to their country
+
+## Action Plan (First 90 Days)
+Give 5 specific, concrete actions numbered and dated:
+1. Week 1: ...
+2. Week 2: ...
+3. Month 2: ...
+4. Month 3: ...
+5. Ongoing: ...
+
+## Impact Milestones
+Set 3 measurable goals for the year that make them feel the plan is working.
+
+## Your Challenge — How to Overcome It
+Address their specific challenge (${challenge}) with 2 concrete tactics.
+
+## Next Tools to Use
+Recommend 2-3 tools from this list that would help them execute this plan:
+- "What Would $X Do?" → /what-would-x-do.html
+- Donation Tax Estimator → /donation-tax-estimator.html
+- Charity Comparison Engine → /charity-comparison-engine.html
+- Nonprofit Health Checker → /nonprofit-health-checker.html
+- Volunteer Match → /volunteer-match.html
+
+Be specific, warm, and actionable. Avoid vague advice. Name real organisations. Use their budget numbers precisely.`;
+
+      const userMessage = `Build my personalised annual giving plan:
+
+**Who I am:** ${role}, based in ${location}
+**What drives me:** ${motivation}
+**Causes I care about:** ${causes}
+**Annual budget:** ${budget}
+**Cadence:** ${frequency}
+**Gift types:** ${giftType}
+**Giving style:** ${style}
+**Involvement level:** ${involvement}
+**My goal this year:** ${goal}
+**Biggest challenge:** ${challenge}`;
+
+      hideError();
+      setLoading(true);
+      startLoadingMessages(LOADING_MSGS);
+
+      try {
+        const result = await callWorker(systemPrompt, userMessage);
+        showResult(result);
+        notifyToolUsed('Giving Plan Builder');
+      } catch (err) {
+        if (!err._shown) showError('Could not build your plan. Please try again.');
+      } finally {
+        setLoading(false);
+        stopLoadingMessages();
+      }
+    }
+
+    initCopyBtn();
+    initUsageCounter();
+    initRelatedTools();
+  </script>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js').catch(() => {});
+    }
+  </script>
+</body>
+</html>
