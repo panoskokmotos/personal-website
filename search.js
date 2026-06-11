@@ -137,6 +137,10 @@
     input.addEventListener('input', () => {
       activeIdx = -1;
       clearTimeout(debounce);
+      const results = document.getElementById('ssResults');
+      if (results && input.value.trim()) {
+        results.innerHTML = '<p class="ss-hint">Searching…</p>';
+      }
       debounce = setTimeout(async () => {
         await loadIndex();
         renderPane(input.value);

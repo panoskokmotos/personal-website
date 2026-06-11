@@ -2195,6 +2195,7 @@
           <div class="form-field">
             <label for="contact-email">Email</label>
             <input id="contact-email" type="email" name="email" placeholder="your@email.com" autocomplete="email" required />
+            <p class="field-error" id="contact-email-error" role="alert"></p>
           </div>
         </div>
         <div class="form-field">
@@ -2215,6 +2216,7 @@
           <span class="form-success-icon">✓</span>
           Message sent! I'll get back to you soon.
         </div>
+        <p class="form-error" id="formError" role="alert" aria-live="assertive"></p>
       </form>
     </div>
   </section>
@@ -2353,6 +2355,8 @@
         if (!expanded) {
           btn.setAttribute('aria-expanded', 'true');
           btn.nextElementSibling.classList.add('open');
+          // After expand animation begins, scroll so the answer is visible
+          setTimeout(() => btn.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
         }
       });
     });

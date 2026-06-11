@@ -164,6 +164,12 @@ async function sendMessage() {
       body: JSON.stringify({ messages }),
     });
 
+    if (res.status === 429) {
+      thinkingEl.remove();
+      addMessage('bot', "You've been chatting a lot! Please wait 30 seconds before trying again.");
+      return;
+    }
+
     const data = await res.json();
     const reply = data.text || 'Sorry, I had trouble responding. Please try again.';
 

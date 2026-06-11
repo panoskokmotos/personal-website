@@ -20,8 +20,14 @@
 
 // ── Navbar: transparent → solid on scroll ──
 const navbar = document.getElementById('navbar');
+let _navTicking = false;
 window.addEventListener('scroll', () => {
-  navbar.classList.toggle('scrolled', window.scrollY > 60);
+  if (_navTicking) return;
+  _navTicking = true;
+  requestAnimationFrame(() => {
+    navbar.classList.toggle('scrolled', window.scrollY > 60);
+    _navTicking = false;
+  });
 }, { passive: true });
 
 // ── Mobile menu ──
@@ -367,6 +373,36 @@ document.querySelectorAll('.watch-featured .watch-embed-wrap').forEach(wrap => {
 // ── Contact form async submit ──
 const contactForm = document.getElementById('contactForm');
 if (contactForm) {
+  function showFormError(msg) {
+    const el = document.getElementById('formError');
+    if (!el) return;
+    el.textContent = msg;
+    el.style.display = 'block';
+    el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+  function hideFormError() {
+    const el = document.getElementById('formError');
+    if (el) { el.textContent = ''; el.style.display = 'none'; }
+  }
+
+  // Real-time email validation feedback
+  const emailInput = document.getElementById('contact-email');
+  const emailError = document.getElementById('contact-email-error');
+  if (emailInput && emailError) {
+    emailInput.addEventListener('blur', () => {
+      if (emailInput.value && !emailInput.validity.valid) {
+        emailError.textContent = 'Please enter a valid email address.';
+      } else {
+        emailError.textContent = '';
+      }
+    });
+    emailInput.addEventListener('input', () => {
+      if (emailError.textContent && emailInput.validity.valid) {
+        emailError.textContent = '';
+      }
+    });
+  }
+
   contactForm.addEventListener('submit', async e => {
     e.preventDefault();
     const btn = contactForm.querySelector('button[type="submit"]');
@@ -375,6 +411,7 @@ if (contactForm) {
     btn.disabled = true;
     btn.classList.add('btn-loading');
     btn.innerHTML = '<span class="btn-spinner"></span>Sending…';
+    hideFormError();
     // Capture form data before reset
     const formData = new FormData(contactForm);
     const notifData = {
@@ -390,7 +427,8 @@ if (contactForm) {
         body: formData,
         headers: { 'Accept': 'application/json' },
       });
-      if (res.ok) {
+      const data = await res.json().catch(() => ({}));
+      if (res.ok && !data.errors?.length) {
         contactForm.reset();
         btn.innerHTML = '✓ Sent!';
         btn.classList.remove('btn-loading');
@@ -402,13 +440,14 @@ if (contactForm) {
         btn.disabled = false;
         btn.classList.remove('btn-loading');
         btn.innerHTML = originalHTML;
-        alert('Something went wrong. Please try again.');
+        const msg = data.errors?.[0]?.message || 'Something went wrong. Please try again.';
+        showFormError(msg);
       }
     } catch {
       btn.disabled = false;
       btn.classList.remove('btn-loading');
       btn.innerHTML = originalHTML;
-      alert('Network error. Please email panagiotis.kokmotoss@gmail.com directly.');
+      showFormError('Network error. Please email panagiotis.kokmotoss@gmail.com directly.');
     }
   });
 }
@@ -462,8 +501,8 @@ document.querySelectorAll('.skeleton-wrap img.book-cover-img').forEach(img => {
 // ── AI Chat: proactive trigger (once per session, after 15s idle — desktop only) ──
 (function() {
   if (sessionStorage.getItem('chat_proactive_done')) return;
-  // Never auto-open on mobile/touch — intrusive on small screens
-  if (window.matchMedia('(pointer: coarse)').matches || window.innerWidth < 768) return;
+  // Never auto-open on mobile/touch or tablets — intrusive on small screens
+  if (window.matchMedia('(pointer: coarse)').matches || window.innerWidth < 1024) return;
   const widget = document.getElementById('chatWidget');
   const toggle = document.getElementById('chatToggle');
   if (!widget || !toggle) return;
