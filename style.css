@@ -14,6 +14,10 @@
   --navy:        rgba(255,255,255,0.95);
   --blue:        #3b6ef8;
   --blue-light:  #6090ff;
+  --brand-purple:      #6B3FA0;
+  --brand-purple-dark: #5718CA;
+  --brand-pink:        #C2185B;
+  --brand-pink-light:  #E353B6;
   --gold:        #f4a924;
   --text:        rgba(255,255,255,0.88);
   --text-muted:  rgba(255,255,255,0.48);
@@ -189,8 +193,8 @@ section { padding: 100px 0; }
 }
 .btn-sm { padding: 8px 18px; font-size: 0.85rem; }
 
-.btn-primary { background: var(--blue); color: #fff; }
-.btn-primary:hover { background: var(--blue-light); color: #fff; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(59,110,248,0.4); }
+.btn-primary { background: var(--brand-purple); color: #fff; }
+.btn-primary:hover { background: var(--brand-purple-dark); color: #fff; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(107,63,160,0.4); }
 
 .btn-ghost { background: rgba(255,255,255,0.1); color: #fff; border-color: rgba(255,255,255,0.25); }
 .btn-ghost:hover { background: rgba(255,255,255,0.18); color: #fff; border-color: rgba(255,255,255,0.5); }
@@ -2653,7 +2657,7 @@ html[data-theme="light"] .now-card-top { background: linear-gradient(135deg, rgb
 .sticky-cta.visible { transform: translateY(0); }
 .sticky-cta-btn {
   display: block; width: 100%;
-  background: linear-gradient(135deg, #3b6ef8, #6366f1);
+  background: linear-gradient(135deg, var(--brand-purple), var(--brand-purple-dark));
   color: #fff; font-weight: 700; font-size: 0.95rem;
   text-align: center; padding: 14px; border-radius: 12px;
   text-decoration: none; letter-spacing: 0.2px;

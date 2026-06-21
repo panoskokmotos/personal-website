@@ -2,6 +2,13 @@
 
 Audited: 2026-06-20 | Branch: `claude/gracious-ramanujan-pykht6`
 
+**Implementation status** (2026-06-21):
+- ✅ P0: Items 2–5 fully implemented
+- ⚠️ P0 Item 1 (exposed secret): requires rotating the secret on the **Cloudflare Worker** side — cannot be fixed client-only; code already has a comment acknowledging this
+- ✅ P1: Items 6–8, 10–11 implemented; Item 9 (image compression) skipped — no image tools in environment
+- ✅ P2: Items 12–13, 15–17 implemented; Item 14 (split tool-utils.js) deferred — large refactor
+- ✅ P3: Item 17 (Go Deeper tooltip) and Item 20 (JSDoc) implemented; Items 18–19 (srcset, CSP) deferred
+
 ---
 
 ## 🔥 P0 — Ship this week (bugs breaking user flows)

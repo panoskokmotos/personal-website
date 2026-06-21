@@ -889,7 +889,7 @@
           <div class="about-photo-wrap">
             <picture>
               <source srcset="assets/headshot.webp" type="image/webp" />
-              <img src="assets/headshot.jpg" alt="Panos Kokmotos — Greek entrepreneur, Forbes 30 Under 30, Co-Founder of Givelink" class="about-photo-placeholder" width="260" height="260" loading="lazy" onerror="this.src='photo.jpg'" />
+              <img src="assets/headshot.jpg" alt="Panos Kokmotos — Greek entrepreneur, Forbes 30 Under 30, Co-Founder of Givelink" class="about-photo-placeholder" width="260" height="260" loading="lazy" data-fallback="photo.jpg" />
             </picture>
             <div class="about-photo-ring"></div>
           </div>
@@ -1422,7 +1422,7 @@
         <div class="project-card project-featured" data-animate>
           <div class="project-img project-img-givelink">
             <div class="company-logo company-logo-givelink" aria-label="Givelink logo">
-              <img src="assets/givelink-logo.png" alt="Givelink logo" class="company-logo-img" loading="lazy" onerror="this.src='assets/givelink-logo.svg';this.onerror=function(){this.style.display='none';this.nextElementSibling.style.display='inline-flex';};" /><span class="company-logo-mark company-logo-fallback" style="display:none">GL</span>
+              <img src="assets/givelink-logo.png" alt="Givelink logo" class="company-logo-img" loading="lazy" data-fallback="assets/givelink-logo.svg" data-fallback-hide="true" /><span class="company-logo-mark company-logo-fallback" style="display:none">GL</span>
               <span class="company-logo-name">Givelink</span>
             </div>
           </div>
@@ -1458,7 +1458,7 @@
         <div class="project-card" data-animate>
           <div class="project-img project-img-podcast">
             <div class="company-logo company-logo-et" aria-label="Entrepreneurship Talks logo">
-              <img src="assets/entrepreneurship-talks-logo.png" alt="Entrepreneurship Talks logo" class="company-logo-img" loading="lazy" onerror="this.src='assets/entrepreneurship-talks-logo.svg';this.onerror=function(){this.style.display='none';this.nextElementSibling.style.display='inline-flex';};" /><span class="company-logo-mark company-logo-fallback" style="display:none">ET</span>
+              <img src="assets/entrepreneurship-talks-logo.png" alt="Entrepreneurship Talks logo" class="company-logo-img" loading="lazy" data-fallback="assets/entrepreneurship-talks-logo.svg" data-fallback-hide="true" /><span class="company-logo-mark company-logo-fallback" style="display:none">ET</span>
               <span class="company-logo-name">Entrepreneurship Talks</span>
             </div>
           </div>
@@ -2342,6 +2342,14 @@
   <script src="search.js"></script>
   <!-- FAQ accordion + follow-up chat launcher -->
   <script>
+    // Wire up aria-controls and ids for accessibility
+    document.querySelectorAll('.faq-q').forEach((btn, i) => {
+      const panel = btn.nextElementSibling;
+      const id = `faq-panel-${i}`;
+      panel.id = id;
+      btn.setAttribute('aria-controls', id);
+    });
+
     document.querySelectorAll('.faq-q').forEach(btn => {
       btn.addEventListener('click', () => {
         const expanded = btn.getAttribute('aria-expanded') === 'true';

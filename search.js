@@ -63,11 +63,16 @@
     return '<p class="ss-hint">No results found — try the <button class="ss-ai-link" onclick="openSearch(); closeSearch(); setTimeout(openChat,120)">AI chat</button> instead.</p>';
   }
 
+  function escapeHtml(s) {
+    return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
   function highlight(text, query) {
     const terms = query.trim().split(/\s+/).filter(t => t.length > 1);
-    if (!terms.length) return text;
+    const safe = escapeHtml(text);
+    if (!terms.length) return safe;
     const pattern = terms.map(t => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|');
-    return text.replace(new RegExp(`(${pattern})`, 'gi'), '<mark>$1</mark>');
+    return safe.replace(new RegExp(`(${pattern})`, 'gi'), '<mark>$1</mark>');
   }
 
   function renderResults(results, query) {

@@ -114,6 +114,12 @@ function stopLoadingMessages() {
 }
 
 /* ── Core API ── */
+/**
+ * Send a prompt to the Cloudflare Worker and stream the response into #resultBody.
+ * @param {string} systemPrompt - The AI system instructions
+ * @param {string} userMessage  - The user's query
+ * @returns {Promise<string>} The full AI response text
+ */
 async function callWorker(systemPrompt, userMessage) {
   // Use streaming endpoint — progressively renders result body in real-time
   let res;
@@ -220,11 +226,18 @@ function _showRateLimitError() {
 }
 
 function formatMarkdown(text) {
-  return text
+  // Escape HTML entities first so AI-generated content can't inject elements
+  const escaped = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  return escaped
     .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
     .replace(/\n/g, '<br>');
 }
 
+/**
+ * Track a tool usage: increments local counter, shows milestone toasts,
+ * and fires a fire-and-forget notification to the Worker.
+ * @param {string} toolName - Human-readable tool name for notifications
+ */
 function notifyToolUsed(toolName) {
   /* Increment local counter */
   const key = 'tuc_' + window.location.pathname.replace(/[^a-z0-9]/gi, '_');
@@ -273,6 +286,7 @@ function _showMilestoneToast(count, toolName) {
 }
 
 /* ── Standard UI helpers (complex tools override with local versions) ── */
+/** @param {boolean} on - true to show loading state, false to hide */
 function setLoading(on) {
   const btn       = document.getElementById('submitBtn');
   const loadingEl = document.getElementById('loading');
@@ -314,6 +328,7 @@ function setLoading(on) {
   else _removeLoadingSkeleton();
 }
 
+/** @param {string} msg - Human-readable error message to display in #errorBox */
 function showError(msg) {
   const el = document.getElementById('errorBox');
   if (!el) return;
@@ -326,6 +341,10 @@ function hideError() {
   if (el) el.classList.remove('visible');
 }
 
+/**
+ * Render final AI result text into #result / #resultBody and inject extras.
+ * @param {string} text - Raw AI response (may contain **bold** markdown)
+ */
 function showResult(text) {
   const result     = document.getElementById('result');
   const resultBody = document.getElementById('resultBody');
@@ -396,13 +415,28 @@ function hideResult() {
   if (el) el.classList.remove('visible');
 }
 
+/* ── Shared clipboard utility with execCommand fallback ── */
+function copyToClipboard(text) {
+  if (navigator.clipboard) return navigator.clipboard.writeText(text);
+  return new Promise((resolve, reject) => {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.cssText = 'position:fixed;opacity:0;pointer-events:none';
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy') ? resolve() : reject(new Error('copy failed')); }
+    catch (e) { reject(e); }
+    finally { document.body.removeChild(ta); }
+  });
+}
+
 /* ── Copy button ── */
 function initCopyBtn() {
   const copyBtn    = document.getElementById('copyBtn');
   const resultBody = document.getElementById('resultBody');
   if (!copyBtn || !resultBody) return;
   copyBtn.addEventListener('click', () => {
-    navigator.clipboard.writeText(resultBody.textContent).then(() => {
+    copyToClipboard(resultBody.textContent).then(() => {
       copyBtn.textContent = 'Copied!';
       setTimeout(() => { copyBtn.textContent = 'Copy'; }, 2000);
     });
@@ -484,7 +518,7 @@ function initShareBtns() {
     const _linkIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="13" height="13"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>`;
     const _checkIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="13" height="13"><path d="M20 6L9 17l-5-5"/></svg>`;
     linkBtn.addEventListener('click', () => {
-      navigator.clipboard.writeText(window.location.href).then(() => {
+      copyToClipboard(window.location.href).then(() => {
         linkBtn.innerHTML = _checkIcon + ' Copied!';
         setTimeout(() => { linkBtn.innerHTML = _linkIcon + ' Copy link'; }, 2200);
       });
@@ -626,7 +660,7 @@ function initEmbed() {
     const pid = btn.dataset.platform;
     const platform = platforms.find(p => p.id === pid);
     if (!platform) return;
-    navigator.clipboard.writeText(platform.code).then(() => {
+    copyToClipboard(platform.code).then(() => {
       btn.textContent = 'Copied!';
       setTimeout(() => { btn.textContent = 'Copy code'; }, 2200);
     });
@@ -1260,6 +1294,7 @@ function _injectGoDeeperBtn() {
   const btn = document.createElement('button');
   btn.id = '_deepBtn';
   btn.className = 'tool-deep-btn';
+  btn.title = 'Get a significantly more detailed, research-backed analysis using Claude Sonnet — takes ~10 seconds';
   btn.innerHTML = `✨ Go Deeper <span class="deep-badge">Claude Sonnet</span>`;
   const actions = result.querySelector('.tool-result-actions');
   if (actions) result.insertBefore(btn, actions);
@@ -1430,6 +1465,7 @@ function _initCharityAutocomplete() {
       debounceTimer = setTimeout(async () => {
         try {
           const res = await fetch(`${TOOL_CHARITY_SEARCH_URL}?q=${encodeURIComponent(q)}`);
+          if (!res.ok) throw new Error(`API error ${res.status}`);
           const data = await res.json();
           renderItems(data.organizations || []);
         } catch { closeDropdown(); }

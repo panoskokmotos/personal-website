@@ -211,19 +211,19 @@ window.addEventListener('scroll', () => {
 
 // ── Book cover placeholder detection (Open Library returns 1px gif for missing covers) ──
 document.querySelectorAll('.book-cover-img').forEach(img => {
+  const getAbbr = () => img.alt.replace(' cover', '').split(' ').map(w => w[0]).join('').substring(0, 3).toUpperCase();
+  const showFallback = () => { img.parentElement.innerHTML = `<div class="book-cover-fb">${getAbbr()}</div>`; };
   const checkSize = () => {
-    if (img.naturalWidth < 10 || img.naturalHeight < 10) {
-      const abbr = img.alt.replace(' cover', '').split(' ').map(w => w[0]).join('').substring(0, 3).toUpperCase();
-      img.parentElement.innerHTML = `<div class="book-cover-fb">${abbr}</div>`;
-    }
+    if (img.naturalWidth < 10 || img.naturalHeight < 10) showFallback();
   };
   if (img.complete) checkSize();
   else img.addEventListener('load', checkSize);
+  img.addEventListener('error', showFallback);
 });
 
-// ── Hero parallax orbs ──
+// ── Hero parallax orbs (desktop/pointer only — avoids jank on touch scroll) ──
 const heroOrbs = document.querySelectorAll('.hero-orb');
-if (heroOrbs.length) {
+if (heroOrbs.length && !window.matchMedia('(hover: none)').matches) {
   window.addEventListener('scroll', () => {
     const y = window.scrollY;
     heroOrbs[0] && (heroOrbs[0].style.transform = `translateY(${y * 0.25}px)`);
@@ -398,6 +398,11 @@ if (contactForm) {
         success.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         // Fire-and-forget: notify Panos via worker
         sendSiteNotification('Contact Form Submission', notifData);
+      } else if (res.status === 429) {
+        btn.disabled = false;
+        btn.classList.remove('btn-loading');
+        btn.innerHTML = originalHTML;
+        alert("You've sent a message recently — please wait a minute and try again.");
       } else {
         btn.disabled = false;
         btn.classList.remove('btn-loading');
@@ -431,6 +436,23 @@ if (contactForm) {
   window.addEventListener('scroll', updateCta, { passive: true });
   cta.setAttribute('aria-hidden', 'false');
 })();
+
+// ── Image fallback handler (replaces inline onerror attributes) ──
+document.querySelectorAll('img[data-fallback]').forEach(img => {
+  img.addEventListener('error', function onFirstError() {
+    const next = this.dataset.fallback;
+    this.removeAttribute('data-fallback');
+    if (!next) return;
+    this.src = next;
+    if (this.dataset.fallbackHide) {
+      this.addEventListener('error', () => {
+        this.style.display = 'none';
+        const sib = this.nextElementSibling;
+        if (sib && sib.classList.contains('company-logo-fallback')) sib.style.display = 'inline-flex';
+      }, { once: true });
+    }
+  }, { once: true });
+});
 
 // ── "Now" section — auto date ──
 (function() {

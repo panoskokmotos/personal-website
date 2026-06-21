@@ -14,15 +14,30 @@ let messages = []; // conversation history
 
 // ── Minimal markdown: bold, italic & clickable URLs ──
 function parseMarkdown(text) {
-  // **bold** → <strong>
-  text = text.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
-  // *italic* (not inside bold)
-  text = text.replace(/(?<!\*)\*(?!\*)(.+?)(?<!\*)\*(?!\*)/g, '<em>$1</em>');
-  // URLs → clickable links (before line break conversion)
-  text = text.replace(/(https?:\/\/[^\s<"']+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer" style="color:var(--blue);text-decoration:underline;text-underline-offset:2px;word-break:break-all;">$1</a>');
-  // Line breaks
-  text = text.replace(/\n/g, '<br>');
-  return text;
+  function esc(s) {
+    return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+  // Extract URLs first so we can HTML-escape everything else without mangling them
+  const urlRe = /(https?:\/\/[^\s<"']+)/g;
+  const chunks = [];
+  let last = 0, m;
+  while ((m = urlRe.exec(text)) !== null) {
+    if (m.index > last) chunks.push({ t: 'text', v: text.slice(last, m.index) });
+    chunks.push({ t: 'url', v: m[0] });
+    last = urlRe.lastIndex;
+  }
+  if (last < text.length) chunks.push({ t: 'text', v: text.slice(last) });
+
+  return chunks.map(c => {
+    if (c.t === 'url') {
+      const safeHref = encodeURI(c.v);
+      return `<a href="${safeHref}" target="_blank" rel="noopener noreferrer" style="color:var(--blue);text-decoration:underline;text-underline-offset:2px;word-break:break-all;">${esc(c.v)}</a>`;
+    }
+    return esc(c.v)
+      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+      .replace(/(?<!\*)\*(?!\*)(.+?)(?<!\*)\*(?!\*)/g, '<em>$1</em>')
+      .replace(/\n/g, '<br>');
+  }).join('');
 }
 
 // ── Load saved chat from localStorage ──
@@ -157,11 +172,15 @@ async function sendMessage() {
   chatMessages.appendChild(thinkingEl);
   chatMessages.scrollTop = chatMessages.scrollHeight;
 
+  const ctrl = new AbortController();
+  const timeoutId = setTimeout(() => ctrl.abort(), 30000);
+
   try {
     const res = await fetch(WORKER_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ messages }),
+      signal: ctrl.signal,
     });
 
     const data = await res.json();
@@ -174,10 +193,14 @@ async function sendMessage() {
 
     // Always show follow-up chips after every bot reply
     showFollowUpChips();
-  } catch {
+  } catch (err) {
     thinkingEl.remove();
-    addMessage('bot', 'Connection error. Email panagiotis.kokmotoss@gmail.com directly!');
+    const msg = err.name === 'AbortError'
+      ? 'This is taking longer than expected — please try again in a moment.'
+      : 'Connection error. Email panagiotis.kokmotoss@gmail.com directly!';
+    addMessage('bot', msg);
   } finally {
+    clearTimeout(timeoutId);
     chatSend.disabled = false;
     chatInput.focus();
   }
