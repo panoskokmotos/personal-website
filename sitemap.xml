@@ -3,37 +3,37 @@
   <!-- Core pages -->
   <url>
     <loc>https://panoskokmotos.com/</loc>
-    <lastmod>2026-03-25</lastmod>
+    <lastmod>2026-07-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://panoskokmotos.com/now.html</loc>
-    <lastmod>2026-03-25</lastmod>
+    <lastmod>2026-07-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://panoskokmotos.com/beliefs.html</loc>
-    <lastmod>2026-03-25</lastmod>
+    <lastmod>2026-07-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://panoskokmotos.com/books.html</loc>
-    <lastmod>2026-03-25</lastmod>
+    <lastmod>2026-07-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://panoskokmotos.com/podcast.html</loc>
-    <lastmod>2026-03-25</lastmod>
+    <lastmod>2026-07-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://panoskokmotos.com/watch.html</loc>
-    <lastmod>2026-03-25</lastmod>
+    <lastmod>2026-07-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -41,7 +41,7 @@
   <!-- AI for Social Impact Lab index -->
   <url>
     <loc>https://panoskokmotos.com/ai-tools.html</loc>
-    <lastmod>2026-03-25</lastmod>
+    <lastmod>2026-07-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
@@ -49,31 +49,37 @@
   <!-- AI tools — For Donors -->
   <url>
     <loc>https://panoskokmotos.com/what-would-x-do.html</loc>
-    <lastmod>2026-03-25</lastmod>
+    <lastmod>2026-07-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://panoskokmotos.com/why-should-i-give.html</loc>
-    <lastmod>2026-03-25</lastmod>
+    <lastmod>2026-07-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://panoskokmotos.com/donation-tax-estimator.html</loc>
+    <lastmod>2026-07-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://panoskokmotos.com/what-can-i-donate.html</loc>
-    <lastmod>2026-03-25</lastmod>
+    <lastmod>2026-07-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://panoskokmotos.com/first-time-donor-coach.html</loc>
-    <lastmod>2026-03-25</lastmod>
+    <lastmod>2026-07-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://panoskokmotos.com/charity-comparison-engine.html</loc>
-    <lastmod>2026-03-25</lastmod>
+    <lastmod>2026-07-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -81,7 +87,7 @@
   <!-- AI tools — For Volunteers -->
   <url>
     <loc>https://panoskokmotos.com/volunteer-match.html</loc>
-    <lastmod>2026-03-25</lastmod>
+    <lastmod>2026-07-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -89,31 +95,31 @@
   <!-- AI tools — For Nonprofits -->
   <url>
     <loc>https://panoskokmotos.com/nonprofit-health-checker.html</loc>
-    <lastmod>2026-03-25</lastmod>
+    <lastmod>2026-07-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://panoskokmotos.com/scam-nonprofit-detector.html</loc>
-    <lastmod>2026-03-25</lastmod>
+    <lastmod>2026-07-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://panoskokmotos.com/impact-story-generator.html</loc>
-    <lastmod>2026-03-25</lastmod>
+    <lastmod>2026-07-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://panoskokmotos.com/community-needs-map.html</loc>
-    <lastmod>2026-03-25</lastmod>
+    <lastmod>2026-07-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://panoskokmotos.com/neighborhood-giving-map.html</loc>
-    <lastmod>2026-03-25</lastmod>
+    <lastmod>2026-07-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -121,13 +127,13 @@
   <!-- Legal -->
   <url>
     <loc>https://panoskokmotos.com/privacy.html</loc>
-    <lastmod>2026-03-25</lastmod>
+    <lastmod>2026-07-01</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
     <loc>https://panoskokmotos.com/terms.html</loc>
-    <lastmod>2026-03-25</lastmod>
+    <lastmod>2026-07-01</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>

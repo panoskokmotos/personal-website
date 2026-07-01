@@ -1,0 +1,33 @@
+# Panos Kokmotos
+
+> Panos Kokmotos is a Greek entrepreneur based in San Francisco and Athens — Forbes 30 Under 30 Greece 2024, WEF Global Shaper (San Francisco Hub), and Co-Founder & COO of Givelink, an in-kind donation platform that has impacted 100,000+ lives and processed $220K+ in donations across 100+ charity partners.
+
+## About
+- [Home](https://panoskokmotos.com/): Bio, milestones, awards, education, and Givelink overview
+- [Now](https://panoskokmotos.com/now.html): Live snapshot of current focus areas
+- [Beliefs](https://panoskokmotos.com/beliefs.html): 10 core beliefs on entrepreneurship, impact, and life
+- [Books](https://panoskokmotos.com/books.html): Curated reading list with key takeaways (40+ books/year)
+- [Watch](https://panoskokmotos.com/watch.html): TV appearances, talks, and podcast episodes (350K+ views)
+
+## Podcast
+- [Entrepreneurship Talks](https://panoskokmotos.com/podcast.html): Co-founded 2020, 60+ episodes, interviews with founders and investors
+
+## Free AI Tools for Social Impact
+A collection of free, no-signup AI tools for donors, volunteers, and nonprofits — listed at [ai-tools.html](https://panoskokmotos.com/ai-tools.html):
+- [Donation Tax Estimator](https://panoskokmotos.com/donation-tax-estimator.html) — US & Greece tax savings calculator
+- [What Would $X Do?](https://panoskokmotos.com/what-would-x-do.html) — Impact calculator for any donation amount
+- [Why Should I Give?](https://panoskokmotos.com/why-should-i-give.html) — Personalized case for giving
+- [First-Time Donor Coach](https://panoskokmotos.com/first-time-donor-coach.html) — 5-step giving plan for new donors
+- [Charity Comparison Engine](https://panoskokmotos.com/charity-comparison-engine.html) — Compare org types by effectiveness
+- [Nonprofit Health Checker](https://panoskokmotos.com/nonprofit-health-checker.html) — Health signals before you give
+- [Scam Nonprofit Detector](https://panoskokmotos.com/scam-nonprofit-detector.html) — Fraud pattern screening
+- [Volunteer Match](https://panoskokmotos.com/volunteer-match.html) — Skills-to-cause matching
+- [What Can I Donate?](https://panoskokmotos.com/what-can-i-donate.html) — Household item to nonprofit matching
+- [Impact Story Generator](https://panoskokmotos.com/impact-story-generator.html) — Before/after impact narratives
+- [Community Needs Map](https://panoskokmotos.com/community-needs-map.html) — Ground-level need mapping
+- [Neighborhood Giving Map](https://panoskokmotos.com/neighborhood-giving-map.html) — Local giving-flow analysis
+
+## Contact
+- Email: panagiotis.kokmotoss@gmail.com
+- LinkedIn: https://www.linkedin.com/in/panoskokmotos
+- Givelink: https://givelink.app
