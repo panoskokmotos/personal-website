@@ -1645,16 +1645,6 @@ function _closeShortcutModal() {
   setTimeout(() => overlay.remove(), 200);
 }
 
-/* ── #23 Error Classification ── */
-function _classifyError(err, status) {
-  if (status === 429) return { type: 'rate', msg: "You've been using this a lot! Please wait 60 seconds and try again." };
-  if (status === 503 || status === 502) return { type: 'server', msg: 'The AI service is temporarily overloaded. Please try again in a moment.' };
-  if (!navigator.onLine || err?.message?.includes('fetch') || err?.message?.includes('network')) {
-    return { type: 'offline', msg: "You appear to be offline. Your last result has been restored below." };
-  }
-  return { type: 'generic', msg: 'Something went wrong. Please try again or simplify your query.' };
-}
-
 /* ── #25 Offline Result Cache ── */
 const _OFFLINE_KEY = () => 'offline_result_' + window.location.pathname.replace(/[^a-z0-9]/gi, '_');
 function _saveLastResultOffline(text, htmlStr) {

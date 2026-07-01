@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
-  <!-- Google Analytics — loaded only after consent -->
+  <!-- Analytics (Google Analytics & PostHog) — both loaded only after cookie consent -->
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
@@ -14,9 +14,17 @@
       gtag('js',new Date());
       gtag('config','G-790ERKMVS5');
     }
+    !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.async=!0,p.src=s.api_host+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+" (stub)"},o="init capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys getNextSurveyStep onSessionId setPersonPropertiesForFlags".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||(window.posthog=[]));
+    function _loadPostHog(){
+      posthog.init("phc_WDGdxSf2xcEbL1c6vbAkrr8LJcJqrodykJKGKhom82L", {
+        api_host: "https://t.panoskokmotos.com",
+        ui_host: "https://us.posthog.com",
+        person_profiles: "identified_only"
+      });
+    }
     (function(){
       var consent=localStorage.getItem('cookie_consent');
-      if(consent==='accepted'){gtag('consent','update',{analytics_storage:'granted'});_loadGA();}
+      if(consent==='accepted'){gtag('consent','update',{analytics_storage:'granted'});_loadGA();_loadPostHog();}
     })();
   </script>
   <meta charset="UTF-8" />
@@ -53,10 +61,6 @@
   <meta name="geo.placename" content="San Francisco, California" />
   <meta name="geo.position" content="37.7749;-122.4194" />
   <meta name="ICBM" content="37.7749, -122.4194" />
-
-  <!-- Plausible Analytics — sign up at plausible.io and add panoskokmotos.com to activate -->
-  <script defer data-domain="panoskokmotos.com" src="https://plausible.io/js/script.js"></script>
-
   <!-- DNS prefetch for external domains -->
   <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
   <link rel="dns-prefetch" href="https://books.google.com" />
@@ -67,7 +71,7 @@
   <link rel="preconnect" href="https://formspree.io" />
   <link rel="preload" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" /></noscript>
-  <link rel="stylesheet" href="style.css?v=4" />
+  <link rel="stylesheet" href="style.css?v=20260701" />
   <link rel="shortcut icon" href="/favicon.ico" />
   <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png" />
   <link rel="icon" type="image/png" sizes="180x180" href="/assets/favicon-180.png" />
@@ -508,18 +512,7 @@
     }
   ]
 }
-</script>
-
-  <!-- PostHog Analytics -->
-  <script>
-    !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.async=!0,p.src=s.api_host+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+" (stub)"},o="init capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys getNextSurveyStep onSessionId setPersonPropertiesForFlags".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||(window.posthog=[]));
-    posthog.init("phc_WDGdxSf2xcEbL1c6vbAkrr8LJcJqrodykJKGKhom82L", {
-      api_host: "https://t.panoskokmotos.com",
-      ui_host: "https://us.posthog.com",
-      person_profiles: "identified_only"
-    });
-  </script>
-</head>
+</script></head>
 <body>
 
   <!-- ── GDPR Cookie Consent Banner ── -->
@@ -557,6 +550,7 @@
           b.style.display='none';
           gtag('consent','update',{analytics_storage:'granted'});
           _loadGA();
+          if (typeof _loadPostHog === 'function') _loadPostHog();
         };
         document.getElementById('cookieDecline').onclick=function(){
           localStorage.setItem('cookie_consent','declined');
@@ -2337,8 +2331,8 @@
     </div>
   </div>
 
-  <script src="script.js"></script>
-  <script src="chat.js"></script>
+  <script src="script.js?v=20260701"></script>
+  <script src="chat.js?v=20260701"></script>
   <script src="search.js"></script>
   <!-- FAQ accordion + follow-up chat launcher -->
   <script>
