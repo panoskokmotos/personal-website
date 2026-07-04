@@ -1,7 +1,522 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8">
-<title>Moved — Scam Nonprofit Detector</title>
-<link rel="canonical" href="https://social-impact-tools.vercel.app/scam-nonprofit-detector.html">
-<meta name="robots" content="noindex, follow">
-<meta http-equiv="refresh" content="0; url=https://social-impact-tools.vercel.app/scam-nonprofit-detector.html">
-<script>location.replace("https://social-impact-tools.vercel.app/scam-nonprofit-detector.html")</script>
-</head><body>This tool has moved to <a href="https://social-impact-tools.vercel.app/scam-nonprofit-detector.html">https://social-impact-tools.vercel.app/scam-nonprofit-detector.html</a>.</body></html>
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- include:gtag -->
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-790ERKMVS5"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-790ERKMVS5');
+  </script>
+<!-- /include:gtag -->
+  <!-- include:plausible -->
+  <script defer data-domain="panoskokmotos.com" src="https://plausible.io/js/script.js"></script>
+<!-- /include:plausible -->
+  <!-- include:posthog -->
+  <!-- PostHog Analytics -->
+  <script>
+    !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.async=!0,p.src=s.api_host+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+" (stub)"},o="init capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys getNextSurveyStep onSessionId setPersonPropertiesForFlags".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||(window.posthog=[]));
+    posthog.init("phc_WDGdxSf2xcEbL1c6vbAkrr8LJcJqrodykJKGKhom82L", {
+      api_host: "https://t.panoskokmotos.com",
+      ui_host: "https://us.posthog.com",
+      person_profiles: "identified_only"
+    });
+  </script>
+<!-- /include:posthog -->
+  <title>Scam Nonprofit Detector — AI Fraud Signal Checker</title>
+  <meta name="description" content="Something feel off about a charity? Describe it and AI scans for the classic warning signs of fraudulent fundraising — before you give a cent." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/style.css" />
+  <script src="/shared.js"></script>
+  <script src="/tool-utils.js"></script>
+  <link rel="icon" href="/favicon.ico" />
+  <meta name="robots" content="index, follow, max-image-preview:large" />
+  <link rel="canonical" href="https://panoskokmotos.com/scam-nonprofit-detector.html" />
+  <meta property="og:url" content="https://panoskokmotos.com/scam-nonprofit-detector.html" />
+  <meta property="og:image" content="https://panoskokmotos.com/og-ai-tools.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://panoskokmotos.com/og-ai-tools.png" />
+  <meta name="twitter:creator" content="@panoskokmotoss" />
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How does the Scam Nonprofit Detector work?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "You describe a charity you've seen \u2014 how you found it, what red flags you noticed \u2014 and AI cross-references it with known fraud patterns to give you a risk assessment."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What are common signs of a fake charity?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "High-pressure tactics, accepting only gift cards or wire transfers, names similar to well-known orgs, no IRS registration, and appearing immediately after a disaster are major red flags."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Where can I verify if a charity is real?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Check the IRS Tax Exempt Organization Search, Charity Navigator, or your state attorney general's charity registry."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can this tool confirm a charity is legitimate?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "It can flag red flags and low-risk signals but cannot definitively confirm legitimacy. Always verify through official sources."
+      }
+    }
+  ]
+}
+</script>
+  <link rel="prefetch" href="/nonprofit-health-checker.html" />
+  <link rel="prefetch" href="/charity-comparison-engine.html" />
+</head>
+<body class="tool-page">
+
+<!-- include:tool-header -->
+  <header class="tool-header">
+    <a href="/#ai-lab" class="tool-back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      panoskokmotos.com
+    </a>
+  </header>
+<!-- /include:tool-header -->
+
+  <main class="tool-main">
+    <p class="tool-eyebrow">AI for Social Impact · Free Tool</p>
+    <h1 class="tool-title">Scam Nonprofit Detector</h1>
+    <p class="tool-desc">Something feel off about a charity you've seen — especially after a disaster or in the news? Describe what you know and AI will flag whether it matches known patterns of fraudulent fundraising, before you give a cent.</p>
+
+    <!-- ── How it works ── -->
+    <div class="tool-how" aria-label="How this tool works">
+      <div class="tool-how-step">
+        <span class="tool-how-num">Step 1</span>
+        <span class="tool-how-title">Describe what you've seen</span>
+        <span class="tool-how-desc">Name the org and check any warning signs you noticed.</span>
+      </div>
+      <div class="tool-how-step">
+        <span class="tool-how-num">Step 2</span>
+        <span class="tool-how-title">AI scans fraud patterns</span>
+        <span class="tool-how-desc">Cross-references against known scam tactics and red flags.</span>
+      </div>
+      <div class="tool-how-step">
+        <span class="tool-how-num">Step 3</span>
+        <span class="tool-how-title">Know if it's safe</span>
+        <span class="tool-how-desc">Get a risk score + exact steps to verify or report.</span>
+      </div>
+    </div>
+
+    <form class="tool-form" id="toolForm">
+
+      <div class="tool-field">
+        <label class="tool-label" for="orgName">
+          Name of the organization
+          <span class="tool-hint"> — as you've seen it written</span>
+        </label>
+        <input
+          id="orgName"
+          class="tool-input"
+          type="text"
+          placeholder="e.g. American Veterans Relief Fund, Children's Cancer Aid Society"
+          required
+        />
+      </div>
+
+      <div class="tool-field">
+        <label class="tool-label" for="howFound">
+          How did you find out about them?
+        </label>
+        <select id="howFound" class="tool-select" required>
+          <option value="">Select…</option>
+          <option value="social media post or ad">Social media post or ad</option>
+          <option value="email I received">Email I received</option>
+          <option value="phone call or robocall">Phone call / robocall</option>
+          <option value="door-to-door or in-person solicitation">Door-to-door or in-person</option>
+          <option value="text message">Text message</option>
+          <option value="crowdfunding platform like GoFundMe">Crowdfunding (GoFundMe, etc.)</option>
+          <option value="news article or media coverage">News article / media</option>
+          <option value="friend or family recommendation">Friend or family recommendation</option>
+          <option value="their website or search result">Their website or search result</option>
+        </select>
+      </div>
+
+      <div class="tool-field">
+        <label class="tool-label" for="context">
+          What's the context — is this tied to a recent event?
+          <span class="tool-hint"> — optional but important</span>
+        </label>
+        <input
+          id="context"
+          class="tool-input"
+          type="text"
+          placeholder="e.g. appeared after the recent hurricane / targeting veterans / claiming to help cancer patients"
+        />
+      </div>
+
+      <div class="tool-field">
+        <label class="tool-label" for="signals">
+          Check everything you've noticed
+          <span class="tool-hint"> — select all that apply</span>
+        </label>
+        <div class="tool-checks" id="signalChecks">
+          <label class="tool-check-item"><input type="checkbox" value="They only accept cash, gift cards, wire transfers, or cryptocurrency"> Only accepts cash, gift cards, wire transfers, or crypto</label>
+          <label class="tool-check-item"><input type="checkbox" value="They use very high pressure or urgent language to rush my decision"> High-pressure or urgent language</label>
+          <label class="tool-check-item"><input type="checkbox" value="Their name is very similar to a well-known organization"> Name similar to a well-known org</label>
+          <label class="tool-check-item"><input type="checkbox" value="I can't find them on Charity Navigator, GuideStar, or IRS search"> Can't find them on Charity Navigator / IRS</label>
+          <label class="tool-check-item"><input type="checkbox" value="They have no physical address, phone number, or named leadership listed"> No address, phone, or named leadership</label>
+          <label class="tool-check-item"><input type="checkbox" value="They appeared online or contacted me very soon after a recent disaster or news event"> Appeared very recently after a disaster</label>
+          <label class="tool-check-item"><input type="checkbox" value="Their website looks unprofessional, has broken links, or was created very recently"> Website looks new, unprofessional, or broken</label>
+          <label class="tool-check-item"><input type="checkbox" value="They can't clearly explain how they use donations"> Can't clearly explain how donations are used</label>
+          <label class="tool-check-item"><input type="checkbox" value="They use a name like 'fund', 'foundation', or 'society' without much substance behind it"> Uses generic charity language without substance</label>
+        </div>
+      </div>
+
+      <div class="tool-field">
+        <label class="tool-label" for="gut">
+          Anything else that feels off?
+          <span class="tool-hint"> — trust your gut, describe it</span>
+        </label>
+        <input
+          id="gut"
+          class="tool-input"
+          type="text"
+          placeholder="e.g. the photos look stock, their social media has no real activity, the person who called me seemed scripted"
+        />
+      </div>
+
+      <!-- Comparison mode -->
+      <div class="cmp-toggle-wrap">
+        <button type="button" class="cmp-toggle-btn" id="cmpToggle">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          Check two orgs side-by-side
+        </button>
+      </div>
+      <div class="cmp-extra-field" id="cmpExtraField" style="display:none">
+        <div class="tool-field">
+          <label class="tool-label" for="orgNameB">Second organization to check</label>
+          <input id="orgNameB" class="tool-input" type="text"
+            placeholder="e.g. Children's Hope Society, Veterans Relief Network" />
+        </div>
+        <p class="cmp-hint">Both organizations will be assessed using the same signals you provided.</p>
+      </div>
+
+      <div class="tool-examples">
+        <span class="tool-examples-label">Try an example:</span>
+        <button type="button" class="tool-example-chip" data-fill-orgName="American Veterans Aid Society" data-fill-howFound="email I received" data-fill-context="appeared after Veterans Day asking for gift card donations" data-fill-gut="The name sounds very similar to a well-known org">Suspicious email charity</button>
+        <button type="button" class="tool-example-chip" data-fill-orgName="Children's Cancer Relief Fund" data-fill-howFound="social media post or ad" data-fill-context="celebrity-endorsed post on Instagram" data-fill-gut="Can't find them on Charity Navigator">Social media fund</button>
+        <button type="button" class="tool-example-chip" data-fill-orgName="Local Police Support Foundation" data-fill-howFound="door-to-door or in-person solicitation" data-fill-context="person came to my door saying they support local police" data-fill-gut="Paid me a compliment and used high-pressure tactics">Door-to-door</button>
+      </div>
+      <button type="submit" class="tool-submit" id="submitBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+        Check for Scam Signals
+      </button>
+    </form>
+
+    <div class="tool-loading" id="loading">
+      <div class="tool-spinner"></div>
+      <span id="loadingText">Scanning for fraud patterns and warning signals…</span>
+    </div>
+
+    <div class="tool-error" id="errorBox"></div>
+
+    <div class="tool-result" id="result">
+      <div class="tool-result-header">
+        <span class="tool-result-label">Scam Signal Assessment</span>
+        <button class="tool-copy-btn" id="copyBtn">Copy</button>
+      </div>
+      <!-- Score meter injected by JS -->
+      <div id="scamScoreWrap"></div>
+      <div class="tool-result-body" id="resultBody"></div>
+      <div class="tool-result-actions">
+        <button class="tool-try-another" id="tryAnotherBtn">← Try another</button>
+        <div class="tool-share-group">
+          <button class="tool-share-x" id="shareXBtn"><svg viewBox="0 0 24 24" fill="currentColor" width="13" height="13"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.746l7.73-8.835L1.254 2.25H8.08l4.258 5.622L18.245 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg> Share on X</button>
+          <button class="tool-share-link" id="shareLinkBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="13" height="13"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg> Copy link</button>
+        </div>
+      </div>
+    </div>
+
+    <footer class="tool-footer">
+      Built by <a href="/" target="_blank">Panos Kokmotos</a> · Part of the
+      <a href="/#ai-lab">AI for Social Impact Lab</a> ·
+      Powered by Claude AI
+    </footer>
+    <div class="tool-usage-count" id="toolUsageCount"></div>
+    <div class="tool-related-wrap" id="toolRelated"></div>
+    <div class="tool-embed-wrap" id="toolEmbed"></div>
+  </main>
+
+  <style>
+    .tool-checks {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 6px;
+    }
+    .tool-check-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      cursor: pointer;
+      line-height: 1.5;
+    }
+    .tool-check-item input[type="checkbox"] {
+      margin-top: 2px;
+      accent-color: var(--accent);
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+    .tool-check-item:hover {
+      color: var(--text-primary);
+    }
+  </style>
+
+  <script>
+    const form = document.getElementById('toolForm');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const orgName = document.getElementById('orgName').value.trim();
+      const howFound = document.getElementById('howFound').value;
+      const context = document.getElementById('context').value.trim();
+      const gut = document.getElementById('gut').value.trim();
+
+      const checkedSignals = Array.from(document.querySelectorAll('#signalChecks input[type="checkbox"]:checked'))
+        .map(cb => cb.value);
+
+      if (!orgName || !howFound) {
+        showError('Please fill in the org name and how you found them.');
+        return;
+      }
+
+      setLoading(true);
+      hideError();
+      hideResult();
+
+      const systemPrompt = `You are a charity fraud investigator and consumer protection expert. You've studied hundreds of scam fundraising operations and know exactly how they work. Your job is to help everyday people avoid being defrauded.
+
+IMPORTANT: You are assessing patterns and signals only — you are NOT making a definitive legal determination. Be honest about what you can and can't conclude.
+
+Start your response with EXACTLY these two lines (no other text before them):
+RISK_SCORE: [a number 0-100 where 0=completely safe, 100=definite scam]
+RISK_LEVEL: [Low|Medium|High|Very High]
+
+Then structure the rest as:
+
+**Risk Level: [Low / Medium / High / Very High]**
+[1-2 sentences explaining your overall read]
+
+**Signal Analysis**
+[Go through the specific warning signs they flagged or described. For each one: is it a confirmed red flag, a yellow flag requiring more investigation, or something that has an innocent explanation? Be specific.]
+
+**What's most concerning here**
+[The 1-2 signals that worry you most, and why — what do they indicate in the context of known fraud patterns?]
+
+**What to do right now**
+[3-4 specific, actionable steps: where to verify legitimacy (FTC, state AG charity registry, IRS tax exempt search, Charity Navigator), who to report to if it's a scam (FTC, FBI IC3, state AG, platform where they found it), and whether/how to protect themselves]
+
+**If it turns out to be legit**
+[1 sentence: what would that look like — what evidence would clear their concerns?]
+
+Be direct. If it smells like a scam based on what they shared, say so. Protect the donor. Max 350 words.`;
+
+      const userMessage = `Organization name: ${orgName}
+How I found them: ${howFound}
+Context / trigger event: ${context || 'not specified'}
+Warning signals I noticed: ${checkedSignals.length > 0 ? checkedSignals.join('; ') : 'none checked'}
+Other things that feel off: ${gut || 'nothing specific'}
+
+Assess the fraud risk and tell me what to do.`;
+
+      // Check for second org (comparison mode)
+      const orgNameB = document.getElementById('orgNameB')?.value?.trim();
+      if (orgNameB) {
+        const userMessageB = `Organization name: ${orgNameB}\nHow I found them: ${howFound}\nContext / trigger event: ${context || 'not specified'}\nWarning signals I noticed: ${checkedSignals.length > 0 ? checkedSignals.join('; ') : 'none checked'}\nOther things that feel off: ${gut || 'nothing specific'}\n\nAssess the fraud risk and tell me what to do.`;
+        try {
+          const [textA, textB] = await Promise.all([
+            callWorker(systemPrompt, userMessage),
+            _callWorkerFallback(systemPrompt, userMessageB),
+          ]);
+          const result = document.getElementById('result');
+          const resultBody = document.getElementById('resultBody');
+          if (result && resultBody) {
+            resultBody.innerHTML = `<div class="cmp-grid">
+              <div class="cmp-col"><div class="cmp-col-label">🔍 ${orgName}</div>${formatMarkdown(textA)}</div>
+              <div class="cmp-col"><div class="cmp-col-label">🔍 ${orgNameB}</div>${formatMarkdown(textB)}</div>
+            </div>`;
+            result.classList.add('visible');
+            result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          }
+          notifyToolUsed(document.title);
+        } catch (err) {
+          if (!err._shown) showError('Something went wrong. Please try again.');
+        } finally {
+          setLoading(false);
+        }
+        return;
+      }
+
+      try {
+        const text = await callWorker(systemPrompt, userMessage);
+        showResult(text);
+        _renderScamScore(text);
+        notifyToolUsed(document.title);
+      } catch (err) {
+        if (!err._shown) showError('Something went wrong. Please try again.');
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    });
+
+    initCopyBtn();
+
+    function _renderScamScore(text) {
+      const wrap = document.getElementById('scamScoreWrap');
+      if (!wrap) return;
+      const lower = text.toLowerCase();
+      let level = 'Medium', score = 45, cls = 'scam-risk-medium', desc = 'Some warning signs present — investigate further before donating.';
+      // Try structured RISK_SCORE line first
+      const scoreMatch = text.match(/RISK_SCORE:\s*(\d+)/i);
+      const levelMatch = text.match(/RISK_LEVEL:\s*(Very High|High|Medium|Low)/i);
+      if (scoreMatch) score = Math.min(100, Math.max(0, parseInt(scoreMatch[1])));
+      if (levelMatch) {
+        const lv = levelMatch[1].toLowerCase();
+        if (lv === 'very high') { level = 'Very High Risk'; cls = 'scam-risk-very-high'; desc = 'Multiple strong red flags. Do not donate without thorough verification.'; if (!scoreMatch) score = 92; }
+        else if (lv === 'high') { level = 'High Risk'; cls = 'scam-risk-high'; desc = 'Significant warning signs. Proceed with extreme caution.'; if (!scoreMatch) score = 72; }
+        else if (lv === 'low')  { level = 'Low Risk'; cls = 'scam-risk-low'; desc = 'No major red flags detected — still verify on Charity Navigator.'; if (!scoreMatch) score = 15; }
+      } else if (!levelMatch) {
+        // Fallback text detection
+        if (lower.includes('very high risk') || lower.includes('risk level: very high')) { level = 'Very High Risk'; cls = 'scam-risk-very-high'; desc = 'Multiple strong red flags. Do not donate without thorough verification.'; if (!scoreMatch) score = 92; }
+        else if (lower.includes('risk level: high')) { level = 'High Risk'; cls = 'scam-risk-high'; desc = 'Significant warning signs.'; if (!scoreMatch) score = 72; }
+        else if (lower.includes('risk level: low'))  { level = 'Low Risk'; cls = 'scam-risk-low'; desc = 'No major red flags.'; if (!scoreMatch) score = 15; }
+      }
+      const r = 22, circ = 2 * Math.PI * r;
+      const offset = circ - (score / 100) * circ;
+      const strokeColor = cls === 'scam-risk-low' ? '#22c55e' : cls === 'scam-risk-medium' ? '#f59e0b' : cls === 'scam-risk-high' ? '#f97316' : '#ef4444';
+      wrap.innerHTML = `
+        <div class="scam-score-wrap">
+          <div class="scam-score-dial">
+            <svg width="58" height="58" viewBox="0 0 58 58">
+              <circle class="scam-score-dial-track" cx="29" cy="29" r="${r}"/>
+              <circle class="scam-score-dial-fill" cx="29" cy="29" r="${r}"
+                stroke="${strokeColor}"
+                stroke-dasharray="${circ}"
+                stroke-dashoffset="${circ}"
+                id="_scamArcFill"/>
+            </svg>
+            <div class="scam-score-num ${cls}">${score}</div>
+          </div>
+          <div class="scam-score-info">
+            <div class="scam-score-level ${cls}">${level}</div>
+            <div class="scam-score-sub">${desc}</div>
+          </div>
+        </div>`;
+      setTimeout(() => {
+        const arc = document.getElementById('_scamArcFill');
+        if (arc) arc.style.strokeDashoffset = offset;
+      }, 80);
+    }
+
+    // Comparison mode toggle
+    document.getElementById('cmpToggle')?.addEventListener('click', function() {
+      const field = document.getElementById('cmpExtraField');
+      const on = field.style.display === 'none';
+      field.style.display = on ? '' : 'none';
+      this.classList.toggle('active', on);
+      this.innerHTML = on
+        ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> Cancel'
+        : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Check two orgs side-by-side';
+      if (on) document.getElementById('orgNameB')?.focus();
+    });
+  </script>
+
+  <!-- ── AI Chat Widget ── -->
+  <div class="chat-widget" id="chatWidget">
+    <button class="chat-toggle" id="chatToggle" aria-label="Chat with Panos AI">
+      <svg class="chat-icon-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      <svg class="chat-icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      <span class="chat-badge">AI</span>
+    </button>
+    <div class="chat-panel" id="chatPanel">
+      <div class="chat-header">
+        <div class="chat-header-info">
+          <picture>
+            <source srcset="/photo.webp" type="image/webp" />
+            <img src="/photo.jpg" alt="Panos Kokmotos" class="chat-avatar" />
+          </picture>
+          <div class="chat-header-text">
+            <strong>Ask Panos</strong>
+            <span><span class="chat-status-dot"></span>AI · Usually replies instantly</span>
+          </div>
+        </div>
+        <div class="chat-header-actions">
+          <button class="chat-new-btn" id="chatNewChat" title="New conversation" aria-label="Start new conversation">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="15" height="15"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          </button>
+          <button class="chat-close-btn" id="chatClose" aria-label="Close chat">✕</button>
+        </div>
+      </div>
+      <div class="chat-messages" id="chatMessages">
+        <div class="chat-msg bot">
+          <p>👋 Hi! I'm Panos's AI. Ask me about his work, Givelink, or the social impact tools!</p>
+        </div>
+      </div>
+      <div class="chat-starters" id="chatStarters">
+        <p class="chat-starters-label">Quick questions</p>
+        <button class="chat-starter-chip" onclick="useChatStarter(this)">
+          <span class="csc-icon">🚀</span>
+          <span class="csc-text">How does Givelink work?</span>
+          <svg class="csc-arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+        </button>
+        <button class="chat-starter-chip" onclick="useChatStarter(this)">
+          <span class="csc-icon">📅</span>
+          <span class="csc-text">How can I book a call?</span>
+          <svg class="csc-arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+        </button>
+        <button class="chat-starter-chip" onclick="useChatStarter(this)">
+          <span class="csc-icon">🏆</span>
+          <span class="csc-text">What is Panos known for?</span>
+          <svg class="csc-arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+        </button>
+      </div>
+      <div class="chat-input-wrap">
+        <input type="text" id="chatInput" placeholder="Ask about Givelink, social impact, Panos…" autocomplete="off" />
+        <button id="chatSend" aria-label="Send">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+        </button>
+      </div>
+      <p class="chat-note">Powered by <a href="https://anthropic.com" target="_blank" rel="noopener">Claude AI</a></p>
+    </div>
+  </div>
+  <script src="/chat.js"></script>
+  <!-- Service Worker registration -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').catch(() => {});
+      });
+    }
+  </script>
+</body>
+</html>

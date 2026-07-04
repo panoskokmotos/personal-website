@@ -1,7 +1,374 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8">
-<title>Moved — What Can I Donate</title>
-<link rel="canonical" href="https://social-impact-tools.vercel.app/what-can-i-donate.html">
-<meta name="robots" content="noindex, follow">
-<meta http-equiv="refresh" content="0; url=https://social-impact-tools.vercel.app/what-can-i-donate.html">
-<script>location.replace("https://social-impact-tools.vercel.app/what-can-i-donate.html")</script>
-</head><body>This tool has moved to <a href="https://social-impact-tools.vercel.app/what-can-i-donate.html">https://social-impact-tools.vercel.app/what-can-i-donate.html</a>.</body></html>
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- include:gtag -->
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-790ERKMVS5"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-790ERKMVS5');
+  </script>
+<!-- /include:gtag -->
+  <!-- include:plausible -->
+  <script defer data-domain="panoskokmotos.com" src="https://plausible.io/js/script.js"></script>
+<!-- /include:plausible -->
+  <!-- include:posthog -->
+  <!-- PostHog Analytics -->
+  <script>
+    !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.async=!0,p.src=s.api_host+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+" (stub)"},o="init capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys getNextSurveyStep onSessionId setPersonPropertiesForFlags".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||(window.posthog=[]));
+    posthog.init("phc_WDGdxSf2xcEbL1c6vbAkrr8LJcJqrodykJKGKhom82L", {
+      api_host: "https://t.panoskokmotos.com",
+      ui_host: "https://us.posthog.com",
+      person_profiles: "identified_only"
+    });
+  </script>
+<!-- /include:posthog -->
+  <title>"What Can I Donate?" — AI Donation Matcher</title>
+  <meta name="description" content="Input what you have at home → AI matches it to types of nonprofits who need exactly that. The donor side of Givelink, standalone." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/style.css" />
+  <script src="/shared.js"></script>
+  <script src="/tool-utils.js"></script>
+  <link rel="icon" href="/favicon.ico" />
+  <meta name="robots" content="index, follow, max-image-preview:large" />
+  <link rel="canonical" href="https://panoskokmotos.com/what-can-i-donate.html" />
+  <meta property="og:url" content="https://panoskokmotos.com/what-can-i-donate.html" />
+  <meta property="og:image" content="https://panoskokmotos.com/og-ai-tools.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://panoskokmotos.com/og-ai-tools.png" />
+  <meta name="twitter:creator" content="@panoskokmotoss" />
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What does the 'What Can I Donate?' tool do?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "You list items you want to donate \u2014 clothes, tech, furniture, books \u2014 and AI matches each one to the type of nonprofit that needs it most, plus tells you how to donate it."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does it work for items in poor condition?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Select 'Needs repair' in the condition filter and the AI will suggest organizations that accept and repair donated items."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What kinds of items can I donate?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Clothing, electronics, furniture, books, baby items, kitchenware, sports equipment, musical instruments, and more. The tool covers dozens of categories."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I donate broken electronics?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Many e-waste recyclers and refurbishment programs accept broken electronics. The tool will point you in the right direction."
+      }
+    }
+  ]
+}
+</script>
+</head>
+<body class="tool-page">
+
+<!-- include:tool-header -->
+  <header class="tool-header">
+    <a href="/#ai-lab" class="tool-back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      panoskokmotos.com
+    </a>
+  </header>
+<!-- /include:tool-header -->
+
+  <main class="tool-main">
+    <p class="tool-eyebrow">AI for Social Impact · Free Tool</p>
+    <h1 class="tool-title">"What Can I Donate?"</h1>
+    <p class="tool-desc">List the items you have at home — things you no longer use, duplicates, or things in good condition. AI matches them to the types of nonprofits who need them most, and tells you how to donate them.</p>
+
+    <!-- ── How it works ── -->
+    <div class="tool-how" aria-label="How this tool works">
+      <div class="tool-how-step">
+        <span class="tool-how-num">Step 1</span>
+        <span class="tool-how-title">List what you have</span>
+        <span class="tool-how-desc">Type items around your home using the category chips.</span>
+      </div>
+      <div class="tool-how-step">
+        <span class="tool-how-num">Step 2</span>
+        <span class="tool-how-title">AI matches each item</span>
+        <span class="tool-how-desc">Finds the type of org that needs it most, locally.</span>
+      </div>
+      <div class="tool-how-step">
+        <span class="tool-how-num">Step 3</span>
+        <span class="tool-how-title">Know exactly where to go</span>
+        <span class="tool-how-desc">Practical donation tips for every item on your list.</span>
+      </div>
+    </div>
+
+    <form class="tool-form" id="toolForm">
+
+      <div class="tool-field">
+        <label class="tool-label" for="items">
+          What do you have to donate?
+          <span class="tool-hint"> — list items, one per line or comma-separated</span>
+        </label>
+
+        <!-- Category quick-add chips -->
+        <div class="wcd-cats" id="wcdCats">
+          <span class="wcd-cats-label">Quick add:</span>
+          <button type="button" class="wcd-cat" data-items="winter coat, summer clothes, shoes, t-shirts, jeans">👕 Clothing</button>
+          <button type="button" class="wcd-cat" data-items="laptop (working), tablet, smartphone, USB cables, monitor">💻 Tech</button>
+          <button type="button" class="wcd-cat" data-items="baby clothes (0–12 months), stroller, baby toys, crib">🍼 Baby &amp; Kids</button>
+          <button type="button" class="wcd-cat" data-items="pots and pans, dishes, kitchen appliances, cutlery">🍳 Kitchen</button>
+          <button type="button" class="wcd-cat" data-items="children's books, novels, textbooks, magazines">📚 Books</button>
+          <button type="button" class="wcd-cat" data-items="sofa, dining table, chairs, desk, bookshelf">🛋️ Furniture</button>
+          <button type="button" class="wcd-cat" data-items="bicycle, yoga mat, dumbbells, sports shoes">🏋️ Sports</button>
+          <button type="button" class="wcd-cat" data-items="art supplies, musical instruments, board games, toys">🎨 Hobbies</button>
+        </div>
+
+        <textarea
+          id="items"
+          class="tool-textarea"
+          placeholder="e.g.
+winter coats (2)
+men's dress shoes size 11
+children's books
+old laptop (working)
+kitchenware"
+          rows="5"
+          required
+        ></textarea>
+      </div>
+
+      <!-- Condition selector -->
+      <div class="tool-field">
+        <label class="tool-label">Overall condition</label>
+        <div class="wcd-condition-chips" id="wcdCondition">
+          <button type="button" class="wcd-cond-chip active" data-condition="good condition, clean and ready to donate">Good condition</button>
+          <button type="button" class="wcd-cond-chip" data-condition="gently used, functional but shows some wear">Gently used</button>
+          <button type="button" class="wcd-cond-chip" data-condition="mixed condition — some items are great, others need minor repairs">Mixed</button>
+          <button type="button" class="wcd-cond-chip" data-condition="some items may be broken or need repair">Needs repair</button>
+        </div>
+      </div>
+
+      <div class="tool-field">
+        <label class="tool-label" for="location">
+          Your city or region
+          <span class="tool-hint"> — helps tailor the types of orgs</span>
+        </label>
+        <input
+          id="location"
+          class="tool-input"
+          type="text"
+          placeholder="e.g. San Francisco, CA"
+        />
+      </div>
+
+      <div class="tool-examples">
+        <span class="tool-examples-label">Full examples:</span>
+        <button type="button" class="tool-example-chip" data-fill-items="2 winter coats, men's dress shoes size 11, children's books (box)" data-fill-location="San Francisco, CA">Coats &amp; books · SF</button>
+        <button type="button" class="tool-example-chip" data-fill-items="old laptop (working), USB cables, iPad cracked screen, computer monitor" data-fill-location="">Tech gear</button>
+        <button type="button" class="tool-example-chip" data-fill-items="baby clothes (0-12 months), stroller, unused kitchenware, toys" data-fill-location="">Baby &amp; kitchen items</button>
+      </div>
+      <button type="submit" class="tool-submit" id="submitBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16"><path d="M20 7H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+        Match My Donations
+      </button>
+    </form>
+
+    <div class="tool-loading" id="loading">
+      <div class="tool-spinner"></div>
+      <span id="loadingText">Finding the best homes for your items…</span>
+    </div>
+
+    <div class="tool-error" id="errorBox"></div>
+
+    <div class="tool-result" id="result">
+      <div class="tool-result-header">
+        <span class="tool-result-label">Your Donation Matches</span>
+        <button class="tool-copy-btn" id="copyBtn">Copy</button>
+      </div>
+      <div class="tool-result-body" id="resultBody"></div>
+      <div class="tool-result-actions">
+        <button class="tool-try-another" id="tryAnotherBtn">← Try another</button>
+        <div class="tool-share-group">
+          <button class="tool-share-x" id="shareXBtn"><svg viewBox="0 0 24 24" fill="currentColor" width="13" height="13"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.746l7.73-8.835L1.254 2.25H8.08l4.258 5.622L18.245 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg> Share on X</button>
+          <button class="tool-share-link" id="shareLinkBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="13" height="13"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg> Copy link</button>
+        </div>
+      </div>
+    </div>
+
+    <footer class="tool-footer">
+      Built by <a href="/" target="_blank">Panos Kokmotos</a> · Part of the
+      <a href="/#ai-lab">AI for Social Impact Lab</a> ·
+      This tool is inspired by <a href="https://givelink.app/en" target="_blank" rel="noopener">Givelink</a>, the in-kind donation platform ·
+      Powered by Claude AI
+    </footer>
+    <div class="tool-usage-count" id="toolUsageCount"></div>
+    <div class="tool-related-wrap" id="toolRelated"></div>
+    <div class="tool-embed-wrap" id="toolEmbed"></div>
+  </main>
+
+  <script>
+    const form = document.getElementById('toolForm');
+
+    // ── Category quick-add chips ──
+    document.getElementById('wcdCats').addEventListener('click', function(e) {
+      const btn = e.target.closest('.wcd-cat');
+      if (!btn) return;
+      const textarea = document.getElementById('items');
+      const newItems = btn.dataset.items;
+      const current = textarea.value.trim();
+      textarea.value = current ? current + '\n' + newItems : newItems;
+      textarea.focus();
+      btn.classList.add('active');
+      setTimeout(() => btn.classList.remove('active'), 600);
+    });
+
+    // ── Condition chips ──
+    let selectedCondition = 'good condition, clean and ready to donate';
+    document.getElementById('wcdCondition').addEventListener('click', function(e) {
+      const btn = e.target.closest('.wcd-cond-chip');
+      if (!btn) return;
+      this.querySelectorAll('.wcd-cond-chip').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      selectedCondition = btn.dataset.condition;
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const items = document.getElementById('items').value.trim();
+      const location = document.getElementById('location').value.trim();
+
+      if (!items) {
+        showError('Please list at least one item you\'d like to donate.');
+        return;
+      }
+
+      setLoading(true);
+      hideError();
+      hideResult();
+
+      const systemPrompt = `You are a donation matching expert who knows the in-kind donation landscape well. Your job is to look at what someone has to donate and match each item (or group of similar items) to the best type of nonprofit that needs it.
+
+For each item or category, provide:
+- The type of nonprofit that needs it most
+- Why that org type needs exactly this
+- A practical tip on how to donate it (drop-off, pick-up services, online platforms like Givelink, etc.)
+
+Format your response as:
+
+**[Item or category]**
+→ Best match: [Type of nonprofit]
+Why: [1 sentence]
+How to donate: [Practical tip]
+
+After all items, add a short encouraging note: "Everything you listed has value to someone who needs it."
+
+Be practical, warm, and specific. Do NOT name specific real organizations. Focus on org types (e.g., "domestic violence shelters", "after-school programs", "homeless shelters", "free clothing pantries").
+Take item condition into account — if items need repair, mention repair-accepting programs or thrift stores.`;
+
+      const userMessage = `Items to donate: ${items}
+Condition: ${selectedCondition}${location ? `\nLocation: ${location}` : ''}
+
+Match each item to the best type of nonprofit and tell me how to donate it.`;
+
+      try {
+        const text = await callWorker(systemPrompt, userMessage);
+        showResult(text);
+        notifyToolUsed(document.title);
+      } catch (err) {
+        if (!err._shown) showError('Something went wrong. Please try again.');
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    });
+
+    initCopyBtn();
+  </script>
+
+  <!-- ── AI Chat Widget ── -->
+  <div class="chat-widget" id="chatWidget">
+    <button class="chat-toggle" id="chatToggle" aria-label="Chat with Panos AI">
+      <svg class="chat-icon-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      <svg class="chat-icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      <span class="chat-badge">AI</span>
+    </button>
+    <div class="chat-panel" id="chatPanel">
+      <div class="chat-header">
+        <div class="chat-header-info">
+          <picture>
+            <source srcset="/photo.webp" type="image/webp" />
+            <img src="/photo.jpg" alt="Panos Kokmotos" class="chat-avatar" />
+          </picture>
+          <div class="chat-header-text">
+            <strong>Ask Panos</strong>
+            <span><span class="chat-status-dot"></span>AI · Usually replies instantly</span>
+          </div>
+        </div>
+        <div class="chat-header-actions">
+          <button class="chat-new-btn" id="chatNewChat" title="New conversation" aria-label="Start new conversation">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="15" height="15"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          </button>
+          <button class="chat-close-btn" id="chatClose" aria-label="Close chat">✕</button>
+        </div>
+      </div>
+      <div class="chat-messages" id="chatMessages">
+        <div class="chat-msg bot">
+          <p>👋 Hi! I'm Panos's AI. Ask me about his work, Givelink, or the social impact tools!</p>
+        </div>
+      </div>
+      <div class="chat-starters" id="chatStarters">
+        <p class="chat-starters-label">Quick questions</p>
+        <button class="chat-starter-chip" onclick="useChatStarter(this)">
+          <span class="csc-icon">🚀</span>
+          <span class="csc-text">How does Givelink work?</span>
+          <svg class="csc-arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+        </button>
+        <button class="chat-starter-chip" onclick="useChatStarter(this)">
+          <span class="csc-icon">📅</span>
+          <span class="csc-text">How can I book a call?</span>
+          <svg class="csc-arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+        </button>
+        <button class="chat-starter-chip" onclick="useChatStarter(this)">
+          <span class="csc-icon">🏆</span>
+          <span class="csc-text">What is Panos known for?</span>
+          <svg class="csc-arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+        </button>
+      </div>
+      <div class="chat-input-wrap">
+        <input type="text" id="chatInput" placeholder="Ask about Givelink, social impact, Panos…" autocomplete="off" />
+        <button id="chatSend" aria-label="Send">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+        </button>
+      </div>
+      <p class="chat-note">Powered by <a href="https://anthropic.com" target="_blank" rel="noopener">Claude AI</a></p>
+    </div>
+  </div>
+  <script src="/chat.js"></script>
+  <!-- Service Worker registration -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').catch(() => {});
+      });
+    }
+  </script>
+</body>
+</html>
