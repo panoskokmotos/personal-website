@@ -45,17 +45,24 @@ This repository contains the complete source code for my personal portfolio webs
 
 ```
 personal-website/
-├── index.html              # Main page (single-page app)
+├── index.html              # Homepage
+├── *.html                  # Content pages (beliefs, books, now, …) + AI tool pages
+├── partials/               # Single source for shared chrome (nav, footer, tool-header, analytics)
+├── build.py                # Syncs partials into pages — see "Shared page chrome" below
 ├── style.css               # Global styles & components
-├── script.js               # Main JavaScript logic
-├── chat.js                 # Chat UI component
+├── shared.js               # Shared config (worker URLs + secret) + helpers (markdown, notify)
+├── script.js               # Homepage / content-page behavior
+├── chat.js                 # "Ask Panos" chat widget
+├── search.js               # Client-side search over search-index.json
+├── tool-utils.js           # Shared runtime for the AI tool pages
+├── sw.js, offline.html     # PWA service worker + offline fallback
+├── cloudflare-worker.js    # Edge API: Claude proxy + notify/email (deployed separately)
+├── serve.py                # Local dev server:  python serve.py [port]
+├── generate_og.py          # Regenerates og-image.png (requires Pillow)
+├── scripts/check_links.py  # Link checker (run in CI)
+├── assets/, logos/         # Images and media
 ├── CNAME                   # Custom domain (panoskokmotos.com)
 ├── DOMAIN_TROUBLESHOOTING.md
-├── _config.yml             # Jekyll config (GitHub Pages)
-├── public/
-│   ├── favicon.ico         # Favicon
-│   ├── apple-touch-icon.png # iOS bookmark icon
-│   └── assets/             # Images and media
 └── README.md               # This file
 ```
 
@@ -96,20 +103,16 @@ npx http-server . -p 4173
 
 ### GitHub Pages Setup
 
-#### Option 1: Automatic Deployment (Recommended)
+GitHub Pages serves the repository branch directly — there is **no build or bundling step**. Pushing to the deployment branch publishes the raw files.
 
 ```bash
-# GitHub Pages automatically deploys from main branch
 git push origin main
-# Check repository → Settings → Pages to verify deployment
+# Repository → Settings → Pages shows deployment status
 ```
 
-#### Option 2: Using GitHub Actions
-
-Repository is configured for automatic deployment via GitHub Actions:
-1. Push to `main` branch
-2. GitHub Actions automatically builds and deploys
-3. Live site updates within seconds
+> **CI note:** the only GitHub Actions workflow (`.github/workflows/link-check.yml`) runs the
+> link checker on pushes/PRs. It does **not** build or deploy — publishing is plain GitHub Pages
+> branch serving.
 
 ### Custom Domain Setup
 
@@ -245,8 +248,8 @@ Optimized for all devices:
 - **Page Load**: ~1.5 seconds
 - **Lighthouse Score**: 95+
 - **No JavaScript frameworks** for faster load times
-- **Optimized images** with modern formats
-- **Minified CSS/JS** for production
+- **Optimized images** with modern formats (WebP)
+- **Raw (un-minified) CSS/JS** served directly — no build step
 
 **Test Performance**: https://pagespeed.web.dev/
 
@@ -277,6 +280,45 @@ git push origin main
 # 4. Verify deployment
 # Visit https://panoskokmotos.com
 ```
+
+---
+
+## 🧩 Shared Page Chrome (partials + build.py)
+
+The nav, footer, tool-page header, and analytics snippets are **not** copy-pasted across pages.
+Each shared region is delimited by HTML-comment markers, and its single source of truth lives in
+`partials/`:
+
+```html
+<!-- include:nav -->
+  ...markup (kept in sync from partials/nav.html)...
+<!-- /include:nav -->
+```
+
+To change shared chrome once and apply it everywhere:
+
+1. Edit the relevant file in `partials/` (e.g. `partials/nav.html`).
+2. Run `python build.py` — it rewrites the markup between every marker pair to match.
+3. Commit the changed pages.
+
+`build.py` is pure-stdlib and idempotent. Pages without markers — and pages whose block is
+intentionally different (e.g. `index.html`, or tool pages with custom back-links) — are left
+untouched. Run `python build.py --check` (e.g. in CI) to fail if any page is out of sync.
+
+---
+
+## ⚠️ Known Limitations
+
+- **Email notifications** (`/notify`, `/email-result` in `cloudflare-worker.js`) rely on the
+  MailChannels free tier, which has been discontinued — delivery may silently fail. The AI chat
+  and tools are unaffected.
+- **Rate limiting** in the worker is in-memory: it resets on cold start and isn't shared across
+  isolates.
+- **`wrangler.jsonc`** configures static-asset serving only; the AI worker
+  (`ask-panos.*.workers.dev`) and its `ANTHROPIC_API_KEY` secret are deployed and managed
+  separately in the Cloudflare dashboard.
+- **`sitemap.xml`, `search-index.json`, and the `sw.js` precache list** are hand-maintained —
+  update them when adding or renaming pages.
 
 ---
 
@@ -324,8 +366,10 @@ Already configured:
 
 | Command | Description |
 |---------|------------|
-| Local dev | `python3 -m http.server 4173` |
-| Test build | Open `index.html` in browser |
+| Local dev | `python serve.py` (defaults to port 4173) |
+| Sync shared chrome | `python build.py` (or `--check` to verify only) |
+| Check links | `python scripts/check_links.py` |
+| Regenerate OG image | `python generate_og.py` (requires Pillow) |
 | Deploy | `git push origin main` |
 | Analytics | Visit https://plausible.io |
 

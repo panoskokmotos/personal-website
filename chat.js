@@ -1,5 +1,5 @@
 // ── Ask Panos AI Chat ──
-const WORKER_URL = 'https://ask-panos.panagiotis-kokmotoss.workers.dev';
+const WORKER_URL = window.SITE_CONFIG.chatUrl;
 
 const chatWidget   = document.getElementById('chatWidget');
 const chatToggle   = document.getElementById('chatToggle');
@@ -12,17 +12,9 @@ const chatNewChat  = document.getElementById('chatNewChat');
 const STORAGE_KEY = 'panos_chat_v1';
 let messages = []; // conversation history
 
-// ── Minimal markdown: bold, italic & clickable URLs ──
+// ── Minimal markdown: bold, italic & clickable URLs (shared renderer) ──
 function parseMarkdown(text) {
-  // **bold** → <strong>
-  text = text.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
-  // *italic* (not inside bold)
-  text = text.replace(/(?<!\*)\*(?!\*)(.+?)(?<!\*)\*(?!\*)/g, '<em>$1</em>');
-  // URLs → clickable links (before line break conversion)
-  text = text.replace(/(https?:\/\/[^\s<"']+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer" style="color:var(--blue);text-decoration:underline;text-underline-offset:2px;word-break:break-all;">$1</a>');
-  // Line breaks
-  text = text.replace(/\n/g, '<br>');
-  return text;
+  return window.renderMarkdown(text, { italic: true, links: true });
 }
 
 // ── Load saved chat from localStorage ──

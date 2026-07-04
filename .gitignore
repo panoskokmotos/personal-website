@@ -7,6 +7,9 @@ __pycache__/
 *.pyo
 .env
 
+# generate_og.py font cache
+_og_fonts/
+
 # macOS
 .DS_Store
 

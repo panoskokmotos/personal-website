@@ -924,17 +924,7 @@ function toggleAwardsMobile(btn) {
 
 // ── Personal notifications ──
 // Sends a notification to Panos via the Cloudflare Worker /notify endpoint.
-// Set NOTIFY_SECRET env var in the worker and update the secret below.
-// The secret is intentionally visible here — it only protects against random noise,
-// not determined attackers. The worker rate-limits requests.
-const NOTIFY_WORKER = "https://ask-panos.panagiotis-kokmotoss.workers.dev/notify";
-const NOTIFY_SECRET = "panos-notify-2026-xyz"; // must match NOTIFY_SECRET in Cloudflare Worker env var
-
+// Endpoint + secret live in shared.js (SITE_CONFIG); POST logic in window.notifySite.
 function sendSiteNotification(event, data) {
-  if (!NOTIFY_SECRET) return; // disabled until secret is configured
-  fetch(NOTIFY_WORKER, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ secret: NOTIFY_SECRET, event, data }),
-  }).catch(() => {}); // silent fail — never block the UI
+  window.notifySite(event, data);
 }

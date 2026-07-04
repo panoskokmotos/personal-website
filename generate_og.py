@@ -5,16 +5,16 @@ import sys
 import os
 import math
 import urllib.request
+from pathlib import Path
 
 try:
     from PIL import Image, ImageDraw, ImageFont, ImageFilter
 except ImportError:
-    import subprocess
-    subprocess.check_call([sys.executable, "-m", "pip", "install", "Pillow",
-                           "--break-system-packages"])
-    from PIL import Image, ImageDraw, ImageFont, ImageFilter
+    sys.exit("Pillow is required to generate the OG image. Install it with:\n"
+             "    pip install Pillow")
 
-BASE = "/Users/panoskokmotos/Documents/GitHub/1st-Project"
+# Repo-relative — runs on any machine (was hard-coded to the author's Mac).
+BASE = str(Path(__file__).resolve().parent)
 FONT_DIR = os.path.join(BASE, "_og_fonts")
 
 

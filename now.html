@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
+<!-- include:gtag -->
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-790ERKMVS5"></script>
   <script>
@@ -9,6 +10,7 @@
     gtag('js', new Date());
     gtag('config', 'G-790ERKMVS5');
   </script>
+<!-- /include:gtag -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="A live snapshot of what Panos Kokmotos is focused on right now — scaling Givelink globally, reading, training for triathlons, and thinking about serendipity. Updated March 2026." />
@@ -45,6 +47,7 @@
   <link rel="canonical" href="https://panoskokmotos.com/now.html" />
   <link rel="manifest" href="manifest.json" />
   <meta name="theme-color" content="#3b6ef8" />
+<!-- include:posthog -->
   <!-- PostHog Analytics -->
   <script>
     !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.async=!0,p.src=s.api_host+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+" (stub)"},o="init capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys getNextSurveyStep onSessionId setPersonPropertiesForFlags".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||(window.posthog=[]));
@@ -54,6 +57,7 @@
       person_profiles: "identified_only"
     });
   </script>
+<!-- /include:posthog -->
   <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://panoskokmotos.com/"},{"@type":"ListItem","position":2,"name":"Now","item":"https://panoskokmotos.com/now.html"}]}
 </script>
@@ -77,6 +81,7 @@
   <!-- Progress Bar -->
   <div id="progress-bar"></div>
 
+<!-- include:nav -->
   <!-- ── Navbar ── -->
   <nav id="navbar" role="banner">
     <div class="nav-inner">
@@ -128,6 +133,7 @@
       </div>
     </div>
   </nav>
+<!-- /include:nav -->
 
   <main id="main" role="main">
 
@@ -234,6 +240,7 @@
 
   </main>
 
+<!-- include:footer -->
   <!-- ── Footer ── -->
   <footer role="contentinfo">
     <div class="footer-inner">
@@ -253,6 +260,7 @@
       </div>
     </div>
   </footer>
+<!-- /include:footer -->
 
   <!-- ── Back to Top ── -->
   <button id="backToTop" class="back-to-top" aria-label="Back to top" title="Back to top">
@@ -314,6 +322,7 @@
       <p class="chat-note">Powered by <a href="https://anthropic.com" target="_blank" rel="noopener">Claude AI</a></p>
     </div>
   </div>
+  <script src="/shared.js"></script>
   <script src="script.js"></script>
   <script src="chat.js"></script>
 </body>

@@ -3,12 +3,10 @@
  * Loaded by all tool pages via <script src="/tool-utils.js">
  */
 
-/* ── Constants ── */
-const TOOL_WORKER_URL    = 'https://ask-panos.panagiotis-kokmotoss.workers.dev/api/v1/tool';
-const TOOL_STREAM_URL    = 'https://ask-panos.panagiotis-kokmotoss.workers.dev/api/v1/stream';
-const TOOL_DEEP_URL      = 'https://ask-panos.panagiotis-kokmotoss.workers.dev/api/v2/tool';
-const TOOL_NOTIFY_WORKER = 'https://ask-panos.panagiotis-kokmotoss.workers.dev/notify';
-const TOOL_NOTIFY_SECRET = 'panos-notify-2026-xyz';
+/* ── Constants (worker URLs + secret come from shared.js / SITE_CONFIG) ── */
+const TOOL_WORKER_URL    = window.SITE_CONFIG.toolUrl;
+const TOOL_STREAM_URL    = window.SITE_CONFIG.streamUrl;
+const TOOL_DEEP_URL      = window.SITE_CONFIG.deepUrl;
 const TOOL_PROMPT_VERSION = 2; // bump when system prompts change significantly
 
 /* ── Related tools map ── */
@@ -220,9 +218,7 @@ function _showRateLimitError() {
 }
 
 function formatMarkdown(text) {
-  return text
-    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-    .replace(/\n/g, '<br>');
+  return window.renderMarkdown(text); // bold + <br> (shared renderer)
 }
 
 function notifyToolUsed(toolName) {
@@ -239,13 +235,8 @@ function notifyToolUsed(toolName) {
   /* Milestone toast */
   if ([1, 5, 10, 25].includes(newCount)) _showMilestoneToast(newCount, toolName);
 
-  /* Fire-and-forget notification */
-  if (!TOOL_NOTIFY_SECRET) return;
-  fetch(TOOL_NOTIFY_WORKER, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ secret: TOOL_NOTIFY_SECRET, event: 'AI Tool Used', data: { tool: toolName } }),
-  }).catch(() => {});
+  /* Fire-and-forget notification (POST logic shared via shared.js) */
+  window.notifySite('AI Tool Used', { tool: toolName });
 }
 
 function _showMilestoneToast(count, toolName) {
