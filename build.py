@@ -24,6 +24,8 @@ import re
 import sys
 from pathlib import Path
 
+from posthog_utils import get_developer_id, initialize_posthog
+
 ROOT = Path(__file__).resolve().parent
 PARTIALS = ROOT / "partials"
 
@@ -69,4 +71,16 @@ def sync(check_only: bool = False) -> int:
 
 if __name__ == "__main__":
     # `python build.py --check` fails (exit 1) if anything is out of sync, for CI.
-    sys.exit(sync(check_only="--check" in sys.argv[1:]))
+    check_only = "--check" in sys.argv[1:]
+    result = sync(check_only=check_only)
+
+    posthog = initialize_posthog()
+    if posthog:
+        dev_id = get_developer_id()
+        posthog.capture(distinct_id=dev_id, event="site_built", properties={
+            "check_only": check_only,
+            "exit_code": result,
+        })
+        posthog.shutdown()
+
+    sys.exit(result)

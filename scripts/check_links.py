@@ -8,6 +8,10 @@ import sys
 import urllib.request
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+
+from posthog_utils import get_developer_id, initialize_posthog  # noqa: E402
+
 HTML_FILE = ROOT / "index.html"
 
 
@@ -79,6 +83,16 @@ def main() -> int:
     errors = check_internal(parser_html.hrefs, parser_html.ids)
     if not args.skip_external:
         errors.extend(check_external(parser_html.hrefs, args.timeout))
+
+    posthog = initialize_posthog()
+    if posthog:
+        dev_id = get_developer_id()
+        posthog.capture(distinct_id=dev_id, event="link_check_completed", properties={
+            "error_count": len(errors),
+            "skip_external": args.skip_external,
+            "success": len(errors) == 0,
+        })
+        posthog.shutdown()
 
     if errors:
         print("❌ Link check failed:")

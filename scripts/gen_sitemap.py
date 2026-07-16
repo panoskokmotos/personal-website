@@ -7,9 +7,13 @@ Usage: python scripts/gen_sitemap.py   (run after content changes; or wire into 
 import datetime
 import re
 import subprocess
+import sys
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(REPO))
+
+from posthog_utils import get_developer_id, initialize_posthog  # noqa: E402
 SITEMAP = REPO / "sitemap.xml"
 BASE = "https://panoskokmotos.com/"
 TODAY = datetime.date.today().isoformat()
@@ -47,6 +51,12 @@ def main():
     text = re.sub(r"<url>[\s\S]*?</url>", repl, text)
     SITEMAP.write_text(text)
     print(f"sitemap.xml: refreshed lastmod on {changed} URL(s) from git history")
+
+    posthog = initialize_posthog()
+    if posthog:
+        dev_id = get_developer_id()
+        posthog.capture(distinct_id=dev_id, event="sitemap_refreshed", properties={"changed_count": changed})
+        posthog.shutdown()
 
 
 if __name__ == "__main__":
