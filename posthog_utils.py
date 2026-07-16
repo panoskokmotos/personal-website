@@ -7,10 +7,15 @@ import os
 import uuid
 from pathlib import Path
 
-from dotenv import load_dotenv
-from posthog import Posthog
 
-load_dotenv()
+def _load_dotenv() -> None:
+    """Load .env if python-dotenv is available; no-op otherwise."""
+    try:
+        from dotenv import load_dotenv
+    except ImportError:
+        return
+    load_dotenv()
+
 
 _ID_FILE = Path.home() / ".posthog_panoskokmotos_dev_id"
 
@@ -29,8 +34,19 @@ def get_developer_id() -> str:
     return dev_id
 
 
-def initialize_posthog() -> Posthog | None:
-    """Create and return a PostHog instance, or None if token is missing."""
+def initialize_posthog() -> "Posthog | None":
+    """Create and return a PostHog instance, or None if unavailable.
+
+    Returns None (and emits no events) when the optional ``posthog`` /
+    ``python-dotenv`` dependencies are not installed, or when no project
+    token is configured. This keeps the instrumented scripts runnable in
+    environments that have not installed the analytics dependencies (e.g. CI).
+    """
+    _load_dotenv()
+    try:
+        from posthog import Posthog
+    except ImportError:
+        return None
     token = os.getenv("POSTHOG_PROJECT_TOKEN")
     if not token:
         return None
