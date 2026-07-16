@@ -1,4 +1,5 @@
 # Simple Coding Agent Requirements
-# This agent uses only Python standard library, so no external dependencies are required!
 # Python 3.7+ is recommended
 
+posthog>=3.0.0
+python-dotenv>=1.0.0

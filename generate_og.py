@@ -7,6 +7,8 @@ import math
 import urllib.request
 from pathlib import Path
 
+from posthog_utils import get_developer_id, initialize_posthog
+
 try:
     from PIL import Image, ImageDraw, ImageFont, ImageFilter
 except ImportError:
@@ -244,6 +246,17 @@ def make_og_image():
     else:
         print("  ⚠ Using placeholder circle (headshot not found)")
 
+    return {"headshot_loaded": headshot_loaded, "file_size_bytes": size}
+
 
 if __name__ == "__main__":
-    make_og_image()
+    stats = make_og_image()
+
+    posthog = initialize_posthog()
+    if posthog:
+        dev_id = get_developer_id()
+        posthog.capture(distinct_id=dev_id, event="og_image_generated", properties={
+            "headshot_loaded": stats["headshot_loaded"],
+            "file_size_bytes": stats["file_size_bytes"],
+        })
+        posthog.shutdown()

@@ -10,6 +10,8 @@ import argparse
 from pathlib import Path
 from typing import List, Optional
 
+from posthog_utils import get_developer_id, initialize_posthog
+
 
 class CodingAgent:
     """A simple coding agent that helps with coding tasks."""
@@ -136,7 +138,9 @@ def main():
     
     args = parser.parse_args()
     agent = CodingAgent()
-    
+    posthog = initialize_posthog()
+    dev_id = get_developer_id()
+
     if args.command == 'analyze':
         if not args.file:
             print("Error: --file is required for analyze command")
@@ -144,8 +148,10 @@ def main():
         result = agent.analyze_file(args.file)
         if 'error' in result:
             print(f"Error: {result['error']}")
+            if posthog:
+                posthog.capture(distinct_id=dev_id, event="file_analyzed", properties={"success": False})
             sys.exit(1)
-        
+
         print(f"\n📊 Code Analysis for: {result['filepath']}")
         print(f"Language: {result['language']}")
         print(f"Total Lines: {result['total_lines']}")
@@ -153,7 +159,15 @@ def main():
         print(f"Comment Lines: {result['comment_lines']}")
         print(f"File Size: {result['file_size']} bytes")
         print(f"Extension: {result['extension']}")
-    
+        if posthog:
+            posthog.capture(distinct_id=dev_id, event="file_analyzed", properties={
+                "language": result["language"],
+                "total_lines": result["total_lines"],
+                "code_lines": result["code_lines"],
+                "comment_lines": result["comment_lines"],
+                "success": True,
+            })
+
     elif args.command == 'generate':
         if not args.name:
             print("Error: --name is required for generate command")
@@ -161,7 +175,12 @@ def main():
         template = agent.generate_function_template(args.language, args.name, args.params)
         print(f"\n📝 Generated {args.language} function template:\n")
         print(template)
-    
+        if posthog:
+            posthog.capture(distinct_id=dev_id, event="function_template_generated", properties={
+                "language": args.language,
+                "param_count": len(args.params),
+            })
+
     elif args.command == 'list':
         directory = args.dir or '.'
         files = agent.list_files_in_directory(directory)
@@ -169,7 +188,9 @@ def main():
         for f in files:
             print(f"  - {f}")
         print(f"\nTotal: {len(files)} files")
-    
+        if posthog:
+            posthog.capture(distinct_id=dev_id, event="directory_listed", properties={"file_count": len(files)})
+
     elif args.command == 'find-functions':
         if not args.file:
             print("Error: --file is required for find-functions command")
@@ -182,6 +203,11 @@ def main():
             for func in functions:
                 print(f"  Line {func['line']}: {func['name']}")
                 print(f"    {func['signature']}\n")
+        if posthog:
+            posthog.capture(distinct_id=dev_id, event="functions_found", properties={
+                "function_count": len(functions),
+                "success": len(functions) > 0,
+            })
 
 
 if __name__ == '__main__':
