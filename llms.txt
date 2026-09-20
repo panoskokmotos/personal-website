@@ -25,6 +25,7 @@ Givelink is an in-kind donation platform and mobile app that lets donors shop fo
 
 ## Pages on this site
 - https://panoskokmotos.com/ — home / full profile, work, press, and contact
+- https://panoskokmotos.com/goal.html — why this site exists, what Panos is open to, and how to reach him
 - https://panoskokmotos.com/now.html — what Panos is focused on right now
 - https://panoskokmotos.com/books.html — books that shaped his thinking
 - https://panoskokmotos.com/beliefs.html — things he believes
