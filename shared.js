@@ -9,8 +9,6 @@
 (function () {
   var base = 'https://ask-panos.panagiotis-kokmotoss.workers.dev';
 
-  // Cloudflare Worker endpoints + notify secret. The secret is intentionally
-  // client-visible — it only deters random noise; the worker rate-limits.
   window.SITE_CONFIG = {
     workerBase:   base,
     chatUrl:      base,                    // default "Ask Panos" chat route
@@ -18,7 +16,12 @@
     streamUrl:    base + '/api/v1/stream',
     deepUrl:      base + '/api/v2/tool',   // "Go Deeper" enhanced route
     notifyUrl:    base + '/notify',
-    notifySecret: 'panos-notify-2026-xyz',
+  };
+
+  window.escapeHtml = function (str) {
+    return String(str)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
   };
 
   /**
@@ -28,13 +31,15 @@
    */
   window.renderMarkdown = function (text, opts) {
     opts = opts || {};
-    var out = String(text).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+    // Escape first: model output is untrusted and must never become live markup.
+    var out = String(text).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    out = out.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
     if (opts.italic) {
       out = out.replace(/(?<!\*)\*(?!\*)(.+?)(?<!\*)\*(?!\*)/g, '<em>$1</em>');
     }
     if (opts.links) {
       out = out.replace(
-        /(https?:\/\/[^\s<"']+)/g,
+        /(https?:\/\/(?:(?!&lt;|&gt;)[^\s<"'])+)/g,
         '<a href="$1" target="_blank" rel="noopener noreferrer" style="color:var(--blue);text-decoration:underline;text-underline-offset:2px;word-break:break-all;">$1</a>'
       );
     }
@@ -42,9 +47,8 @@
   };
 
   /**
-   * Fire-and-forget notification to the worker /notify endpoint. Shared by
-   * script.js (sendSiteNotification) and tool-utils.js (notifyToolUsed).
-   * Silent no-op if the secret is unset; never blocks the UI.
+   * Fire-and-forget notification to the worker /notify endpoint. No-op unless a
+   * notifySecret is configured; the secret must never ship in public JS.
    */
   window.notifySite = function (event, data) {
     var c = window.SITE_CONFIG;

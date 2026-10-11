@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
+<!-- include:gtag -->
   <!-- Analytics (Google Analytics & PostHog) — both loaded only after cookie consent -->
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -27,6 +28,7 @@
       if(consent==='accepted'){gtag('consent','update',{analytics_storage:'granted'});_loadGA();_loadPostHog();}
     })();
   </script>
+<!-- /include:gtag -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Panos Kokmotos — Forbes 30 Under 30 Greece, WEF Global Shaper SF, Co-Founder & COO of Givelink. 100K+ lives impacted, 18 awards. Building from San Francisco." />
@@ -70,7 +72,7 @@
   <link rel="preconnect" href="https://formspree.io" />
   <link rel="preload" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" /></noscript>
-  <link rel="stylesheet" href="style.min.css?v=20260912" />
+  <link rel="stylesheet" href="style.min.css?v=20261011" />
   <link rel="shortcut icon" href="/favicon.ico" />
   <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png" />
   <link rel="icon" type="image/png" sizes="180x180" href="/assets/favicon-180.png" />
@@ -454,66 +456,10 @@
     "https://www.youtube.com/@entrepreneurshiptalks"
   ]
 }
-</script>
-  <!-- FAQ Schema for SEO/GEO -->
-  <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "mainEntity": [
-    {
-      "@type": "Question",
-      "name": "What is Givelink and how does it work?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Givelink is an in-kind donation platform that lets donors shop the specific goods nonprofits need most — with step-by-step delivery tracking, photo confirmation, and real impact stories. It has impacted 100,000+ lives and processed $220K+ in donations."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "How can I book a call or meeting with Panos Kokmotos?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "You can book a 30-minute call directly at tidycal.com/givelink/panos. Panos is open to conversations about Givelink partnerships, speaking invitations, podcast appearances, and connecting with founders working on hard problems."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "What is Entrepreneurship Talks?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Entrepreneurship Talks is a long-form podcast and community co-founded by Panos Kokmotos in 2020, featuring conversations with founders, investors, and changemakers. It has 60+ episodes, 350K+ views, and a $100K+ grant secured."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Is Panos Kokmotos available for speaking engagements?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Yes. Panos speaks on entrepreneurship, social impact, in-kind giving, AI, and the future of philanthropy. He has spoken at university events, startup competitions, and community forums across Europe and the US."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "What awards has Panos Kokmotos received?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Panos has been named to Forbes 30 Under 30 Greece 2024, recognized as a WEF Global Shaper (San Francisco Hub), reached Top 4 in Europe at GSEA 2023, won the Pappajohn Business Plan Competition, and was selected among Europe's Top 15 Young Innovators by World Summit Awards Global."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Where is Panos Kokmotos based?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Panos splits his time between San Francisco, USA and Athens/Patras, Greece. He is available for remote conversations globally and in-person meetings in both locations."
-      }
-    }
-  ]
-}
 </script></head>
 <body>
 
+<!-- include:cookie-banner -->
   <!-- ── GDPR Cookie Consent Banner ── -->
   <div id="cookieBanner" class="cookie-banner" role="dialog" aria-label="Cookie consent" style="display:none">
     <div class="cookie-banner-inner">
@@ -558,6 +504,7 @@
       }
     })();
   </script>
+<!-- /include:cookie-banner -->
 
   <!-- Page Loader -->
   <div id="page-loader" aria-hidden="true">
@@ -577,7 +524,8 @@
   <div id="progress-bar"></div>
 
   <!-- ── Navbar ── -->
-  <nav id="navbar" role="banner">
+  <header>
+  <nav id="navbar" aria-label="Main">
     <div class="nav-inner">
       <a href="#hero" class="nav-logo">
         <span class="nav-avatar">
@@ -594,6 +542,7 @@
         <li><a href="/watch.html" class="nav-link">Watch</a></li>
         <li><a href="/books.html" class="nav-link">Books</a></li>
         <li><a href="/now.html" class="nav-link">Now</a></li>
+        <li><a href="/beliefs.html" class="nav-link">Beliefs</a></li>
         <li><a href="https://tools.panoskokmotos.com/compass/#/" class="nav-link">AI Tools</a></li>
 
         <li><a href="/goal.html" class="nav-cta">Let's Talk →</a></li>
@@ -621,6 +570,7 @@
           <li><a href="/watch.html">Watch</a></li>
           <li><a href="/books.html">Books</a></li>
           <li><a href="/now.html">Now</a></li>
+          <li><a href="/beliefs.html">Beliefs</a></li>
           <li><a href="https://tools.panoskokmotos.com/compass/#/">AI Tools</a></li>
           <li><a href="/goal.html">Let's Talk</a></li>
         </ul>
@@ -638,6 +588,7 @@
       </div>
     </div>
   </nav>
+  </header>
 
   <main role="main">
 
@@ -754,11 +705,6 @@
           </div>
           <div class="logo-divider"></div>
           <div class="logo-item">
-            <svg viewBox="0 0 60 22" fill="currentColor" class="logo-svg logo-gsea" role="img" aria-label="GSEA — Global Student Entrepreneur Awards"><text x="0" y="16" font-size="14" font-weight="900" font-family="Arial, sans-serif">GSEA</text></svg>
-            <span class="logo-sub">Top 16 Worldwide</span>
-          </div>
-          <div class="logo-divider"></div>
-          <div class="logo-item">
             <img src="logos/eo.svg" alt="Entrepreneurs' Organization" class="logo-img" width="72" height="48" loading="lazy" />
             <span class="logo-sub">GSEA Top 16</span>
           </div>
@@ -816,11 +762,6 @@
           <div class="logo-item">
             <img src="logos/athens-voice.svg" alt="" class="logo-img logo-img-athens" width="90" height="36" loading="lazy" />
             <span class="logo-sub">Press Feature</span>
-          </div>
-          <div class="logo-divider"></div>
-          <div class="logo-item">
-            <svg viewBox="0 0 60 22" fill="currentColor" class="logo-svg logo-gsea" aria-hidden="true"><text x="0" y="16" font-size="14" font-weight="900" font-family="Arial, sans-serif">GSEA</text></svg>
-            <span class="logo-sub">Top 16 Worldwide</span>
           </div>
           <div class="logo-divider"></div>
           <div class="logo-item">
@@ -2127,6 +2068,7 @@
           <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
           Send Message
         </button>
+        <div class="form-error" id="formError" role="alert"></div>
         <div class="form-success" id="formSuccess" role="status" aria-live="polite">
           <span class="form-success-icon">✓</span>
           Message sent! I'll get back to you soon.
@@ -2137,10 +2079,11 @@
 
   </main>
 
+<!-- include:footer -->
   <!-- ── Footer ── -->
   <footer role="contentinfo">
     <div class="footer-inner">
-      <a href="#hero" class="footer-logo">
+      <a href="/" class="footer-logo">
         <picture>
           <source srcset="photo.webp" type="image/webp" />
           <img src="photo.jpg" alt="Panos Kokmotos" loading="lazy" />
@@ -2157,7 +2100,9 @@
       </div>
     </div>
   </footer>
+<!-- /include:footer -->
 
+<!-- include:chat -->
   <!-- ── AI Chat Widget ── -->
   <div class="chat-widget" id="chatWidget">
     <div class="chat-nudge" id="chatNudge">Ask me anything! ✦</div>
@@ -2170,8 +2115,8 @@
       <div class="chat-header">
         <div class="chat-header-info">
           <picture>
-            <source srcset="photo.webp" type="image/webp" />
-            <img src="photo.jpg" alt="Panos Kokmotos" class="chat-avatar" />
+            <source srcset="/photo.webp" type="image/webp" />
+            <img src="/photo.jpg" alt="Panos Kokmotos" class="chat-avatar" />
           </picture>
           <div class="chat-header-text">
             <strong>Ask Panos</strong>
@@ -2229,6 +2174,7 @@
       <p class="chat-note">Powered by <a href="https://anthropic.com" target="_blank" rel="noopener">Claude AI</a></p>
     </div>
   </div>
+<!-- /include:chat -->
 
   <!-- ── Back to Top ── -->
   <button id="backToTop" class="back-to-top" aria-label="Back to top" title="Back to top">
@@ -2254,10 +2200,10 @@
     </div>
   </div>
 
-  <script src="/shared.js"></script>
-  <script src="script.min.js?v=20260912"></script>
-  <script src="chat.min.js?v=20260912"></script>
-  <script src="search.min.js?v=20260912"></script>
+  <script src="/shared.js?v=20261011"></script>
+  <script src="script.min.js?v=20261011"></script>
+  <script src="chat.min.js?v=20261011"></script>
+  <script src="search.min.js?v=20261011"></script>
   <!-- FAQ accordion + follow-up chat launcher -->
   <script>
     document.querySelectorAll('.faq-q').forEach(btn => {
@@ -2300,31 +2246,6 @@
         navigator.serviceWorker.register('/sw.js').catch(() => {});
       });
     }
-  </script>
-  <script>
-    // ── Chat nudge: show after 3s, hide on scroll or click ──
-    (function() {
-      var nudge = document.getElementById('chatNudge');
-      var widget = document.getElementById('chatWidget');
-      if (!nudge || !widget) return;
-      var shown = false;
-      var dismissed = sessionStorage.getItem('chat_nudge_dismissed');
-      if (dismissed) return;
-      var t = setTimeout(function() {
-        if (!widget.classList.contains('open')) {
-          nudge.classList.add('show');
-          shown = true;
-          setTimeout(function() { nudge.classList.remove('show'); }, 5000);
-        }
-      }, 3000);
-      function dismiss() {
-        clearTimeout(t);
-        nudge.classList.remove('show');
-        sessionStorage.setItem('chat_nudge_dismissed', '1');
-      }
-      window.addEventListener('scroll', dismiss, { once: true, passive: true });
-      document.getElementById('chatToggle').addEventListener('click', dismiss, { once: true });
-    })();
   </script>
 </body>
 </html>

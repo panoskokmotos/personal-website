@@ -60,25 +60,29 @@
       return '<p class="ss-hint">Search books, beliefs, Givelink, awards, contact…</p>' +
         '<div class="ss-shortcuts"><span><kbd>↑</kbd><kbd>↓</kbd> navigate</span><span><kbd>↵</kbd> open</span><span><kbd>Esc</kbd> close</span></div>';
     }
-    return '<p class="ss-hint">No results found — try the <button class="ss-ai-link" onclick="openSearch(); closeSearch(); setTimeout(openChat,120)">AI chat</button> instead.</p>';
+    return '<p class="ss-hint">No results found — try the <button class="ss-ai-link" onclick="window.__ssClose(); setTimeout(window.__ssOpenChat,120)">AI chat</button> instead.</p>';
   }
+
+  const esc = s => window.escapeHtml(s);
 
   function highlight(text, query) {
     const terms = query.trim().split(/\s+/).filter(t => t.length > 1);
-    if (!terms.length) return text;
+    if (!terms.length) return esc(text);
     const pattern = terms.map(t => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|');
-    return text.replace(new RegExp(`(${pattern})`, 'gi'), '<mark>$1</mark>');
+    // split() with a capture group puts matches at odd indices
+    return text.split(new RegExp(`(${pattern})`, 'gi'))
+      .map((part, i) => i % 2 ? `<mark>${esc(part)}</mark>` : esc(part)).join('');
   }
 
   function renderResults(results, query) {
     return results.map((r, i) =>
-      `<a href="${r.url}" class="ss-result${i === activeIdx ? ' ss-active' : ''}" data-idx="${i}" onclick="window.__ssClose()">
+      `<a href="${esc(r.url)}" class="ss-result${i === activeIdx ? ' ss-active' : ''}" data-idx="${i}" onclick="window.__ssClose()">
         <span class="ss-result-icon">${catIcon(r.category)}</span>
         <div class="ss-result-body">
           <strong class="ss-result-title">${highlight(r.title, query)}</strong>
           <span class="ss-result-snippet">${highlight(r.snippet.slice(0, 88), query)}…</span>
         </div>
-        <span class="ss-result-cat">${r.category}</span>
+        <span class="ss-result-cat">${esc(r.category)}</span>
       </a>`
     ).join('');
   }
@@ -95,7 +99,7 @@
     input.focus();
     loadIndex();
     modalOpen = true;
-    if (typeof posthog !== 'undefined') {
+    if (typeof posthog !== 'undefined' && typeof posthog.capture === 'function') {
       posthog.capture('search_opened', { trigger: 'keyboard' });
     }
   }
@@ -172,9 +176,10 @@
   // ── Expose globally ──
   window.openSearch  = openModal;
   window.__ssClose   = closeModal;
-  // Helper referenced in empty-state button
-  window.openChat = function () {
+  // Must not be named openChat: chat.js's toggle handler calls the global
+  // openChat(), and overwriting it made the chat button click itself (a no-op).
+  window.__ssOpenChat = function () {
     const toggle = document.getElementById('chatToggle');
-    if (toggle) toggle.click();
+    if (toggle && !document.getElementById('chatWidget').classList.contains('open')) toggle.click();
   };
 })();

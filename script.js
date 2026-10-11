@@ -101,56 +101,8 @@ const counterObserver = new IntersectionObserver(entries => {
 }, { threshold: 0.15 });
 document.querySelectorAll('.impact-num').forEach(el => counterObserver.observe(el));
 
-// ── Active nav link on scroll ──
-const sections = document.querySelectorAll('section[id]');
-const navLinks = document.querySelectorAll('.nav-links a');
-const sectionObserver = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (e.isIntersecting) {
-      navLinks.forEach(a => {
-        a.style.color = '';
-        if (a.getAttribute('href') === '#' + e.target.id) a.style.color = '#fff';
-      });
-    }
-  });
-}, { threshold: 0.4 });
-sections.forEach(s => sectionObserver.observe(s));
-
 // ── Theme: dark mode locked ──
 document.documentElement.setAttribute('data-theme', 'dark');
-
-// ── Logo strip drag-to-scroll ──
-document.querySelectorAll('.logos-strip-wrap').forEach(wrap => {
-  let isDown = false, startX = 0, scrollLeft = 0;
-  const track = wrap.querySelector('.logos-track');
-
-  function dragStart(x) {
-    isDown = true;
-    startX = x - wrap.getBoundingClientRect().left;
-    scrollLeft = wrap.scrollLeft;
-    wrap.classList.add('dragging');
-    if (track) track.style.animationPlayState = 'paused';
-  }
-  function dragEnd() {
-    if (!isDown) return;
-    isDown = false;
-    wrap.classList.remove('dragging');
-    if (track) track.style.animationPlayState = '';
-  }
-  function dragMove(x) {
-    if (!isDown) return;
-    const walk = (x - wrap.getBoundingClientRect().left - startX) * 1.5;
-    wrap.scrollLeft = scrollLeft - walk;
-  }
-
-  wrap.addEventListener('mousedown', e => { dragStart(e.clientX); e.preventDefault(); });
-  window.addEventListener('mouseup', dragEnd);
-  window.addEventListener('mousemove', e => { if (isDown) dragMove(e.clientX); });
-
-  wrap.addEventListener('touchstart', e => { dragStart(e.touches[0].clientX); }, { passive: true });
-  wrap.addEventListener('touchend', dragEnd);
-  wrap.addEventListener('touchmove', e => { if (isDown) dragMove(e.touches[0].clientX); }, { passive: true });
-});
 
 // ── Scroll progress bar ──
 const progressBar = document.getElementById('progress-bar');
@@ -174,7 +126,8 @@ window.addEventListener('scroll', () => {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
 
-  const COLORS = ['#3b6ef8', '#d4af37', '#10b981', '#f43f5e', '#8b5cf6', '#f97316'];
+  const brandBlue = getComputedStyle(document.documentElement).getPropertyValue('--blue').trim() || '#3b6ef8';
+  const COLORS = [brandBlue, '#d4af37', '#10b981', '#f43f5e', '#8b5cf6', '#f97316'];
   const pieces = Array.from({ length: 65 }, () => ({
     x: Math.random() * canvas.width,
     y: Math.random() * canvas.height - canvas.height,
@@ -375,19 +328,19 @@ if (contactForm) {
     e.preventDefault();
     const btn = contactForm.querySelector('button[type="submit"]');
     const success = document.getElementById('formSuccess');
+    const error = document.getElementById('formError');
+    const showError = msg => {
+      btn.disabled = false;
+      btn.classList.remove('btn-loading');
+      btn.innerHTML = originalHTML;
+      if (error) { error.textContent = msg; error.classList.add('visible'); }
+    };
+    if (error) error.classList.remove('visible');
     const originalHTML = btn.innerHTML;
     btn.disabled = true;
     btn.classList.add('btn-loading');
     btn.innerHTML = '<span class="btn-spinner"></span>Sending…';
-    // Capture form data before reset
     const formData = new FormData(contactForm);
-    const notifData = {
-      name: formData.get('name') || '—',
-      email: formData.get('email') || '—',
-      subject: formData.get('subject') || '—',
-      page: location.href,
-      time: new Date().toISOString(),
-    };
     try {
       const res = await fetch(contactForm.action, {
         method: 'POST',
@@ -400,19 +353,11 @@ if (contactForm) {
         btn.classList.remove('btn-loading');
         success.classList.add('visible');
         success.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        // Fire-and-forget: notify Panos via worker
-        sendSiteNotification('Contact Form Submission', notifData);
       } else {
-        btn.disabled = false;
-        btn.classList.remove('btn-loading');
-        btn.innerHTML = originalHTML;
-        alert('Something went wrong. Please try again.');
+        showError('Something went wrong sending your message. Please try again, or email panagiotis.kokmotoss@gmail.com directly.');
       }
     } catch {
-      btn.disabled = false;
-      btn.classList.remove('btn-loading');
-      btn.innerHTML = originalHTML;
-      alert('Network error. Please email panagiotis.kokmotoss@gmail.com directly.');
+      showError('Network error — your message was not sent. Please email panagiotis.kokmotoss@gmail.com directly.');
     }
   });
 }
@@ -461,34 +406,6 @@ document.querySelectorAll('.skeleton-wrap img.book-cover-img').forEach(img => {
   btn.addEventListener('click', () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
-})();
-
-// ── AI Chat: proactive trigger (once per session, after 15s idle — desktop only) ──
-(function() {
-  if (sessionStorage.getItem('chat_proactive_done')) return;
-  // Never auto-open on mobile/touch — intrusive on small screens
-  if (window.matchMedia('(pointer: coarse)').matches || window.innerWidth < 768) return;
-  const widget = document.getElementById('chatWidget');
-  const toggle = document.getElementById('chatToggle');
-  if (!widget || !toggle) return;
-  // Only fire if chat hasn't been manually opened yet
-  const timer = setTimeout(() => {
-    if (widget.classList.contains('open')) return; // user already opened it
-    sessionStorage.setItem('chat_proactive_done', '1');
-    toggle.click(); // open chat
-    // Show a proactive intro message (injected as a "bot thinking then reveal" effect)
-    const msgs = document.getElementById('chatMessages');
-    if (msgs) {
-      const existing = msgs.querySelectorAll('.chat-msg.bot');
-      if (existing.length === 1) {
-        // Replace the generic welcome with a more personal nudge
-        existing[0].querySelector('p').textContent =
-          '👋 Hey! Quick one — curious about Givelink, or want to know what Panos is focused on right now?';
-      }
-    }
-  }, 15000);
-  // Cancel if user interacts with the chat themselves
-  toggle.addEventListener('click', () => clearTimeout(timer), { once: true });
 })();
 
 // ── AI Chat: keyboard shortcut (/ or ?) to toggle ──
@@ -926,11 +843,3 @@ function toggleAwards(btn) {
   wrap.addEventListener('touchmove', e => { if (dragging) moveDrag(e.touches[0].clientX); }, { passive: true });
   wrap.addEventListener('touchend', e => endDrag(e.changedTouches[0].clientX));
 })();
-
-
-// ── Personal notifications ──
-// Sends a notification to Panos via the Cloudflare Worker /notify endpoint.
-// Endpoint + secret live in shared.js (SITE_CONFIG); POST logic in window.notifySite.
-function sendSiteNotification(event, data) {
-  window.notifySite(event, data);
-}

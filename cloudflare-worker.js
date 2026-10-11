@@ -123,14 +123,27 @@ function checkRateLimit(ip) {
   return true; // allowed
 }
 
-const CORS_HEADERS = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'POST, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type',
-};
+const ALLOWED_ORIGINS = new Set([
+  'https://panoskokmotos.com',
+  'https://www.panoskokmotos.com',
+  'https://tools.panoskokmotos.com',
+]);
 
 export default {
   async fetch(request, env) {
+    const origin = request.headers.get('Origin');
+    // Browsers always send Origin on cross-origin POSTs; server-to-server calls
+    // (e.g. the internal /notify below) send none and stay guarded by the secret.
+    if (origin && !ALLOWED_ORIGINS.has(origin)) {
+      return new Response('Forbidden origin', { status: 403 });
+    }
+    const CORS_HEADERS = {
+      'Access-Control-Allow-Origin': origin || 'https://panoskokmotos.com',
+      'Access-Control-Allow-Methods': 'POST, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type',
+      'Vary': 'Origin',
+    };
+
     // CORS preflight
     if (request.method === 'OPTIONS') {
       return new Response(null, { headers: { ...CORS_HEADERS, 'Access-Control-Allow-Methods': 'GET, POST, OPTIONS' } });

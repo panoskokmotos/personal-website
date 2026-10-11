@@ -1,13 +1,16 @@
-const CACHE_NAME = 'panos-v5';
+// Keep in sync with the ?v= cache-buster used in the HTML (bump both on asset changes).
+const ASSET_VERSION = '20261011';
+const CACHE_NAME = 'panos-' + ASSET_VERSION;
 const OFFLINE_URL = '/offline.html';
 
 const PRECACHE_ASSETS = [
   '/',
   '/index.html',
-  '/style.min.css',
-  '/shared.js',
-  '/script.min.js',
-  '/chat.min.js',
+  '/style.min.css?v=' + ASSET_VERSION,
+  '/shared.js?v=' + ASSET_VERSION,
+  '/script.min.js?v=' + ASSET_VERSION,
+  '/chat.min.js?v=' + ASSET_VERSION,
+  '/search.min.js?v=' + ASSET_VERSION,
   '/photo.webp',
   '/offline.html',
   '/manifest.json',

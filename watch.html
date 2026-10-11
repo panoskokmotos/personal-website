@@ -56,7 +56,7 @@
   <link rel="dns-prefetch" href="https://www.youtube.com" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.min.css?v=20260912" />
+  <link rel="stylesheet" href="style.min.css?v=20261011" />
   <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png" />
   <link rel="icon" type="image/png" sizes="180x180" href="assets/favicon-180.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon-180.png" />
@@ -173,6 +173,7 @@
 </script>
 </head>
 <body>
+<!-- include:cookie-banner -->
   <!-- ── GDPR Cookie Consent Banner ── -->
   <div id="cookieBanner" class="cookie-banner" role="dialog" aria-label="Cookie consent" style="display:none">
     <div class="cookie-banner-inner">
@@ -217,6 +218,7 @@
       }
     })();
   </script>
+<!-- /include:cookie-banner -->
 
   <!-- Page Loader -->
   <div id="page-loader" aria-hidden="true">
@@ -237,7 +239,8 @@
 
 <!-- include:nav -->
   <!-- ── Navbar ── -->
-  <nav id="navbar" role="banner">
+  <header>
+  <nav id="navbar" aria-label="Main">
     <div class="nav-inner">
       <a href="/" class="nav-logo">
         <span class="nav-avatar">
@@ -255,6 +258,7 @@
         <li><a href="/books.html" class="nav-link">Books</a></li>
         <li><a href="/now.html" class="nav-link">Now</a></li>
         <li><a href="/beliefs.html" class="nav-link">Beliefs</a></li>
+        <li><a href="https://tools.panoskokmotos.com/compass/#/" class="nav-link">AI Tools</a></li>
         <li><a href="/goal.html" class="nav-cta">Let's Talk →</a></li>
       </ul>
       <div class="nav-controls">
@@ -276,6 +280,7 @@
           <li><a href="/books.html">Books</a></li>
           <li><a href="/now.html">Now</a></li>
           <li><a href="/beliefs.html">Beliefs</a></li>
+          <li><a href="https://tools.panoskokmotos.com/compass/#/">AI Tools</a></li>
           <li><a href="/goal.html">Let's Talk</a></li>
         </ul>
         <div class="nav-mobile-socials">
@@ -287,6 +292,7 @@
       </div>
     </div>
   </nav>
+  </header>
 <!-- /include:nav -->
 
   <main id="main" role="main">
@@ -482,7 +488,7 @@
       <a href="/" class="footer-logo">
         <picture>
           <source srcset="photo.webp" type="image/webp" />
-          <img src="photo.jpg" alt="Panos" loading="lazy" />
+          <img src="photo.jpg" alt="Panos Kokmotos" loading="lazy" />
         </picture>
       </a>
       <p>© 2026 Panos Kokmotos · Advocate ✨ Changemaker 🌍 Builder 🚀</p>
@@ -503,8 +509,10 @@
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="20" height="20"><polyline points="18 15 12 9 6 15"/></svg>
   </button>
 
+<!-- include:chat -->
   <!-- ── AI Chat Widget ── -->
   <div class="chat-widget" id="chatWidget">
+    <div class="chat-nudge" id="chatNudge">Ask me anything! ✦</div>
     <button class="chat-toggle" id="chatToggle" aria-label="Chat with Panos AI">
       <svg class="chat-icon-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
       <svg class="chat-icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
@@ -517,25 +525,42 @@
             <source srcset="/photo.webp" type="image/webp" />
             <img src="/photo.jpg" alt="Panos Kokmotos" class="chat-avatar" />
           </picture>
-          <div><strong>Ask Panos</strong><span>AI · Usually replies instantly</span></div>
+          <div class="chat-header-text">
+            <strong>Ask Panos</strong>
+            <span><span class="chat-status-dot"></span>AI · Usually replies instantly</span>
+          </div>
         </div>
         <div class="chat-header-actions">
           <button class="chat-new-btn" id="chatNewChat" title="New conversation" aria-label="Start new conversation">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="15" height="15"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          </button>
+          <button class="chat-size-btn" id="chatSizeToggle" title="Make button bigger" aria-label="Toggle AI button size" aria-pressed="false">
+            <svg class="size-icon-expand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+            <svg class="size-icon-shrink" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13" style="display:none"><path d="M4 14h6v6M14 4h6v6M10 14l-7 7M21 3l-7 7"/></svg>
           </button>
           <button class="chat-close-btn" id="chatClose" aria-label="Close chat">✕</button>
         </div>
       </div>
       <div class="chat-messages" id="chatMessages">
         <div class="chat-msg bot">
-          <p>👋 Hi! I’m Panos’s AI assistant. Ask me anything about his work, Givelink, the podcast, or how to get in touch!</p>
+          <p>👋 Hi! I'm Panos's AI assistant. Ask me anything about his work, Givelink, the podcast, or how to get in touch!</p>
         </div>
       </div>
       <div class="chat-starters" id="chatStarters">
-        <p class="chat-starters-label">Suggested questions</p>
+        <p class="chat-starters-label">Ask me anything</p>
         <button class="chat-starter-chip" onclick="useChatStarter(this)">
-          <span class="csc-icon">💡</span>
-          <span class="csc-text">What is Givelink?</span>
+          <span class="csc-icon">🚀</span>
+          <span class="csc-text">How does Givelink work?</span>
+          <svg class="csc-arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+        </button>
+        <button class="chat-starter-chip" onclick="useChatStarter(this)">
+          <span class="csc-icon">🤝</span>
+          <span class="csc-text">Can I partner or invest?</span>
+          <svg class="csc-arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+        </button>
+        <button class="chat-starter-chip" onclick="useChatStarter(this)">
+          <span class="csc-icon">🎙️</span>
+          <span class="csc-text">Tell me about the podcast</span>
           <svg class="csc-arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
         </button>
         <button class="chat-starter-chip" onclick="useChatStarter(this)">
@@ -543,14 +568,12 @@
           <span class="csc-text">How can I book a call?</span>
           <svg class="csc-arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
         </button>
-        <button class="chat-starter-chip" onclick="useChatStarter(this)">
-          <span class="csc-icon">🏆</span>
-          <span class="csc-text">What awards has Panos won?</span>
-          <svg class="csc-arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
-        </button>
       </div>
       <div class="chat-input-wrap">
-        <input type="text" id="chatInput" placeholder="Ask something..." autocomplete="off" />
+        <input type="text" id="chatInput" placeholder="Ask about Givelink, my journey, speaking…" autocomplete="off" />
+        <button id="chatMic" aria-label="Voice input" title="Speak your question" style="display:none">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+        </button>
         <button id="chatSend" aria-label="Send">
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
         </button>
@@ -558,8 +581,9 @@
       <p class="chat-note">Powered by <a href="https://anthropic.com" target="_blank" rel="noopener">Claude AI</a></p>
     </div>
   </div>
-  <script src="/shared.js"></script>
-  <script src="script.min.js?v=20260912"></script>
-  <script src="chat.min.js?v=20260912"></script>
+<!-- /include:chat -->
+  <script src="/shared.js?v=20261011"></script>
+  <script src="script.min.js?v=20261011"></script>
+  <script src="chat.min.js?v=20261011"></script>
 </body>
 </html>

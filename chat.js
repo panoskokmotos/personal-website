@@ -89,7 +89,7 @@ function showFollowUpChips() {
   // Clear existing chips and label
   starters.innerHTML = '<p class="chat-starters-label">Follow-up questions</p>';
   // Add 2 random follow-up chips
-  const shuffled = followUpChips.sort(() => 0.5 - Math.random()).slice(0, 2);
+  const shuffled = [...followUpChips].sort(() => 0.5 - Math.random()).slice(0, 2);
   shuffled.forEach(chip => {
     const btn = document.createElement('button');
     btn.className = 'chat-starter-chip';
@@ -110,7 +110,8 @@ const INTENT_PATTERNS = [
 ];
 
 function detectAndTrackIntent(text) {
-  if (typeof posthog === 'undefined') return;
+  // Before cookie consent posthog is only an init stub with no capture().
+  if (typeof posthog === 'undefined' || typeof posthog.capture !== 'function') return;
   for (const { type, re } of INTENT_PATTERNS) {
     if (re.test(text)) {
       posthog.capture('contact_intent', {
@@ -218,6 +219,7 @@ if (chatNewChat) chatNewChat.addEventListener('click', clearChat);
 // ── Book AI: open chat pre-loaded with a book question ──
 window.chatOpenWithBook = function(title, author) {
   openChat();
+  const safeTitle = window.escapeHtml(title);
   const starters = document.getElementById('chatStarters');
   if (starters) {
     const arrow = '<svg class="csc-arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg>';
@@ -227,9 +229,9 @@ window.chatOpenWithBook = function(title, author) {
         '<span class="csc-text">' + text + '</span>' + arrow +
       '</button>';
     starters.innerHTML =
-      '<p class="chat-starters-label">Ask about <em>' + title + '</em></p>' +
+      '<p class="chat-starters-label">Ask about <em>' + safeTitle + '</em></p>' +
       chip('💬', 'How did this book shape Panos\u2019 thinking?') +
-      chip('🌟', 'What\u2019s the most surprising idea in \u201c' + title + '\u201d?') +
+      chip('🌟', 'What\u2019s the most surprising idea in \u201c' + safeTitle + '\u201d?') +
       chip('🚀', 'How did this apply to building Givelink?');
     starters.classList.remove('hidden');
   }
@@ -309,4 +311,22 @@ if (chatSizeToggle && chatWidget) {
   }
 
   micBtn.addEventListener('click', startListening);
+})();
+
+// ── Chat nudge: show once per session after 3s, hide on scroll or open ──
+(function () {
+  const nudge = document.getElementById('chatNudge');
+  if (!nudge || sessionStorage.getItem('chat_nudge_dismissed')) return;
+  const t = setTimeout(() => {
+    if (chatWidget.classList.contains('open')) return;
+    nudge.classList.add('show');
+    setTimeout(() => nudge.classList.remove('show'), 5000);
+  }, 3000);
+  function dismiss() {
+    clearTimeout(t);
+    nudge.classList.remove('show');
+    sessionStorage.setItem('chat_nudge_dismissed', '1');
+  }
+  window.addEventListener('scroll', dismiss, { once: true, passive: true });
+  chatToggle.addEventListener('click', dismiss, { once: true });
 })();
