@@ -4,8 +4,14 @@ from __future__ import annotations
 import argparse
 import html.parser
 import pathlib
+import socket
 import sys
+import urllib.error
 import urllib.request
+
+# Only these mean the link is actually dead. Social sites routinely answer CI
+# bots with 403/429/999 or time out, which says nothing about the link itself.
+DEAD_STATUSES = {404, 410}
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 HTML_FILE = ROOT / "index.html"
@@ -36,8 +42,18 @@ def check_internal(hrefs: list[str], ids: set[str]) -> list[str]:
     return errors
 
 
-def check_external(hrefs: list[str], timeout: float) -> list[str]:
+def _fetch_status(url: str, method: str, timeout: float) -> int:
+    req = urllib.request.Request(url, method=method, headers={"User-Agent": "link-checker/1.0"})
+    try:
+        with urllib.request.urlopen(req, timeout=timeout) as resp:
+            return resp.status
+    except urllib.error.HTTPError as exc:
+        return exc.code
+
+
+def check_external(hrefs: list[str], timeout: float) -> tuple[list[str], list[str]]:
     errors: list[str] = []
+    warnings: list[str] = []
     urls = sorted(
         {
             h
@@ -47,24 +63,26 @@ def check_external(hrefs: list[str], timeout: float) -> list[str]:
     )
 
     for url in urls:
-        req = urllib.request.Request(url, method="HEAD", headers={"User-Agent": "link-checker/1.0"})
         try:
-            with urllib.request.urlopen(req, timeout=timeout) as resp:
-                if resp.status >= 400:
-                    errors.append(f"{resp.status} for {url}")
+            status = _fetch_status(url, "HEAD", timeout)
+            if status >= 400:
+                # Some servers reject HEAD; GET is the authoritative answer
+                status = _fetch_status(url, "GET", timeout)
+        except urllib.error.URLError as exc:
+            if isinstance(exc.reason, socket.gaierror):
+                errors.append(f"Domain does not resolve: {url}")
+            else:
+                warnings.append(f"Unreachable: {url} ({exc.reason})")
             continue
-        except Exception:
-            pass
-
-        # Fallback to GET for servers that reject HEAD
-        req = urllib.request.Request(url, method="GET", headers={"User-Agent": "link-checker/1.0"})
-        try:
-            with urllib.request.urlopen(req, timeout=timeout) as resp:
-                if resp.status >= 400:
-                    errors.append(f"{resp.status} for {url}")
         except Exception as exc:
-            errors.append(f"Unreachable: {url} ({exc.__class__.__name__})")
-    return errors
+            warnings.append(f"Unreachable: {url} ({exc.__class__.__name__})")
+            continue
+
+        if status in DEAD_STATUSES:
+            errors.append(f"{status} for {url}")
+        elif status >= 400:
+            warnings.append(f"{status} for {url} (likely bot-blocked; not failing)")
+    return errors, warnings
 
 
 def main() -> int:
@@ -77,8 +95,15 @@ def main() -> int:
     parser_html.feed(HTML_FILE.read_text(encoding="utf-8"))
 
     errors = check_internal(parser_html.hrefs, parser_html.ids)
+    warnings: list[str] = []
     if not args.skip_external:
-        errors.extend(check_external(parser_html.hrefs, args.timeout))
+        ext_errors, warnings = check_external(parser_html.hrefs, args.timeout)
+        errors.extend(ext_errors)
+
+    if warnings:
+        print("⚠️  Link warnings (not failing the build):")
+        for w in warnings:
+            print(f"- {w}")
 
     if errors:
         print("❌ Link check failed:")
