@@ -843,3 +843,34 @@ function toggleAwards(btn) {
   wrap.addEventListener('touchmove', e => { if (dragging) moveDrag(e.touches[0].clientX); }, { passive: true });
   wrap.addEventListener('touchend', e => endDrag(e.changedTouches[0].clientX));
 })();
+
+// ── PostHog: lightweight conversion tracking (no-ops silently without consent) ──
+(function () {
+  function track(event, props) {
+    if (window.posthog && typeof window.posthog.capture === 'function') {
+      window.posthog.capture(event, props || {});
+    }
+  }
+  document.addEventListener('click', e => {
+    const link = e.target.closest('a');
+    if (link) {
+      const href = link.getAttribute('href') || '';
+      if (href === '/goal.html' || href === 'goal.html') {
+        const spot = link.closest('#navbar') ? 'nav' : (link.closest('.hero-actions') ? 'hero' : 'page');
+        track('goal_page_cta_clicked', { spot, page: location.pathname });
+      } else if (href.indexOf('tidycal.com') !== -1) {
+        track('book_call_clicked', { page: location.pathname });
+      } else if (href.indexOf('mailto:') === 0) {
+        track('email_clicked', { page: location.pathname });
+      } else if (href.indexOf('substack.com') !== -1) {
+        track('substack_clicked', { page: location.pathname });
+      }
+    }
+    if (e.target.closest('#tidycalToggle')) {
+      track('booking_widget_toggled', { page: location.pathname });
+    }
+    if (e.target.closest('#chatToggle')) {
+      track('chat_widget_toggled', { page: location.pathname });
+    }
+  });
+})();
