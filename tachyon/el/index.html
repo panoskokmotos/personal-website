@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Tachyon στα Ελληνικά</title>
+  <meta name="description" content="Το Tachyon του Zcash εξηγημένο σαν παραμύθι, τόσο απλά που να το καταλαβαίνει ένα παιδί πέντε χρονών." />
+  <link rel="canonical" href="https://panoskokmotos.com/tachyon/el/" />
+  <link rel="alternate" hreflang="en" href="https://panoskokmotos.com/tachyon/" />
+  <link rel="alternate" hreflang="el" href="https://panoskokmotos.com/tachyon/el/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Tachyon στα Ελληνικά" />
+  <meta property="og:description" content="Το Tachyon του Zcash εξηγημένο σαν παραμύθι, τόσο απλά που να το καταλαβαίνει ένα παιδί πέντε χρονών." />
+  <meta property="og:url" content="https://panoskokmotos.com/tachyon/el/" />
+  <meta name="theme-color" content="#1d2b5c" />
+
+  <!-- Same hardening as the rest of the site; this page needs only its own script, styles and fonts. -->
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'none';
+                 script-src 'self';
+                 style-src 'self';
+                 font-src 'self';
+                 img-src 'self';
+                 connect-src 'none';
+                 frame-src 'none';
+                 object-src 'none';
+                 base-uri 'self';
+                 form-action 'none';
+                 upgrade-insecure-requests;" />
+  <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
+  <meta http-equiv="Permissions-Policy"
+        content="camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=(), browsing-topics=()" />
+
+  <link rel="stylesheet" href="../assets/el.css" />
+  <script src="../assets/app.js" defer></script>
+</head>
+<body>
+<main class="story">
+
+  <header class="hero">
+    <div class="top">
+      <span class="kicker">μια ιστορία για μυστικά χρήματα</span>
+      <a class="lang" href="../" lang="en" hreflang="en">Read in English</a>
+    </div>
+    <h1>Tachyon</h1>
+    <p class="sub">Πώς το Zcash σχεδιάζει να κάνει τα μυστικά του χρήματα <mark>μικρότερα</mark>, <mark>πιο γρήγορα</mark> και πιο εύκολα στη μεταφορά.</p>
+    <figure>
+      <svg viewBox="0 0 420 170" role="img" aria-label="Ένας σφραγισμένος φάκελος με λουκέτο τρέχει προς τα δεξιά, με γραμμές ταχύτητας πίσω του.">
+        <defs>
+          <filter id="wobA"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="2" seed="2"/><feDisplacementMap in="SourceGraphic" scale="3.5"/></filter>
+        </defs>
+        <g filter="url(#wobA)">
+          <path class="s-thin" d="M20 70 H110 M40 95 H120 M10 120 H100"/>
+          <rect class="s-ink f-paper" x="150" y="30" width="190" height="120" rx="6"/>
+          <path class="s-ink" d="M150 36 L245 100 L340 36"/>
+          <rect class="s-ink f-card" x="226" y="96" width="38" height="32" rx="5"/>
+          <path class="s-ink" d="M233 96 V86 a12 12 0 0 1 24 0 V96"/>
+        </g>
+        <text class="t-small" x="345" y="164">φιούουου</text>
+      </svg>
+    </figure>
+    <p class="aside">Το ταχυόνιο (tachyon) είναι ένα φανταστικό σωματίδιο που θα έτρεχε πιο γρήγορα κι από το φως. Ωραίο όνομα για ένα σχέδιο που θέλει να κάνει τα πράγματα γρήγορα.</p>
+  </header>
+
+  <section class="prose">
+    <h2>Πρώτα απ' όλα, τι είναι το Zcash;</h2>
+    <p>Το Zcash είναι χρήματα που μπορείς να στείλεις μέσω ίντερνετ.</p>
+    <p>Το ιδιαίτερο: κάθε πληρωμή ταξιδεύει μέσα σε έναν <mark>σφραγισμένο φάκελο</mark>. Κανείς δεν μπορεί να κρυφοκοιτάξει. Κανείς δεν βλέπει ποιος τον έστειλε, ποιος τον πήρε ή πόσα λεφτά έχει μέσα.</p>
+    <p>Πολλοί υπολογιστές σε όλο τον κόσμο δουλεύουν μαζί σαν ένα τεράστιο <mark>ταχυδρομείο</mark>. Μεταφέρουν τους φακέλους και προσέχουν να μην κλέβει κανείς.</p>
+  </section>
+
+  <section class="prose">
+    <h2>Ποιο είναι λοιπόν το πρόβλημα;</h2>
+    <p>Οι σφραγισμένοι φάκελοι είναι τέλειοι για μυστικά. Φέρνουν όμως δύο προβλήματα.</p>
+
+    <h3>Πρόβλημα 1: κάθε φάκελος είναι βαρύς</h3>
+    <p>Πώς ξέρει το ταχυδρομείο ότι ένας φάκελος έχει αληθινά λεφτά και όχι ψεύτικα; Κάθε φάκελος κουβαλάει ένα χοντρό <mark>τετράδιο με μαθηματικά</mark> που αποδεικνύει ότι είναι τίμιος, χωρίς να τον ανοίξει κανείς.</p>
+    <p>Και το ταχυδρομείο κρατάει ένα σημείωμα από κάθε φάκελο, <mark>για πάντα</mark>. Τα ράφια δεν σταματούν ποτέ να γεμίζουν.</p>
+    <figure>
+      <svg viewBox="0 0 420 210" role="img" aria-label="Τρία ράφια δίπλα δίπλα. Τη μέρα 1 το ράφι έχει δύο σημειώματα, τη μέρα 100 έχει έξι και τη μέρα 1000 ξεχειλίζει.">
+        <defs>
+          <filter id="wobB"><feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="5"/><feDisplacementMap in="SourceGraphic" scale="3"/></filter>
+        </defs>
+        <g filter="url(#wobB)">
+          <path class="s-ink" d="M20 170 H120 M28 170 V40 M112 170 V40"/>
+          <rect class="s-thin f-card" x="40" y="148" width="60" height="18" rx="2"/>
+          <rect class="s-thin f-card" x="44" y="128" width="54" height="18" rx="2"/>
+          <path class="s-ink" d="M160 170 H260 M168 170 V40 M252 170 V40"/>
+          <rect class="s-thin f-card" x="180" y="148" width="60" height="18" rx="2"/>
+          <rect class="s-thin f-card" x="184" y="128" width="54" height="18" rx="2"/>
+          <rect class="s-thin f-card" x="178" y="108" width="62" height="18" rx="2"/>
+          <rect class="s-thin f-card" x="186" y="88" width="52" height="18" rx="2"/>
+          <rect class="s-thin f-card" x="182" y="68" width="58" height="18" rx="2"/>
+          <rect class="s-thin f-card" x="185" y="48" width="54" height="18" rx="2"/>
+          <path class="s-ink" d="M300 170 H400 M308 170 V40 M392 170 V40"/>
+          <rect class="s-thin f-card" x="320" y="148" width="60" height="18" rx="2"/>
+          <rect class="s-thin f-card" x="322" y="128" width="58" height="18" rx="2"/>
+          <rect class="s-thin f-card" x="318" y="108" width="62" height="18" rx="2"/>
+          <rect class="s-thin f-card" x="324" y="88" width="56" height="18" rx="2"/>
+          <rect class="s-thin f-card" x="320" y="68" width="60" height="18" rx="2"/>
+          <rect class="s-thin f-card" x="322" y="48" width="58" height="18" rx="2"/>
+          <rect class="s-thin f-card" x="318" y="28" width="62" height="18" rx="2"/>
+          <rect class="s-thin f-card" x="326" y="8" width="54" height="18" rx="2" transform="rotate(8 353 17)"/>
+          <rect class="s-thin f-card" x="388" y="140" width="26" height="18" rx="2" transform="rotate(-25 400 150)"/>
+        </g>
+        <text class="t-hand" x="70" y="198" text-anchor="middle">μέρα 1</text>
+        <text class="t-hand" x="210" y="198" text-anchor="middle">μέρα 100</text>
+        <text class="t-hand" x="350" y="198" text-anchor="middle">μέρα 1000</text>
+      </svg>
+      <figcaption>Τα ράφια του ταχυδρομείου μόνο γεμίζουν.</figcaption>
+    </figure>
+
+    <h3>Πρόβλημα 2: τα δικά σου γράμματα βρίσκονται αργά</h3>
+    <p>Κάθε φάκελος είναι σφραγισμένος, οπότε το πορτοφόλι σου δεν ξέρει ποιοι είναι για σένα. Σήμερα πρέπει να <mark>δοκιμάσει να ανοίξει κάθε φάκελο</mark> που πέρασε ποτέ από το ταχυδρομείο, μόνο και μόνο για να βρει τους λίγους που είναι δικοί σου.</p>
+    <p>Είναι σαν να ψάχνεις σε κάθε γραμματοκιβώτιο όλης της πόλης για να βρεις την κάρτα για τα γενέθλιά σου.</p>
+  </section>
+
+  <section class="prose">
+    <span class="trick-label">Κόλπο 1 του Tachyon</span>
+    <h2>Κόψε κάθε γράμμα στα δύο</h2>
+    <p>Το Tachyon χωρίζει κάθε πληρωμή σε δύο κομμάτια.</p>
+    <p>Ένα μικρό <mark>σημείωμα άδειας</mark>. Λέει «Επιτρέπεται να ξοδέψω αυτά τα λεφτά» και είναι υπογεγραμμένο, σαν σημείωμα από τους γονείς σου.</p>
+    <p>Και ένα <mark>γραμματόσημο</mark>. Αυτό είναι το βαρύ κομμάτι με τα μαθηματικά, που αποδεικνύει ότι όλα είναι τίμια.</p>
+    <p>Γιατί τόσος κόπος; Γιατί τώρα τα γραμματόσημα μπορούν να στριμωχτούν και να μικρύνουν (αυτό είναι το κόλπο 2), ενώ τα σημειώματα άδειας δεν χρειάζεται να αλλάξουν καθόλου.</p>
+    <figure>
+      <svg viewBox="0 0 440 200" role="img" aria-label="Ένας φάκελος αριστερά χωρίζεται σε δύο κομμάτια δεξιά: ένα μικρό υπογεγραμμένο σημείωμα άδειας και ένα γραμματόσημο με κυματιστή άκρη.">
+        <defs>
+          <filter id="wobC"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="2" seed="8"/><feDisplacementMap in="SourceGraphic" scale="3"/></filter>
+        </defs>
+        <g filter="url(#wobC)">
+          <rect class="s-ink f-paper" x="20" y="55" width="130" height="85" rx="5"/>
+          <path class="s-ink" d="M20 60 L85 105 L150 60"/>
+          <path class="s-blue" d="M170 80 C 210 60, 230 55, 262 50"/>
+          <path class="s-blue" d="M252 42 L264 50 L252 60"/>
+          <path class="s-blue" d="M170 118 C 210 135, 230 145, 262 152"/>
+          <path class="s-blue" d="M252 142 L264 152 L252 162"/>
+          <rect class="s-ink f-paper" x="280" y="18" width="130" height="62" rx="4"/>
+          <path class="s-thin" d="M294 38 H396 M294 52 H370"/>
+          <path class="s-ink" d="M300 70 c8 -10 14 6 22 -4 s12 -6 18 2 s10 -4 16 -2"/>
+          <path class="s-ink f-hl" d="M290 120 q6 -6 12 0 q6 -6 12 0 q6 -6 12 0 q6 -6 12 0 q6 -6 12 0 q6 -6 12 0 q6 -6 12 0 v60 q-6 6 -12 0 q-6 6 -12 0 q-6 6 -12 0 q-6 6 -12 0 q-6 6 -12 0 q-6 6 -12 0 q-6 6 -12 0 z"/>
+          <path class="s-thin" d="M306 140 H362 M306 152 H350 M306 164 H356"/>
+        </g>
+        <text class="t-small" x="186" y="110">κόψιμο!</text>
+        <text class="t-hand" x="345" y="100" text-anchor="middle">σημείωμα άδειας</text>
+        <text class="t-hand" x="335" y="198" text-anchor="middle">γραμματόσημο</text>
+      </svg>
+    </figure>
+    <details class="grownup">
+      <summary>Οι λέξεις των μεγάλων</summary>
+      <div class="gw">
+        <dl>
+          <dt>Bundle (ο φάκελος)</dt>
+          <dd>Περιέχει ένα ή περισσότερα actions, το συνολικό value balance και μία binding signature που τα δένει μεταξύ τους.</dd>
+          <dt>Action (το σημείωμα άδειας)</dt>
+          <dd>Ένα value commitment, ένα randomized verification key και μια spend-authorization signature (RedPallas).</dd>
+          <dt>Stamp (το γραμματόσημο)</dt>
+          <dd>Κουβαλάει τα «tachygrams» (nullifiers και note commitments), ένα anchor και το proof. Μένει χωριστά ώστε τα proofs να μπορούν να συγκεντρωθούν (aggregation), ενώ η εξουσιοδότηση κάθε action μένει όπως είναι.</dd>
+        </dl>
+      </div>
+    </details>
+  </section>
+
+  <section class="prose">
+    <span class="trick-label">Κόλπο 2 του Tachyon</span>
+    <h2>Στρίμωξε πολλά γραμματόσημα σε ένα</h2>
+    <p>Φαντάσου μια σειρά από παιδιά που διορθώνουν εργασίες.</p>
+    <p>Το πρώτο παιδί ελέγχει ένα φύλλο και δίνει ένα <mark>χρυσό αστεράκι</mark>. Το επόμενο παιδί ελέγχει το δικό του φύλλο <em>και</em> το αστεράκι του πρώτου, και δίνει ένα καινούργιο αστεράκι. Και πάει λέγοντας.</p>
+    <p>Στο τέλος, η δασκάλα κοιτάζει μόνο <mark>ένα αστεράκι</mark>. Αυτό το ένα αστεράκι σημαίνει ότι ελέγχθηκαν όλα τα φύλλα. Και έχει το ίδιο μέγεθος, είτε ήταν 3 φύλλα είτε 300.</p>
+    <p>Το Tachyon κάνει το ίδιο με τα γραμματόσημα. Μπαίνουν πολλά γραμματόσημα. Βγαίνει μία μικρή απόδειξη. Το ταχυδρομείο ελέγχει μόνο αυτήν.</p>
+
+    <div class="play">
+      <p class="say">Φύλλα εργασίας: <b id="sheetCount">12</b></p>
+      <div class="row">
+        <div class="sheets" id="sheets" aria-hidden="true"></div>
+        <div class="arrow">τα παιδιά<br/>ελέγχουν<br/>→</div>
+        <div class="star-wrap">
+          <svg viewBox="0 0 64 64" role="img" aria-label="Ένα χρυσό αστεράκι">
+            <path class="f-star" d="M32 5 L40 23 L59 24 L44 37 L49 57 L32 46 L15 57 L20 37 L5 24 L24 23 Z"/>
+          </svg>
+          <span>πάλι 1 αστεράκι</span>
+        </div>
+      </div>
+      <label class="hand" for="sheetSlider">Σύρε για να προσθέσεις κι άλλες εργασίες:</label>
+      <input type="range" id="sheetSlider" min="1" max="300" value="12">
+      <p class="say" id="sheetSay">12 φύλλα ελέγχθηκαν. Η δασκάλα κοιτάζει <b>1 αστεράκι</b>.</p>
+    </div>
+    <p class="hand">Αυτή είναι μια εικόνα της ιδέας, όχι μέτρηση.</p>
+
+    <details class="grownup">
+      <summary>Οι λέξεις των μεγάλων</summary>
+      <div class="gw">
+        <p>Η «σειρά από παιδιά» λέγεται <strong>proof-carrying data</strong> (PCD): αναδρομικά proofs, όπου κάθε βήμα επαληθεύει το προηγούμενο. Το πλαίσιο PCD του Tachyon λέγεται <strong>Ragu</strong>, μια παραλλαγή της κατασκευής αναδρομικών SNARK από το Halo, φτιαγμένη για τις καμπύλες Pasta που ήδη χρησιμοποιεί το Zcash. Ο δηλωμένος στόχος του έργου είναι shielded συναλλαγές περίπου <strong>100 φορές μικρότερες</strong> από σήμερα.</p>
+      </div>
+    </details>
+  </section>
+
+  <section class="prose">
+    <span class="trick-label">Κόλπο 3 του Tachyon</span>
+    <h2>Άνοιξε μόνο τα δικά σου γράμματα</h2>
+    <p>Θυμάσαι το πρόβλημα 2; Το Tachyon το λύνει με έναν απλό τρόπο. Αυτός που σε πληρώνει σού δίνει τα στοιχεία του γράμματός σου <mark>κατευθείαν</mark>, σαν να σου περνάει ένα σημείωμα στην τάξη. Έτσι το πορτοφόλι σου δεν χρειάζεται ποτέ να ανοίξει τους φακέλους των άλλων.</p>
+    <p>Κι όσο το πορτοφόλι σου κοιμάται, ένας <mark>βοηθός</mark> προσέχει το ταχυδρομείο γι' αυτό. Ο βοηθός κάνει αυτή τη δουλειά χωρίς να μάθει ποτέ τα μυστικά σου.</p>
+
+    <div class="play">
+      <div class="toggle" role="group" aria-label="Διάλεξε πώς βρίσκει το πορτοφόλι τα γράμματά του">
+        <button type="button" id="btnOld" aria-pressed="true">Ο παλιός τρόπος</button>
+        <button type="button" id="btnNew" aria-pressed="false">Ο τρόπος του Tachyon</button>
+      </div>
+      <div class="envelopes" id="envelopes" aria-hidden="true"></div>
+      <p class="say" id="mailSay">Το πορτοφόλι σου δοκιμάζει <b>και τους 12</b> φακέλους. Μόνο οι 2 είναι δικοί σου.</p>
+    </div>
+
+    <details class="grownup">
+      <summary>Οι λέξεις των μεγάλων</summary>
+      <div class="gw">
+        <p>Σήμερα τα πορτοφόλια κάνουν trial decryption σε κάθε shielded output για να βρουν τα δικά τους notes. Στο Tachyon οι πληρωμές παραδίδονται <strong>out of band</strong>: ο αποστολέας δίνει τα στοιχεία του note απευθείας στον παραλήπτη, για παράδειγμα σε ένα αίτημα πληρωμής ή ένα URI, οπότε τα κρυπτογραφημένα notes δεν μπαίνουν πια στην αλυσίδα. Τα πορτοφόλια μπορούν να αναθέσουν την παρακολούθηση των νέων blocks σε μια <strong>oblivious syncing service</strong>, στην οποία δεν εμπιστεύονται ιδιωτικές πληροφορίες.</p>
+      </div>
+    </details>
+  </section>
+
+  <section class="prose">
+    <h2>Και τα ράφια;</h2>
+    <p>Με το Tachyon, το πορτοφόλι σου κουβαλάει <mark>το δικό του χρυσό αστεράκι</mark> που αποδεικνύει ότι τα λεφτά του είναι αληθινά. Έτσι το ταχυδρομείο χρειάζεται να θυμάται μόνο τα πιο καινούργια σημάδια «αυτό ξοδεύτηκε ήδη». Όλα τα παλιά μπορούν να πάνε στην ανακύκλωση.</p>
+    <p>Τα ράφια <mark>σταματούν να γεμίζουν για πάντα</mark>. Αυτό ήταν το πρόβλημα 1.</p>
+    <p>Και ένα μπόνους ακόμα: τα μυστικά σημειώματα που κάθονταν μέσα σε κάθε φάκελο δεν φυλάγονται πια στο ταχυδρομείο. Άρα μένουν λιγότερα πράγματα για να προσπαθήσουν να σπάσουν οι πανίσχυροι <mark>κβαντικοί υπολογιστές</mark> που ίσως φτιαχτούν κάποια μέρα.</p>
+    <details class="grownup">
+      <summary>Οι λέξεις των μεγάλων</summary>
+      <div class="gw">
+        <p>Το state του πορτοφολιού αναπαρίσταται ως <strong>proof-carrying data</strong>, που επισυνάπτεται όταν ξοδεύει. Έτσι οι validators χρειάζονται μόνο τα πρόσφατα anchors και τους nullifiers που αποκαλύφθηκαν πρόσφατα, και μπορούν να κάνουν pruning σχεδόν σε όλα τα υπόλοιπα ενός block. Η αφαίρεση των κρυπτογραφημένων notes από την αλυσίδα αφαιρεί επίσης ευαίσθητα δεδομένα που δεν προστατεύονται ακόμα από κρυπτογραφία ανθεκτική σε κβαντικούς υπολογιστές.</p>
+      </div>
+    </details>
+  </section>
+
+  <section class="prose">
+    <h2>Έχει τελειώσει;</h2>
+    <p>Όχι ακόμα. Κάποιοι άνθρωποι το φτιάχνουν αυτή τη στιγμή. Να τι έχει γίνει μέχρι τώρα.</p>
+    <ul class="checks">
+      <li class="done"><span class="box"></span><span><span class="what">Δημιουργία μυστικών κλειδιών</span><span class="small">key derivation</span></span></li>
+      <li class="done"><span class="box"></span><span><span class="what">Κρύψιμο των ποσών</span><span class="small">value commitments (Pedersen, καμπύλη Pallas)</span></span></li>
+      <li class="done"><span class="box"></span><span><span class="what">Υπογραφή των σημειωμάτων άδειας</span><span class="small">spend authorization signatures (RedPallas)</span></span></li>
+      <li class="done"><span class="box"></span><span><span class="what">Έλεγχος ότι ο φάκελος βγάζει σωστό λογαριασμό</span><span class="small">binding signatures, bundle verification</span></span></li>
+      <li class="todo"><span class="box"></span><span><span class="what">Τα σημάδια «ξοδεύτηκε ήδη»</span><span class="small">note commitments, nullifier derivation</span></span></li>
+      <li class="todo"><span class="box"></span><span><span class="what">Φτιάξιμο και στρίμωγμα των γραμματοσήμων</span><span class="small">proofs και stamp compression, περιμένουν το Ragu και το Poseidon</span></span></li>
+    </ul>
+    <p class="note">Ακόμα κι όταν ολοκληρωθεί, δεν θα ανάψει απλώς με ένα κουμπί. Πρώτα πρέπει να συμφωνήσει η κοινότητα του Zcash.</p>
+  </section>
+
+  <footer>
+    <p>Θέλεις να δεις το πραγματικό; Όλα φτιάχνονται ανοιχτά, μπροστά σε όλους.</p>
+    <div class="links">
+      <a href="https://tachyon.z.cash/" target="_blank" rel="noopener">tachyon.z.cash</a>
+      <a href="https://github.com/tachyon-zcash/tachyon" target="_blank" rel="noopener">tachyon-zcash/tachyon</a>
+      <a href="https://github.com/tachyon-zcash/ragu" target="_blank" rel="noopener">tachyon-zcash/ragu</a>
+    </div>
+    <p>Αυτός είναι ένας ανεπίσημος οδηγός, γραμμένος από ένα μέλος της κοινότητας. Δεν έχει φτιαχτεί ούτε εγκριθεί από την Electric Coin Co., το Zcash Foundation ή την ομάδα του Tachyon. Οι παιδικές συγκρίσεις απλοποιούν την πραγματική κρυπτογραφία. Για οτιδήποτε ακριβές, διάβασε τις πηγές (στα αγγλικά):</p>
+    <ul>
+      <li><a href="https://tachyon.z.cash/" target="_blank" rel="noopener">tachyon.z.cash</a>: στόχοι, εύρος, έγκριση από την κοινότητα</li>
+      <li><a href="https://github.com/tachyon-zcash/tachyon" target="_blank" rel="noopener">tachyon-zcash/tachyon</a>: bundles, actions, stamps και πρόοδος</li>
+      <li><a href="https://github.com/tachyon-zcash/ragu" target="_blank" rel="noopener">tachyon-zcash/ragu</a>: το πλαίσιο proof-carrying data</li>
+      <li><a href="https://seanbowe.com/blog/tachyon-scaling-zcash-oblivious-synchronization/" target="_blank" rel="noopener">Sean Bowe, "Tachyon: Scaling Zcash with Oblivious Synchronization"</a>: πληρωμές out of band, proofs πορτοφολιού, pruning</li>
+    </ul>
+    <p>Κώδικας και κείμενο: <a href="https://github.com/panoskokmotos/personal-website/tree/main/tachyon" target="_blank" rel="noopener">άδεια MIT στο GitHub</a>. Οι διορθώσεις είναι ευπρόσδεκτες.</p>
+  </footer>
+</main>
+</body>
+</html>
