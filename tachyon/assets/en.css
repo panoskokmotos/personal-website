@@ -1,0 +1,163 @@
+@font-face{font-family:'Baloo 2';font-style:normal;font-weight:600 800;font-display:swap;src:url(fonts/Baloo2-latin.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:'Atkinson Hyperlegible';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/AtkinsonHyperlegible-400-latin.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:'Atkinson Hyperlegible';font-style:normal;font-weight:700;font-display:swap;src:url(fonts/AtkinsonHyperlegible-700-latin.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:'Patrick Hand';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/PatrickHand-latin.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+
+/* layout: a school notebook page (light) / a classroom chalkboard (dark).
+   one narrow story column, a hand-drawn picture for every idea */
+:root{
+  --paper:#ffffff; --rule:#e3ecf7; --margin:#f3c2ba; --ink:#1d2b5c; --pencil:#5f6a86;
+  --hl:rgba(255,214,64,.55); --star:#f2b705; --red:#cf3f2b; --green:#2b8a3e; --blue:#2f6fde;
+  --card:#f6f8fc; --line:rgba(29,43,92,.16);
+  --font-display:'Baloo 2','Trebuchet MS',system-ui,sans-serif;
+  --font-body:'Atkinson Hyperlegible',Verdana,system-ui,sans-serif;
+  --font-hand:'Patrick Hand','Comic Sans MS','Segoe Print',cursive;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#1e2c26; --rule:#26372f; --margin:#4c3632; --ink:#eef2ea; --pencil:#a7b4ab;
+    --hl:rgba(245,215,110,.28); --star:#f5d76e; --red:#ff8f7d; --green:#8fd99a; --blue:#8db9ff;
+    --card:#25352e; --line:rgba(238,242,234,.16);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#1e2c26; --rule:#26372f; --margin:#4c3632; --ink:#eef2ea; --pencil:#a7b4ab;
+  --hl:rgba(245,215,110,.28); --star:#f5d76e; --red:#ff8f7d; --green:#8fd99a; --blue:#8db9ff;
+  --card:#25352e; --line:rgba(238,242,234,.16);
+  color-scheme: dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+[hidden]{display:none!important}
+img{max-width:100%}
+body{
+  background-color:var(--paper);
+  background-image:
+    linear-gradient(to right, transparent 0, transparent 46px, var(--margin) 46px, var(--margin) 48px, transparent 48px),
+    repeating-linear-gradient(to bottom, transparent 0, transparent 31px, var(--rule) 31px, var(--rule) 32px);
+  color:var(--ink); font-family:var(--font-body); font-size:18px; line-height:1.6;
+  padding-left:max(16px, env(safe-area-inset-left,0px));
+  padding-right:max(16px, env(safe-area-inset-right,0px));
+}
+@media (max-width:600px){ body{background-image:repeating-linear-gradient(to bottom, transparent 0, transparent 31px, var(--rule) 31px, var(--rule) 32px); font-size:17px} }
+.story{max-width:700px; margin:0 auto; padding-block:48px 80px; display:flex; flex-direction:column; gap:64px}
+h1,h2,h3{font-family:var(--font-display); line-height:1.15; text-wrap:balance; margin:0}
+h1{font-size:clamp(52px,11vw,88px); font-weight:800; letter-spacing:-.01em}
+h2{font-size:clamp(28px,5vw,38px); font-weight:700}
+h3{font-size:24px; font-weight:700}
+p{margin:0}
+.prose{display:flex; flex-direction:column; gap:14px}
+mark{background:linear-gradient(to top, var(--hl) 0 45%, transparent 45%); color:inherit; padding:0 2px}
+.hand{font-family:var(--font-hand); font-size:20px; color:var(--pencil)}
+.kicker{font-family:var(--font-hand); font-size:22px; color:var(--blue)}
+
+.hero{display:flex; flex-direction:column; gap:16px}
+.hero .top{display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap}
+.lang{font-family:var(--font-body); font-size:15px; color:var(--blue); border:2px solid var(--line); border-radius:999px; padding:3px 12px; text-decoration:none}
+.lang:hover{border-color:var(--blue)}
+.lang:focus-visible{outline:3px solid var(--blue); outline-offset:2px}
+.hero .sub{font-size:21px; max-width:34ch}
+.hero .aside{font-family:var(--font-hand); font-size:19px; color:var(--pencil); max-width:44ch}
+
+figure{margin:0; display:flex; flex-direction:column; gap:6px}
+figure svg{width:100%; height:auto; display:block; max-width:100%}
+figcaption{font-family:var(--font-hand); font-size:18px; color:var(--pencil); text-align:center}
+
+/* svg classes (page css styles inline svg) */
+.s-ink{stroke:var(--ink); fill:none; stroke-width:2.4; stroke-linecap:round; stroke-linejoin:round}
+.s-thin{stroke:var(--ink); fill:none; stroke-width:1.6; stroke-linecap:round}
+.s-dash{stroke:var(--red); fill:none; stroke-width:1.8; stroke-dasharray:5 6; stroke-linecap:round}
+.s-blue{stroke:var(--blue); fill:none; stroke-width:2.6; stroke-linecap:round; stroke-linejoin:round}
+.f-paper{fill:var(--paper)}
+.f-card{fill:var(--card)}
+.f-star{fill:var(--star); stroke:var(--ink); stroke-width:2; stroke-linejoin:round}
+.f-red{fill:var(--red)}
+.f-blue{fill:var(--blue)}
+.f-hl{fill:var(--hl)}
+.t-hand{font-family:var(--font-hand); fill:var(--ink); font-size:19px}
+.t-small{font-family:var(--font-hand); fill:var(--pencil); font-size:16px}
+.t-red{font-family:var(--font-hand); fill:var(--red); font-size:18px}
+.t-blue{font-family:var(--font-hand); fill:var(--blue); font-size:18px}
+
+.trick-label{
+  display:inline-block; align-self:flex-start; font-family:var(--font-display); font-weight:700; font-size:16px;
+  color:var(--paper); background:var(--blue); border-radius:999px; padding:2px 14px;
+  transform:rotate(-2deg);
+}
+
+/* grown-up words */
+details.grownup{border:2px dashed var(--line); border-radius:14px; background:var(--card)}
+details.grownup summary{
+  cursor:pointer; list-style:none; padding:10px 16px; font-family:var(--font-hand); font-size:19px; color:var(--pencil);
+}
+details.grownup summary::-webkit-details-marker{display:none}
+details.grownup summary::before{content:"+ "; color:var(--blue)}
+details.grownup[open] summary::before{content:"– "}
+details.grownup .gw{padding:0 16px 14px; font-size:15.5px; line-height:1.55; display:flex; flex-direction:column; gap:8px}
+details.grownup dt{font-weight:700}
+details.grownup dd{margin:0 0 6px}
+details.grownup code{font-size:14px}
+
+/* homework demo */
+.play{
+  border:2.5px solid var(--ink); border-radius:18px; background:var(--card);
+  padding:18px; display:flex; flex-direction:column; gap:14px;
+  box-shadow:4px 5px 0 var(--line);
+}
+.play .row{display:flex; align-items:center; gap:14px}
+.sheets{display:flex; flex-wrap:wrap; gap:5px; flex:1; min-width:0; min-height:70px; align-content:flex-start}
+.sheet{width:14px; height:18px; background:var(--paper); border:1.5px solid var(--ink); border-radius:2px; flex:0 0 auto}
+.more{font-family:var(--font-hand); font-size:17px; color:var(--pencil); align-self:center}
+.arrow{font-family:var(--font-hand); font-size:18px; color:var(--pencil); text-align:center; flex:0 0 auto; line-height:1.2}
+.star-wrap{flex:0 0 auto; width:76px; text-align:center}
+.star-wrap svg{width:64px; height:64px}
+.star-wrap span{font-family:var(--font-hand); font-size:16px; color:var(--pencil); display:block}
+input[type=range]{width:100%; accent-color:var(--blue); height:28px}
+.say{font-family:var(--font-hand); font-size:21px}
+.say b{color:var(--blue); font-weight:400}
+
+/* mailbox demo */
+.toggle{display:flex; gap:8px; flex-wrap:wrap}
+.toggle button{
+  font-family:var(--font-display); font-weight:700; font-size:17px; cursor:pointer;
+  border:2.5px solid var(--ink); border-radius:999px; background:var(--paper); color:var(--ink); padding:4px 16px;
+}
+.toggle button[aria-pressed="true"]{background:var(--ink); color:var(--paper)}
+.toggle button:focus-visible, input:focus-visible, summary:focus-visible{outline:3px solid var(--blue); outline-offset:2px}
+.envelopes{display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:10px}
+@media (max-width:480px){ .envelopes{grid-template-columns:repeat(4,minmax(0,1fr))} }
+.env{position:relative}
+.env svg{width:100%; height:auto; display:block}
+.env .mark{position:absolute; top:-8px; right:-4px; font-family:var(--font-hand); font-size:18px; line-height:1}
+.env.tried .e-body{stroke:var(--red)}
+.env.mine .e-body{stroke:var(--blue); stroke-width:3.4}
+.env.mine .e-fill{fill:var(--hl)}
+.env.skip{opacity:.35}
+
+/* checklist */
+.checks{list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:12px}
+.checks li{display:flex; gap:12px; align-items:flex-start}
+.box{
+  flex:0 0 auto; width:26px; height:26px; border:2.5px solid var(--ink); border-radius:5px;
+  margin-top:2px; position:relative; transform:rotate(-3deg);
+}
+.done .box::after{
+  content:""; position:absolute; left:6px; top:-6px; width:9px; height:18px;
+  border:solid var(--green); border-width:0 4px 4px 0; transform:rotate(40deg);
+}
+.checks .small{display:block; font-size:14.5px; color:var(--pencil)}
+.todo .what{color:var(--pencil)}
+
+.note{
+  font-family:var(--font-hand); font-size:20px; background:var(--card);
+  border:2px solid var(--line); border-radius:14px; padding:14px 18px; transform:rotate(-.6deg);
+}
+
+footer{display:flex; flex-direction:column; gap:14px; font-size:15px; color:var(--pencil); border-top:2px dashed var(--line); padding-top:24px}
+footer a{color:var(--blue)}
+footer ul{margin:0; padding-left:20px}
+.links{display:flex; flex-wrap:wrap; gap:8px 18px}
+
+@media (prefers-reduced-motion: reduce){ *{transition:none!important; animation:none!important} }

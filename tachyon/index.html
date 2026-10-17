@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Project Tachyon</title>
+  <meta name="description" content="A storybook explainer of Zcash's Tachyon upgrade, simple enough for a five-year-old, with the real terms for grown-ups." />
+  <link rel="canonical" href="https://panoskokmotos.com/tachyon/" />
+  <link rel="alternate" hreflang="en" href="https://panoskokmotos.com/tachyon/" />
+  <link rel="alternate" hreflang="el" href="https://panoskokmotos.com/tachyon/el/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Project Tachyon" />
+  <meta property="og:description" content="A storybook explainer of Zcash's Tachyon upgrade, simple enough for a five-year-old, with the real terms for grown-ups." />
+  <meta property="og:url" content="https://panoskokmotos.com/tachyon/" />
+  <meta name="theme-color" content="#1d2b5c" />
+
+  <!-- Same hardening as the rest of the site; this page needs only its own script, styles and fonts. -->
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'none';
+                 script-src 'self';
+                 style-src 'self';
+                 font-src 'self';
+                 img-src 'self';
+                 connect-src 'none';
+                 frame-src 'none';
+                 object-src 'none';
+                 base-uri 'self';
+                 form-action 'none';
+                 upgrade-insecure-requests;" />
+  <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
+  <meta http-equiv="Permissions-Policy"
+        content="camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=(), browsing-topics=()" />
+
+  <link rel="stylesheet" href="assets/en.css" />
+  <script src="assets/app.js" defer></script>
+</head>
+<body>
+<main class="story">
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="top">
+      <span class="kicker">a story about secret money</span>
+      <a class="lang" href="el/" lang="el" hreflang="el">Διάβασε στα Ελληνικά</a>
+    </div>
+    <h1>Tachyon</h1>
+    <p class="sub">How Zcash plans to make its secret money <mark>smaller</mark>, <mark>faster</mark>, and easier to carry around.</p>
+    <figure>
+      <svg viewBox="0 0 420 170" role="img" aria-label="A sealed envelope with a padlock on it, zooming to the right with speed lines behind it.">
+        <defs>
+          <filter id="wobA"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="2" seed="2"/><feDisplacementMap in="SourceGraphic" scale="3.5"/></filter>
+        </defs>
+        <g filter="url(#wobA)">
+          <path class="s-thin" d="M20 70 H110 M40 95 H120 M10 120 H100"/>
+          <rect class="s-ink f-paper" x="150" y="30" width="190" height="120" rx="6"/>
+          <path class="s-ink" d="M150 36 L245 100 L340 36"/>
+          <rect class="s-ink f-card" x="226" y="96" width="38" height="32" rx="5"/>
+          <path class="s-ink" d="M233 96 V86 a12 12 0 0 1 24 0 V96"/>
+        </g>
+        <text class="t-small" x="350" y="160">whoosh</text>
+      </svg>
+    </figure>
+    <p class="aside">A tachyon is a made-up particle that would go faster than light. Pretty good name for a plan to make things fast.</p>
+  </header>
+
+  <!-- WHAT IS ZCASH -->
+  <section class="prose">
+    <h2>First, what's Zcash?</h2>
+    <p>Zcash is money you can send over the internet.</p>
+    <p>The special thing about it: every payment travels inside a <mark>sealed envelope</mark>. Nobody can peek in. Nobody can see who sent it, who got it, or how much was inside.</p>
+    <p>Lots of computers around the world work together like one giant <mark>post office</mark>. They pass the envelopes along and make sure nobody cheats.</p>
+  </section>
+
+  <!-- PROBLEMS -->
+  <section class="prose">
+    <h2>So what's the problem?</h2>
+    <p>Sealed envelopes are great for secrets. But they cause two headaches.</p>
+
+    <h3>Headache 1: every envelope is heavy</h3>
+    <p>How does the post office know an envelope has real money in it, and not fake money? Each one carries a thick <mark>math booklet</mark> that proves it's honest, without opening it.</p>
+    <p>And the post office keeps a little note from every envelope, <mark>forever</mark>. The shelves never stop filling up.</p>
+    <figure>
+      <svg viewBox="0 0 420 210" role="img" aria-label="Three shelves side by side. On day 1 the shelf has two notes, on day 100 it has six, and on day 1000 it is overflowing.">
+        <defs>
+          <filter id="wobB"><feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="5"/><feDisplacementMap in="SourceGraphic" scale="3"/></filter>
+        </defs>
+        <g filter="url(#wobB)">
+          <!-- shelf 1 -->
+          <path class="s-ink" d="M20 170 H120 M28 170 V40 M112 170 V40"/>
+          <rect class="s-thin f-card" x="40" y="148" width="60" height="18" rx="2"/>
+          <rect class="s-thin f-card" x="44" y="128" width="54" height="18" rx="2"/>
+          <!-- shelf 2 -->
+          <path class="s-ink" d="M160 170 H260 M168 170 V40 M252 170 V40"/>
+          <rect class="s-thin f-card" x="180" y="148" width="60" height="18" rx="2"/>
+          <rect class="s-thin f-card" x="184" y="128" width="54" height="18" rx="2"/>
+          <rect class="s-thin f-card" x="178" y="108" width="62" height="18" rx="2"/>
+          <rect class="s-thin f-card" x="186" y="88" width="52" height="18" rx="2"/>
+          <rect class="s-thin f-card" x="182" y="68" width="58" height="18" rx="2"/>
+          <rect class="s-thin f-card" x="185" y="48" width="54" height="18" rx="2"/>
+          <!-- shelf 3 -->
+          <path class="s-ink" d="M300 170 H400 M308 170 V40 M392 170 V40"/>
+          <rect class="s-thin f-card" x="320" y="148" width="60" height="18" rx="2"/>
+          <rect class="s-thin f-card" x="322" y="128" width="58" height="18" rx="2"/>
+          <rect class="s-thin f-card" x="318" y="108" width="62" height="18" rx="2"/>
+          <rect class="s-thin f-card" x="324" y="88" width="56" height="18" rx="2"/>
+          <rect class="s-thin f-card" x="320" y="68" width="60" height="18" rx="2"/>
+          <rect class="s-thin f-card" x="322" y="48" width="58" height="18" rx="2"/>
+          <rect class="s-thin f-card" x="318" y="28" width="62" height="18" rx="2"/>
+          <rect class="s-thin f-card" x="326" y="8" width="54" height="18" rx="2" transform="rotate(8 353 17)"/>
+          <rect class="s-thin f-card" x="388" y="140" width="26" height="18" rx="2" transform="rotate(-25 400 150)"/>
+        </g>
+        <text class="t-hand" x="70" y="198" text-anchor="middle">day 1</text>
+        <text class="t-hand" x="210" y="198" text-anchor="middle">day 100</text>
+        <text class="t-hand" x="350" y="198" text-anchor="middle">day 1000</text>
+      </svg>
+      <figcaption>The post office's shelves only ever get fuller.</figcaption>
+    </figure>
+
+    <h3>Headache 2: finding your own mail is slow</h3>
+    <p>Every envelope is sealed, so your wallet can't tell which ones are for you. Today it has to <mark>try opening every single envelope</mark> the post office has ever handled, just to find the few that are yours.</p>
+    <p>That's like checking every mailbox in the whole city to find your birthday card.</p>
+  </section>
+
+  <!-- TRICK 1 -->
+  <section class="prose">
+    <span class="trick-label">Tachyon trick 1</span>
+    <h2>Split each letter in two</h2>
+    <p>Tachyon cuts every payment into two parts.</p>
+    <p>A small <mark>permission slip</mark>. It says "I'm allowed to spend this money," and it's signed, like a note from your parents.</p>
+    <p>And a <mark>stamp</mark>. That's the heavy math part that proves everything is honest.</p>
+    <p>Why bother? Because now the stamps can be squished down (that's trick 2) and the permission slips don't have to change at all.</p>
+    <figure>
+      <svg viewBox="0 0 440 200" role="img" aria-label="An envelope on the left splits into two parts on the right: a small signed permission slip, and a stamp with a wavy edge.">
+        <defs>
+          <filter id="wobC"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="2" seed="8"/><feDisplacementMap in="SourceGraphic" scale="3"/></filter>
+        </defs>
+        <g filter="url(#wobC)">
+          <rect class="s-ink f-paper" x="20" y="55" width="130" height="85" rx="5"/>
+          <path class="s-ink" d="M20 60 L85 105 L150 60"/>
+          <path class="s-blue" d="M170 80 C 210 60, 230 55, 262 50"/>
+          <path class="s-blue" d="M252 42 L264 50 L252 60"/>
+          <path class="s-blue" d="M170 118 C 210 135, 230 145, 262 152"/>
+          <path class="s-blue" d="M252 142 L264 152 L252 162"/>
+          <!-- slip -->
+          <rect class="s-ink f-paper" x="280" y="18" width="130" height="62" rx="4"/>
+          <path class="s-thin" d="M294 38 H396 M294 52 H370"/>
+          <path class="s-ink" d="M300 70 c8 -10 14 6 22 -4 s12 -6 18 2 s10 -4 16 -2"/>
+          <!-- stamp -->
+          <path class="s-ink f-hl" d="M290 120 q6 -6 12 0 q6 -6 12 0 q6 -6 12 0 q6 -6 12 0 q6 -6 12 0 q6 -6 12 0 q6 -6 12 0 v60 q-6 6 -12 0 q-6 6 -12 0 q-6 6 -12 0 q-6 6 -12 0 q-6 6 -12 0 q-6 6 -12 0 q-6 6 -12 0 z"/>
+          <path class="s-thin" d="M306 140 H362 M306 152 H350 M306 164 H356"/>
+        </g>
+        <text class="t-small" x="190" y="110">split!</text>
+        <text class="t-hand" x="345" y="98" text-anchor="middle">permission slip</text>
+        <text class="t-hand" x="335" y="198" text-anchor="middle">stamp (heavy math)</text>
+      </svg>
+    </figure>
+    <details class="grownup">
+      <summary>The grown-up words</summary>
+      <div class="gw">
+        <dl>
+          <dt>Bundle</dt>
+          <dd>The envelope. Holds one or more actions, the overall value balance, and one binding signature that ties them together.</dd>
+          <dt>Action</dt>
+          <dd>The permission slip. A value commitment, a randomized verification key, and a spend-authorization signature (RedPallas).</dd>
+          <dt>Stamp</dt>
+          <dd>The heavy part. Carries the "tachygrams" (nullifiers and note commitments), an anchor, and the proof. Kept separate so proofs can be aggregated while the action authorizations stay as they are.</dd>
+        </dl>
+      </div>
+    </details>
+  </section>
+
+  <!-- TRICK 2 -->
+  <section class="prose">
+    <span class="trick-label">Tachyon trick 2</span>
+    <h2>Squish lots of stamps into one</h2>
+    <p>Picture a line of kids checking homework.</p>
+    <p>The first kid checks a sheet and hands over a <mark>gold star</mark>. The next kid checks their own sheet <em>and</em> the first kid's star, then hands over a new star. And on down the line.</p>
+    <p>At the end, the teacher only has to look at <mark>one star</mark>. That one star means every sheet got checked. And the star is the same size whether there were 3 sheets or 300.</p>
+    <p>Tachyon does this with stamps. Lots of stamps go in. One small proof comes out. The post office checks just that one.</p>
+
+    <div class="play">
+      <p class="say">Homework sheets: <b id="sheetCount">12</b></p>
+      <div class="row">
+        <div class="sheets" id="sheets" aria-hidden="true"></div>
+        <div class="arrow">kids<br/>check<br/>→</div>
+        <div class="star-wrap">
+          <svg viewBox="0 0 64 64" role="img" aria-label="One gold star">
+            <path class="f-star" d="M32 5 L40 23 L59 24 L44 37 L49 57 L32 46 L15 57 L20 37 L5 24 L24 23 Z"/>
+          </svg>
+          <span>still 1 star</span>
+        </div>
+      </div>
+      <label class="hand" for="sheetSlider">Slide to add more homework:</label>
+      <input type="range" id="sheetSlider" min="1" max="300" value="12">
+      <p class="say" id="sheetSay">12 sheets checked. The teacher looks at <b>1 star</b>.</p>
+    </div>
+    <p class="hand">This is a picture of the idea, not a measurement.</p>
+
+    <details class="grownup">
+      <summary>The grown-up words</summary>
+      <div class="gw">
+        <p>The "line of kids" is <strong>proof-carrying data</strong> (PCD): recursive proofs where each step verifies the previous one. Tachyon's PCD framework is <strong>Ragu</strong>, a modified version of the recursive SNARK construction from Halo, built to work on the Pasta curves Zcash already uses. The project's stated goal is shielded transactions roughly <strong>100× smaller</strong> than today.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- TRICK 3 -->
+  <section class="prose">
+    <span class="trick-label">Tachyon trick 3</span>
+    <h2>Only open your own mail</h2>
+    <p>Remember headache 2? Tachyon fixes it in a simple way. The person paying you hands you the details of your letter <mark>directly</mark>, like passing a note in class. So your wallet never has to open anyone else's envelopes.</p>
+    <p>And while your wallet is asleep, a <mark>helper</mark> keeps an eye on the post office for it. The helper does this job without ever learning your secrets.</p>
+
+    <div class="play">
+      <div class="toggle" role="group" aria-label="Choose how the wallet finds its mail">
+        <button type="button" id="btnOld" aria-pressed="true">The old way</button>
+        <button type="button" id="btnNew" aria-pressed="false">The Tachyon way</button>
+      </div>
+      <div class="envelopes" id="envelopes" aria-hidden="true"></div>
+      <p class="say" id="mailSay">Your wallet tries <b>all 12</b> envelopes. Only 2 are yours.</p>
+    </div>
+
+    <details class="grownup">
+      <summary>The grown-up words</summary>
+      <div class="gw">
+        <p>Today, wallets trial-decrypt every shielded output to find their own notes. In Tachyon, payments are delivered <strong>out of band</strong>: the sender gives the recipient the note information directly, for example in a payment request or URI, so note ciphertexts no longer go on chain. Wallets can hand the work of following new blocks to an <strong>oblivious syncing service</strong>, which is not trusted with private information.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- BONUS -->
+  <section class="prose">
+    <h2>And the shelves?</h2>
+    <p>With Tachyon, your wallet carries <mark>its own gold star</mark> that proves its money is real. So the post office only has to remember the newest "already spent" markers. Everything older can go in the recycling bin.</p>
+    <p>The shelves <mark>stop filling up forever</mark>. That was headache 1.</p>
+    <p>One more bonus: the secret notes that used to sit inside every envelope aren't kept at the post office anymore. That leaves less for the super-powerful <mark>quantum computers</mark> people might build one day to try to crack.</p>
+    <details class="grownup">
+      <summary>The grown-up words</summary>
+      <div class="gw">
+        <p>The wallet's state is represented as <strong>proof-carrying data</strong>, which it attaches when spending. Validators then only need recent anchors and recently revealed nullifiers, and can prune almost everything else in a block. Removing on-chain note ciphertexts also removes privacy-sensitive data that isn't yet protected by quantum-resistant cryptography.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- STATUS -->
+  <section class="prose">
+    <h2>Is it finished?</h2>
+    <p>Not yet. People are building it right now. Here's what's done so far.</p>
+    <ul class="checks">
+      <li class="done"><span class="box"></span><span><span class="what">Making the secret keys</span><span class="small">key derivation</span></span></li>
+      <li class="done"><span class="box"></span><span><span class="what">Hiding the amounts</span><span class="small">value commitments (Pedersen, Pallas curve)</span></span></li>
+      <li class="done"><span class="box"></span><span><span class="what">Signing the permission slips</span><span class="small">spend authorization signatures (RedPallas)</span></span></li>
+      <li class="done"><span class="box"></span><span><span class="what">Checking the whole envelope adds up</span><span class="small">binding signatures, bundle verification</span></span></li>
+      <li class="todo"><span class="box"></span><span><span class="what">Making the "already spent" markers</span><span class="small">note commitments, nullifier derivation</span></span></li>
+      <li class="todo"><span class="box"></span><span><span class="what">Making the stamps and squishing them</span><span class="small">proofs and stamp compression, waiting on Ragu and Poseidon</span></span></li>
+    </ul>
+    <p class="note">Even when it's all built, it doesn't just switch on. The Zcash community has to agree to it first.</p>
+  </section>
+
+  <footer>
+    <p>Want to see the real thing? Everything is built in the open.</p>
+    <div class="links">
+      <a href="https://tachyon.z.cash/" target="_blank" rel="noopener">tachyon.z.cash</a>
+      <a href="https://github.com/tachyon-zcash/tachyon" target="_blank" rel="noopener">tachyon-zcash/tachyon</a>
+      <a href="https://github.com/tachyon-zcash/ragu" target="_blank" rel="noopener">tachyon-zcash/ragu</a>
+    </div>
+    <p>This is an unofficial explainer written by a community member. It isn't made or endorsed by Electric Coin Co., the Zcash Foundation, or the Tachyon team. The kid-sized comparisons simplify the real cryptography. For anything precise, read the sources:</p>
+    <ul>
+      <li><a href="https://tachyon.z.cash/" target="_blank" rel="noopener">tachyon.z.cash</a>: goals, scope, community approval</li>
+      <li><a href="https://github.com/tachyon-zcash/tachyon" target="_blank" rel="noopener">tachyon-zcash/tachyon</a>: bundles, actions, stamps, and build status</li>
+      <li><a href="https://github.com/tachyon-zcash/ragu" target="_blank" rel="noopener">tachyon-zcash/ragu</a>: the proof-carrying data framework</li>
+      <li><a href="https://seanbowe.com/blog/tachyon-scaling-zcash-oblivious-synchronization/" target="_blank" rel="noopener">Sean Bowe, "Tachyon: Scaling Zcash with Oblivious Synchronization"</a>: out-of-band payments, wallet proofs, pruning</li>
+    </ul>
+    <p>Source code and text: <a href="https://github.com/panoskokmotos/personal-website/tree/main/tachyon" target="_blank" rel="noopener">MIT licensed on GitHub</a>. Corrections welcome.</p>
+  </footer>
+</main>
+</body>
+</html>
