@@ -45,6 +45,7 @@ function saveHistory() {
 // ── Toggle open/close ──
 function openChat() {
   chatWidget.classList.add('open');
+  chatToggle.setAttribute('aria-expanded', 'true');
   // On mobile, delay focus so the panel animation finishes before keyboard opens
   const isMobile = window.innerWidth <= 768 || ('ontouchstart' in window);
   if (isMobile) {
@@ -53,7 +54,12 @@ function openChat() {
     chatInput.focus();
   }
 }
-function closeChat() { chatWidget.classList.remove('open'); }
+function closeChat() {
+  const wasOpen = chatWidget.classList.contains('open');
+  chatWidget.classList.remove('open');
+  chatToggle.setAttribute('aria-expanded', 'false');
+  if (wasOpen && chatWidget.contains(document.activeElement)) chatToggle.focus();
+}
 
 chatToggle.addEventListener('click', () => {
   chatWidget.classList.contains('open') ? closeChat() : openChat();
@@ -157,8 +163,16 @@ async function sendMessage() {
       body: JSON.stringify({ messages }),
     });
 
-    const data = await res.json();
+    const data = await res.json().catch(() => ({}));
     const reply = data.text || 'Sorry, I had trouble responding. Please try again.';
+    if (!res.ok) {
+      // Don't keep the failed turn in history, or it is resent with the next message
+      messages.pop();
+      saveHistory();
+      thinkingEl.remove();
+      addMessage('bot', reply);
+      return;
+    }
 
     thinkingEl.remove();
     addMessage('bot', reply);

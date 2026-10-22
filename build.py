@@ -34,6 +34,27 @@ MARKER = re.compile(
 )
 
 
+def asset_version() -> str | None:
+    """The ?v= cache-buster used by the pages (taken from index.html)."""
+    m = re.search(r"style\.min\.css\?v=(\d+)", (ROOT / "index.html").read_text())
+    return m.group(1) if m else None
+
+
+def sync_sw(check_only: bool) -> int:
+    """Keep sw.js ASSET_VERSION equal to the pages' ?v= so precache URLs match."""
+    ver, sw = asset_version(), ROOT / "sw.js"
+    if not ver or not sw.exists():
+        return 0
+    text = sw.read_text()
+    new = re.sub(r"(ASSET_VERSION = ')\d+(')", rf"\g<1>{ver}\g<2>", text)
+    if new == text:
+        return 0
+    if not check_only:
+        sw.write_text(new)
+    print(f"{'would update' if check_only else 'updated'}: sw.js (ASSET_VERSION -> {ver})")
+    return 1
+
+
 def sync(check_only: bool = False) -> int:
     partials: dict[str, str] = {}
     changed = 0
@@ -62,6 +83,7 @@ def sync(check_only: bool = False) -> int:
     if missing:
         print(f"ERROR: missing partial(s): {', '.join(sorted(missing))}", file=sys.stderr)
         return 2
+    changed += sync_sw(check_only)
     if not changed:
         print("all pages already in sync.")
     return 1 if (check_only and changed) else 0

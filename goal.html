@@ -55,7 +55,7 @@
   <link rel="dns-prefetch" href="https://tidycal.com" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.min.css?v=20261016" />
+  <link rel="stylesheet" href="style.min.css?v=20261022" />
   <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png" />
   <link rel="icon" type="image/png" sizes="180x180" href="assets/favicon-180.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon-180.png" />
@@ -342,12 +342,12 @@
   <!-- ── AI Chat Widget ── -->
   <div class="chat-widget" id="chatWidget">
     <div class="chat-nudge" id="chatNudge">Ask me anything! ✦</div>
-    <button class="chat-toggle" id="chatToggle" aria-label="Chat with Panos AI">
+    <button class="chat-toggle" id="chatToggle" aria-label="Chat with Panos AI" aria-expanded="false" aria-controls="chatPanel">
       <svg class="chat-icon-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
       <svg class="chat-icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       <span class="chat-badge">AI</span>
     </button>
-    <div class="chat-panel" id="chatPanel">
+    <div class="chat-panel" id="chatPanel" role="dialog" aria-label="Chat with Panos">
       <div class="chat-header">
         <div class="chat-header-info">
           <picture>
@@ -370,7 +370,7 @@
           <button class="chat-close-btn" id="chatClose" aria-label="Close chat">✕</button>
         </div>
       </div>
-      <div class="chat-messages" id="chatMessages">
+      <div class="chat-messages" id="chatMessages" aria-live="polite">
         <div class="chat-msg bot">
           <p>👋 Hi! I'm Panos's AI assistant. Ask me anything about his work, Givelink, the podcast, or how to get in touch!</p>
         </div>
@@ -411,8 +411,8 @@
     </div>
   </div>
 <!-- /include:chat -->
-  <script src="/shared.js?v=20261016"></script>
-  <script src="script.min.js?v=20261016"></script>
-  <script src="chat.min.js?v=20261016"></script>
+  <script src="/shared.js?v=20261022"></script>
+  <script src="script.min.js?v=20261022"></script>
+  <script src="chat.min.js?v=20261022"></script>
 </body>
 </html>

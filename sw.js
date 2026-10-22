@@ -1,5 +1,5 @@
 // Keep in sync with the ?v= cache-buster used in the HTML (bump both on asset changes).
-const ASSET_VERSION = '20261011';
+const ASSET_VERSION = '20261022';
 const CACHE_NAME = 'panos-' + ASSET_VERSION;
 const OFFLINE_URL = '/offline.html';
 
@@ -54,8 +54,10 @@ self.addEventListener('fetch', event => {
     event.respondWith(
       fetch(event.request)
         .then(res => {
-          const clone = res.clone();
-          caches.open(CACHE_NAME).then(c => c.put(event.request, clone));
+          if (res.ok) {
+            const clone = res.clone();
+            caches.open(CACHE_NAME).then(c => c.put(event.request, clone));
+          }
           return res;
         })
         .catch(() =>

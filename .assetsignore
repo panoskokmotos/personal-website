@@ -1,0 +1,8 @@
+*.py
+scripts/
+*.md
+cloudflare-worker.js
+wrangler.jsonc
+agent.py
+requirements.txt
+.github/
