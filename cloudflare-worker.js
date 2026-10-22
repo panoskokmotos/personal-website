@@ -105,6 +105,8 @@ Never make up facts. Keep responses friendly, short, and helpful.`;
 const rateLimitStore = new Map();
 const RATE_LIMIT = 20;          // max requests
 const RATE_WINDOW_MS = 60 * 60 * 1000; // 1 hour
+const MAX_BODY_BYTES = 20000;   // ~5k tokens; far above any real chat/tool request
+const MAX_CHAT_CHARS = 2000;    // per chat message
 
 function checkRateLimit(ip) {
   const now = Date.now();
@@ -151,6 +153,17 @@ export default {
 
     const url = new URL(request.url);
 
+    // Rate limiting
+    // CF-Connecting-IP only: X-Forwarded-For is client-spoofable
+    const ip = request.headers.get('CF-Connecting-IP') || 'unknown';
+
+    if (!checkRateLimit(ip)) {
+      return new Response(
+        JSON.stringify({ text: "You've sent a lot of messages! Please wait a bit before trying again, or email panagiotis.kokmotoss@gmail.com directly." }),
+        { status: 429, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
+      );
+    }
+
     // ── GET /api/charity-search?q=QUERY — ProPublica nonprofit autocomplete ──
     if (request.method === 'GET' && url.pathname === '/api/charity-search') {
       const q = url.searchParams.get('q') || '';
@@ -185,15 +198,11 @@ export default {
       return new Response('Method not allowed', { status: 405 });
     }
 
-    // Rate limiting
-    const ip = request.headers.get('CF-Connecting-IP') ||
-               request.headers.get('X-Forwarded-For') || 'unknown';
-
-    if (!checkRateLimit(ip)) {
-      return new Response(
-        JSON.stringify({ text: "You've sent a lot of messages! Please wait a bit before trying again, or email panagiotis.kokmotoss@gmail.com directly." }),
-        { status: 429, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
-      );
+    // Reject oversized bodies before parsing (all POST routes forward text to the Anthropic API)
+    if (Number(request.headers.get('Content-Length') || 0) > MAX_BODY_BYTES) {
+      return new Response(JSON.stringify({ text: 'Message too long.' }), {
+        status: 413, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS },
+      });
     }
 
     // ── /notify route: send personal email notification ──
@@ -519,9 +528,17 @@ export default {
     // ── Default route: "Ask Panos" chat ──
     try {
       const { messages } = await request.json();
+      if (!Array.isArray(messages)) {
+        return new Response(JSON.stringify({ text: 'Invalid request.' }), {
+          status: 400, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS },
+        });
+      }
 
-      // Guard: max 10 messages in context to prevent prompt injection via long histories
-      const recentMessages = messages.slice(-10);
+      // Guard: max 10 messages in context, each capped, to limit cost and prompt injection via long histories
+      const recentMessages = messages.slice(-10).map(m => ({
+        role: m.role === 'assistant' ? 'assistant' : 'user',
+        content: String(m.content ?? '').slice(0, MAX_CHAT_CHARS),
+      }));
 
       const response = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',

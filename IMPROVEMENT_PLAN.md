@@ -2,6 +2,10 @@
 
 > Automated audit · 2026-10-17 · supersedes the 2026-10-11 plan (all its fixable items shipped).
 
+## ✅ Status — 2026-10-22
+
+Fixed on branch `claude/pensive-ptolemy-a441sf`: #1 (SW version, now enforced by `build.py --check`), #5 (chat ARIA/focus), #8 (`.assetsignore`), #10 (chat error handling), #15 (only cache OK HTML), and the dead Global Shapers link. #2 partly: body-size and per-message caps, `X-Forwarded-For` dropped, charity-search now rate limited — a durable limiter (Rate Limiting binding/KV) is still open. #3 still needs `wrangler deploy` (and now also deploys these Worker changes).
+
 ## ⚠️ Scope note
 
 The repo this routine ran against (`panoskokmotos/personal-website`) is Panos's **static personal site** (plain HTML/CSS/JS on GitHub Pages + one Cloudflare Worker), **not the Givelink app**. Consequences:
