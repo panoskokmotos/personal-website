@@ -399,8 +399,32 @@ for i, (cx, cy, cz) in enumerate([(-8.5, 3.5, 3.2), (7.5, 5.5, 4.0), (-6.0, -7.0
         ico(random.uniform(0.45, 0.8), (k * 0.6 - 0.9, random.uniform(-0.3, 0.3), random.uniform(-0.15, 0.25)), CLOUD, sub=1, parent=root, scale=(1, 0.8, 0.65))
 
 # ---------- export ----------
+# ---------- baked soft lighting (ambient occlusion → vertex colours) ----------
+# Pass --bake: Cycles bakes AO per face corner on every mesh; the glTF carries it as COLOR_0 and three.js
+# multiplies it into each material, so the web page gets soft contact shadows for free.
+BAKE = "--bake" in sys.argv
+if BAKE:
+    sc = bpy.context.scene
+    if sc.world is None:
+        sc.world = bpy.data.worlds.new("World")
+    sc.world.light_settings.distance = 1.2
+    sc.render.engine = "CYCLES"
+    sc.cycles.device = "CPU"
+    sc.cycles.samples = 32
+    meshes = [o for o in bpy.data.objects if o.type == "MESH"]
+    for o in meshes:
+        ca = o.data.color_attributes.get("AO") or o.data.color_attributes.new("AO", "BYTE_COLOR", "CORNER")
+        o.data.color_attributes.active_color = ca
+    bpy.ops.object.select_all(action="DESELECT")
+    for o in meshes:
+        o.select_set(True)
+    bpy.context.view_layer.objects.active = meshes[0]
+    bpy.ops.object.bake(type="AO", target="VERTEX_COLORS")
+    print("BAKED AO on", len(meshes), "meshes")
+GLTF_COLORS = dict(export_vertex_color="ACTIVE") if BAKE else {}
+
 glb = os.path.join(out_dir, "island.glb")
-bpy.ops.export_scene.gltf(filepath=glb, export_format="GLB", export_apply=True, export_cameras=False, export_lights=False)
+bpy.ops.export_scene.gltf(filepath=glb, export_format="GLB", export_apply=True, export_cameras=False, export_lights=False, **GLTF_COLORS)
 print("EXPORTED", glb, os.path.getsize(glb))
 
 # ---------- single-object exports for the other pages ----------
@@ -414,7 +438,7 @@ def export_one(root_name, filename):
     for o in tree(bpy.data.objects[root_name]):
         o.select_set(True)
     path = os.path.join(out_dir, filename)
-    bpy.ops.export_scene.gltf(filepath=path, export_format="GLB", use_selection=True, export_apply=True, export_cameras=False, export_lights=False)
+    bpy.ops.export_scene.gltf(filepath=path, export_format="GLB", use_selection=True, export_apply=True, export_cameras=False, export_lights=False, **GLTF_COLORS)
     print("EXPORTED", path, os.path.getsize(path))
 
 for root_name, filename in [("LM_education", "obj-temple.glb"), ("LM_recognition", "obj-trophy.glb"), ("LM_podcast", "obj-mic.glb"), ("OBJ_books", "obj-books.glb"), ("PLANE", "obj-plane.glb")]:

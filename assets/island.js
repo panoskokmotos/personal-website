@@ -246,7 +246,7 @@
       curTarget.lerp(goal.target, k);
       curOffset.lerp(goal.offset, k);
       par.lerp(parGoal, reduce ? 1 : 1 - Math.pow(0.1, dt));
-      const narrow = canvas.clientWidth < 520 ? (current === 'overview' ? 0.72 : 0.95) : 1;
+      const narrow = canvas.clientWidth < 520 ? (current === 'overview' ? 0.8 : 0.95) : 1;
       tmp.copy(curOffset).multiplyScalar(narrow).applyAxisAngle(up, yaw + par.x * 0.12);
       tmp.y += par.y * 1.2;
       camera.position.copy(curTarget).add(tmp);

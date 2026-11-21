@@ -316,7 +316,7 @@ export default {
             'anthropic-version': '2023-06-01',
           },
           body: JSON.stringify({
-            model: 'claude-haiku-4-5',
+            model: 'claude-haiku-5-5',
             max_tokens: 1024,
             stream: true,
             system: systemPrompt,
@@ -396,7 +396,7 @@ export default {
             'anthropic-version': '2023-06-01',
           },
           body: JSON.stringify({
-            model: 'claude-sonnet-4-6',
+            model: 'claude-sonnet-5-5',
             max_tokens: 2048,
             system: systemPrompt,
             messages: [{ role: 'user', content: userMessage }],
@@ -451,7 +451,7 @@ export default {
             'anthropic-version': '2023-06-01',
           },
           body: JSON.stringify({
-            model: 'claude-haiku-4-5',
+            model: 'claude-haiku-5-5',
             max_tokens: 1024,
             system: systemPrompt,
             messages: [{ role: 'user', content: userMessage }],
@@ -495,7 +495,7 @@ export default {
             'anthropic-version': '2023-06-01',
           },
           body: JSON.stringify({
-            model: 'claude-haiku-4-5',
+            model: 'claude-haiku-5-5',
             max_tokens: 1024,
             system: systemPrompt,
             messages: [{ role: 'user', content: userMessage }],
@@ -531,7 +531,7 @@ export default {
           'anthropic-version': '2023-06-01',
         },
         body: JSON.stringify({
-          model: 'claude-haiku-4-5',
+          model: 'claude-haiku-5-5',
           max_tokens: 512,
           system: SYSTEM_PROMPT,
           messages: recentMessages,

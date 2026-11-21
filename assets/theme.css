@@ -1,0 +1,113 @@
+/* ── Aegean night theme (Nov 2026) ──
+   Loaded after style.min.css on every page (partials/theme.html). Overrides tokens, type and the
+   card/grid look; the old blue-to-purple gradients are retired.
+   Palette from the island: ink navy, Cycladic white, island green, gold; Givelink pink is the only accent.
+   Type: Geist (text), Instrument Serif (headlines), Geist Mono (labels). */
+
+:root, html[data-theme="dark"] {
+  --bg: #0a0f1c;  --bg-alt: #0e1526;  --bg-dark: #070b15;  --bg-dark2: #0b111f;
+  --navy: #eef1f4;                       /* headings (Cycladic white) */
+  --text: rgba(238,241,244,.86);  --text-muted: rgba(238,241,244,.56);  --text-light: rgba(238,241,244,.72);
+  --blue: #e0457b;  --blue-light: #f0729b;   /* Givelink pink: the one accent */
+  --gold: #e8b04b;  --green: #6fae8a;
+  --border: rgba(238,241,244,.09);  --border-dark: rgba(238,241,244,.09);
+  --card-bg: rgba(255,255,255,.025);  --card-hover: rgba(255,255,255,.05);
+  --shadow: none;  --shadow-md: 0 1px 0 rgba(255,255,255,.04) inset, 0 12px 32px rgba(0,0,0,.25);  --shadow-lg: 0 20px 50px rgba(0,0,0,.35);
+  --radius-sm: 10px;  --radius: 18px;  --radius-lg: 24px;
+  --font: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --serif: "Instrument Serif", "Iowan Old Style", Georgia, serif;
+  --mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --glow: rgba(224,69,123,.10);
+}
+html[data-theme="light"] {
+  --bg: #f6f6f3;  --bg-alt: #eef0ec;  --bg-dark: #e7eae5;  --bg-dark2: #dfe3dd;
+  --navy: #0b1222;
+  --text: #1c2333;  --text-muted: #5d6577;  --text-light: #3e4657;
+  --blue: #c2185b;  --blue-light: #d6336c;
+  --gold: #a8700f;  --green: #2f7a55;
+  --border: rgba(11,18,34,.1);  --border-dark: rgba(11,18,34,.1);
+  --card-bg: #ffffff;  --card-hover: #fbfbf9;
+  --shadow-md: 0 1px 2px rgba(11,18,34,.05), 0 10px 28px rgba(11,18,34,.07);  --shadow-lg: 0 18px 44px rgba(11,18,34,.12);
+  --glow: rgba(194,24,91,.07);
+}
+
+/* Type */
+body { font-family: var(--font); letter-spacing: -0.006em; font-feature-settings: "ss01", "cv11"; }
+h1, h2, .section-heading { font-family: var(--serif) !important; font-weight: 400 !important; letter-spacing: -0.012em; line-height: 1.04; }
+.section-heading { font-size: clamp(2.3rem, 4.6vw, 3.6rem); color: var(--navy); text-wrap: balance; }
+.section-heading em, h1 em, h2 em { font-style: italic; color: var(--gold); }
+h3, h4, .now-card-title, .blog-card h3 { font-family: var(--font); font-weight: 600; letter-spacing: -0.01em; }
+.section-eyebrow, .impact-eyebrow, .now-tag, .blog-tag, .isl-eyebrow { font-family: var(--mono) !important; font-weight: 500 !important; font-size: .72rem !important; letter-spacing: .14em !important; text-transform: uppercase; }
+.section-eyebrow, .impact-eyebrow { color: var(--text-muted) !important; }
+
+/* Retire gradient text and glow blobs */
+.hero-name-accent, .impact-num-big, .gradient-text {
+  background: none !important; -webkit-text-fill-color: currentColor !important; color: var(--navy) !important; animation: none !important;
+}
+.impact-num, .impact-num-big { font-family: var(--serif) !important; font-weight: 400 !important; letter-spacing: -0.02em; color: var(--navy) !important; }
+.hero-orb, #hero-particles { display: none !important; }
+
+/* Buttons: white pill, pink on hover */
+.btn { border-radius: 999px !important; font-weight: 500 !important; letter-spacing: -0.005em; }
+.btn-primary, .nav-cta { background: var(--navy) !important; color: var(--bg) !important; box-shadow: none !important; border: 1px solid transparent !important; }
+.btn-primary:hover, .nav-cta:hover { background: var(--blue) !important; color: #fff !important; transform: translateY(-1px); }
+.btn-secondary, .btn-ghost { background: transparent !important; border: 1px solid var(--border) !important; color: var(--navy) !important; }
+.btn-secondary:hover, .btn-ghost:hover { border-color: var(--blue) !important; color: var(--blue) !important; }
+a { text-underline-offset: 3px; }
+
+/* Sections: flat bands separated by hairlines instead of gradients */
+.section-alt, .section-dark, .impact-bar, .featured-bar { background: var(--bg-alt) !important; background-image: none !important; }
+.impact-bar, .featured-bar { border-block: 1px solid var(--border); }
+section { border-color: var(--border); }
+
+/* Cards: hairline border, soft spotlight that follows the cursor (assets/theme.js sets --mx/--my) */
+.now-card, .blog-card, .proj-card, .press-card, .award-card, .edu-card, .timeline-item .timeline-content, .milestone, .book-card, .faq-item {
+  background-color: var(--card-bg) !important;
+  background-image: radial-gradient(420px circle at var(--mx, 50%) var(--my, -20%), var(--glow), transparent 45%) !important;
+  border: 1px solid var(--border) !important; border-radius: var(--radius) !important; box-shadow: none !important;
+  transition: border-color .25s, transform .25s, box-shadow .25s !important;
+}
+.now-card:hover, .blog-card:hover, .proj-card:hover, .press-card:hover, .award-card:hover, .book-card:hover {
+  border-color: color-mix(in srgb, var(--blue) 40%, var(--border)) !important; transform: translateY(-2px) !important; box-shadow: var(--shadow-md) !important;
+}
+
+/* Bento: Now (8 cards) and Blog (5 cards). Alternating wide/narrow tiles, no tall empty cards. */
+@media (min-width: 900px) {
+  .now-grid { display: grid !important; grid-template-columns: repeat(6, minmax(0, 1fr)) !important; gap: 14px !important; align-items: stretch; }
+  .now-grid > .now-card { grid-column: span 2 !important; grid-row: auto !important; }
+  .now-grid > .now-card:nth-child(1), .now-grid > .now-card:nth-child(4) { grid-column: span 4 !important; }
+  .now-grid > .now-card:nth-child(8) { grid-column: span 6 !important; }
+  .now-grid > .now-card:nth-child(1) .now-card-title, .now-grid > .now-card:nth-child(4) .now-card-title { font-family: var(--serif); font-weight: 400; font-size: 1.9rem; line-height: 1.1; }
+
+  .blog-grid { display: grid !important; grid-template-columns: repeat(6, minmax(0, 1fr)) !important; gap: 14px !important; }
+  .blog-grid > .blog-card { grid-column: span 2 !important; grid-row: auto !important; }
+  .blog-grid > .blog-card:nth-child(1) { grid-column: span 4 !important; }
+  .blog-grid > .blog-card:nth-child(1) h3 { font-family: var(--serif); font-weight: 400; font-size: 2rem; line-height: 1.1; }
+}
+.now-icon { filter: saturate(.85); }
+.now-tag, .blog-tag { background: transparent !important; border: 1px solid var(--border); color: var(--text-muted) !important; border-radius: 999px; padding: 3px 10px; }
+
+/* Calm reveals (assets/theme.js adds .rv-on to <html>; nothing hides without JS or with reduced motion) */
+.rv-on .rv { opacity: 0; transform: translateY(14px); transition: opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1); }
+.rv-on .rv.rv-in { opacity: 1; transform: none; }
+.hero-title .w { display: inline-block; opacity: 0; transform: translateY(.35em); filter: blur(6px); animation: wIn .8s cubic-bezier(.2,.7,.2,1) forwards; }
+@keyframes wIn { to { opacity: 1; transform: none; filter: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .rv-on .rv { opacity: 1 !important; transform: none !important; transition: none !important; }
+  .hero-title .w { animation: none !important; opacity: 1 !important; transform: none !important; filter: none !important; }
+}
+
+/* Nav: quieter, glassy */
+#navbar { background: color-mix(in srgb, var(--bg) 78%, transparent) !important; backdrop-filter: blur(14px) saturate(140%); -webkit-backdrop-filter: blur(14px) saturate(140%); border-bottom: 1px solid var(--border) !important; box-shadow: none !important; }
+.nav-link { font-weight: 450 !important; }
+#progress-bar { background: var(--blue) !important; }
+
+/* Loader matches the theme */
+#page-loader { background: var(--bg-dark) !important; }
+.loader-tagline { font-family: var(--mono); letter-spacing: .2em; }
+
+/* Side chat: hidden on the homepage while the hero chat is on screen (assets/hero-chat.js) */
+html.hero-chat-on #chatToggle, html.hero-chat-on #chatNudge { opacity: 0 !important; pointer-events: none !important; transform: translateY(12px); transition: opacity .3s, transform .3s; }
+
+.now-card-top, .blog-card-top { background: transparent !important; border: 0 !important; box-shadow: none !important; padding-left: 0 !important; padding-right: 0 !important; }
+.notfound-code { background: none !important; -webkit-text-fill-color: currentColor !important; color: var(--gold) !important; font-family: var(--serif) !important; font-weight: 400 !important; font-style: italic; }
