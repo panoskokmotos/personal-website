@@ -10,12 +10,16 @@
   const pinsEl = section.querySelector('.isl-pins');
   const countEl = section.querySelector('.isl-count');
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const LABELS = { givelink: 'Givelink', sf: 'San Francisco', aiops: 'AI ops', oss: 'Open source', podcast: 'Podcast', education: 'Education', recognition: 'Recognition' };
+  const LABELS = { education: 'Patras', podcast: 'Podcast', givelink: 'Givelink', recognition: 'Recognition', sf: 'San Francisco', aiops: 'AI agents', oss: 'Open source' };
 
   const track = (event, props) => { try { if (window.posthog && posthog.capture) posthog.capture(event, props); } catch (e) {} };
   const goToChapter = (id) => { const el = document.getElementById('isl-' + id); if (el) el.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' }); };
 
-  fetch('assets/givelink-stats.json').then(r => r.json()).then(s => { if (countEl && s.liveNonprofits) countEl.textContent = s.liveNonprofits; }).catch(() => {});
+  fetch('assets/givelink-stats.json').then(r => r.json()).then(s => {
+    if (countEl && s.liveNonprofits) countEl.textContent = s.liveNonprofits;
+    section.querySelectorAll('.isl-count-gr').forEach(e => { if (s.gr) e.textContent = s.gr; });
+    section.querySelectorAll('.isl-count-us').forEach(e => { if (s.us) e.textContent = s.us; });
+  }).catch(() => {});
 
   function loadScript(src) {
     return new Promise((res, rej) => { const s = document.createElement('script'); s.src = src; s.onload = res; s.onerror = rej; document.head.appendChild(s); });
@@ -60,46 +64,51 @@
 
     const island = new THREE.Group();
     scene.add(island);
-    const landmarks = {}, lmBox = {}, pins = {}, spinY = [], spinZ = [], glows = [], clouds = [], windowMats = [];
+    const landmarks = {}, lmBox = {}, pins = {}, spinY = [], spinZ = [], glows = [], clouds = [], windowMats = [], bars = [], people = [], drones = [];
+    let groundSF = null, cableCar = null, droneProto = null;
     let van = null, plane = null, arm = null, ground = null, gift = null, ready = false;
 
-    const OVERVIEW = { target: new THREE.Vector3(3.2, -1.2, 0.3), offset: new THREE.Vector3(21, 13, 23) };
+    const OVERVIEW = { target: new THREE.Vector3(6.2, 0.2, -0.8), offset: new THREE.Vector3(20, 17, 31) };
     let goal = OVERVIEW, yaw = 0, current = 'overview';
     const curTarget = OVERVIEW.target.clone(), curOffset = OVERVIEW.offset.clone().multiplyScalar(1.4);
     const par = new THREE.Vector2(), parGoal = new THREE.Vector2();
 
+    // Every chapter is seen from the same front angle as the overview, just closer, so the story reads as one camera move.
+    const FRONT = OVERVIEW.offset.clone().normalize();
+    const DIST = { sf: 12, aiops: 11, givelink: 9, education: 8.5, podcast: 8.5, recognition: 8.5, oss: 8.5 };
     function shotFor(id) {
       const b = lmBox[id];
       if (!b) return OVERVIEW;
-      const t = b.c.clone(); t.y = b.base + 1.1;
-      const out = new THREE.Vector3(t.x, 0, t.z);
-      if (out.length() < 1) out.set(0.8, 0, 0.9);
-      out.normalize();
-      const side = new THREE.Vector3(-out.z, 0, out.x);
-      return { target: t, offset: out.multiplyScalar(8.5).add(side.multiplyScalar(1.6)).add(new THREE.Vector3(0, 4.6, 0)) };
+      const t = b.c.clone(); t.y = b.base + (id === 'sf' ? 0.9 : 1.1);
+      return { target: t, offset: FRONT.clone().multiplyScalar(DIST[id] || 9) };
     }
 
     // Deterministic random so lanterns stay put between visits.
     let seed = 20261121;
     const rnd = () => { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 4294967296; };
     const down = new THREE.Raycaster();
-    const groundY = (x, z) => { down.set(new THREE.Vector3(x, 20, z), new THREE.Vector3(0, -1, 0)); const h = ground && down.intersectObject(ground, true)[0]; return h ? h.point.y - island.position.y : 0.1; }; // island-local height (the island may still be rising)
+    const groundY = (x, z) => { down.set(new THREE.Vector3(x, 20, z), new THREE.Vector3(0, -1, 0)); const h = down.intersectObjects([ground, groundSF].filter(Boolean), true)[0]; return h ? h.point.y - island.position.y : 0.1; }; // island-local height (the island may still be rising)
 
     // Road for the van, from the island edge to the Givelink door (three.js coords: x, -blenderY).
     const ROAD = [[-2.0, 5.2], [-1.4, 4.2], [-0.85, 3.2], [-0.3, 2.2], [0.3, 1.35]];
     let road = null;
 
-    function addLanterns(n) {
+    // Lanterns: one per live nonprofit, Greek ones on the Greek island, US ones on the San Francisco island.
+    function addLanterns(gr, us) {
       const pts = [];
-      let guard = 0;
-      while (pts.length < n && guard++ < 6000) {
-        const a = rnd() * Math.PI * 2, r = 5.0 * Math.sqrt(0.06 + 0.94 * rnd());
-        const x = r * Math.cos(a), z = r * Math.sin(a);
-        if (Object.values(lmBox).some(b => Math.hypot(x - b.c.x, z - b.c.z) < 1.35)) continue;
-        if (ROAD.some(p => Math.hypot(x - p[0], z - p[1]) < 0.55)) continue;
-        if (pts.some(p => Math.hypot(x - p.x, z - p.z) < 0.28)) continue;
-        pts.push({ x, z, y: groundY(x, z) });
-      }
+      const scatter = (count, cx, cz, rad) => {
+        let guard = 0, made = 0;
+        while (made < count && guard++ < 6000) {
+          const a = rnd() * Math.PI * 2, r = rad * Math.sqrt(0.06 + 0.94 * rnd());
+          const x = cx + r * Math.cos(a), z = cz + r * Math.sin(a);
+          if (Object.values(lmBox).some(b => x > b.min.x - 0.25 && x < b.max.x + 0.25 && z > b.min.z - 0.25 && z < b.max.z + 0.25)) continue;
+          if (ROAD.some(p => Math.hypot(x - p[0], z - p[1]) < 0.55)) continue;
+          if (pts.some(p => Math.hypot(x - p.x, z - p.z) < 0.26)) continue;
+          pts.push({ x, z, y: groundY(x, z) }); made++;
+        }
+      };
+      scatter(gr, 0, 0, 5.0);
+      scatter(us, 13.2, 1.0, 2.75);
       const post = new THREE.InstancedMesh(new THREE.CylinderGeometry(0.018, 0.022, 0.32, 5), new THREE.MeshStandardMaterial({ color: 0x1a2347, roughness: 0.6 }), pts.length);
       const bulbMat = new THREE.MeshStandardMaterial({ color: 0xf4a924, emissive: 0xf4a924, emissiveIntensity: 1.2, roughness: 0.4 });
       const bulb = new THREE.InstancedMesh(new THREE.IcosahedronGeometry(0.06, 0), bulbMat, pts.length);
@@ -109,11 +118,35 @@
       glows.push(bulbMat);
     }
 
+    // Agent drones: copies of the Blender DRONE fly loops from the HQ to the Givelink house, the nonprofits and San Francisco.
+    function setupDrones() {
+      const pad = droneProto.position.clone();
+      const house = lmBox.givelink ? lmBox.givelink.c.clone().setY(lmBox.givelink.top + 0.6) : new THREE.Vector3(0, 2, 0);
+      const sf = lmBox.sf ? lmBox.sf.c.clone().setY(lmBox.sf.top - 0.6) : new THREE.Vector3(13, 2, 1);
+      const spots = [[-2.5, 3.2], [2.8, -2.4], [-3.4, -1.6], [12.2, 2.2], [14.4, 0.0], [1.5, 3.8]];
+      const routes = [
+        [house, spots[0], spots[1]], [sf, spots[3], spots[4]], [house, sf], [spots[2], house, spots[5]], [sf, spots[4], house],
+      ];
+      routes.forEach((stops, i) => {
+        const d = i === 0 ? droneProto : droneProto.clone();
+        if (i) droneProto.parent.add(d);
+        const pts = [pad.clone().add(new THREE.Vector3(0, 0.6, 0))];
+        stops.forEach(sp => {
+          const v = Array.isArray(sp) ? new THREE.Vector3(sp[0], groundY(sp[0], sp[1]) + 0.9, sp[1]) : sp.clone();
+          pts.push(v.clone().add(new THREE.Vector3(0, 1.6, 0)), v);
+        });
+        const curve = new THREE.CatmullRomCurve3(pts, true, 'centripetal');
+        const rotors = []; d.traverse(o => { if (o.name && o.name.startsWith('ROTOR')) rotors.push(o); });
+        drones.push({ d, curve, rotors, speed: 0.018 + i * 0.003, off: i / routes.length });
+      });
+    }
+
     new THREE.GLTFLoader().load('assets/island.glb', (gltf) => {
       const root = gltf.scene;
       root.traverse(o => {
         if (o.isMesh) {
           o.castShadow = true; o.receiveShadow = true;
+          if (o.geometry && o.geometry.attributes.color) (Array.isArray(o.material) ? o.material : [o.material]).forEach(m => { m.vertexColors = true; });
           (Array.isArray(o.material) ? o.material : [o.material]).forEach(m => {
             if (m.name === 'window' && !windowMats.includes(m)) windowMats.push(m);
             if (m.metalness > 0.2) { m.metalness = 0.2; m.roughness = Math.max(m.roughness, 0.35); }
@@ -128,19 +161,25 @@
         else if (n === 'PLANE') plane = o;
         else if (n === 'WAVE_arm') arm = o;
         else if (n === 'ISLAND_main') ground = o;
+        else if (n === 'ISLAND_sf') groundSF = o;
+        else if (n.startsWith('BAR_')) bars.push(o);
+        else if (n.startsWith('PERSON')) people.push({ o, y: o.position.y, p: Math.random() * 6 });
+        else if (n === 'CABLECAR') cableCar = { o, x: o.position.x };
+        else if (n === 'DRONE') droneProto = o;
         if (n.startsWith('GLOW_')) o.traverse(m => { if (m.isMesh) glows.push(m.material); });
       });
       island.add(root);
       island.updateMatrixWorld(true);
       Object.entries(landmarks).forEach(([id, o]) => {
         const box = new THREE.Box3().setFromObject(o);
-        lmBox[id] = { c: box.getCenter(new THREE.Vector3()), base: box.min.y, top: box.max.y };
+        lmBox[id] = { c: box.getCenter(new THREE.Vector3()), base: box.min.y, top: box.max.y, min: box.min.clone(), max: box.max.clone() };
       });
       road = new THREE.CatmullRomCurve3(ROAD.map(p => new THREE.Vector3(p[0], groundY(p[0], p[1]) + 0.02, p[1])));
       if (plane) scene.add(plane); // the plane flies in world space, not with the bobbing island
       gift = new THREE.Mesh(new THREE.BoxGeometry(0.18, 0.18, 0.18), new THREE.MeshStandardMaterial({ color: 0xf4a924, emissive: 0xf4a924, emissiveIntensity: 0 }));
       gift.visible = false; island.add(gift);
-      fetch('assets/givelink-stats.json').then(r => r.json()).then(s => addLanterns(Math.min(s.liveNonprofits || 0, 400))).catch(() => addLanterns(150));
+      fetch('assets/givelink-stats.json').then(r => r.json()).then(s => addLanterns(Math.min(s.gr || 0, 200), Math.min(s.us || 0, 200))).catch(() => addLanterns(55, 100));
+      if (droneProto) setupDrones();
 
       Object.keys(LABELS).forEach(id => {
         if (!landmarks[id]) return;
@@ -264,9 +303,17 @@
           spinZ.forEach(o => { o.rotation.z -= dt * 0.7; });
           if (arm) arm.rotation.z = -0.35 + Math.sin(t * 7) * 0.45;
           animateVan(t);
+          drones.forEach(dr => {
+            const u = (t * dr.speed + dr.off) % 1, p = dr.curve.getPointAt(u), tan = dr.curve.getTangentAt(u);
+            dr.d.position.copy(p); dr.d.rotation.set(0, Math.atan2(-tan.z, tan.x), 0);
+            dr.rotors.forEach(r => { r.rotation.y += dt * 40; });
+          });
+          bars.forEach((b, i) => { b.scale.y = 0.85 + 0.25 * (0.5 + 0.5 * Math.sin(t * 0.8 - i * 0.6)) * (1 + i * 0.15); });
+          if (cableCar) cableCar.o.position.x = cableCar.x + 1.25 + Math.sin(t * 0.35) * 1.25;
+          people.forEach(pp => { pp.o.position.y = pp.y + Math.abs(Math.sin(t * 2.2 + pp.p)) * 0.04; });
           if (plane) {
-            const a = t * 0.22, cx = 4.2, cz = 0.3, rx = 10.5, rz = 6.5;
-            plane.position.set(cx + rx * Math.cos(a), 4.4 + Math.sin(a * 2) * 0.6, cz + rz * Math.sin(a));
+            const a = t * 0.16, cx = 6.6, cz = -0.6, rx = 13.5, rz = 8.5;
+            plane.position.set(cx + rx * Math.cos(a), 5.2 + Math.sin(a * 2) * 0.7, cz + rz * Math.sin(a));
             const vx = -rx * Math.sin(a), vz = rz * Math.cos(a);
             plane.rotation.set(0, Math.atan2(-vz, vx), 0);
             plane.rotateX(-0.25);

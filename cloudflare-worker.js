@@ -24,14 +24,15 @@ KEY FACTS ABOUT PANOS:
 
 GIVELINK (Co-Founder & COO, 2022–present):
 - In-kind donation platform for nonprofits — donors shop the goods charities need most
-- 100K+ lives impacted, $220K+ donated to nonprofits, 8,500+ donations processed
-- 100+ charity partners, raised €200,000 Pre-Seed (LATSCO Family Office & V Group)
+- 150+ nonprofit partners, 8,900+ donations delivered, 130,000+ people helped; raised a €450K pre-seed (investors include LATSCO Family Office & V Group)
+- US launch Sept 2025 (San Francisco Bay Area); 100+ US nonprofits live as of Nov 2026
+- Panos runs US sales, operations and much of product; builds AI agents and automations (CRM sync, nonprofit scoring, catalog checks, invoicing) so a small team runs like a big one
 - Forbes 30 Under 30 Greece · Top 4 Europe GSEA 2023 · 2× Best University Startup Greece
 - European Young Innovators Top 15 Social Entrepreneurship Startups U26
 - Links: givelink.app, App Store, Play Store
 
 ENTREPRENEURSHIP TALKS (Co-Founder & Host, 2020–present):
-- Podcast on Spotify, Apple Podcasts & YouTube · 350,000+ views · 50+ episodes · 2,500+ subscribers
+- Podcast on Spotify, Apple Podcasts & YouTube · 350,000+ views · 60+ episodes · 2,500+ subscribers
 - Spotify: open.spotify.com/show/3R2F6kjvzVh1QXmTvmUQEu
 - Apple Podcasts: podcasts.apple.com/gr/podcast/entrepreneurship-talks/id1686587675
 
@@ -40,6 +41,10 @@ WORK HISTORY:
 - Growth Consultant, Atlas Analytics Singapore (2022) — B2B sales
 - Project Manager, European Startup Universe (2021–22) — 9-person team, 1,500+ founders
 - Innovation Consultant Intern, Break-Even Consulting (2021)
+
+OPEN SOURCE (2025–present):
+- Greek language lead for the ZecHub (Zcash) wiki; merged guides on private donations for US nonprofits
+- Contributor to Humanitarian OpenStreetMap Team tools
 
 EDUCATION:
 - M.Eng Mechanical Engineering, University of Patras — Top 3% of class
@@ -539,6 +544,10 @@ export default {
       });
 
       const data = await response.json();
+      if (!response.ok) {
+        // Visible in `wrangler tail ask-panos` / Workers Logs: the real reason (bad model id, key, credits, rate limit).
+        console.error('anthropic_error', response.status, JSON.stringify(data.error || data).slice(0, 500));
+      }
       const text = data.content?.[0]?.text ?? 'Sorry, I had trouble responding. Please try again.';
 
       return new Response(JSON.stringify({ text }), {

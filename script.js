@@ -102,7 +102,7 @@ const counterObserver = new IntersectionObserver(entries => {
 document.querySelectorAll('.impact-num').forEach(el => counterObserver.observe(el));
 
 // ── Theme: dark mode locked ──
-document.documentElement.setAttribute('data-theme', 'dark');
+document.documentElement.setAttribute('data-theme', 'light'); // bright 'Aegean day' theme (Nov 2026)
 
 // ── Scroll progress bar ──
 const progressBar = document.getElementById('progress-bar');

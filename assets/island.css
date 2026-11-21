@@ -96,3 +96,5 @@ html[data-theme="light"] .isl-stage { background-image: none; } /* poster is the
 .isl-hero .hero-socials a { width: 36px; height: 36px; display: inline-grid; place-items: center; border: 1px solid var(--border) !important; border-radius: 10px !important; background: transparent !important; }
 .isl-hero .hero-socials a:hover { border-color: var(--blue) !important; }
 @media (max-width: 860px) { .isl-hint { display: none; } .isl-story { padding-top: 40px; } }
+.isl-stage { overflow: hidden; }
+html, body { overflow-x: clip; }
