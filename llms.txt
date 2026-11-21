@@ -11,10 +11,16 @@
 - **Expertise:** entrepreneurship, social impact, in-kind donations, startup fundraising, AI & technology, product management, public speaking
 
 ## Givelink
-Givelink is an in-kind donation platform and mobile app that lets donors shop for the exact goods nonprofits need most, with step-by-step tracking and photo confirmation. Founded in 2022; 100+ charity partners, 100,000+ lives impacted, and $220K+ of goods delivered to nonprofits.
+Givelink is an in-kind donation platform and mobile app that lets donors shop for the exact goods nonprofits need most, with step-by-step tracking and photo confirmation. Founded in 2022; 150+ charity partners, 100,000+ lives impacted, and $220K+ of goods delivered to nonprofits.
 
 ## Also
 - Co-founder and host of **Entrepreneurship Talks**, a podcast with founders, investors, and changemakers (350K+ views, 60+ episodes).
+
+## Open source
+- **ZecHub** (Zcash education hub): led the Greek translation of zechub.wiki (https://zechub.wiki/el) and wrote its nonprofit donation guides: accepting private ZEC donations as a US nonprofit, where to donate ZEC, claiming a US tax deduction, and running a ZEC fundraising campaign. Also rewrote the Development Fund and Governance pages. Merged PRs: https://github.com/ZecHub/zechub/pulls?q=is%3Apr+author%3Apanoskokmotos+is%3Amerged
+
+## Writing
+- Substack: https://panoskokmotos.substack.com
 
 ## Key links
 - Website: https://panoskokmotos.com
