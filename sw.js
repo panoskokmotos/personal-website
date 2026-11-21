@@ -1,5 +1,5 @@
 // Keep in sync with the ?v= cache-buster used in the HTML (bump both on asset changes).
-const ASSET_VERSION = '20261121';
+const ASSET_VERSION = '20261122';
 const CACHE_NAME = 'panos-' + ASSET_VERSION;
 const OFFLINE_URL = '/offline.html';
 

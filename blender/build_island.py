@@ -328,6 +328,17 @@ box((0.12, 0.42, 0.025), (-0.4, 0, 0.02), BLUE, plane)
 box((0.14, 0.025, 0.2), (-0.4, 0, 0.12), GOLD, plane)
 box((0.5, 0.012, 0.03), (0, 0.112, 0.02), GOLD, plane)
 
+# A stack of books beside the temple: decoration here, and the object on the Books page.
+BOOKS_AT = (-4.25, -0.45)
+books = empty("OBJ_books", (BOOKS_AT[0], BOOKS_AT[1], Z))
+zb = 0.0
+for i, (w, d, h, m, rot) in enumerate([(0.62, 0.44, 0.11, BLUE, 0.05), (0.56, 0.4, 0.1, GIFT1, -0.12), (0.6, 0.42, 0.12, GOLD, 0.2), (0.5, 0.36, 0.09, RED, -0.05)]):
+    b = box((w, d, h), (0, 0, zb + h / 2), m, books, rot=(0, 0, rot))
+    box((w - 0.04, d + 0.005, h - 0.03), (0.0, 0.0, zb + h / 2), MARBLE, books, rot=(0, 0, rot))
+    box((w + 0.005, d - 0.05, h - 0.03), (0.0, 0.0, zb + h / 2), MARBLE, books, rot=(0, 0, rot))
+    zb += h
+apple = ico(0.07, (0.05, 0.0, zb + 0.06), RED, sub=1, parent=books)
+
 # Cypresses on the SF islet sit outside the bridge root so the click target stays the bridge.
 for (dx, dy) in [(0.4, 0.5), (-0.3, -0.6), (0.7, -0.3)]:
     cyl(0.18, 1.1, (9.2 + dx, -0.6 + dy, Z + 0.55), PINE, verts=7, r2=0.02)
@@ -337,6 +348,8 @@ def clear_of_landmarks(x, y, pad=1.55):
     for (lx, ly, _), _fn in LANDMARKS.values():
         if (x - lx) ** 2 + (y - ly) ** 2 < pad ** 2:
             return False
+    if (x - BOOKS_AT[0]) ** 2 + (y - BOOKS_AT[1]) ** 2 < 0.9 ** 2:
+        return False
     for (rx, ry) in ROAD:
         if (x - rx) ** 2 + (y - ry) ** 2 < 0.55 ** 2:
             return False
@@ -389,6 +402,43 @@ for i, (cx, cy, cz) in enumerate([(-8.5, 3.5, 3.2), (7.5, 5.5, 4.0), (-6.0, -7.0
 glb = os.path.join(out_dir, "island.glb")
 bpy.ops.export_scene.gltf(filepath=glb, export_format="GLB", export_apply=True, export_cameras=False, export_lights=False)
 print("EXPORTED", glb, os.path.getsize(glb))
+
+# ---------- single-object exports for the other pages ----------
+def tree(o):
+    yield o
+    for c in o.children:
+        yield from tree(c)
+
+def export_one(root_name, filename):
+    bpy.ops.object.select_all(action="DESELECT")
+    for o in tree(bpy.data.objects[root_name]):
+        o.select_set(True)
+    path = os.path.join(out_dir, filename)
+    bpy.ops.export_scene.gltf(filepath=path, export_format="GLB", use_selection=True, export_apply=True, export_cameras=False, export_lights=False)
+    print("EXPORTED", path, os.path.getsize(path))
+
+for root_name, filename in [("LM_education", "obj-temple.glb"), ("LM_recognition", "obj-trophy.glb"), ("LM_podcast", "obj-mic.glb"), ("OBJ_books", "obj-books.glb"), ("PLANE", "obj-plane.glb")]:
+    export_one(root_name, filename)
+
+# PK coin for the loading screen: gold rim, Aegean-blue faces, raised gold "PK" on both sides. Not part of the island.
+coin = empty("COIN", (0, 0, 40))
+cyl(1.0, 0.2, (0, 0, 0), GOLD, verts=48, parent=coin)
+cyl(0.84, 0.215, (0, 0, 0), BLUE, verts=48, parent=coin)
+for side in (1, -1):
+    bpy.ops.object.text_add(location=(0, 0, 0))
+    t = bpy.context.active_object
+    t.data.body = "PK"
+    t.data.align_x = "CENTER"; t.data.align_y = "CENTER"
+    t.data.size = 0.95
+    t.data.extrude = 0.035
+    t.data.bevel_depth = 0.008
+    bpy.ops.object.convert(target="MESH")
+    t = bpy.context.active_object
+    t.location = (0, 0, side * 0.125)
+    if side < 0:
+        t.rotation_euler = (0, math.pi, 0)
+    finish(t, GOLD, coin)
+export_one("COIN", "obj-coin.glb")
 
 # ---------- optional preview render (crashes headless on the 2014 Iris GPU; pass --preview on newer Macs) ----------
 if "--preview" not in sys.argv:
