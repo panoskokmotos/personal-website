@@ -10,28 +10,28 @@
     "id": "about",
     "title": "About Panos",
     "snippet": "Greek entrepreneur who co-founded Givelink in 2022. Studied Mechanical Engineering at University of Patras (Top 3%). Erasmus at UPC Barcelona. WEF Global Shaper in San Francisco. Reads 40+ books per year. Trains for HYROX and triathlons.",
-    "url": "/#about",
+    "url": "/about.html",
     "category": "About"
   },
   {
     "id": "givelink",
     "title": "Givelink — In-Kind Donation Platform",
     "snippet": "Givelink is an in-kind donation platform co-founded by Panos in 2022. Donors shop the exact goods nonprofits need. 100K+ lives impacted, $220K+ in donations, 8,500+ donations processed, 100+ nonprofit partners. Raised €200K pre-seed. Scaling globally from San Francisco.",
-    "url": "/#projects",
+    "url": "/about.html#projects",
     "category": "Projects"
   },
   {
     "id": "podcast",
     "title": "Entrepreneurship Talks — Podcast",
     "snippet": "Entrepreneurship Talks is a podcast co-founded by Panos in 2020. 60+ episodes, 350,000+ views, 5+ live events, $100K+ grant secured. Available on Spotify, Apple Podcasts and YouTube. Long-form conversations with founders, investors, and changemakers.",
-    "url": "/#projects",
+    "url": "/about.html#projects",
     "category": "Podcast"
   },
   {
     "id": "awards",
     "title": "Awards & Recognition",
     "snippet": "Forbes 30 Under 30 Greece 2024. WEF Global Shaper San Francisco Hub. Top 4 Europe GSEA 2023. 2× Best University Startup Greece. European Young Innovators Top 15 Social Entrepreneurship. Pappajohn Business Plan Competition Winner. Circle Future Leaders Fellow. Pegasus Angel Accelerator Fellow. Mensa Member.",
-    "url": "/#journey",
+    "url": "/about.html#journey",
     "category": "Awards"
   },
   {
@@ -248,49 +248,49 @@
     "id": "naval",
     "title": "Naval Ravikant — Panos's Life Mentor & Role Model",
     "snippet": "Naval shaped how Panos thinks about wealth, happiness, leverage, and what it means to live well. Maximizing serendipity — putting yourself in rooms where luck can find you.",
-    "url": "/#about",
+    "url": "/about.html",
     "category": "About"
   },
   {
     "id": "wef-shaper",
     "title": "WEF Global Shaper — San Francisco Hub",
     "snippet": "Panos is a World Economic Forum Global Shaper at the San Francisco Hub since December 2025. Also serves on the Executive Board of Social Impact SF.",
-    "url": "/#journey",
+    "url": "/about.html#journey",
     "category": "Milestones"
   },
   {
     "id": "education",
     "title": "Education — University of Patras & UPC Barcelona",
     "snippet": "M.Eng Mechanical Engineering, University of Patras — Top 3% of class, GPA 3.5. Erasmus at Universitat Politècnica de Catalunya (UPC Barcelona) studying Technology and Engineering Management.",
-    "url": "/#journey",
+    "url": "/about.html#journey",
     "category": "Education"
   },
   {
     "id": "hobbies",
     "title": "Hobbies — HYROX, CrossFit, Triathlon, Trail Running, Piano, Chess",
     "snippet": "Panos trains for HYROX and triathlons at a competitive level. Also into trail running, piano, and chess. Reads 40+ books per year across physics, AI, philosophy, and entrepreneurship.",
-    "url": "/#about",
+    "url": "/about.html",
     "category": "About"
   },
   {
     "id": "faq-givelink",
     "title": "FAQ: What is Givelink and how does it work?",
     "snippet": "Givelink lets donors shop the specific goods nonprofits need most — from food to hygiene products — with step-by-step delivery tracking, photo confirmation, and real impact stories. Instead of cash donations, you give exactly what's needed.",
-    "url": "/#faq",
+    "url": "/faq.html",
     "category": "FAQ"
   },
   {
     "id": "faq-booking",
     "title": "FAQ: How can I book a call with Panos?",
     "snippet": "Book a 30-minute call directly at tidycal.com/givelink/panos. Panos is open to conversations about Givelink partnerships, speaking invitations, podcast appearances, and connecting with founders working on hard problems.",
-    "url": "/#faq",
+    "url": "/faq.html",
     "category": "FAQ"
   },
   {
     "id": "faq-podcast",
     "title": "FAQ: What is Entrepreneurship Talks?",
     "snippet": "Entrepreneurship Talks is a long-form podcast and community Panos co-founded in 2020. 60+ episodes, 350K+ views, 5+ live events, $100K+ grant secured. Listen on Spotify or YouTube.",
-    "url": "/#faq",
+    "url": "/faq.html",
     "category": "FAQ"
   }
 ]

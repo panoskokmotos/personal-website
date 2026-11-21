@@ -1,0 +1,39 @@
+/* ── Island tour (homepage) ──
+   Sticky 3D stage beside scrolling chapters. Colours come from the site tokens in style.css,
+   so dark (default) and html[data-theme="light"] both follow automatically. */
+.isl { position: relative; padding: 40px 0 0; }
+.isl-head { max-width: 1120px; margin: 0 auto; padding: 0 24px 8px; }
+.isl-head .section-heading { margin-bottom: 8px; }
+.isl-head p { color: var(--text-muted); max-width: 60ch; margin: 0; }
+.isl-count { color: var(--gold); font-weight: 700; }
+.isl-layout { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); max-width: 1280px; margin: 0 auto; }
+.isl-stage { position: sticky; top: 64px; height: calc(100vh - 64px); background: url("island-poster.jpg") center / contain no-repeat; }
+.isl-stage.isl-loaded { background: none; }
+.isl-canvas { display: block; width: 100%; height: 100%; cursor: grab; touch-action: pan-y; }
+.isl-canvas:active { cursor: grabbing; }
+.isl-pins { position: absolute; inset: 0; pointer-events: none; }
+.isl-pin { position: absolute; transform: translate(-50%, -100%); pointer-events: auto; font: 600 11px var(--font); letter-spacing: .06em; text-transform: uppercase;
+  color: var(--text); background: var(--card-bg); border: 1px solid var(--border); border-radius: 999px; padding: 4px 10px; cursor: pointer; white-space: nowrap;
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); transition: opacity .3s, border-color .2s, color .2s; }
+.isl-pin[aria-current="true"] { border-color: var(--gold); color: var(--gold); }
+.isl-pin:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+.isl-hint { position: absolute; left: 24px; bottom: 18px; font-size: 12px; color: var(--text-muted); }
+.isl-story { padding: 12vh 24px 30vh; display: grid; gap: 26vh; }
+.isl-ch { max-width: 52ch; scroll-margin-top: 30vh; }
+.isl-ch .isl-eyebrow { font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--blue-light); }
+.isl-ch h3 { font-size: clamp(28px, 3vw, 40px); line-height: 1.05; margin: 6px 0; color: var(--navy); font-weight: 800; letter-spacing: -.01em; }
+.isl-ch .isl-role { font-weight: 600; margin: 0 0 4px; color: var(--text); }
+.isl-ch .isl-meta { font-size: 13px; color: var(--text-muted); margin: 0 0 10px; }
+.isl-ch ul { margin: 0 0 12px; padding-left: 18px; display: grid; gap: 6px; color: var(--text); }
+.isl-ch .isl-more { font-weight: 600; color: var(--blue-light); text-decoration: none; }
+.isl-ch .isl-more:hover { text-decoration: underline; }
+@media (max-width: 860px) {
+  .isl-layout { grid-template-columns: minmax(0, 1fr); }
+  .isl-stage { top: 60px; height: 46vh; z-index: 2; background-color: var(--bg); }
+  .isl-story { gap: 16vh; padding: 6vh 20px 20vh; }
+  .isl-ch { scroll-margin-top: 52vh; }
+  .isl-hint { left: 16px; bottom: 8px; }
+}
+@media (prefers-reduced-motion: reduce) { .isl-pin { transition: none; } }
+
+html[data-theme="light"] .isl-stage { background-image: none; } /* poster is the night render */
