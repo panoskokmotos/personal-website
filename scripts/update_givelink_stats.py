@@ -18,6 +18,10 @@ stats = {
     "liveNonprofits": len(live),
     "us": sum(1 for c in live if c.get("region") == "US"),
     "gr": sum(1 for c in live if c.get("region") == "GR"),
+    # Platform totals (counts only, no money — public-number rule)
+    "donations": (data.get("liveStats") or {}).get("totalDonations"),
+    "products": (data.get("liveStats") or {}).get("totalProducts"),
+    "people": (data.get("liveStats") or {}).get("peopleImpacted"),
     "updated": datetime.date.today().isoformat(),
 }
 out = ROOT / "assets" / "givelink-stats.json"

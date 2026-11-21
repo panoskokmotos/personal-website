@@ -102,7 +102,7 @@ const counterObserver = new IntersectionObserver(entries => {
 document.querySelectorAll('.impact-num').forEach(el => counterObserver.observe(el));
 
 // ── Theme: dark mode locked ──
-document.documentElement.setAttribute('data-theme', 'dark');
+document.documentElement.setAttribute('data-theme', 'light'); // bright 'Aegean day' theme (Nov 2026)
 
 // ── Scroll progress bar ──
 const progressBar = document.getElementById('progress-bar');
@@ -113,8 +113,9 @@ window.addEventListener('scroll', () => {
   progressBar.style.width = pct + '%';
 }, { passive: true });
 
-// ── Confetti on first visit (session-gated) ──
+// ── Confetti on first visit (retired Nov 2026: calmer reveals in assets/theme.js instead) ──
 (function () {
+  return;
   if (prefersReducedMotion) return;
   if (sessionStorage.getItem('confetti_done')) return;
   sessionStorage.setItem('confetti_done', '1');

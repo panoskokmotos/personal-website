@@ -1,0 +1,32 @@
+name: Refresh Givelink stats
+
+# Daily: pull live counts from the public Givelink feed into assets/givelink-stats.json.
+# The homepage lanterns and impact numbers read that file, so they stay current without manual edits.
+on:
+  schedule:
+    - cron: "15 5 * * *"   # 05:15 UTC every day
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Update stats
+        run: python3 scripts/update_givelink_stats.py
+      - name: Commit if the counts changed
+        run: |
+          # Ignore the date-only change so the repo doesn't get a commit every day for nothing.
+          if git diff --quiet -- assets/givelink-stats.json; then echo "no change"; exit 0; fi
+          if [ "$(git diff -U0 -- assets/givelink-stats.json | grep -E '^[-+]\{' | sed -E 's/"updated": "[^"]*"//' | sort -u | wc -l)" -le 1 ]; then echo "only the date changed"; git checkout -- assets/givelink-stats.json; exit 0; fi
+          git config user.name "givelink-stats-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/givelink-stats.json
+          git commit -m "Refresh Givelink stats"
+          git push

@@ -175,7 +175,10 @@ def build_island(name, base_r, center, depth_scale=1.0):
     return o
 
 island = build_island("ISLAND_main", 6.0, (0, 0, 0))
-islet = build_island("ISLAND_sf", 1.6, (9.2, -0.6, -0.05), depth_scale=0.45)
+SF = (13.2, -1.0)          # San Francisco island centre
+HQ = (6.6, 5.2, 2.4)       # AI agent HQ islet, floating higher between Greece and SF
+islet = build_island("ISLAND_sf", 3.2, (SF[0], SF[1], -0.05), depth_scale=0.7)
+hq_islet = build_island("ISLAND_hq", 1.5, HQ, depth_scale=0.35)
 for i, (x, y, z, r) in enumerate([(-4.5, -3.5, -5.5, 0.45), (3.8, 4.2, -4.6, 0.35), (-1.2, 5.6, -6.6, 0.28), (6.2, -4.4, -3.8, 0.3)]):
     ico(r, (x, y, z), ROCK if i % 2 else ROCK2, sub=1, name=f"ROCKBIT_{i}", scale=(1, 1, 1.3))
 
@@ -273,23 +276,23 @@ def trophy(root):
     ico(0.16, (0, 0, 0), GOLD, sub=0, parent=spin, scale=(1, 1, 1.4))
 
 def sf_bridge(root):
-    # Deck from the main island's east edge to the SF islet.
-    x0, x1, y = 5.35, 8.0, -0.6
+    # A Golden-Gate-style bridge from the Greek island's east edge to the San Francisco island.
+    x0, x1, y = 5.35, 10.2, -0.6
     deck_z = Z + 0.25
     box((x1 - x0, 0.5, 0.1), ((x0 + x1) / 2, y, deck_z), ORANGE, root)
-    towers = (5.9, 7.45)
-    top = deck_z + 1.55
+    towers = (6.4, 9.1)
+    top = deck_z + 1.9
     for tx in towers:
         for dy in (-0.2, 0.2):
-            box((0.12, 0.12, 1.85), (tx, y + dy, deck_z + 0.75), ORANGE, root)
-        for zz in (deck_z + 0.55, deck_z + 1.15, top):
+            box((0.12, 0.12, 2.2), (tx, y + dy, deck_z + 0.95), ORANGE, root)
+        for zz in (deck_z + 0.65, deck_z + 1.35, top):
             box((0.12, 0.46, 0.09), (tx, y, zz), ORANGE, root)
     for dy in (-0.22, 0.22):
         pts = []
-        for i in range(9):
-            s = i / 8
+        for i in range(13):
+            s = i / 12
             x = towers[0] + s * (towers[1] - towers[0])
-            pts.append((x, y + dy, top - 1.15 * 4 * s * (1 - s) + 0.0))
+            pts.append((x, y + dy, top - 1.5 * 4 * s * (1 - s) + 0.0))
         for a, b in zip(pts, pts[1:]):
             rod(a, b, 0.025, ORANGE, parent=root, verts=5)
         rod((x0, y + dy, deck_z + 0.05), (towers[0], y + dy, top), 0.025, ORANGE, parent=root, verts=5)
@@ -297,17 +300,97 @@ def sf_bridge(root):
         for (x, _, zt) in pts[1:-1]:
             rod((x, y + dy, deck_z), (x, y + dy, zt), 0.012, ORANGE, parent=root, verts=4)
 
+
+def person(loc, shirt, parent=None, name="PERSON"):
+    me = empty(name, loc, parent)
+    for dx in (-0.05, 0.05):
+        box((0.06, 0.07, 0.24), (dx, 0, 0.12), DARK, me)
+    box((0.2, 0.12, 0.24), (0, 0, 0.36), shirt, me)
+    ico(0.085, (0, 0, 0.58), SKIN, sub=1, parent=me)
+    return me
+
+def palm(loc, h=1.5, parent=None):
+    p = empty("palm", loc, parent)
+    cyl(0.06, h, (0, 0, h / 2), TRUNK, verts=6, r2=0.04, parent=p)
+    for k in range(6):
+        a = k * math.pi / 3
+        box((0.55, 0.12, 0.03), (0.25 * math.cos(a), 0.25 * math.sin(a), h - 0.02), PINE, p, rot=(0, -0.35, a))
+    return p
+
+LADIES = [mat("lady_pink", "#f4a6c0"), mat("lady_sky", "#8ec5ff"), mat("lady_mint", "#a8e0c0"), mat("lady_butter", "#ffe08a")]
+CABLE_RED = mat("cable_red", "#c0362c", 0.5); CREAM = mat("cream", "#f6ecd2")
+GLASS = mat("glass", "#9fd2ff", 0.12, 0.0); AGENT = mat("agent_white", "#f5f7ff", 0.35)
+AGENT_GLOW = mat("agent_glow", "#e0357a", 0.3, 0.0, 5.0); BAR_A = mat("bar_blue", "#3b6ef8", 0.45); BAR_B = mat("bar_pink", "#e0357a", 0.45)
+
+def sf_city(root):
+    # Transamerica-style pyramid, a row of painted Victorian houses, a cable car line and palms.
+    pyr = cyl(0.6, 2.8, (0.9, 0.7, Z + 1.4), MARBLE, verts=4, r2=0.03, parent=root, rot=(0, 0, math.pi / 4))
+    cyl(0.015, 0.4, (0.9, 0.7, Z + 3.0), DARK, verts=4, parent=root)
+    for i, m in enumerate(LADIES):
+        x = -1.7 + i * 0.58
+        box((0.52, 0.5, 0.78), (x, -1.45, Z + 0.39), m, root)
+        prism(0.28, 0.26, 0.32, (x, -1.45, Z + 0.78), WHITE, root, "roof")
+        for wz in (0.3, 0.58):
+            box((0.12, 0.03, 0.16), (x - 0.12, -1.71, Z + wz), WINDOW, root)
+            box((0.12, 0.03, 0.16), (x + 0.12, -1.71, Z + wz), WINDOW, root)
+    rails = empty("rails", (0, 0, 0), root)
+    for dy in (-0.12, 0.12):
+        rod((-1.9, 1.25 + dy, Z + 0.03), (1.9, 1.25 + dy, Z + 0.03), 0.02, DARK, parent=rails, verts=4)
+    car = empty("CABLECAR", (-1.2, 1.25, Z), root)
+    box((0.62, 0.3, 0.3), (0, 0, 0.2), CABLE_RED, car)
+    box((0.66, 0.34, 0.06), (0, 0, 0.38), CREAM, car)
+    for wx in (-0.18, 0.0, 0.18):
+        box((0.12, 0.31, 0.1), (wx, 0, 0.26), WINDOW, car)
+    for (px, py, h) in [(-0.4, 0.2, 1.4), (1.9, -0.6, 1.6), (-2.2, 0.6, 1.3)]:
+        palm((px, py, Z), h, root)
+    for (px, py, shirt) in [(-1.0, -0.9, BLUE), (-0.2, -0.85, RED), (0.4, 0.0, GOLD)]:
+        person((px, py, Z), shirt, root)
+
+def agent_hq(root):
+    # The AI agent HQ: a glass tower, a turning ring, a growth chart and a landing pad for the drones.
+    cyl(0.42, 1.9, (0, 0, Z + 0.95), GLASS, verts=12, parent=root)
+    for fz in (0.4, 0.85, 1.3, 1.75):
+        cyl(0.44, 0.04, (0, 0, Z + fz), WHITE, verts=12, parent=root)
+    cyl(0.46, 0.08, (0, 0, Z + 1.94), WHITE, verts=12, parent=root)
+    rod((0, 0, Z + 1.98), (0, 0, Z + 2.5), 0.02, DARK, parent=root, verts=4)
+    ico(0.07, (0, 0, Z + 2.55), AGENT_GLOW, sub=1, parent=root, name="GLOW_antenna")
+    ring = empty("SPINY_ring", (0, 0, Z + 1.35), root)
+    bpy.ops.mesh.primitive_torus_add(major_radius=0.72, minor_radius=0.03, major_segments=32, minor_segments=6, location=(0, 0, 0))
+    t = bpy.context.active_object; finish(t, GOLD, ring); t.rotation_euler = (0.35, 0, 0)
+    for i, h in enumerate([0.25, 0.4, 0.58, 0.8, 1.05]):
+        bar = empty(f"BAR_{i}", (-0.75 + i * 0.3, -0.85, Z), root)
+        box((0.2, 0.2, h), (0, 0, h / 2), BAR_B if i == 4 else BAR_A, bar)
+    cyl(0.32, 0.05, (0.85, 0.55, Z + 0.03), DARK, verts=16, parent=root)
+    cyl(0.25, 0.055, (0.85, 0.55, Z + 0.035), AGENT_GLOW, verts=16, parent=root, name="GLOW_pad")
+
+def drone():
+    d = empty("DRONE", (HQ[0] + 0.85, HQ[1] + 0.55, HQ[2] + 0.5))
+    ico(0.12, (0, 0, 0), AGENT, sub=1, parent=d, scale=(1, 1, 0.7))
+    cyl(0.2, 0.025, (0, 0, 0), AGENT_GLOW, verts=16, parent=d)
+    for k in range(4):
+        a = math.pi / 4 + k * math.pi / 2
+        rod((0, 0, 0), (0.22 * math.cos(a), 0.22 * math.sin(a), 0.02), 0.012, DARK, parent=d, verts=4)
+        r = empty(f"ROTOR_{k}", (0.22 * math.cos(a), 0.22 * math.sin(a), 0.04), d)
+        box((0.16, 0.02, 0.005), (0, 0, 0), DARK, r)
+    box((0.1, 0.1, 0.08), (0, 0, -0.13), GIFT2, d)   # a small parcel it carries
+
 LANDMARKS = {
     "givelink": ((0.0, 0.2, 0), givelink),
-    "aiops": ((-3.3, 2.0, 0), windmill),
+    "aiops": (HQ, agent_hq),
     "podcast": ((2.7, 2.7, 0), podcast),
     "education": ((-2.8, -2.6, 0), temple),
     "oss": ((0.9, -4.2, 0), lighthouse),
     "recognition": ((-0.7, 4.3, 0), trophy),
-    "sf": ((0, 0, 0), sf_bridge),
+    "sf": ((SF[0], SF[1], 0), sf_city),
 }
 for lid, (loc, fn) in LANDMARKS.items():
     fn(empty(f"LM_{lid}", loc))
+sf_bridge(empty("BRIDGE", (0, 0, 0)))
+windmill(empty("OBJ_windmill", (-3.3, 2.0, 0)))
+drone()
+# Islanders: a few people out and about on the Greek island.
+for i, (px, py, shirt) in enumerate([(-1.9, -1.4, GOLD), (1.6, 1.4, RED), (-2.2, 0.9, BLUE), (2.2, -2.0, GIFT1)]):
+    person((px, py, 0.2), shirt, name=f"PERSON_{i}")
 
 # Delivery van: built facing +x at the origin; the page drives it along the road to the door.
 van = empty("VAN", (0, 0, 0))
@@ -340,16 +423,17 @@ for i, (w, d, h, m, rot) in enumerate([(0.62, 0.44, 0.11, BLUE, 0.05), (0.56, 0.
 apple = ico(0.07, (0.05, 0.0, zb + 0.06), RED, sub=1, parent=books)
 
 # Cypresses on the SF islet sit outside the bridge root so the click target stays the bridge.
-for (dx, dy) in [(0.4, 0.5), (-0.3, -0.6), (0.7, -0.3)]:
-    cyl(0.18, 1.1, (9.2 + dx, -0.6 + dy, Z + 0.55), PINE, verts=7, r2=0.02)
+for (dx, dy) in [(-2.4, 1.6), (-2.0, -2.2), (2.6, 1.2)]:
+    cyl(0.18, 1.1, (SF[0] + dx, SF[1] + dy, Z + 0.55), PINE, verts=7, r2=0.02)
 
 # ---------- trees and paths ----------
 def clear_of_landmarks(x, y, pad=1.55):
     for (lx, ly, _), _fn in LANDMARKS.values():
         if (x - lx) ** 2 + (y - ly) ** 2 < pad ** 2:
             return False
-    if (x - BOOKS_AT[0]) ** 2 + (y - BOOKS_AT[1]) ** 2 < 0.9 ** 2:
-        return False
+    for (ex, ey, er) in [(BOOKS_AT[0], BOOKS_AT[1], 0.9), (-3.3, 2.0, 1.4), (-1.9, -1.4, 0.4), (1.6, 1.4, 0.4), (-2.2, 0.9, 0.4), (2.2, -2.0, 0.4)]:
+        if (x - ex) ** 2 + (y - ey) ** 2 < er ** 2:
+            return False
     for (rx, ry) in ROAD:
         if (x - rx) ** 2 + (y - ry) ** 2 < 0.55 ** 2:
             return False
@@ -378,7 +462,7 @@ while placed < 34 and tries < 2000:
         ico(random.uniform(0.22, 0.3), (x, y, zb + 0.15), GRASS2, sub=1, scale=(1, 1, 0.7))
     placed += 1
 
-for (lx, ly, _), _fn in list(LANDMARKS.values())[1:6]:
+for (lx, ly, _), _fn in [v for v in LANDMARKS.values() if math.hypot(v[0][0], v[0][1]) < 5.5][1:]:
     d = math.hypot(lx, ly)
     for k in range(1, 6):
         s = k / 6.0
@@ -393,14 +477,39 @@ for (x, y) in ROAD[::2]:
     cyl(0.22, 0.045, (x, y, 0.245 - 0.2 * (math.hypot(x, y) / 5.5)), STONE, verts=8)
 
 # ---------- clouds ----------
-for i, (cx, cy, cz) in enumerate([(-8.5, 3.5, 3.2), (7.5, 5.5, 4.0), (-6.0, -7.0, 2.2), (3.5, -8.0, 4.6), (-2.0, 8.5, 5.0), (11.5, -4.5, 2.6)]):
+for i, (cx, cy, cz) in enumerate([(-8.5, 3.5, 3.2), (9.5, 8.5, 4.6), (-6.0, -7.0, 2.2), (3.5, -8.0, 4.6), (-2.0, 8.5, 5.0), (17.5, -5.0, 2.6), (19.0, 3.0, 4.2), (6.5, -6.5, 3.4)]):
     root = empty(f"CLOUD_{i}", (cx, cy, cz))
     for k in range(4):
         ico(random.uniform(0.45, 0.8), (k * 0.6 - 0.9, random.uniform(-0.3, 0.3), random.uniform(-0.15, 0.25)), CLOUD, sub=1, parent=root, scale=(1, 0.8, 0.65))
 
 # ---------- export ----------
+# ---------- baked soft lighting (ambient occlusion → vertex colours) ----------
+# Pass --bake: Cycles bakes AO per face corner on every mesh; the glTF carries it as COLOR_0 and three.js
+# multiplies it into each material, so the web page gets soft contact shadows for free.
+BAKE = "--bake" in sys.argv
+if BAKE:
+    sc = bpy.context.scene
+    if sc.world is None:
+        sc.world = bpy.data.worlds.new("World")
+    sc.world.light_settings.distance = 1.2
+    sc.render.engine = "CYCLES"
+    sc.cycles.device = "CPU"
+    sc.cycles.samples = 32
+    # Hand-built meshes (heart, sails, roofs, pediment) have one-sided faces that bake black: leave them out.
+    meshes = [o for o in bpy.data.objects if o.type == "MESH" and not o.name.split(".")[0] in ("heart", "sail", "roof", "pediment")]
+    for o in meshes:
+        ca = o.data.color_attributes.get("AO") or o.data.color_attributes.new("AO", "BYTE_COLOR", "CORNER")
+        o.data.color_attributes.active_color = ca
+    bpy.ops.object.select_all(action="DESELECT")
+    for o in meshes:
+        o.select_set(True)
+    bpy.context.view_layer.objects.active = meshes[0]
+    bpy.ops.object.bake(type="AO", target="VERTEX_COLORS")
+    print("BAKED AO on", len(meshes), "meshes")
+GLTF_COLORS = dict(export_vertex_color="ACTIVE") if BAKE else {}
+
 glb = os.path.join(out_dir, "island.glb")
-bpy.ops.export_scene.gltf(filepath=glb, export_format="GLB", export_apply=True, export_cameras=False, export_lights=False)
+bpy.ops.export_scene.gltf(filepath=glb, export_format="GLB", export_apply=True, export_cameras=False, export_lights=False, **GLTF_COLORS)
 print("EXPORTED", glb, os.path.getsize(glb))
 
 # ---------- single-object exports for the other pages ----------
@@ -414,7 +523,7 @@ def export_one(root_name, filename):
     for o in tree(bpy.data.objects[root_name]):
         o.select_set(True)
     path = os.path.join(out_dir, filename)
-    bpy.ops.export_scene.gltf(filepath=path, export_format="GLB", use_selection=True, export_apply=True, export_cameras=False, export_lights=False)
+    bpy.ops.export_scene.gltf(filepath=path, export_format="GLB", use_selection=True, export_apply=True, export_cameras=False, export_lights=False, **GLTF_COLORS)
     print("EXPORTED", path, os.path.getsize(path))
 
 for root_name, filename in [("LM_education", "obj-temple.glb"), ("LM_recognition", "obj-trophy.glb"), ("LM_podcast", "obj-mic.glb"), ("OBJ_books", "obj-books.glb"), ("PLANE", "obj-plane.glb")]:
