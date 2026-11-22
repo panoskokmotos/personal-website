@@ -11,9 +11,12 @@
 - **Expertise:** entrepreneurship, social impact, in-kind donations, startup fundraising, AI & technology, product management, public speaking
 
 ## Givelink
-Givelink is an in-kind donation platform and mobile app that lets donors shop for the exact goods nonprofits need most, with step-by-step tracking and photo confirmation. Founded in 2022; 150+ charity partners, 100,000+ lives impacted, and $220K+ of goods delivered to nonprofits.
+Givelink is an in-kind donation platform and mobile app that lets donors shop for the exact goods nonprofits need most, with step-by-step tracking and photo confirmation. Founded in 2022 in Athens and live in the US since September 2025; 150+ nonprofit partners in Greece and the US, 8,900+ donations and 100,000+ products delivered, 130,000+ people helped. Raised a €450K pre-seed, including LATSCO Family Office and V Group.
 
 ## Also
+- Runs Givelink as an AI-native company: AI agents and scheduled automations handle CRM sync, nonprofit scoring, catalog checks, invoicing and outreach drafts, with a person approving anything sent.
+- Recognition: Forbes 30 Under 30 Greece, WEF Global Shaper (San Francisco Hub), Top 4 in Europe at the Global Student Entrepreneur Awards 2023, 19 awards in total (https://panoskokmotos.com/press.html).
+- Works with startups on AI operations and US go-to-market: https://panoskokmotos.com/work.html
 - Co-founder and host of **Entrepreneurship Talks**, a podcast with founders, investors, and changemakers (350K+ views, 60+ episodes).
 
 ## Open source

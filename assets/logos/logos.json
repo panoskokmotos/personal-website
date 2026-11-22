@@ -1,0 +1,110 @@
+[
+ {
+  "name": "Helping Mamas Atlanta",
+  "slug": "helping-mamas-atlanta",
+  "region": "US",
+  "logo": "/assets/logos/helping-mamas-atlanta.jpg"
+ },
+ {
+  "name": "Navajo Evangelical Lutheran Mission",
+  "slug": "nelm",
+  "region": "US",
+  "logo": "/assets/logos/nelm.jpg"
+ },
+ {
+  "name": "St Vincent de Paul of Alameda County",
+  "slug": "st-vincent-de-paul",
+  "region": "US",
+  "logo": "/assets/logos/st-vincent-de-paul.jpg"
+ },
+ {
+  "name": "Family Giving Tree",
+  "slug": "family-giving-tree",
+  "region": "US",
+  "logo": "/assets/logos/family-giving-tree.jpg"
+ },
+ {
+  "name": "Ukandu",
+  "slug": "ukandu",
+  "region": "US",
+  "logo": "/assets/logos/ukandu.jpg"
+ },
+ {
+  "name": "Swords to Plowshares",
+  "slug": "swords-to-plowshares",
+  "region": "US",
+  "logo": "/assets/logos/swords-to-plowshares.jpg"
+ },
+ {
+  "name": "Kesem Berkeley",
+  "slug": "kesem-berkeley",
+  "region": "US",
+  "logo": "/assets/logos/kesem-berkeley.jpg"
+ },
+ {
+  "name": "Passion for Pitties",
+  "slug": "passion-for-pitties",
+  "region": "US",
+  "logo": "/assets/logos/passion-for-pitties.jpg"
+ },
+ {
+  "name": "Maui Humane Society",
+  "slug": "maui-humane-society",
+  "region": "US",
+  "logo": "/assets/logos/maui-humane-society.jpg"
+ },
+ {
+  "name": "Inland Valley Humane Society & SPCA",
+  "slug": "inland-valley-humane-society",
+  "region": "US",
+  "logo": "/assets/logos/inland-valley-humane-society.jpg"
+ },
+ {
+  "name": "Volunteers of America - Greater New York",
+  "slug": "volunteers-of-america-ny",
+  "region": "US",
+  "logo": "/assets/logos/volunteers-of-america-ny.jpg"
+ },
+ {
+  "name": "Safe Alternatives to Violent Environments",
+  "slug": "save",
+  "region": "US",
+  "logo": "/assets/logos/save.jpg"
+ },
+ {
+  "name": "Humanity Greece",
+  "slug": "humanity-greece",
+  "region": "GR",
+  "logo": "/assets/logos/humanity-greece.jpg"
+ },
+ {
+  "name": "Genesis Hellas",
+  "slug": "genesis",
+  "region": "GR",
+  "logo": "/assets/logos/genesis.jpg"
+ },
+ {
+  "name": "Φροντίζω",
+  "slug": "frontizo",
+  "region": "GR",
+  "logo": "/assets/logos/frontizo.jpg"
+ },
+ {
+  "name": "Co2gether",
+  "slug": "co2gether",
+  "region": "GR",
+  "logo": "/assets/logos/co2gether.jpg"
+ },
+ {
+  "name": "ANIMA-Σύλλογος Προστασίας και Περίθαλψης Άγριας Ζωής",
+  "slug": "anima",
+  "region": "GR",
+  "logo": "/assets/logos/anima.jpg"
+ },
+ {
+  "name": "Η Αγκαλιά",
+  "slug": "agkalia",
+  "region": "GR",
+  "logo": "/assets/logos/agkalia.jpg"
+ }
+]

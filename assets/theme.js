@@ -3,12 +3,33 @@
 (function () {
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  // Day/night: bright by default; a visitor's choice is remembered (script.js sets 'light' on load, so re-apply here).
+  window.setSiteTheme = function (t) {
+    document.documentElement.setAttribute('data-theme', t);
+    try { localStorage.setItem('site_theme', t); } catch (e) {}
+    document.querySelectorAll('.theme-toggle').forEach(b => { b.textContent = t === 'dark' ? '☀' : '☾'; b.setAttribute('aria-label', t === 'dark' ? 'Switch to day' : 'Switch to night'); });
+    try { if (window.posthog && posthog.capture) posthog.capture('theme_toggle', { theme: t }); } catch (e) {}
+  };
+  let saved = null; try { saved = localStorage.getItem('site_theme'); } catch (e) {}
+  if (saved) document.documentElement.setAttribute('data-theme', saved);
+  const controls = document.querySelector('.nav-controls');
+  if (controls && !controls.querySelector('.theme-toggle')) {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'theme-toggle';
+    const cur = document.documentElement.getAttribute('data-theme');
+    b.textContent = cur === 'dark' ? '☀' : '☾'; b.setAttribute('aria-label', cur === 'dark' ? 'Switch to day' : 'Switch to night');
+    b.addEventListener('click', () => window.setSiteTheme(document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'));
+    controls.insertBefore(b, controls.firstChild);
+  }
+
+
   // Live counts: set data-target before the counter animation reads it (counters start on scroll).
   const stats = document.querySelectorAll('[data-stat]');
-  if (stats.length) {
+  if (stats.length || document.querySelector('.np-count')) {
     fetch('/assets/givelink-stats.json').then(r => r.json()).then(s => {
       const k = { peopleK: s.people, productsK: s.products, donationsK: s.donations };
       stats.forEach(el => { const v = k[el.dataset.stat]; if (v) el.dataset.target = Math.floor(v / 1000); });
+      document.querySelectorAll('.np-count').forEach(e => { if (s.liveNonprofits) e.textContent = s.liveNonprofits; });
     }).catch(() => {});
   }
 
