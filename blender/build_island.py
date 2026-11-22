@@ -403,6 +403,22 @@ for wx in (-0.22, 0.3):
     for wy in (-0.17, 0.17):
         cyl(0.08, 0.06, (wx, wy, 0.08), TYRE, verts=10, parent=van, rot=(math.pi / 2, 0, 0))
 
+
+# Supplier trucks: a blue cash-and-carry truck in Greece and a dark parcel truck in San Francisco bring goods to the nonprofits.
+TRUCK_BLUE = mat("truck_blue", "#1f4fa8", 0.5); TRUCK_DARK = mat("truck_dark", "#2a2f3a", 0.5); TRUCK_YELLOW = mat("truck_yellow", "#f4c430", 0.5)
+def truck(name, body_m, stripe_m):
+    t = empty(name, (0, 0, 0))
+    box((0.78, 0.38, 0.42), (-0.12, 0, 0.33), body_m, t)
+    box((0.8, 0.39, 0.06), (-0.12, 0, 0.42), stripe_m, t)
+    box((0.3, 0.36, 0.32), (0.43, 0, 0.27), WHITE, t)
+    box((0.02, 0.3, 0.13), (0.585, 0, 0.33), WINDOW, t)
+    for wx in (-0.35, 0.1, 0.43):
+        for wy in (-0.19, 0.19):
+            cyl(0.085, 0.06, (wx, wy, 0.085), TYRE, verts=10, parent=t, rot=(math.pi / 2, 0, 0))
+    return t
+truck("TRUCK_gr", TRUCK_BLUE, TRUCK_YELLOW)
+truck("TRUCK_us", TRUCK_DARK, GOLD)
+
 # Little plane for the Athens <-> San Francisco loop, nose along +x.
 plane = empty("PLANE", (0, 0, 0))
 cyl(0.11, 0.9, (0, 0, 0), WHITE, verts=10, parent=plane, rot=(0, math.pi / 2, 0))
@@ -549,7 +565,7 @@ def export_one(root_name, filename):
     bpy.ops.export_scene.gltf(filepath=path, export_format="GLB", use_selection=True, export_apply=True, export_cameras=False, export_lights=False, **GLTF_COLORS)
     print("EXPORTED", path, os.path.getsize(path))
 
-for root_name, filename in [("LM_education", "obj-temple.glb"), ("LM_recognition", "obj-trophy.glb"), ("LM_podcast", "obj-mic.glb"), ("OBJ_books", "obj-books.glb"), ("PLANE", "obj-plane.glb")]:
+for root_name, filename in [("LM_education", "obj-temple.glb"), ("LM_recognition", "obj-trophy.glb"), ("LM_podcast", "obj-mic.glb"), ("OBJ_books", "obj-books.glb"), ("PLANE", "obj-plane.glb"), ("OBJ_windmill", "obj-windmill.glb"), ("LM_oss", "obj-lighthouse.glb")]:
     export_one(root_name, filename)
 
 # PK coin for the loading screen: gold rim, Aegean-blue faces, raised gold "PK" on both sides. Not part of the island.

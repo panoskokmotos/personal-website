@@ -13,7 +13,8 @@
   });
   let libs = null;
   const three = () => libs || (libs = load('https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js')
-    .then(() => load('https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js')));
+    .then(() => load('https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js'))
+    .then(() => load('https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/libs/meshopt_decoder.js')));
 
   const io = new IntersectionObserver((entries) => {
     entries.forEach(e => { if (e.isIntersecting) { io.unobserve(e.target); three().then(() => mount(e.target)).catch(() => {}); } });
@@ -38,7 +39,8 @@
     const pivot = new THREE.Group(); scene.add(pivot);
     const glows = [];
 
-    new THREE.GLTFLoader().load('/assets/obj-' + el.dataset['3d'] + '.glb', (gltf) => {
+    const gl = new THREE.GLTFLoader(); if (window.MeshoptDecoder) gl.setMeshoptDecoder(window.MeshoptDecoder);
+    gl.load('/assets/obj-' + el.dataset['3d'] + '.glb', (gltf) => {
       const obj = gltf.scene;
       obj.traverse(o => {
         if (!o.isMesh) return;
@@ -52,16 +54,28 @@
       obj.position.sub(c);
       pivot.add(obj);
       const r = size.length() / 2;
-      camera.position.set(0, r * 0.55, r * 3.1);
-      camera.lookAt(0, 0, 0);
+      baseDist = r * 3.1; baseH = r * 0.55; placeCam();
       el.classList.add('is-loaded');
     });
 
-    // Drag to spin with a little momentum; otherwise turn slowly.
-    let dragging = false, lastX = 0, vel = 0;
-    canvas.addEventListener('pointerdown', ev => { dragging = true; lastX = ev.clientX; canvas.setPointerCapture(ev.pointerId); canvas.style.cursor = 'grabbing'; });
-    canvas.addEventListener('pointermove', ev => { if (!dragging) return; const dx = ev.clientX - lastX; lastX = ev.clientX; pivot.rotation.y += dx * 0.012; vel = dx * 0.012; });
-    canvas.addEventListener('pointerup', () => { dragging = false; canvas.style.cursor = 'grab'; });
+    // Drag to spin (sideways) and tilt (up/down), pinch or Ctrl/⌘ + scroll to zoom, double-click to reset.
+    let dragging = false, lastX = 0, lastY = 0, vel = 0, tilt = 0, zoom = 1, baseDist = 5, baseH = 1, pinch0 = 0, zoom0 = 1;
+    const pts = new Map();
+    function placeCam() { camera.position.set(0, baseH * zoom, baseDist * zoom); camera.lookAt(0, 0, 0); }
+    canvas.addEventListener('pointerdown', ev => { pts.set(ev.pointerId, ev); dragging = true; lastX = ev.clientX; lastY = ev.clientY; canvas.setPointerCapture(ev.pointerId); canvas.style.cursor = 'grabbing';
+      if (pts.size === 2) { const [a, b] = [...pts.values()]; pinch0 = Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY); zoom0 = zoom; } });
+    canvas.addEventListener('pointermove', ev => {
+      if (pts.has(ev.pointerId)) pts.set(ev.pointerId, ev);
+      if (pts.size === 2 && pinch0) { const [a, b] = [...pts.values()]; zoom = Math.min(2, Math.max(0.5, zoom0 * pinch0 / Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY))); placeCam(); return; }
+      if (!dragging) return;
+      const dx = ev.clientX - lastX, dy = ev.clientY - lastY; lastX = ev.clientX; lastY = ev.clientY;
+      pivot.rotation.y += dx * 0.012; vel = dx * 0.012;
+      if (ev.pointerType === 'mouse') { tilt = Math.max(-0.6, Math.min(0.6, tilt + dy * 0.008)); pivot.rotation.x = tilt; }
+    });
+    const end = ev => { pts.delete(ev.pointerId); if (pts.size < 2) pinch0 = 0; dragging = pts.size > 0; canvas.style.cursor = 'grab'; };
+    canvas.addEventListener('pointerup', end); canvas.addEventListener('pointercancel', end);
+    canvas.addEventListener('wheel', ev => { if (!(ev.ctrlKey || ev.metaKey)) return; ev.preventDefault(); zoom = Math.min(2, Math.max(0.5, zoom * Math.exp(ev.deltaY * 0.003))); placeCam(); }, { passive: false });
+    canvas.addEventListener('dblclick', () => { zoom = 1; tilt = 0; pivot.rotation.x = 0; placeCam(); });
 
     function resize() { const w = el.clientWidth, h = el.clientHeight; if (!w || !h) return; renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); }
     new ResizeObserver(resize).observe(el); resize();

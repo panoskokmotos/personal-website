@@ -36,7 +36,7 @@
 }
 @media (prefers-reduced-motion: reduce) { .isl-pin { transition: none; } }
 
-html[data-theme="light"] .isl-stage { background-image: none; } /* poster is the night render */
+/* poster is the daytime render; night sky replaces it in .isl-night */
 
 /* ── Hero (island is the hero) + Claude-style chat ── */
 .isl { padding-top: 0; }
@@ -98,3 +98,19 @@ html[data-theme="light"] .isl-stage { background-image: none; } /* poster is the
 @media (max-width: 860px) { .isl-hint { display: none; } .isl-story { padding-top: 40px; } }
 .isl-stage { overflow: hidden; }
 html, body { overflow-x: clip; }
+
+/* ── Island controls, night sky, zoom hint, phone hero ── */
+.isl-ctrl { position: absolute; right: 16px; bottom: 16px; display: flex; gap: 6px; z-index: 3; }
+.isl-ctrl button { width: 36px; height: 36px; border-radius: 12px; border: 1px solid var(--border); background: color-mix(in srgb, var(--bg) 82%, transparent); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); color: var(--navy); font: 600 16px var(--font); cursor: pointer; display: grid; place-items: center; transition: border-color .2s, color .2s, transform .15s; }
+.isl-ctrl button:hover { border-color: var(--blue); color: var(--blue); }
+.isl-ctrl button:active { transform: scale(.94); }
+.isl-ctrl button[aria-pressed="true"] { background: var(--blue); color: #fff; border-color: var(--blue); }
+.isl-zoomhint { position: absolute; left: 50%; top: 16px; transform: translateX(-50%); font-size: 12px; color: #fff; background: rgba(11,27,58,.72); padding: 6px 12px; border-radius: 999px; opacity: 0; pointer-events: none; transition: opacity .25s; z-index: 3; }
+.isl-zoomhint.show { opacity: 1; }
+html[data-theme] .isl-stage.isl-night { background: radial-gradient(120% 90% at 40% 30%, #22305a 0%, #0f1830 60%, #080d1f 100%) !important; }
+.isl-stage.isl-night .isl-hint { color: rgba(255,255,255,.6); }
+.isl-hero-top { max-width: none; padding: 92px 20px 8px; }
+@media (max-width: 860px) {
+  .isl-ctrl { right: 10px; bottom: 10px; }
+  .isl-ctrl button { width: 32px; height: 32px; border-radius: 10px; font-size: 14px; }
+}

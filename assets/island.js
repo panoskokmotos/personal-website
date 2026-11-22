@@ -10,7 +10,7 @@
   const pinsEl = section.querySelector('.isl-pins');
   const countEl = section.querySelector('.isl-count');
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const LABELS = { education: 'Patras', podcast: 'Podcast', givelink: 'Givelink', recognition: 'Recognition', sf: 'San Francisco', aiops: 'AI agents', oss: 'Open source' };
+  const LABELS = Object.assign({ education: 'Patras', podcast: 'Podcast', givelink: 'Givelink', recognition: 'Recognition', sf: 'San Francisco', aiops: 'AI agents', oss: 'Open source' }, (() => { try { return JSON.parse(section.dataset.labels || '{}'); } catch (e) { return {}; } })());
 
   const track = (event, props) => { try { if (window.posthog && posthog.capture) posthog.capture(event, props); } catch (e) {} };
   const goToChapter = (id) => { const el = document.getElementById('isl-' + id); if (el) el.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' }); };
@@ -29,9 +29,13 @@
     near.disconnect();
     loadScript('https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js')
       .then(() => loadScript('https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js'))
+      .then(() => loadScript('https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/libs/meshopt_decoder.js'))
       .then(init).catch(() => {});
   }, { rootMargin: '800px 0px' });
   near.observe(section);
+
+  // Phones: the hero (name + chat) goes above the island panel, not below it.
+  if (matchMedia('(max-width: 860px)').matches) { const hero = section.querySelector('.isl-hero'), layout = section.querySelector('.isl-layout'); if (hero && layout) { hero.classList.add('isl-hero-top'); section.insertBefore(hero, layout); } }
 
   function init() {
     const t0 = performance.now();
@@ -53,7 +57,8 @@
     sun.shadow.mapSize.set(1024, 1024);
     Object.assign(sun.shadow.camera, { left: -12, right: 12, top: 12, bottom: -12, near: 1, far: 50 });
     scene.add(hemi, sun);
-    const isDark = () => document.documentElement.getAttribute('data-theme') !== 'light';
+    // Night when the site is in dark mode, or (if the visitor never chose) when it's night where they are.
+    const isDark = () => { const t = document.documentElement.getAttribute('data-theme'); let saved = null; try { saved = localStorage.getItem('site_theme'); } catch (e) {} if (t === 'dark') return true; if (saved) return false; const h = new Date().getHours(); return h < 6 || h >= 20; };
 
     // Stars for the dark (night) theme.
     const starPos = [];
@@ -69,7 +74,9 @@
     let van = null, plane = null, arm = null, ground = null, gift = null, ready = false;
 
     const OVERVIEW = { target: new THREE.Vector3(6.2, 0.2, -0.8), offset: new THREE.Vector3(20, 17, 31) };
-    let goal = OVERVIEW, yaw = 0, current = 'overview';
+    let goal = OVERVIEW, yaw = 0, pitch = 0, zoom = 1, current = 'overview';
+    const trucks = [], lanternMeshes = [];
+    let lanternTotal = 0, lanternT0 = 0;
     const curTarget = OVERVIEW.target.clone(), curOffset = OVERVIEW.offset.clone().multiplyScalar(1.4);
     const par = new THREE.Vector2(), parGoal = new THREE.Vector2();
 
@@ -115,6 +122,7 @@
       const m = new THREE.Matrix4();
       pts.forEach((p, i) => { m.makeTranslation(p.x, p.y + 0.16, p.z); post.setMatrixAt(i, m); m.makeTranslation(p.x, p.y + 0.36, p.z); bulb.setMatrixAt(i, m); });
       island.add(post, bulb);
+      post.count = bulb.count = 0; lanternMeshes.push(post, bulb); lanternTotal = pts.length; lanternT0 = performance.now();
       glows.push(bulbMat);
     }
 
@@ -141,7 +149,8 @@
       });
     }
 
-    new THREE.GLTFLoader().load('assets/island.glb', (gltf) => {
+    const gl = new THREE.GLTFLoader(); if (window.MeshoptDecoder) gl.setMeshoptDecoder(window.MeshoptDecoder);
+    gl.load('assets/island.glb', (gltf) => {
       const root = gltf.scene;
       root.traverse(o => {
         if (o.isMesh) {
@@ -166,6 +175,7 @@
         else if (n.startsWith('PERSON')) people.push({ o, y: o.position.y, p: Math.random() * 6 });
         else if (n === 'CABLECAR') cableCar = { o, x: o.position.x };
         else if (n === 'DRONE') droneProto = o;
+        else if (n.startsWith('TRUCK_')) trucks.push({ o, kind: n.slice(6) });
         if (n.startsWith('GLOW_')) o.traverse(m => { if (m.isMesh) glows.push(m.material); });
       });
       island.add(root);
@@ -175,6 +185,8 @@
         lmBox[id] = { c: box.getCenter(new THREE.Vector3()), base: box.min.y, top: box.max.y, min: box.min.clone(), max: box.max.clone() };
       });
       road = new THREE.CatmullRomCurve3(ROAD.map(p => new THREE.Vector3(p[0], groundY(p[0], p[1]) + 0.02, p[1])));
+      const lane = pts => new THREE.CatmullRomCurve3(pts.map(p => new THREE.Vector3(p[0], groundY(p[0], p[1]) + 0.02, p[1])));
+      trucks.forEach(tr => { tr.curve = tr.kind === 'gr' ? lane([[-4.7, 0.9], [-3.4, 1.0], [-2.2, 1.15], [-1.1, 1.25]]) : lane([[10.5, 1.05], [11.8, 1.2], [13.1, 1.3], [14.3, 1.1]]); tr.speed = tr.kind === 'gr' ? 0.07 : 0.06; tr.off = tr.kind === 'gr' ? 0.3 : 0; });
       if (plane) scene.add(plane); // the plane flies in world space, not with the bobbing island
       gift = new THREE.Mesh(new THREE.BoxGeometry(0.18, 0.18, 0.18), new THREE.MeshStandardMaterial({ color: 0xf4a924, emissive: 0xf4a924, emissiveIntensity: 0 }));
       gift.visible = false; island.add(gift);
@@ -219,18 +231,64 @@
       for (let o = hit && hit.object; o; o = o.parent) if (o.name && o.name.startsWith('LM_')) return o.name.slice(3);
       return null;
     }
-    canvas.addEventListener('pointerdown', ev => { dragging = true; moved = 0; lastX = ev.clientX; canvas.setPointerCapture(ev.pointerId); });
+    // Orbit, tilt and zoom. Drag = rotate (sideways) and tilt (up/down); pinch or Ctrl/⌘ + scroll = zoom.
+    const touches = new Map(); let pinch0 = 0, zoom0 = 1, lastY = 0;
+    const clampZoom = z => Math.min(2.2, Math.max(0.35, z));
+    canvas.addEventListener('pointerdown', ev => { touches.set(ev.pointerId, ev); dragging = true; moved = 0; lastX = ev.clientX; lastY = ev.clientY; canvas.setPointerCapture(ev.pointerId);
+      if (touches.size === 2) { const [a, b] = [...touches.values()]; pinch0 = Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY); zoom0 = zoom; } });
     canvas.addEventListener('pointermove', ev => {
       const r = canvas.getBoundingClientRect();
       if (ev.pointerType === 'mouse') parGoal.set(((ev.clientX - r.left) / r.width) * 2 - 1, ((ev.clientY - r.top) / r.height) * 2 - 1);
-      if (dragging) { const dx = ev.clientX - lastX; lastX = ev.clientX; moved += Math.abs(dx); yaw -= dx * 0.006; }
-      else if (ev.pointerType === 'mouse') canvas.style.cursor = hitLandmark(ev) ? 'pointer' : '';
+      if (touches.has(ev.pointerId)) touches.set(ev.pointerId, ev);
+      if (touches.size === 2 && pinch0) { const [a, b] = [...touches.values()]; const d = Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY); zoom = clampZoom(zoom0 * pinch0 / d); moved = 99; return; }
+      if (dragging) {
+        const dx = ev.clientX - lastX, dy = ev.clientY - lastY; lastX = ev.clientX; lastY = ev.clientY; moved += Math.abs(dx) + Math.abs(dy);
+        yaw -= dx * 0.006;
+        if (ev.pointerType === 'mouse') pitch = Math.max(-0.5, Math.min(0.7, pitch + dy * 0.004));
+      } else if (ev.pointerType === 'mouse') canvas.style.cursor = hitLandmark(ev) ? 'pointer' : '';
     });
+    const endPtr = ev => { touches.delete(ev.pointerId); if (touches.size < 2) pinch0 = 0; };
     canvas.addEventListener('pointerleave', () => parGoal.set(0, 0));
+    canvas.addEventListener('pointercancel', endPtr);
     canvas.addEventListener('pointerup', ev => {
-      dragging = false;
+      endPtr(ev); dragging = touches.size > 0;
       if (moved < 6) { const id = hitLandmark(ev); if (id) { track('island_landmark_click', { landmark: id, via: '3d' }); goToChapter(id); } }
     });
+    canvas.addEventListener('wheel', ev => {
+      if (!(ev.ctrlKey || ev.metaKey)) { hint.classList.add('show'); clearTimeout(hint._t); hint._t = setTimeout(() => hint.classList.remove('show'), 1400); return; }
+      ev.preventDefault(); zoom = clampZoom(zoom * Math.exp(ev.deltaY * 0.0025));
+    }, { passive: false });
+    canvas.addEventListener('dblclick', () => { yaw = 0; pitch = 0; zoom = 1; });
+
+    // On-screen controls: zoom out/in, reset, day/night, ambient sound.
+    const bar = document.createElement('div'); bar.className = 'isl-ctrl';
+    bar.innerHTML = '<button type="button" data-a="out" aria-label="Zoom out">−</button><button type="button" data-a="in" aria-label="Zoom in">+</button><button type="button" data-a="reset" aria-label="Reset view">⟲</button><button type="button" data-a="night" aria-label="Day or night">☾</button><button type="button" data-a="sound" aria-label="Ambient sound" aria-pressed="false">♪</button>';
+    stage.appendChild(bar);
+    const hint = document.createElement('div'); hint.className = 'isl-zoomhint'; hint.textContent = navigator.platform.includes('Mac') ? 'Hold ⌘ and scroll to zoom' : 'Hold Ctrl and scroll to zoom'; stage.appendChild(hint);
+    let audio = null;
+    bar.addEventListener('click', ev => {
+      const a = ev.target.closest('button') && ev.target.closest('button').dataset.a; if (!a) return;
+      if (a === 'in') zoom = clampZoom(zoom / 1.25);
+      if (a === 'out') zoom = clampZoom(zoom * 1.25);
+      if (a === 'reset') { yaw = 0; pitch = 0; zoom = 1; }
+      if (a === 'night') { const dark = isDark(); window.setSiteTheme ? window.setSiteTheme(dark ? 'light' : 'dark') : document.documentElement.setAttribute('data-theme', dark ? 'light' : 'dark'); }
+      if (a === 'sound') { audio = audio || makeAmbience(); const on = audio.toggle(); ev.target.setAttribute('aria-pressed', String(on)); track('island_sound', { on }); }
+      track('island_control', { action: a });
+    });
+
+    // Gentle sea-and-wind ambience made in the browser (no audio files); starts only when asked.
+    function makeAmbience() {
+      const Ctx = window.AudioContext || window.webkitAudioContext; if (!Ctx) return { toggle: () => false };
+      const ctx = new Ctx(), len = ctx.sampleRate * 4, buf = ctx.createBuffer(1, len, ctx.sampleRate), d = buf.getChannelData(0);
+      let last = 0; for (let i = 0; i < len; i++) { const w = Math.random() * 2 - 1; last = (last + 0.02 * w) / 1.02; d[i] = last * 3.2; }
+      const src = ctx.createBufferSource(); src.buffer = buf; src.loop = true;
+      const lp = ctx.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 700;
+      const gain = ctx.createGain(); gain.gain.value = 0;
+      const lfo = ctx.createOscillator(), lfoGain = ctx.createGain(); lfo.frequency.value = 0.12; lfoGain.gain.value = 0.05; lfo.connect(lfoGain).connect(gain.gain);
+      src.connect(lp).connect(gain).connect(ctx.destination); src.start(); lfo.start();
+      let on = false;
+      return { toggle() { on = !on; ctx.resume(); gain.gain.cancelScheduledValues(ctx.currentTime); gain.gain.linearRampToValueAtTime(on ? 0.09 : 0, ctx.currentTime + 0.8); return on; } };
+    }
 
     function resize() {
       const w = canvas.clientWidth, h = canvas.clientHeight;
@@ -246,7 +304,7 @@
     let visible = true;
     new IntersectionObserver(e => { visible = e[e.length - 1].isIntersecting; if (visible && !running) { running = true; last = performance.now(); requestAnimationFrame(frame); } }, { rootMargin: '100px 0px' }).observe(section);
 
-    const tmp = new THREE.Vector3(), up = new THREE.Vector3(0, 1, 0);
+    const tmp = new THREE.Vector3(), up = new THREE.Vector3(0, 1, 0), sph = new THREE.Spherical();
     const ease = x => 1 - Math.pow(1 - Math.min(Math.max(x, 0), 1), 3);
     let last = performance.now(), enterT = 0;
     const VAN_CYCLE = 16;
@@ -286,8 +344,8 @@
       curOffset.lerp(goal.offset, k);
       par.lerp(parGoal, reduce ? 1 : 1 - Math.pow(0.1, dt));
       const narrow = canvas.clientWidth < 520 ? (current === 'overview' ? 0.8 : 0.95) : 1;
-      tmp.copy(curOffset).multiplyScalar(narrow).applyAxisAngle(up, yaw + par.x * 0.12);
-      tmp.y += par.y * 1.2;
+      tmp.copy(curOffset).multiplyScalar(narrow * zoom);
+      sph.setFromVector3(tmp); sph.theta += yaw + par.x * 0.12; sph.phi = Math.min(1.5, Math.max(0.18, sph.phi - pitch + par.y * 0.05)); tmp.setFromSpherical(sph);
       camera.position.copy(curTarget).add(tmp);
       camera.lookAt(curTarget);
 
@@ -308,6 +366,7 @@
             dr.d.position.copy(p); dr.d.rotation.set(0, Math.atan2(-tan.z, tan.x), 0);
             dr.rotors.forEach(r => { r.rotation.y += dt * 40; });
           });
+          trucks.forEach(tr => { if (!tr.curve) return; const c = (t * tr.speed + tr.off) % 1, u = c < 0.5 ? c * 2 : 2 - c * 2, p = tr.curve.getPointAt(Math.min(0.999, Math.max(0.001, u))), tan = tr.curve.getTangentAt(Math.min(0.999, Math.max(0.001, u))); if (c >= 0.5) tan.negate(); tr.o.position.copy(p); tr.o.rotation.set(0, Math.atan2(-tan.z, tan.x), 0); });
           bars.forEach((b, i) => { b.scale.y = 0.85 + 0.25 * (0.5 + 0.5 * Math.sin(t * 0.8 - i * 0.6)) * (1 + i * 0.15); });
           if (cableCar) cableCar.o.position.x = cableCar.x + 1.25 + Math.sin(t * 0.35) * 1.25;
           people.forEach(pp => { pp.o.position.y = pp.y + Math.abs(Math.sin(t * 2.2 + pp.p)) * 0.04; });
@@ -319,10 +378,12 @@
             plane.rotateX(-0.25);
           }
         } else if (van && road) { const p = road.getPointAt(1); van.position.copy(p); }
+        if (lanternTotal) { const n = reduce ? lanternTotal : Math.min(lanternTotal, Math.floor((now - lanternT0) / 18)); lanternMeshes.forEach(m => { m.count = n; }); }
         const dark = isDark();
         hemi.intensity = dark ? 0.75 : 0.9; hemi.color.setHex(dark ? 0x9fb4ff : 0xdfefff);
         sun.intensity = dark ? 0.45 : 1.6; sun.color.setHex(dark ? 0xb8c8ff : 0xfff1dc);
         stars.visible = dark;
+        stage.classList.toggle('isl-night', dark);
         windowMats.forEach(m => { m.emissive.setHex(dark ? 0xf4a924 : 0x000000); m.emissiveIntensity = dark ? 1.4 : 0; });
         glows.forEach(m => { if (m.emissive) m.emissiveIntensity = (dark ? 3 : 1.2) * (reduce ? 1 : 0.8 + 0.2 * Math.sin(t * 2.2)); });
       }
