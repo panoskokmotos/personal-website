@@ -87,6 +87,11 @@ def box(size, loc, m, parent=None, name=None, rot=(0, 0, 0)):
     bpy.ops.mesh.primitive_cube_add(size=1, location=loc, rotation=rot)
     o = bpy.context.active_object
     o.scale = size
+    # Soft bevelled edges: apply the scale first so the bevel is even on thin and thick boxes alike.
+    bpy.ops.object.transform_apply(location=False, rotation=False, scale=True)
+    w = min(0.02, min(size) * 0.18)
+    if w > 0.003:
+        bv = o.modifiers.new("bevel", "BEVEL"); bv.width = w; bv.segments = 1; bv.limit_method = "ANGLE"
     return finish(o, m, parent, name)
 
 def ico(r, loc, m, sub=1, parent=None, name=None, scale=(1, 1, 1)):

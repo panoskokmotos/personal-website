@@ -76,4 +76,37 @@
       card.style.setProperty('--my', (ev.clientY - r.top) + 'px');
     }, { passive: true });
   }
+
+  // "More" menu in the nav.
+  document.querySelectorAll('.nav-more-btn').forEach(btn => {
+    const li = btn.closest('.nav-more');
+    btn.addEventListener('click', e => { e.stopPropagation(); const open = li.classList.toggle('open'); btn.setAttribute('aria-expanded', String(open)); });
+  });
+  document.addEventListener('click', () => document.querySelectorAll('.nav-more.open').forEach(li => { li.classList.remove('open'); li.querySelector('.nav-more-btn').setAttribute('aria-expanded', 'false'); }));
+
+  // Language switch (EN / EL) next to the day/night button.
+  const navc = document.querySelector('.nav-controls');
+  if (navc && !navc.querySelector('.lang-switch')) {
+    const el = document.documentElement.lang === 'el';
+    const a = document.createElement('a'); a.className = 'lang-switch'; a.href = el ? '/' : '/el.html'; a.textContent = el ? 'EN' : 'EL'; a.lang = el ? 'en' : 'el';
+    a.setAttribute('aria-label', el ? 'English' : 'Ελληνικά');
+    navc.insertBefore(a, navc.firstChild);
+  }
+
+  // Funnel tracking: every booking-link click (TidyCal) and Work page CTA.
+  document.addEventListener('click', ev => {
+    const a = ev.target.closest && ev.target.closest('a[href*="tidycal.com"], a[href="/work.html"]');
+    if (!a) return;
+    try { if (window.posthog && posthog.capture) posthog.capture(a.href.includes('tidycal') ? 'booking_click' : 'work_page_click', { from: location.pathname, label: a.textContent.trim().slice(0, 40) }); } catch (e) {}
+  }, true);
+
+  // Side chat loads when the browser is idle, or right away if someone opens it first.
+  if (window.__lazyChat) {
+    let loaded = false;
+    const loadChat = (then) => { if (loaded) { if (then) then(); return; } loaded = true; const s = document.createElement('script'); s.src = window.__lazyChat; s.onload = () => { if (then) then(); }; document.body.appendChild(s); };
+    const t = document.getElementById('chatToggle');
+    if (t) t.addEventListener('click', function first(ev) { if (loaded) return; ev.preventDefault(); ev.stopImmediatePropagation(); t.removeEventListener('click', first, true); loadChat(() => t.click()); }, true);
+    const idle = window.requestIdleCallback || (cb => setTimeout(cb, 2500));
+    addEventListener('load', () => idle(() => loadChat(), { timeout: 4000 }));
+  }
 })();

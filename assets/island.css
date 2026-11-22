@@ -114,3 +114,20 @@ html[data-theme] .isl-stage.isl-night { background: radial-gradient(120% 90% at 
   .isl-ctrl { right: 10px; bottom: 10px; }
   .isl-ctrl button { width: 32px; height: 32px; border-radius: 10px; font-size: 14px; }
 }
+
+/* ── Landmark card, GivingTuesday banner, film grain ── */
+.isl-card { position: absolute; left: 20px; top: 20px; width: min(320px, calc(100% - 40px)); background: color-mix(in srgb, var(--bg) 92%, transparent); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border: 1px solid var(--border); border-radius: 18px; padding: 16px 18px 14px; box-shadow: var(--shadow-lg); z-index: 4; animation: cardIn .35s cubic-bezier(.2,.7,.2,1); }
+@keyframes cardIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.isl-card-eb { display: block; font-family: var(--mono); font-size: .68rem; letter-spacing: .14em; text-transform: uppercase; color: var(--blue); margin-bottom: 4px; padding-right: 24px; }
+.isl-card strong { display: block; font-family: var(--serif); font-weight: 400; font-size: 1.7rem; line-height: 1.05; color: var(--navy); margin-bottom: 6px; }
+.isl-card p { margin: 0 0 12px; font-size: .9rem; line-height: 1.5; color: var(--text-light); }
+.isl-card-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.isl-card-row button { font: 600 .82rem var(--font); background: var(--navy); color: var(--bg); border: 0; border-radius: 999px; padding: 7px 13px; cursor: pointer; }
+.isl-card-row button:hover { background: var(--blue); color: #fff; }
+.isl-card-row a { font-size: .82rem; font-weight: 600; color: var(--blue); text-decoration: none; }
+.isl-card-x { position: absolute; top: 8px; right: 10px; width: 28px; height: 28px; border: 0; background: transparent; color: var(--text-muted); font-size: 20px; cursor: pointer; border-radius: 8px; }
+.isl-card-x:hover { color: var(--navy); background: var(--border); }
+.isl-banner { position: absolute; left: 50%; top: 16px; transform: translateX(-50%); background: var(--blue); color: #fff; font-size: .8rem; font-weight: 600; padding: 7px 14px; border-radius: 999px; z-index: 3; white-space: nowrap; box-shadow: 0 6px 18px rgba(224,53,122,.3); }
+.isl-stage::after { content: ""; position: absolute; inset: 0; pointer-events: none; border-radius: inherit; opacity: .07; mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"); }
+@media (max-width: 860px) { .isl-card { left: 10px; top: 10px; width: calc(100% - 20px); } .isl-banner { font-size: .7rem; top: 8px; white-space: normal; text-align: center; width: max-content; max-width: 90%; } }
