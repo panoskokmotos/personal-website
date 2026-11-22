@@ -1,0 +1,37 @@
+[
+ {
+  "name": "Helping Mamas Atlanta",
+  "region": "US",
+  "src": "/assets/photos/helping-mamas-atlanta.jpg"
+ },
+ {
+  "name": "Navajo Evangelical Lutheran Mission",
+  "region": "US",
+  "src": "/assets/photos/nelm.jpg"
+ },
+ {
+  "name": "St Vincent de Paul of Alameda County",
+  "region": "US",
+  "src": "/assets/photos/st-vincent-de-paul.jpg"
+ },
+ {
+  "name": "Family Giving Tree",
+  "region": "US",
+  "src": "/assets/photos/family-giving-tree.jpg"
+ },
+ {
+  "name": "Humanity Greece",
+  "region": "GR",
+  "src": "/assets/photos/humanity-greece.jpg"
+ },
+ {
+  "name": "Genesis Hellas",
+  "region": "GR",
+  "src": "/assets/photos/genesis.jpg"
+ },
+ {
+  "name": "Φροντίζω",
+  "region": "GR",
+  "src": "/assets/photos/frontizo.jpg"
+ }
+]

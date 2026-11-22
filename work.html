@@ -57,8 +57,8 @@
 <!-- include:theme -->
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" />
-  <link rel="stylesheet" href="/assets/theme.css?v=20261126" />
-  <script src="/assets/theme.js?v=20261126" defer></script>
+  <link rel="stylesheet" href="/assets/theme.css?v=20261127" />
+  <script src="/assets/theme.js?v=20261127" defer></script>
 <!-- /include:theme -->
   <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png" />
   <link rel="icon" type="image/png" sizes="180x180" href="assets/favicon-180.png" />
@@ -149,11 +149,15 @@
         <li><a href="/about.html" class="nav-link">About</a></li>
         <li><a href="/work.html" class="nav-link">Work with me</a></li>
         <li><a href="/press.html" class="nav-link">Press</a></li>
-        <li><a href="/watch.html" class="nav-link">Watch</a></li>
-        <li><a href="/books.html" class="nav-link">Books</a></li>
-        <li><a href="/now.html" class="nav-link">Now</a></li>
-        <li><a href="/beliefs.html" class="nav-link">Beliefs</a></li>
-        <li><a href="https://tools.panoskokmotos.com/compass/#/" class="nav-link">AI Tools</a></li>
+        <li class="nav-more"><button type="button" class="nav-more-btn" aria-expanded="false" aria-haspopup="true">More <span aria-hidden="true">▾</span></button>
+          <ul class="nav-more-menu">
+            <li><a href="/now.html">Now</a></li>
+            <li><a href="/books.html">Books</a></li>
+            <li><a href="/watch.html">Watch</a></li>
+            <li><a href="/beliefs.html">Beliefs</a></li>
+            <li><a href="https://tools.panoskokmotos.com/compass/#/">AI Tools</a></li>
+          </ul>
+        </li>
         <li><a href="/goal.html" class="nav-cta">Let's Talk →</a></li>
       </ul>
       <div class="nav-controls">
@@ -228,6 +232,17 @@
         <div class="wk-case-stat"><strong>350K+</strong><span>views across 60+ episodes</span></div>
         <div><h3>Entrepreneurship Talks</h3><p>I co-founded a podcast in 2020 to learn from Greek founders. With a team of 20+ volunteers it reached 60+ episodes and 350,000+ views on Spotify and YouTube.</p></div>
       </div>
+    </div>
+  </section>
+
+  <section class="wk-who">
+    <div class="container">
+      <p class="section-eyebrow">Who I work with</p>
+      <ul class="wk-who-list">
+        <li><strong>Startups, seed to Series A</strong><span>Teams that want AI to take over repeat operations work before they hire for it.</span></li>
+        <li><strong>European founders going to the US</strong><span>A practical plan for the first hundred customers, from someone who just did it.</span></li>
+        <li><strong>Universities, accelerators, conferences</strong><span>Talks on AI-native operations, giving and social impact.</span></li>
+      </ul>
     </div>
   </section>
 
@@ -359,7 +374,7 @@
 <!-- /include:chat -->
   <script src="/shared.js?v=20261126"></script>
   <script src="script.min.js?v=20261016"></script>
-  <script src="chat.min.js?v=20261016"></script>
+  <script>window.__lazyChat="/chat.min.js?v=20261126";</script>
   <script src="/assets/page-object.js?v=20261126" defer></script>
   <script>
     // Testimonials: shown only when assets/quotes.json has entries [{"quote","name","role"}].
@@ -369,6 +384,21 @@
       q.forEach(x => { const f = document.createElement('figure'); f.className = 'wk-quote'; const b = document.createElement('blockquote'); b.textContent = x.quote; const c = document.createElement('figcaption'); c.innerHTML = '<strong></strong><span></span>'; c.querySelector('strong').textContent = x.name; c.querySelector('span').textContent = x.role || ''; f.append(b, c); g.appendChild(f); });
       document.getElementById('quotes').hidden = false;
     }).catch(() => {});
+  </script>
+  <div class="wk-sticky" id="wkSticky" aria-hidden="true">
+    <span>30-minute intro call</span>
+    <a class="btn btn-primary" href="https://tidycal.com/givelink/panos" target="_blank" rel="noopener" tabindex="-1">Book a call</a>
+  </div>
+  <script>
+    // Sticky booking bar: shows after the hero has scrolled away, hides again at the final call-to-action.
+    (function () {
+      const bar = document.getElementById('wkSticky'), hero = document.querySelector('.wk-hero'), fin = document.querySelector('.wk-final');
+      if (!bar || !hero || !fin) return;
+      let heroGone = false, finIn = false;
+      const upd = () => { const on = heroGone && !finIn; bar.classList.toggle('on', on); bar.setAttribute('aria-hidden', String(!on)); bar.querySelector('a').tabIndex = on ? 0 : -1; };
+      new IntersectionObserver(e => { heroGone = !e[0].isIntersecting; upd(); }).observe(hero);
+      new IntersectionObserver(e => { finIn = e[0].isIntersecting; upd(); }).observe(fin);
+    })();
   </script>
 </body>
 </html>

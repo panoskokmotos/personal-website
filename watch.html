@@ -59,8 +59,8 @@
 <!-- include:theme -->
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" />
-  <link rel="stylesheet" href="/assets/theme.css?v=20261126" />
-  <script src="/assets/theme.js?v=20261126" defer></script>
+  <link rel="stylesheet" href="/assets/theme.css?v=20261127" />
+  <script src="/assets/theme.js?v=20261127" defer></script>
 <!-- /include:theme -->
   <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png" />
   <link rel="icon" type="image/png" sizes="180x180" href="assets/favicon-180.png" />
@@ -256,11 +256,15 @@
         <li><a href="/about.html" class="nav-link">About</a></li>
         <li><a href="/work.html" class="nav-link">Work with me</a></li>
         <li><a href="/press.html" class="nav-link">Press</a></li>
-        <li><a href="/watch.html" class="nav-link">Watch</a></li>
-        <li><a href="/books.html" class="nav-link">Books</a></li>
-        <li><a href="/now.html" class="nav-link">Now</a></li>
-        <li><a href="/beliefs.html" class="nav-link">Beliefs</a></li>
-        <li><a href="https://tools.panoskokmotos.com/compass/#/" class="nav-link">AI Tools</a></li>
+        <li class="nav-more"><button type="button" class="nav-more-btn" aria-expanded="false" aria-haspopup="true">More <span aria-hidden="true">▾</span></button>
+          <ul class="nav-more-menu">
+            <li><a href="/now.html">Now</a></li>
+            <li><a href="/books.html">Books</a></li>
+            <li><a href="/watch.html">Watch</a></li>
+            <li><a href="/beliefs.html">Beliefs</a></li>
+            <li><a href="https://tools.panoskokmotos.com/compass/#/">AI Tools</a></li>
+          </ul>
+        </li>
         <li><a href="/goal.html" class="nav-cta">Let's Talk →</a></li>
       </ul>
       <div class="nav-controls">
@@ -588,6 +592,6 @@
 <!-- /include:chat -->
   <script src="/shared.js?v=20261126"></script>
   <script src="script.min.js?v=20261016"></script>
-  <script src="chat.min.js?v=20261016"></script>
+  <script>window.__lazyChat="/chat.min.js?v=20261126";</script>
 </body>
 </html>

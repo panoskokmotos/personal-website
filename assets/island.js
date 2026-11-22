@@ -192,6 +192,7 @@
       gift.visible = false; island.add(gift);
       fetch('assets/givelink-stats.json').then(r => r.json()).then(s => addLanterns(Math.min(s.gr || 0, 200), Math.min(s.us || 0, 200))).catch(() => addLanterns(55, 100));
       if (droneProto) setupDrones();
+      setupExtras();
 
       Object.keys(LABELS).forEach(id => {
         if (!landmarks[id]) return;
@@ -211,6 +212,7 @@
     const io = new IntersectionObserver(entries => {
       entries.forEach(e => {
         if (!e.isIntersecting) return;
+        if (touring) return;
         current = e.target.dataset.lm;
         goal = current === 'overview' ? OVERVIEW : shotFor(current);
         yaw = 0;
@@ -234,6 +236,7 @@
     // Orbit, tilt and zoom. Drag = rotate (sideways) and tilt (up/down); pinch or Ctrl/⌘ + scroll = zoom.
     const touches = new Map(); let pinch0 = 0, zoom0 = 1, lastY = 0;
     const clampZoom = z => Math.min(2.2, Math.max(0.35, z));
+    canvas.addEventListener('pointerdown', () => { if (touring) stopTour(); });
     canvas.addEventListener('pointerdown', ev => { touches.set(ev.pointerId, ev); dragging = true; moved = 0; lastX = ev.clientX; lastY = ev.clientY; canvas.setPointerCapture(ev.pointerId);
       if (touches.size === 2) { const [a, b] = [...touches.values()]; pinch0 = Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY); zoom0 = zoom; } });
     canvas.addEventListener('pointermove', ev => {
@@ -252,7 +255,7 @@
     canvas.addEventListener('pointercancel', endPtr);
     canvas.addEventListener('pointerup', ev => {
       endPtr(ev); dragging = touches.size > 0;
-      if (moved < 6) { const id = hitLandmark(ev); if (id) { track('island_landmark_click', { landmark: id, via: '3d' }); goToChapter(id); } }
+      if (moved < 6) { const id = hitLandmark(ev); if (id) { track('island_landmark_click', { landmark: id, via: '3d' }); stopTour(); openCard(id); } else closeCard(); }
     });
     canvas.addEventListener('wheel', ev => {
       if (!(ev.ctrlKey || ev.metaKey)) { hint.classList.add('show'); clearTimeout(hint._t); hint._t = setTimeout(() => hint.classList.remove('show'), 1400); return; }
@@ -262,12 +265,13 @@
 
     // On-screen controls: zoom out/in, reset, day/night, ambient sound.
     const bar = document.createElement('div'); bar.className = 'isl-ctrl';
-    bar.innerHTML = '<button type="button" data-a="out" aria-label="Zoom out">−</button><button type="button" data-a="in" aria-label="Zoom in">+</button><button type="button" data-a="reset" aria-label="Reset view">⟲</button><button type="button" data-a="night" aria-label="Day or night">☾</button><button type="button" data-a="sound" aria-label="Ambient sound" aria-pressed="false">♪</button>';
+    bar.innerHTML = '<button type="button" data-a="tour" aria-label="Play the guided tour">▶</button><button type="button" data-a="out" aria-label="Zoom out">−</button><button type="button" data-a="in" aria-label="Zoom in">+</button><button type="button" data-a="reset" aria-label="Reset view">⟲</button><button type="button" data-a="night" aria-label="Day or night">☾</button><button type="button" data-a="sound" aria-label="Ambient sound" aria-pressed="false">♪</button>';
     stage.appendChild(bar);
     const hint = document.createElement('div'); hint.className = 'isl-zoomhint'; hint.textContent = navigator.platform.includes('Mac') ? 'Hold ⌘ and scroll to zoom' : 'Hold Ctrl and scroll to zoom'; stage.appendChild(hint);
     let audio = null;
     bar.addEventListener('click', ev => {
       const a = ev.target.closest('button') && ev.target.closest('button').dataset.a; if (!a) return;
+      if (a === 'tour') { touring ? stopTour() : startTour(); }
       if (a === 'in') zoom = clampZoom(zoom / 1.25);
       if (a === 'out') zoom = clampZoom(zoom * 1.25);
       if (a === 'reset') { yaw = 0; pitch = 0; zoom = 1; }
@@ -288,6 +292,82 @@
       src.connect(lp).connect(gain).connect(ctx.destination); src.start(); lfo.start();
       let on = false;
       return { toggle() { on = !on; ctx.resume(); gain.gain.cancelScheduledValues(ctx.currentTime); gain.gain.linearRampToValueAtTime(on ? 0.09 : 0, ctx.currentTime + 0.8); return on; } };
+    }
+
+
+    // ── Landmark cards, guided tour, photo billboards, seasons, cloud fade ──
+    const ORDER = ['education', 'podcast', 'givelink', 'recognition', 'sf', 'aiops', 'oss'];
+    const card = document.createElement('div'); card.className = 'isl-card'; card.hidden = true; stage.appendChild(card);
+    let cardId = null, touring = false, tourI = 0, tourT = 0;
+    function openCard(id) {
+      const ch = document.getElementById('isl-' + id); if (!ch) return;
+      cardId = id; goal = shotFor(id); current = id; yaw = 0;
+      const eb = ch.querySelector('.isl-eyebrow'), h = ch.querySelector('h3'), li = ch.querySelector('li'), more = ch.querySelector('.isl-more');
+      card.innerHTML = '';
+      const e1 = document.createElement('span'); e1.className = 'isl-card-eb'; e1.textContent = eb ? eb.textContent : '';
+      const e2 = document.createElement('strong'); e2.textContent = h ? h.textContent : '';
+      const e3 = document.createElement('p'); e3.textContent = li ? li.textContent : '';
+      const row = document.createElement('div'); row.className = 'isl-card-row';
+      const read = document.createElement('button'); read.type = 'button'; read.textContent = section.dataset.read || 'Read the chapter'; read.addEventListener('click', () => { stopTour(); closeCard(); goToChapter(id); });
+      row.appendChild(read);
+      if (more) { const a = document.createElement('a'); a.href = more.href; a.textContent = more.textContent; if (more.target) a.target = more.target; row.appendChild(a); }
+      const x = document.createElement('button'); x.type = 'button'; x.className = 'isl-card-x'; x.setAttribute('aria-label', 'Close'); x.textContent = '×'; x.addEventListener('click', () => { stopTour(); closeCard(); });
+      card.append(x, e1, e2, e3, row); card.hidden = false;
+      Object.entries(pins).forEach(([pid, b]) => b.setAttribute('aria-current', String(pid === id)));
+    }
+    function closeCard() { card.hidden = true; cardId = null; }
+    function startTour() { touring = true; tourI = 0; tourT = performance.now(); openCard(ORDER[0]); bar.querySelector('[data-a="tour"]').textContent = '❚❚'; track('island_tour', { action: 'start' }); }
+    function stopTour() { if (!touring) return; touring = false; bar.querySelector('[data-a="tour"]').textContent = '▶'; track('island_tour', { action: 'stop', step: tourI }); }
+    addEventListener('wheel', () => { if (touring) stopTour(); }, { passive: true });
+    // pins open cards too
+    pinsEl.addEventListener('click', ev => { const b = ev.target.closest('.isl-pin'); if (!b) return; ev.stopImmediatePropagation(); const id = Object.keys(pins).find(k => pins[k] === b); if (id) { stopTour(); openCard(id); } }, true);
+
+    const boards = [], season = { snow: null, lights: [] };
+    let cloudMats = [];
+    function setupExtras() {
+      island.traverse(o => { if (o.isMesh && o.parent && o.parent.name && o.parent.name.startsWith('CLOUD_')) { o.material = o.material.clone(); o.material.transparent = true; cloudMats.push(o.material); } });
+      // Photo billboards: one per island, cycling through photos nonprofits published on Givelink.
+      fetch('/assets/photos/photos.json').then(r => r.json()).then(list => {
+        const loader = new THREE.TextureLoader();
+        [['GR', 3.2, 1.6], ['US', 15.0, 2.0]].forEach(([reg, x, z]) => {
+          const pics = list.filter(p => p.region === reg); if (!pics.length) return;
+          const texs = pics.map(p => { const t = loader.load(p.src); t.encoding = THREE.sRGBEncoding; return t; });
+          const g = new THREE.Group(); const y = groundY(x, z);
+          const post = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.05, 1.1, 6), new THREE.MeshStandardMaterial({ color: 0x1a2347 })); post.position.y = 0.55; g.add(post);
+          const frame = new THREE.Mesh(new THREE.BoxGeometry(1.24, 0.96, 0.06), new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.6 })); frame.position.y = 1.45; g.add(frame);
+          const face = new THREE.Mesh(new THREE.PlaneGeometry(1.12, 0.84), new THREE.MeshBasicMaterial({ map: texs[0], toneMapped: false })); face.position.set(0, 1.45, 0.035); g.add(face);
+          g.position.set(x, y, z); g.rotation.y = Math.atan2(FRONT.x, FRONT.z);
+          island.add(g); boards.push({ face, texs, i: 0 });
+        });
+      }).catch(() => {});
+      // Holiday season (Nov 20 to Jan 6): snow and string lights.
+      const d = new Date(), md = (d.getMonth() + 1) * 100 + d.getDate();
+      if (md >= 1120 || md <= 106) {
+        const n = 900, pos = new Float32Array(n * 3);
+        for (let i = 0; i < n; i++) { pos[i * 3] = -8 + Math.random() * 26; pos[i * 3 + 1] = Math.random() * 12 - 2; pos[i * 3 + 2] = -9 + Math.random() * 16; }
+        const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+        season.snow = new THREE.Points(g, new THREE.PointsMaterial({ color: 0xffffff, size: 0.07, transparent: true, opacity: 0.9 }));
+        scene.add(season.snow);
+        const cols = [0xf4a924, 0xe0357a, 0x3b6ef8, 0x6fae8a];
+        const strand = (cx, cz, r, y, count) => { for (let i = 0; i < count; i++) { const a = i / count * Math.PI * 2; const m = new THREE.Mesh(new THREE.SphereGeometry(0.035, 6, 4), new THREE.MeshStandardMaterial({ color: cols[i % 4], emissive: cols[i % 4], emissiveIntensity: 2 })); m.position.set(cx + Math.cos(a) * r, y, cz + Math.sin(a) * r); island.add(m); season.lights.push(m); } };
+        if (lmBox.givelink) strand(lmBox.givelink.c.x, lmBox.givelink.c.z, 1.25, lmBox.givelink.base + 1.35, 28);
+        if (lmBox.sf) strand(lmBox.sf.c.x, lmBox.sf.c.z, 1.8, lmBox.sf.base + 0.9, 36);
+      }
+      // GivingTuesday (Dec 1, 2026): a banner with the running donation count from the daily stats file.
+      if (md >= 1123 && md <= 1202) fetch('/assets/givelink-stats.json').then(r => r.json()).then(st => {
+        const b = document.createElement('div'); b.className = 'isl-banner';
+        b.textContent = (section.dataset.gt || 'GivingTuesday is Dec 1 · {n} donations through Givelink so far').replace('{n}', (Math.floor((st.donations || 0) / 100) * 100).toLocaleString() + '+');
+        stage.appendChild(b);
+      }).catch(() => {});
+    }
+    function extrasFrame(now, dt) {
+      const t = now / 1000;
+      boards.forEach(b => { const k = Math.floor(t / 5) % b.texs.length; if (k !== b.i && b.texs[k].image) { b.i = k; b.face.material.map = b.texs[k]; b.face.material.needsUpdate = true; } });
+      if (season.snow && !reduce) { const a = season.snow.geometry.attributes.position; for (let i = 0; i < a.count; i++) { let y = a.getY(i) - dt * 0.6; if (y < -3) y = 10; a.setY(i, y); a.setX(i, a.getX(i) + Math.sin(t + i) * dt * 0.05); } a.needsUpdate = true; }
+      season.lights.forEach((m, i) => { m.material.emissiveIntensity = reduce ? 2 : 1.2 + Math.sin(t * 3 + i) * 1.0; });
+      const dist = camera.position.distanceTo(curTarget);
+      cloudMats.forEach(m => { m.opacity = Math.min(1, Math.max(0.12, (dist - 7) / 14)); });
+      if (touring && now - tourT > 4500) { tourT = now; tourI++; if (tourI >= ORDER.length) { stopTour(); closeCard(); goal = OVERVIEW; } else openCard(ORDER[tourI]); }
     }
 
     function resize() {
@@ -387,6 +467,7 @@
         windowMats.forEach(m => { m.emissive.setHex(dark ? 0xf4a924 : 0x000000); m.emissiveIntensity = dark ? 1.4 : 0; });
         glows.forEach(m => { if (m.emissive) m.emissiveIntensity = (dark ? 3 : 1.2) * (reduce ? 1 : 0.8 + 0.2 * Math.sin(t * 2.2)); });
       }
+      extrasFrame(now, dt);
       renderer.render(scene, camera);
 
       const w = canvas.clientWidth, h = canvas.clientHeight, small = w < 520;
