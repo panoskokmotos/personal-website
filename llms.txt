@@ -15,8 +15,8 @@ Givelink is an in-kind donation platform and mobile app that lets donors shop fo
 
 ## Also
 - Runs Givelink as an AI-native company: AI agents and scheduled automations handle CRM sync, nonprofit scoring, catalog checks, invoicing and outreach drafts, with a person approving anything sent.
-- Recognition: Forbes 30 Under 30 Greece, WEF Global Shaper (San Francisco Hub), Top 4 in Europe at the Global Student Entrepreneur Awards 2023, 19 awards in total (https://panoskokmotos.com/press.html).
-- Works with startups on AI operations and US go-to-market: https://panoskokmotos.com/work.html
+- Recognition: Forbes 30 Under 30 Greece, WEF Global Shaper (San Francisco Hub), Top 4 in Europe at the Global Student Entrepreneur Awards 2023, 19 awards in total (https://panoskokmotos.com/press).
+- Works with startups on AI operations and US go-to-market: https://panoskokmotos.com/work
 - Co-founder and host of **Entrepreneurship Talks**, a podcast with founders, investors, and changemakers (350K+ views, 60+ episodes).
 
 ## Open source
@@ -34,12 +34,12 @@ Givelink is an in-kind donation platform and mobile app that lets donors shop fo
 
 ## Pages on this site
 - https://panoskokmotos.com/ — home / full profile, work, press, and contact
-- https://panoskokmotos.com/goal.html — why this site exists, what Panos is open to, and how to reach him
-- https://panoskokmotos.com/now.html — what Panos is focused on right now
-- https://panoskokmotos.com/books.html — books that shaped his thinking
-- https://panoskokmotos.com/beliefs.html — things he believes
-- https://panoskokmotos.com/podcast.html — the Entrepreneurship Talks podcast
-- https://panoskokmotos.com/watch.html — talks, interviews, and media
+- https://panoskokmotos.com/goal — why this site exists, what Panos is open to, and how to reach him
+- https://panoskokmotos.com/now — what Panos is focused on right now
+- https://panoskokmotos.com/books — books that shaped his thinking
+- https://panoskokmotos.com/beliefs — things he believes
+- https://panoskokmotos.com/podcast — the Entrepreneurship Talks podcast
+- https://panoskokmotos.com/watch — talks, interviews, and media
 
 ## Usage
 This content is factual and may be quoted or cited with attribution to Panos Kokmotos (panoskokmotos.com).

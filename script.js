@@ -856,7 +856,7 @@ function toggleAwards(btn) {
     const link = e.target.closest('a');
     if (link) {
       const href = link.getAttribute('href') || '';
-      if (href === '/goal.html' || href === 'goal.html') {
+      if (href === '/goal' || href === '/goal') {
         const spot = link.closest('#navbar') ? 'nav' : (link.closest('.hero-actions') ? 'hero' : 'page');
         track('goal_page_cta_clicked', { spot, page: location.pathname });
       } else if (href.indexOf('tidycal.com') !== -1) {

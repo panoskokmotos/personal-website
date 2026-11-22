@@ -3,6 +3,9 @@
 (function () {
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  // Clean URLs: /about rather than /about.html (GitHub Pages serves both; show the clean one).
+  if (/\.html$/.test(location.pathname)) { const clean = location.pathname.replace(/\/index\.html$/, '/').replace(/\.html$/, ''); try { history.replaceState(null, '', clean + location.search + location.hash); } catch (e) {} }
+
   // Day/night: bright by default; a visitor's choice is remembered (script.js sets 'light' on load, so re-apply here).
   window.setSiteTheme = function (t) {
     document.documentElement.setAttribute('data-theme', t);
@@ -88,14 +91,14 @@
   const navc = document.querySelector('.nav-controls');
   if (navc && !navc.querySelector('.lang-switch')) {
     const el = document.documentElement.lang === 'el';
-    const a = document.createElement('a'); a.className = 'lang-switch'; a.href = el ? '/' : '/el.html'; a.textContent = el ? 'EN' : 'EL'; a.lang = el ? 'en' : 'el';
+    const a = document.createElement('a'); a.className = 'lang-switch'; a.href = el ? '/' : '/el'; a.textContent = el ? 'EN' : 'EL'; a.lang = el ? 'en' : 'el';
     a.setAttribute('aria-label', el ? 'English' : 'Ελληνικά');
     navc.insertBefore(a, navc.firstChild);
   }
 
   // Funnel tracking: every booking-link click (TidyCal) and Work page CTA.
   document.addEventListener('click', ev => {
-    const a = ev.target.closest && ev.target.closest('a[href*="tidycal.com"], a[href="/work.html"]');
+    const a = ev.target.closest && ev.target.closest('a[href*="tidycal.com"], a[href="/work"]');
     if (!a) return;
     try { if (window.posthog && posthog.capture) posthog.capture(a.href.includes('tidycal') ? 'booking_click' : 'work_page_click', { from: location.pathname, label: a.textContent.trim().slice(0, 40) }); } catch (e) {}
   }, true);
