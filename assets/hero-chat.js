@@ -49,13 +49,16 @@
     try {
       const res = await fetch(window.SITE_CONFIG.chatUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ messages }) });
       const data = await res.json();
-      const reply = data.text || 'Sorry, I had trouble answering. Please try again.';
+      let reply = data.text || '';
+      const fb = window.chatFallback ? window.chatFallback(text, reply) : null;
+      if (fb) { reply = fb; track('hero_chat_fallback', {}); }
       thinking.remove();
       add('assistant', reply);
       messages.push({ role: 'assistant', content: reply }); save();
     } catch (e) {
       thinking.remove();
-      add('assistant', 'I couldn\'t connect just now. You can reach the real me through the Let\'s Talk page.');
+      const fb = window.chatFallback ? window.chatFallback(text, '') : null;
+      add('assistant', fb || 'I couldn\'t connect just now. You can reach the real me through the Let\'s Talk page.');
     } finally {
       send.disabled = false;
       input.focus({ preventScroll: true });
