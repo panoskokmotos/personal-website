@@ -207,3 +207,42 @@ html[data-theme="light"] .press-thumb-placeholder .ptp-label, html[data-theme="l
 html[data-theme="light"] .nav-links .nav-more-btn { color: var(--text-light); }
 .nav-links .nav-more-btn:hover { background: var(--card-hover); }
 .nav-more-menu a { font-size: 0.9rem !important; padding: 8px 12px !important; }
+
+/* ── Less "AI template", more editorial (Nov 2026 feedback) ──
+   No coloured-italic accent words, no spaced-out mono caps labels, no pills or 01/02/03 numbering. */
+.section-heading em, h1 em, h2 em, .hero-title em, html[data-theme="light"] .section-heading em, html[data-theme="light"] h1 em, html[data-theme="light"] h2 em, html[data-theme="light"] .hero-title em { font-style: normal !important; color: inherit !important; }
+.section-eyebrow, .impact-eyebrow, .isl-eyebrow, .isl-ch .isl-eyebrow, .isl-card-eb, .hero-kicker, .now-tag, .blog-tag, .featured-label {
+  font-family: var(--font) !important; text-transform: none !important; letter-spacing: 0 !important; font-size: .92rem !important; font-weight: 500 !important; color: var(--text-muted) !important; }
+.isl-ch .isl-eyebrow { color: var(--blue) !important; }
+.now-tag, .blog-tag { border: 0 !important; padding: 0 !important; }
+.wk-num { display: none; }
+.wk-meta { font-family: var(--font) !important; letter-spacing: 0 !important; }
+.hero-title { letter-spacing: -0.03em; }
+.hero-creds { margin: 0 0 22px; font-size: .92rem; color: var(--text-muted); line-height: 1.6; }
+.impact-static { font-family: var(--serif); font-size: clamp(2rem, 4vw, 2.6rem); color: var(--navy); line-height: 1; letter-spacing: -0.02em; display: block; }
+.impact-label { font-size: .86rem !important; max-width: 18ch; }
+
+/* ── Nonprofit logos: larger, greyscale until hovered, slow scrolling strip ── */
+.np-logos { display: block !important; overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); }
+.np-track { display: flex; gap: 18px; width: max-content; animation: npScroll 60s linear infinite; padding: 6px 0; }
+.np-logos:hover .np-track { animation-play-state: paused; }
+.np-logos li { width: 128px !important; height: 128px !important; border-radius: 22px !important; position: relative; flex: none; }
+.np-logos img { width: 104px !important; height: 104px !important; filter: grayscale(1) contrast(1.05); opacity: .78; transition: filter .3s, opacity .3s, transform .3s; }
+.np-logos li:hover img { filter: none; opacity: 1; transform: scale(1.04); }
+.np-logos li::after { content: attr(data-name); position: absolute; left: 50%; bottom: -26px; transform: translateX(-50%); font-size: .74rem; color: var(--text-muted); white-space: nowrap; max-width: 180px; overflow: hidden; text-overflow: ellipsis; opacity: 0; transition: opacity .2s; }
+.np-logos li:hover::after { opacity: 1; }
+.np-logos { padding-bottom: 28px; }
+@keyframes npScroll { to { transform: translateX(-50%); } }
+@media (prefers-reduced-motion: reduce) { .np-track { animation: none; flex-wrap: wrap; width: auto; } }
+/* Numbers band: one clean row (big number + four stats) */
+.impact-bar { padding: 0 !important; }
+.impact-bar-inner { display: grid !important; grid-template-columns: minmax(0, 1.1fr) minmax(0, 2.6fr) !important; align-items: center !important; gap: 36px !important; max-width: 1120px; margin: 0 auto !important; padding: 56px 24px !important; }
+.impact-center-hero { text-align: left !important; display: flex; flex-direction: column; align-items: flex-start !important; gap: 6px; }
+.impact-center-hero .impact-num-big { font-size: clamp(4rem, 8vw, 6rem) !important; line-height: .9 !important; }
+.impact-label-big { font-size: .95rem !important; max-width: 28ch; text-align: left; }
+.impact-stats-row { display: grid !important; grid-template-columns: repeat(4, minmax(0, 1fr)) !important; gap: 24px !important; align-items: start !important; }
+.impact-stat { display: flex !important; flex-direction: column !important; align-items: flex-start !important; text-align: left !important; gap: 6px; border-left: 1px solid var(--border); padding-left: 18px; }
+.impact-stat .impact-num { font-size: clamp(2rem, 4vw, 2.6rem) !important; }
+.impact-label { max-width: none !important; text-align: left !important; }
+@media (max-width: 860px) { .impact-bar-inner { grid-template-columns: minmax(0, 1fr) !important; padding: 40px 20px !important; } .impact-stats-row { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; } }
+.np-home { padding-top: 80px !important; }

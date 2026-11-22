@@ -280,60 +280,70 @@
       track('island_control', { action: a });
     });
 
-    // Generative island music, made in the browser (no audio files): soft pads moving through D Dorian chords,
-    // a sparse plucked melody like a distant bouzouki, and quiet waves. Starts only when the visitor asks.
+    // Island music, generated in the browser (no audio files). An uplifting I-V-vi-IV progression in D major at 92 BPM:
+    // warm pads and a piano-like arpeggio, a rising bell melody joins after 4 bars and a soft pulse after 8.
     function makeAmbience() {
       const Ctx = window.AudioContext || window.webkitAudioContext; if (!Ctx) return { toggle: () => false };
       const ctx = new Ctx(), master = ctx.createGain(); master.gain.value = 0;
-      // Reverb from a generated impulse response.
-      const rev = ctx.createConvolver(), irLen = ctx.sampleRate * 3.2, ir = ctx.createBuffer(2, irLen, ctx.sampleRate);
-      for (let c = 0; c < 2; c++) { const d = ir.getChannelData(c); for (let i = 0; i < irLen; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / irLen, 2.6); }
+      const comp = ctx.createDynamicsCompressor(); comp.threshold.value = -18; comp.ratio.value = 3;
+      const rev = ctx.createConvolver(), irLen = ctx.sampleRate * 2.6, ir = ctx.createBuffer(2, irLen, ctx.sampleRate);
+      for (let c = 0; c < 2; c++) { const d = ir.getChannelData(c); for (let i = 0; i < irLen; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / irLen, 2.2); }
       rev.buffer = ir;
-      const wet = ctx.createGain(); wet.gain.value = 0.55; const dry = ctx.createGain(); dry.gain.value = 0.6;
-      const bus = ctx.createGain(); bus.connect(dry).connect(master); bus.connect(rev).connect(wet).connect(master);
-      master.connect(ctx.destination);
+      const bus = ctx.createGain(), wet = ctx.createGain(), dry = ctx.createGain(); wet.gain.value = 0.42; dry.gain.value = 0.75;
+      bus.connect(dry).connect(comp); bus.connect(rev).connect(wet).connect(comp); comp.connect(master).connect(ctx.destination);
       const hz = m => 440 * Math.pow(2, (m - 69) / 12);
-      // Waves: filtered noise with a slow swell.
-      const nLen = ctx.sampleRate * 4, nb = ctx.createBuffer(1, nLen, ctx.sampleRate), nd = nb.getChannelData(0); let last = 0;
-      for (let i = 0; i < nLen; i++) { last = (last + 0.02 * (Math.random() * 2 - 1)) / 1.02; nd[i] = last * 3; }
-      const noise = ctx.createBufferSource(); noise.buffer = nb; noise.loop = true;
-      const nlp = ctx.createBiquadFilter(); nlp.type = 'lowpass'; nlp.frequency.value = 500;
-      const ng = ctx.createGain(); ng.gain.value = 0.05; const lfo = ctx.createOscillator(), lg = ctx.createGain(); lfo.frequency.value = 0.09; lg.gain.value = 0.035; lfo.connect(lg).connect(ng.gain);
-      noise.connect(nlp).connect(ng).connect(master); noise.start(); lfo.start();
-      // Chords (MIDI notes) in D Dorian: Dm9, Fmaj7, Cadd9, Gm7.
-      const chords = [[50, 57, 60, 64, 65], [53, 57, 60, 64, 69], [48, 55, 62, 64, 67], [55, 58, 62, 65, 70]];
-      const scale = [62, 64, 65, 67, 69, 71, 72, 74, 76, 77];
-      let on = false, ci = 0, timer = null;
-      function pad(notes, t, dur) {
-        notes.forEach((m, k) => {
-          const o = ctx.createOscillator(), g = ctx.createGain(), f = ctx.createBiquadFilter();
-          o.type = k === 0 ? 'sine' : 'triangle'; o.frequency.value = hz(m); o.detune.value = (Math.random() - 0.5) * 8;
-          f.type = 'lowpass'; f.frequency.value = 1400;
-          g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(k === 0 ? 0.05 : 0.028, t + 2.2); g.gain.linearRampToValueAtTime(0, t + dur + 1.5);
-          o.connect(f).connect(g).connect(bus); o.start(t); o.stop(t + dur + 1.6);
+      const BEAT = 60 / 92, BAR = BEAT * 4;
+      const chords = [[50, 57, 62, 66, 69], [45, 57, 61, 64, 69], [47, 54, 59, 62, 66], [43, 55, 59, 62, 67]]; // D, A, Bm, G
+      const melody = [[74, 78, 81, 83], [81, 80, 76, 73], [78, 81, 83, 86], [83, 81, 79, 78]];          // rises, answers, lifts, resolves
+      function pad(notes, t) {
+        notes.slice(0, 4).forEach((m, k) => {
+          [-6, 6].forEach(det => {
+            const o = ctx.createOscillator(), g = ctx.createGain(), f = ctx.createBiquadFilter();
+            o.type = 'sawtooth'; o.frequency.value = hz(m); o.detune.value = det;
+            f.type = 'lowpass'; f.frequency.setValueAtTime(600, t); f.frequency.linearRampToValueAtTime(1400, t + BAR * 0.6); f.Q.value = 0.4;
+            g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(k === 0 ? 0.022 : 0.012, t + 0.9); g.gain.linearRampToValueAtTime(0, t + BAR + 0.6);
+            o.connect(f).connect(g).connect(bus); o.start(t); o.stop(t + BAR + 0.7);
+          });
         });
       }
-      function pluck(m, t) {
-        const o = ctx.createOscillator(), o2 = ctx.createOscillator(), g = ctx.createGain(), f = ctx.createBiquadFilter();
-        o.type = 'triangle'; o2.type = 'sine'; o.frequency.value = hz(m); o2.frequency.value = hz(m + 12) * 1.002;
-        f.type = 'lowpass'; f.frequency.setValueAtTime(3200, t); f.frequency.exponentialRampToValueAtTime(700, t + 0.6);
-        g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.05, t + 0.01); g.gain.exponentialRampToValueAtTime(0.0001, t + 1.4);
-        o.connect(f); o2.connect(f); f.connect(g).connect(bus); o.start(t); o2.start(t); o.stop(t + 1.5); o2.stop(t + 1.5);
+      function keys(m, t, vel, len) {
+        const o = ctx.createOscillator(), o2 = ctx.createOscillator(), g = ctx.createGain();
+        o.type = 'sine'; o2.type = 'triangle'; o.frequency.value = hz(m); o2.frequency.value = hz(m) * 2;
+        const g2 = ctx.createGain(); g2.gain.value = 0.25;
+        g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(vel, t + 0.008); g.gain.exponentialRampToValueAtTime(0.0001, t + len);
+        o.connect(g); o2.connect(g2).connect(g); g.connect(bus); o.start(t); o2.start(t); o.stop(t + len + 0.05); o2.stop(t + len + 0.05);
       }
-      function bar() {
-        const t = ctx.currentTime + 0.05, len = 8;
-        pad(chords[ci % chords.length], t, len);
-        // A short phrase: a few notes, often resting, leaning on chord tones.
-        let at = t + 0.8;
-        for (let k = 0; k < 6; k++) { if (Math.random() < 0.55) pluck(scale[Math.floor(Math.random() * scale.length)], at); at += [0.5, 0.75, 1, 1.25][Math.floor(Math.random() * 4)]; }
-        ci++;
+      function bell(m, t) {
+        [1, 2.76, 5.4].forEach((r, k) => { const o = ctx.createOscillator(), g = ctx.createGain(); o.type = 'sine'; o.frequency.value = hz(m) * r;
+          const v = [0.06, 0.018, 0.008][k]; g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(v, t + 0.005); g.gain.exponentialRampToValueAtTime(0.0001, t + 1.8 - k * 0.5);
+          o.connect(g).connect(bus); o.start(t); o.stop(t + 1.9); });
+      }
+      function pulse(t) {
+        const o = ctx.createOscillator(), g = ctx.createGain(); o.type = 'sine';
+        o.frequency.setValueAtTime(110, t); o.frequency.exponentialRampToValueAtTime(42, t + 0.18);
+        g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.16, t + 0.01); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.35);
+        o.connect(g).connect(comp); o.start(t); o.stop(t + 0.4);
+      }
+      let on = false, barN = 0, next = 0, timer = null;
+      function schedule() {
+        while (next < ctx.currentTime + 0.6) {
+          const ci = barN % 4, ch = chords[ci], t = next;
+          pad(ch, t);
+          keys(ch[0] - 12, t, 0.05, BAR * 0.9);                                    // bass
+          const arp = [ch[1], ch[2], ch[3], ch[4], ch[3], ch[2], ch[3], ch[4]];
+          arp.forEach((m, k) => keys(m + 12, t + k * BEAT / 2, k % 2 ? 0.022 : 0.032, 0.9)); // eighth-note arpeggio
+          if (barN >= 4) melody[ci].forEach((m, k) => { if (!(barN % 8 >= 4 && k === 3)) bell(m, t + k * BEAT); });
+          if (barN >= 8) [0, 2].forEach(b => pulse(t + b * BEAT));
+          barN = (barN + 1) % 32; if (barN === 0) barN = 4;                         // after the intro, loop without it
+          next += BAR;
+        }
       }
       return { toggle() {
         on = !on; ctx.resume();
         master.gain.cancelScheduledValues(ctx.currentTime);
-        master.gain.linearRampToValueAtTime(on ? 0.9 : 0, ctx.currentTime + 1.2);
-        if (on && !timer) { bar(); timer = setInterval(() => { if (on) bar(); }, 8000); }
-        if (!on && timer) { setTimeout(() => { if (!on) { clearInterval(timer); timer = null; } }, 1300); }
+        master.gain.linearRampToValueAtTime(on ? 0.85 : 0, ctx.currentTime + (on ? 1.5 : 1.0));
+        if (on && !timer) { barN = 0; next = ctx.currentTime + 0.1; schedule(); timer = setInterval(schedule, 200); }
+        if (!on && timer) { setTimeout(() => { if (!on) { clearInterval(timer); timer = null; } }, 1100); }
         return on;
       } };
     }
