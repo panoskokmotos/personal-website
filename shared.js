@@ -32,12 +32,12 @@
     if (/ai|agent|automat|claude|build/.test(q))
       return note + 'I run Givelink like an AI-native company. Agents spot nonprofits facing an urgent need and draft outreach that I approve before anything is sent. Scheduled automations sync our CRM, score every nonprofit, check catalog prices and close invoices, so a small team works like a big one.';
     if (/work together|collab|hire|speak|advis|partner|contact|reach|email|call/.test(q))
-      return note + 'The best way is the Let\'s Talk page: https://panoskokmotos.com/goal.html. I\'m open to partnerships, speaking, advising, and nonprofits or companies that want to work with Givelink.';
+      return note + 'The best way is the Let\'s Talk page: https://panoskokmotos.com/goal. I\'m open to partnerships, speaking, advising, and nonprofits or companies that want to work with Givelink.';
     if (/podcast|entrepreneurship talks|episode/.test(q))
-      return note + 'Entrepreneurship Talks is the podcast I co-founded in 2020: 60+ episodes and 350,000+ views of conversations with Greek founders. https://panoskokmotos.com/podcast.html';
+      return note + 'Entrepreneurship Talks is the podcast I co-founded in 2020: 60+ episodes and 350,000+ views of conversations with Greek founders. https://panoskokmotos.com/podcast';
     if (/givelink|what (is|does)|donat/.test(q))
       return note + 'Givelink is an in-kind giving platform. Donors buy the exact items a nonprofit needs and see a photo when they arrive. 150+ nonprofits in Greece and the US use it, with 8,900+ donations and 100,000+ products delivered so far. https://givelink.app';
-    return note + 'I\'m Panos, co-founder and COO of Givelink, based between Athens and San Francisco. For anything specific, the Let\'s Talk page reaches the real me: https://panoskokmotos.com/goal.html';
+    return note + 'I\'m Panos, co-founder and COO of Givelink, based between Athens and San Francisco. For anything specific, the Let\'s Talk page reaches the real me: https://panoskokmotos.com/goal';
   };
 
   window.escapeHtml = function (str) {

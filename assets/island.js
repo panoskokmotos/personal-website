@@ -265,7 +265,7 @@
 
     // On-screen controls: zoom out/in, reset, day/night, ambient sound.
     const bar = document.createElement('div'); bar.className = 'isl-ctrl';
-    bar.innerHTML = '<button type="button" data-a="tour" aria-label="Play the guided tour">▶</button><button type="button" data-a="out" aria-label="Zoom out">−</button><button type="button" data-a="in" aria-label="Zoom in">+</button><button type="button" data-a="reset" aria-label="Reset view">⟲</button><button type="button" data-a="night" aria-label="Day or night">☾</button><button type="button" data-a="sound" aria-label="Ambient sound" aria-pressed="false">♪</button>';
+    bar.innerHTML = '<button type="button" data-a="tour" aria-label="Play the guided tour">▶</button><button type="button" data-a="out" aria-label="Zoom out">−</button><button type="button" data-a="in" aria-label="Zoom in">+</button><button type="button" data-a="reset" aria-label="Reset view">⟲</button><button type="button" data-a="night" aria-label="Day or night">☾</button><button type="button" data-a="sound" aria-label="Island music" aria-pressed="false">♪</button>';
     stage.appendChild(bar);
     const hint = document.createElement('div'); hint.className = 'isl-zoomhint'; hint.textContent = navigator.platform.includes('Mac') ? 'Hold ⌘ and scroll to zoom' : 'Hold Ctrl and scroll to zoom'; stage.appendChild(hint);
     let audio = null;
@@ -280,18 +280,62 @@
       track('island_control', { action: a });
     });
 
-    // Gentle sea-and-wind ambience made in the browser (no audio files); starts only when asked.
+    // Generative island music, made in the browser (no audio files): soft pads moving through D Dorian chords,
+    // a sparse plucked melody like a distant bouzouki, and quiet waves. Starts only when the visitor asks.
     function makeAmbience() {
       const Ctx = window.AudioContext || window.webkitAudioContext; if (!Ctx) return { toggle: () => false };
-      const ctx = new Ctx(), len = ctx.sampleRate * 4, buf = ctx.createBuffer(1, len, ctx.sampleRate), d = buf.getChannelData(0);
-      let last = 0; for (let i = 0; i < len; i++) { const w = Math.random() * 2 - 1; last = (last + 0.02 * w) / 1.02; d[i] = last * 3.2; }
-      const src = ctx.createBufferSource(); src.buffer = buf; src.loop = true;
-      const lp = ctx.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 700;
-      const gain = ctx.createGain(); gain.gain.value = 0;
-      const lfo = ctx.createOscillator(), lfoGain = ctx.createGain(); lfo.frequency.value = 0.12; lfoGain.gain.value = 0.05; lfo.connect(lfoGain).connect(gain.gain);
-      src.connect(lp).connect(gain).connect(ctx.destination); src.start(); lfo.start();
-      let on = false;
-      return { toggle() { on = !on; ctx.resume(); gain.gain.cancelScheduledValues(ctx.currentTime); gain.gain.linearRampToValueAtTime(on ? 0.09 : 0, ctx.currentTime + 0.8); return on; } };
+      const ctx = new Ctx(), master = ctx.createGain(); master.gain.value = 0;
+      // Reverb from a generated impulse response.
+      const rev = ctx.createConvolver(), irLen = ctx.sampleRate * 3.2, ir = ctx.createBuffer(2, irLen, ctx.sampleRate);
+      for (let c = 0; c < 2; c++) { const d = ir.getChannelData(c); for (let i = 0; i < irLen; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / irLen, 2.6); }
+      rev.buffer = ir;
+      const wet = ctx.createGain(); wet.gain.value = 0.55; const dry = ctx.createGain(); dry.gain.value = 0.6;
+      const bus = ctx.createGain(); bus.connect(dry).connect(master); bus.connect(rev).connect(wet).connect(master);
+      master.connect(ctx.destination);
+      const hz = m => 440 * Math.pow(2, (m - 69) / 12);
+      // Waves: filtered noise with a slow swell.
+      const nLen = ctx.sampleRate * 4, nb = ctx.createBuffer(1, nLen, ctx.sampleRate), nd = nb.getChannelData(0); let last = 0;
+      for (let i = 0; i < nLen; i++) { last = (last + 0.02 * (Math.random() * 2 - 1)) / 1.02; nd[i] = last * 3; }
+      const noise = ctx.createBufferSource(); noise.buffer = nb; noise.loop = true;
+      const nlp = ctx.createBiquadFilter(); nlp.type = 'lowpass'; nlp.frequency.value = 500;
+      const ng = ctx.createGain(); ng.gain.value = 0.05; const lfo = ctx.createOscillator(), lg = ctx.createGain(); lfo.frequency.value = 0.09; lg.gain.value = 0.035; lfo.connect(lg).connect(ng.gain);
+      noise.connect(nlp).connect(ng).connect(master); noise.start(); lfo.start();
+      // Chords (MIDI notes) in D Dorian: Dm9, Fmaj7, Cadd9, Gm7.
+      const chords = [[50, 57, 60, 64, 65], [53, 57, 60, 64, 69], [48, 55, 62, 64, 67], [55, 58, 62, 65, 70]];
+      const scale = [62, 64, 65, 67, 69, 71, 72, 74, 76, 77];
+      let on = false, ci = 0, timer = null;
+      function pad(notes, t, dur) {
+        notes.forEach((m, k) => {
+          const o = ctx.createOscillator(), g = ctx.createGain(), f = ctx.createBiquadFilter();
+          o.type = k === 0 ? 'sine' : 'triangle'; o.frequency.value = hz(m); o.detune.value = (Math.random() - 0.5) * 8;
+          f.type = 'lowpass'; f.frequency.value = 1400;
+          g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(k === 0 ? 0.05 : 0.028, t + 2.2); g.gain.linearRampToValueAtTime(0, t + dur + 1.5);
+          o.connect(f).connect(g).connect(bus); o.start(t); o.stop(t + dur + 1.6);
+        });
+      }
+      function pluck(m, t) {
+        const o = ctx.createOscillator(), o2 = ctx.createOscillator(), g = ctx.createGain(), f = ctx.createBiquadFilter();
+        o.type = 'triangle'; o2.type = 'sine'; o.frequency.value = hz(m); o2.frequency.value = hz(m + 12) * 1.002;
+        f.type = 'lowpass'; f.frequency.setValueAtTime(3200, t); f.frequency.exponentialRampToValueAtTime(700, t + 0.6);
+        g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.05, t + 0.01); g.gain.exponentialRampToValueAtTime(0.0001, t + 1.4);
+        o.connect(f); o2.connect(f); f.connect(g).connect(bus); o.start(t); o2.start(t); o.stop(t + 1.5); o2.stop(t + 1.5);
+      }
+      function bar() {
+        const t = ctx.currentTime + 0.05, len = 8;
+        pad(chords[ci % chords.length], t, len);
+        // A short phrase: a few notes, often resting, leaning on chord tones.
+        let at = t + 0.8;
+        for (let k = 0; k < 6; k++) { if (Math.random() < 0.55) pluck(scale[Math.floor(Math.random() * scale.length)], at); at += [0.5, 0.75, 1, 1.25][Math.floor(Math.random() * 4)]; }
+        ci++;
+      }
+      return { toggle() {
+        on = !on; ctx.resume();
+        master.gain.cancelScheduledValues(ctx.currentTime);
+        master.gain.linearRampToValueAtTime(on ? 0.9 : 0, ctx.currentTime + 1.2);
+        if (on && !timer) { bar(); timer = setInterval(() => { if (on) bar(); }, 8000); }
+        if (!on && timer) { setTimeout(() => { if (!on) { clearInterval(timer); timer = null; } }, 1300); }
+        return on;
+      } };
     }
 
 

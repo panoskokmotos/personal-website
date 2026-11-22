@@ -62,7 +62,7 @@ HOBBIES: HYROX, CrossFit, Triathlon, Trail Running, Piano, Chess
 LANGUAGES: Greek (native), English (C2), French (B2), Spanish (elementary)
 READS: ~40 books/year across physics, AI, philosophy, and entrepreneurship
 
-BOOKS THAT SHAPED PANOS (panoskokmotos.com/books.html):
+BOOKS THAT SHAPED PANOS (panoskokmotos.com/books):
 Science & Future:
 1. The Fabric of Reality — David Deutsch. Key ideas: Reality is understood by connecting ideas across disciplines; good explanations survive serious criticism; progress starts with better questions. Shaped Panos: deepened his systems thinking and his belief that big problems require cross-disciplinary curiosity.
 2. The Beginning of Infinity — David Deutsch. Key ideas: Knowledge grows through bold conjectures and criticism; progress is open-ended when reason is protected; good explanations are hard to vary. Shaped Panos: his conviction that there are no unsolvable problems, only bad explanations.
@@ -81,7 +81,7 @@ Entrepreneurship & Execution:
 11. The Lean Startup — Eric Ries. Key ideas: Test assumptions fast before over-investing; validated learning guides priorities; iteration speed is a long-term advantage. Shaped Panos: his "ship fast, learn faster" approach to building.
 12. Shoe Dog — Phil Knight. Key ideas: Building iconic companies requires resilience through chaos; mission-aligned teams outperform when resources are tight; conviction and consistency matter more than short-term comfort. Shaped Panos: his stamina and his belief that the hardest stretches are usually the most important ones.
 
-PANOS'S 12 BELIEFS (panoskokmotos.com/beliefs.html):
+PANOS'S 12 BELIEFS (panoskokmotos.com/beliefs):
 01. "Real impact is always specific." — Vague missions help no one. Givelink doesn't fight poverty — it makes sure a specific shelter gets the exact sleeping bags it needs.
 02. "Your mental model is your most important asset." — He reads 40 books a year not for information, but to build a more accurate map of how the world works.
 03. "Constraints are instructions." — Limitations are not obstacles; they're design briefs. The best solutions almost always come from working within tight constraints.
@@ -264,7 +264,7 @@ export default {
             <p style="color:#666;font-size:13px;margin-bottom:20px">From <a href="${pageUrl || 'https://panoskokmotos.com'}" style="color:#3b6ef8">panoskokmotos.com</a></p>
             <div style="background:#f8f9fc;border:1px solid #e5e7eb;border-radius:10px;padding:20px;font-size:14px;line-height:1.7;white-space:pre-wrap">${safeResult}</div>
             ${subscribe ? '<p style="background:#e8f5e9;border-radius:6px;padding:8px 14px;font-size:13px;color:#1a7a2e;margin-top:16px">✓ You\'ve subscribed to Panos\'s monthly social-impact digest.</p>' : ''}
-          <p style="color:#999;font-size:12px;margin-top:20px">Sent from <a href="https://panoskokmotos.com/ai-tools.html" style="color:#3b6ef8">Free AI for Social Impact tools</a> by Panos Kokmotos</p>
+          <p style="color:#999;font-size:12px;margin-top:20px">Sent from <a href="https://panoskokmotos.com/ai-tools" style="color:#3b6ef8">Free AI for Social Impact tools</a> by Panos Kokmotos</p>
           </div>`;
 
         const mcRes = await fetch('https://api.mailchannels.net/tx/v1/send', {
