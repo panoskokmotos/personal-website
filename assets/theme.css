@@ -118,3 +118,28 @@ html[data-theme="light"] .section-heading em, html[data-theme="light"] h1 em, ht
 html[data-theme="light"] .isl-stage { background: radial-gradient(120% 90% at 40% 30%, #ffffff 0%, var(--sky) 55%, #b9dbff 100%) !important; border-radius: 28px; }
 html[data-theme="light"] .impact-bar, html[data-theme="light"] .featured-bar, html[data-theme="light"] .section-alt { background: var(--bg-alt) !important; }
 html[data-theme="light"] .isl-count { color: var(--aegean) !important; }
+
+/* ── Bright-theme repairs: components built for the old forced-dark site (contrast audit, Nov 2026) ── */
+html[data-theme="light"] .section-heading.light, html[data-theme="light"] .press-sub-heading { color: var(--navy) !important; }
+html[data-theme="light"] :is(.section-dark, .impact-bar, .featured-bar, #contact, #press, #experience) :is(p, li, span, strong, label, small, .press-outlet, .press-headline, .lc-date, .press-kit-note, .contact-sub, .impact-label, .impact-label-big):not(.btn):not(.btn *):not(.section-eyebrow):not(.isl-eyebrow) { color: var(--text) !important; -webkit-text-fill-color: currentColor; }
+html[data-theme="light"] :is(.section-dark, #contact, #press, #experience) :is(h3, h4, strong) { color: var(--navy) !important; }
+html[data-theme="light"] .impact-label, html[data-theme="light"] .impact-label-big, html[data-theme="light"] .lc-date, html[data-theme="light"] .press-kit-note { color: var(--text-muted) !important; }
+html[data-theme="light"] .btn-press-kit { color: var(--navy) !important; border: 1px solid var(--border) !important; background: transparent !important; }
+html[data-theme="light"] .btn-press-kit:hover { border-color: var(--blue) !important; color: var(--blue) !important; }
+html[data-theme="light"] .ms-tag-gold { color: #8a5a00 !important; background: #fdf1d8 !important; border-color: #f2d49a !important; }
+html[data-theme="light"] .bnr-label { color: var(--text-muted) !important; }
+/* Press/featured logos: dark silhouettes on the bright theme */
+html[data-theme="light"] .logo-item, html[data-theme="light"] .logo-item svg, html[data-theme="light"] .featured-bar svg { color: var(--navy) !important; fill: currentColor; opacity: .72; }
+html[data-theme="light"] .logo-item img, html[data-theme="light"] .featured-bar img { filter: brightness(0) saturate(100%); opacity: .7; }
+/* Impact row: wrap instead of overflowing, no vertical dividers */
+.impact-stats-row { flex-wrap: wrap !important; justify-content: center !important; gap: 28px 44px !important; }
+.impact-divider { display: none !important; }
+/* One headline family everywhere: island chapters and cards use the serif like section headings */
+.isl-ch h3 { font-family: var(--serif) !important; font-weight: 400 !important; font-size: clamp(2.2rem, 3.4vw, 2.9rem) !important; letter-spacing: -0.015em; }
+.isl-ch .isl-eyebrow { color: var(--blue) !important; }
+/* Newsletter box: drop the old gradient border */
+.email-capture, .email-capture-inner { background: var(--card-bg) !important; background-image: none !important; border: 1px solid var(--border) !important; border-radius: var(--radius-lg) !important; box-shadow: var(--shadow-md) !important; }
+/* Coloured press banners keep white labels; contact cards share one style */
+html[data-theme="light"] .press-thumb-placeholder .ptp-label, html[data-theme="light"] .press-thumb-placeholder span { color: #fff !important; -webkit-text-fill-color: #fff !important; opacity: .92; }
+.contact-card { background: var(--card-bg) !important; border: 1px solid var(--border) !important; border-radius: var(--radius) !important; box-shadow: none !important; }
+.contact-card:hover { border-color: color-mix(in srgb, var(--blue) 40%, var(--border)) !important; box-shadow: var(--shadow-md) !important; }

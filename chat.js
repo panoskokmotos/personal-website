@@ -158,7 +158,9 @@ async function sendMessage() {
     });
 
     const data = await res.json();
-    const reply = data.text || 'Sorry, I had trouble responding. Please try again.';
+    let reply = data.text || 'Sorry, I had trouble responding. Please try again.';
+    const fb = window.chatFallback ? window.chatFallback(text, reply) : null;
+    if (fb) reply = fb;
 
     thinkingEl.remove();
     addMessage('bot', reply);

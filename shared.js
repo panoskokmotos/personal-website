@@ -18,6 +18,28 @@
     notifyUrl:    base + '/notify',
   };
 
+  /**
+   * Offline answers for the chat when the live AI is unavailable. Verified facts only (Nov 2026);
+   * returns null when the live reply is fine so callers keep it.
+   */
+  window.chatFallback = function (question, reply) {
+    var broken = !reply || /^Sorry, I had trouble|^Something went wrong|Connection error/.test(reply);
+    if (!broken) return null;
+    var q = String(question || '').toLowerCase();
+    var note = '*Quick answer while the live AI is offline.*\n\n';
+    if (/join|sign ?up|nonprofit|charity|list (our|my)|wishlist/.test(q))
+      return note + 'Nonprofits join Givelink for free. They list the exact items they need, donors buy them, and Givelink delivers them with a photo for the donor. Start at https://givelink.app or message me through the Let\'s Talk page and I\'ll help you set up.';
+    if (/ai|agent|automat|claude|build/.test(q))
+      return note + 'I run Givelink like an AI-native company. Agents spot nonprofits facing an urgent need and draft outreach that I approve before anything is sent. Scheduled automations sync our CRM, score every nonprofit, check catalog prices and close invoices, so a small team works like a big one.';
+    if (/work together|collab|hire|speak|advis|partner|contact|reach|email|call/.test(q))
+      return note + 'The best way is the Let\'s Talk page: https://panoskokmotos.com/goal.html. I\'m open to partnerships, speaking, advising, and nonprofits or companies that want to work with Givelink.';
+    if (/podcast|entrepreneurship talks|episode/.test(q))
+      return note + 'Entrepreneurship Talks is the podcast I co-founded in 2020: 60+ episodes and 350,000+ views of conversations with Greek founders. https://panoskokmotos.com/podcast.html';
+    if (/givelink|what (is|does)|donat/.test(q))
+      return note + 'Givelink is an in-kind giving platform. Donors buy the exact items a nonprofit needs and see a photo when they arrive. 150+ nonprofits in Greece and the US use it, with 8,900+ donations and 100,000+ products delivered so far. https://givelink.app';
+    return note + 'I\'m Panos, co-founder and COO of Givelink, based between Athens and San Francisco. For anything specific, the Let\'s Talk page reaches the real me: https://panoskokmotos.com/goal.html';
+  };
+
   window.escapeHtml = function (str) {
     return String(str)
       .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')

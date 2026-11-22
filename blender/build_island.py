@@ -303,6 +303,7 @@ def sf_bridge(root):
 
 def person(loc, shirt, parent=None, name="PERSON"):
     me = empty(name, loc, parent)
+    me.scale = (1.35, 1.35, 1.35)
     for dx in (-0.05, 0.05):
         box((0.06, 0.07, 0.24), (dx, 0, 0.12), DARK, me)
     box((0.2, 0.12, 0.24), (0, 0, 0.36), shirt, me)
@@ -426,12 +427,34 @@ apple = ico(0.07, (0.05, 0.0, zb + 0.06), RED, sub=1, parent=books)
 for (dx, dy) in [(-2.4, 1.6), (-2.0, -2.2), (2.6, 1.2)]:
     cyl(0.18, 1.1, (SF[0] + dx, SF[1] + dy, Z + 0.55), PINE, verts=7, r2=0.02)
 
+
+# Flags so each island reads at a glance: Greece (9 blue/white stripes) and the USA (stripes + blue canton).
+FLAG_BLUE = mat("flag_blue", "#0d5eaf", 0.6); FLAG_WHITE = mat("flag_white", "#ffffff", 0.6)
+US_RED = mat("us_red", "#b22234", 0.6); US_BLUE = mat("us_blue", "#3c3b6e", 0.6)
+def flag(name, loc, kind):
+    f = empty(name, loc)
+    cyl(0.025, 1.6, (0, 0, 0.8), WHITE, verts=6, parent=f)
+    w, h = 0.75, 0.48
+    for i in range(9 if kind == "gr" else 7):
+        n = 9 if kind == "gr" else 7
+        sh = h / n
+        m = (FLAG_BLUE if i % 2 == 0 else FLAG_WHITE) if kind == "gr" else (US_RED if i % 2 == 0 else FLAG_WHITE)
+        box((w, 0.02, sh), (w / 2 + 0.03, 0, 1.55 - sh / 2 - i * sh), m, f)
+    canton = FLAG_BLUE if kind == "gr" else US_BLUE
+    box((0.3, 0.025, 0.27), (0.18, 0, 1.55 - 0.135), canton, f)
+    if kind == "gr":
+        box((0.3, 0.03, 0.055), (0.18, 0, 1.55 - 0.135), FLAG_WHITE, f)
+        box((0.055, 0.03, 0.27), (0.18, 0, 1.55 - 0.135), FLAG_WHITE, f)
+    return f
+flag("FLAG_gr", (-1.2, 1.6, 0.2), "gr")
+flag("FLAG_us", (SF[0] - 1.4, SF[1] + 0.5, Z), "us")
+
 # ---------- trees and paths ----------
 def clear_of_landmarks(x, y, pad=1.55):
     for (lx, ly, _), _fn in LANDMARKS.values():
         if (x - lx) ** 2 + (y - ly) ** 2 < pad ** 2:
             return False
-    for (ex, ey, er) in [(BOOKS_AT[0], BOOKS_AT[1], 0.9), (-3.3, 2.0, 1.4), (-1.9, -1.4, 0.4), (1.6, 1.4, 0.4), (-2.2, 0.9, 0.4), (2.2, -2.0, 0.4)]:
+    for (ex, ey, er) in [(BOOKS_AT[0], BOOKS_AT[1], 0.9), (-1.2, 1.6, 0.6), (-3.3, 2.0, 1.4), (-1.9, -1.4, 0.4), (1.6, 1.4, 0.4), (-2.2, 0.9, 0.4), (2.2, -2.0, 0.4)]:
         if (x - ex) ** 2 + (y - ey) ** 2 < er ** 2:
             return False
     for (rx, ry) in ROAD:
@@ -477,7 +500,7 @@ for (x, y) in ROAD[::2]:
     cyl(0.22, 0.045, (x, y, 0.245 - 0.2 * (math.hypot(x, y) / 5.5)), STONE, verts=8)
 
 # ---------- clouds ----------
-for i, (cx, cy, cz) in enumerate([(-8.5, 3.5, 3.2), (9.5, 8.5, 4.6), (-6.0, -7.0, 2.2), (3.5, -8.0, 4.6), (-2.0, 8.5, 5.0), (17.5, -5.0, 2.6), (19.0, 3.0, 4.2), (6.5, -6.5, 3.4)]):
+for i, (cx, cy, cz) in enumerate([(-8.5, 3.5, 3.2), (11.0, 10.0, 5.2), (-6.0, -7.0, 2.2), (2.5, -9.0, 4.8), (-2.0, 8.5, 5.0), (20.5, -6.5, 1.8), (21.0, 4.5, 5.0), (7.0, -8.0, 3.8)]):
     root = empty(f"CLOUD_{i}", (cx, cy, cz))
     for k in range(4):
         ico(random.uniform(0.45, 0.8), (k * 0.6 - 0.9, random.uniform(-0.3, 0.3), random.uniform(-0.15, 0.25)), CLOUD, sub=1, parent=root, scale=(1, 0.8, 0.65))
