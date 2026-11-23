@@ -11,7 +11,7 @@ const PRECACHE_ASSETS = [
   '/script.min.js?v=' + ASSET_VERSION,
   '/chat.min.js?v=' + ASSET_VERSION,
   '/search.min.js?v=' + ASSET_VERSION,
-  '/photo.webp',
+  '/photo.webp', '/assets/avatar.jpg',
   '/offline.html',
   '/manifest.json',
 ];

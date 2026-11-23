@@ -286,3 +286,10 @@ html[data-theme="light"] .nav-links .nav-more-btn { color: var(--text-light); }
 .essay p a { color: var(--blue); }
 .essay-end { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 40px; padding-top: 28px; border-top: 1px solid var(--border); }
 @media (min-width: 900px) { .blog-grid > .blog-card:nth-child(5), .blog-grid > .blog-card:nth-child(6) { grid-column: span 3 !important; } }
+
+/* Cookie button: darker pink so white text reads at 4.5:1 */
+:root[data-theme="light"] .cookie-btn-accept, :root:not([data-theme]) .cookie-btn-accept { background: #c81f66; }
+
+/* Fallback for Instrument Serif sized to its narrow width, so headings don't rewrap when the font arrives. */
+@font-face { font-family: "Instrument Serif Fallback"; src: local("Times New Roman"), local("Times"), local("Liberation Serif"); size-adjust: 82%; ascent-override: 92%; descent-override: 24%; }
+html:root, html:root[data-theme="light"], html:root[data-theme="dark"] { --serif: "Instrument Serif", "Instrument Serif Fallback", "Iowan Old Style", Georgia, serif; }

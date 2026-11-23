@@ -94,7 +94,7 @@
     const path = location.pathname.replace(/\.html$/, '').replace(/\/index$/, '/');
     const toEl = { '/': '/el', '/work': '/el-work', '/about': '/el-about' }, toEn = { '/el': '/', '/el-work': '/work', '/el-about': '/about' };
     const a = document.createElement('a'); a.className = 'lang-switch'; a.href = el ? (toEn[path] || '/') : (toEl[path] || '/el'); a.textContent = el ? 'EN' : 'EL'; a.lang = el ? 'en' : 'el';
-    a.setAttribute('aria-label', el ? 'English' : 'Ελληνικά');
+    a.title = el ? 'English' : 'Ελληνικά';
     navc.insertBefore(a, navc.firstChild);
   }
 

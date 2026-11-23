@@ -35,7 +35,7 @@
   near.observe(section);
 
   // Phones: the hero (name + chat) goes above the island panel, not below it.
-  if (matchMedia('(max-width: 860px)').matches) { const hero = section.querySelector('.isl-hero'), layout = section.querySelector('.isl-layout'); if (hero && layout) { hero.classList.add('isl-hero-top'); section.insertBefore(hero, layout); } }
+  if (matchMedia('(max-width: 860px)').matches) { const hero = section.querySelector('.isl-hero'), layout = section.querySelector('.isl-layout'); if (hero && layout && !hero.classList.contains('isl-hero-top')) { hero.classList.add('isl-hero-top'); section.insertBefore(hero, layout); } }
 
   function init() {
     const t0 = performance.now();
