@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
+  <meta charset="UTF-8" />
 <!-- include:gtag -->
   <!-- Analytics (Google Analytics & PostHog) — both loaded only after cookie consent -->
   <script>
@@ -29,7 +30,6 @@
     })();
   </script>
 <!-- /include:gtag -->
-  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Panos Kokmotos — Forbes 30 Under 30 Greece, WEF Global Shaper SF, Co-Founder & COO of Givelink. 130K+ people helped, 19 awards. Building from San Francisco." />
   <meta name="robots" content="index, follow, max-image-preview:large" />
@@ -75,10 +75,10 @@
 <!-- include:theme -->
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" />
-  <link rel="stylesheet" href="/assets/theme.css?v=20261129" />
-  <script src="/assets/theme.js?v=20261128" defer></script>
+  <link rel="stylesheet" href="/assets/theme.css?v=20261130" />
+  <script src="/assets/theme.js?v=20261130" defer></script>
 <!-- /include:theme -->
-  <link rel="stylesheet" href="assets/island.css?v=20261127" />
+  <link rel="stylesheet" href="assets/island.css?v=20261130" />
   <link rel="shortcut icon" href="/favicon.ico" />
   <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png" />
   <link rel="icon" type="image/png" sizes="180x180" href="/assets/favicon-180.png" />
@@ -86,7 +86,6 @@
   <link rel="canonical" href="https://panoskokmotos.com/" />
   <link rel="manifest" href="manifest.json" />
   <meta name="theme-color" content="#3b6ef8" />
-  <link rel="preload" as="image" href="photo.webp" type="image/webp" fetchpriority="high" />
   <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -381,8 +380,7 @@
       <a href="#island" class="nav-logo">
         <span class="nav-avatar">
           <picture>
-            <source srcset="photo.webp" type="image/webp" />
-            <img src="photo.jpg" alt="Panos Kokmotos" width="38" height="38" />
+            <img src="/assets/avatar.jpg" alt="Panos Kokmotos" width="38" height="38" />
           </picture>
         </span>
         <span class="nav-logo-name">Panos Kokmotos</span>
@@ -597,6 +595,7 @@
         <div class="isl-ch" data-lm="overview"></div>
       </div>
     </div>
+  <script>/* Phones: hero text above the 3D stage, done before first paint so nothing jumps. */(function(){if(!matchMedia('(max-width: 860px)').matches)return;var s=document.getElementById('island'),h=s&&s.querySelector('.isl-hero'),l=s&&s.querySelector('.isl-layout');if(h&&l){h.classList.add('isl-hero-top');s.insertBefore(h,l);}})();</script>
   </section>
 
 
@@ -620,7 +619,7 @@
 
   <!-- ── Featured In ── -->
   <div class="featured-bar">
-    <p class="featured-label">Featured In &amp; Recognised By</p>
+    <p class="featured-label">Featured in</p>
     <div class="logos-strip-wrap">
       <div class="logos-track">
         <div class="logos-strip">
@@ -759,6 +758,19 @@
     </div>
   </section>
 
+  <!-- ── Book: The Useful Life (shows once data-book-url is set) ── -->
+  <section class="book-sec" id="book" data-book-url="" hidden>
+    <div class="container book-grid">
+      <div class="page-3d" data-3d="books" aria-hidden="true" style="width:260px;height:220px;max-width:100%"></div>
+      <div>
+        <p class="section-eyebrow">My book</p>
+        <h2 class="section-heading">The Useful Life</h2>
+        <p class="book-sub">A field guide to leverage, wisdom and purpose in the age of AI. On Kindle and in paperback.</p>
+        <a class="btn btn-primary book-link" href="#" target="_blank" rel="noopener">Get the book</a>
+      </div>
+    </div>
+  </section>
+
   <!-- ── Now ── -->
   <section id="now" class="now-section">
     <div class="container">
@@ -776,11 +788,11 @@
             <div class="now-icon">🚀</div>
           </div>
           <div class="now-body">
-            <h3 class="now-card-title">Scaling Givelink Globally</h3>
+            <h3 class="now-card-title">Growing Givelink in the US</h3>
             <ul class="now-bullets">
-              <li>Building from San Francisco toward a 100M-people mission</li>
-              <li>Deepening nonprofit partnerships globally</li>
-              <li>Sharpening product-market fit for US expansion</li>
+              <li>100+ US nonprofits live since the September 2025 launch</li>
+              <li>I run US sales, onboarding and operations</li>
+              <li>Goal: get the nonprofits with real reach live before the holidays</li>
             </ul>
             <a href="https://givelink.app/en" target="_blank" rel="noopener" class="now-link">Visit Givelink →</a>
           </div>
@@ -824,11 +836,10 @@
             <div class="now-icon">🏋️</div>
           </div>
           <div class="now-body">
-            <h3 class="now-card-title">Triathlon &amp; CrossFit</h3>
+            <h3 class="now-card-title">Training</h3>
             <ul class="now-bullets">
-              <li>Competing at competitive level</li>
-              <li>Triathlon &amp; CrossFit training daily</li>
-              <li>Same discipline as building a company</li>
+              <li>Racing HYROX and triathlons</li>
+              <li>Training at 6am, the one hour the calendar can't touch</li>
             </ul>
           </div>
         </div>
@@ -855,7 +866,7 @@
             <h3 class="now-card-title">The Useful Life</h3>
             <ul class="now-bullets">
               <li>"A Field Guide to Leverage, Wisdom &amp; Purpose in the Age of AI"</li>
-              <li>Now on Kindle and in paperback</li>
+              <li>On Kindle and in paperback</li>
             </ul>
           </div>
         </div>
@@ -865,10 +876,9 @@
             <div class="now-icon">⚡</div>
           </div>
           <div class="now-body">
-            <h3 class="now-card-title">Vibe Coding for Good</h3>
+            <h3 class="now-card-title">AI at work</h3>
             <ul class="now-bullets">
-              <li>Building small tools for social impact &amp; everyday usefulness</li>
-              <li>Claude Code as an internal ops layer, with custom skills for outreach, reporting and digests</li>
+                            <li>Claude Code agents run Givelink's repeat operations work</li>
               <li>Open source: Greek language lead for the ZecHub (Zcash) wiki</li>
             </ul>
           </div>
@@ -920,9 +930,15 @@
   <section id="blog">
     <div class="container">
       <p class="section-eyebrow">Writing</p>
-      <h2 class="section-heading">Blogs &amp; Insights</h2>
-      <p class="section-sub">Thoughts on entrepreneurship, social impact, AI, and building companies that matter.</p>
+      <h2 class="section-heading">Writing</h2>
+      <p class="section-sub">Essays on giving, AI and what I learn building Givelink. New ones go out on Substack first.</p>
       <div class="blog-grid">
+        <a href="/ai-agents" class="blog-card">
+          <div class="blog-card-top"><span class="blog-tag">AI at work</span><span class="blog-read">Nov 2026 · 4 min</span></div>
+          <h3>How I run Givelink with AI agents</h3>
+          <p>A small team, a lot of repeat work, and the 9 automations that now do most of it, with a person approving anything that leaves the company.</p>
+          <span class="blog-cta">Read the essay →</span>
+        </a>
         <a href="https://panoskokmotos.substack.com/p/ethics-needs-its-telescope" target="_blank" rel="noopener" class="blog-card" data-animate>
           <div class="blog-card-top">
             <span class="blog-tag">💭 Philosophy</span>
@@ -981,7 +997,7 @@
         <div class="email-capture-inner">
           <div class="email-capture-text">
             <span class="ec-eyebrow">📬 Newsletter</span>
-            <h3>Get thoughts on startups, impact &amp; AI directly in your inbox</h3>
+            <h3>New essays by email</h3>
             <p>I write when I have something worth saying. Subscribe on Substack to get new essays straight to your inbox.</p>
           </div>
           <div class="email-capture-form">
@@ -997,8 +1013,8 @@
   <section id="open-to" class="section-alt">
     <div class="container" style="text-align:center">
       <p class="section-eyebrow">Opportunities</p>
-      <h2 class="section-heading">Open To Working Together</h2>
-      <p class="section-sub" style="max-width:600px;margin-left:auto;margin-right:auto">Partnerships, speaking, investment conversations, advisory, podcast guests, or a good conversation with someone building something real. See exactly what I am open to and how to reach me.</p>
+      <h2 class="section-heading">Working together</h2>
+      <p class="section-sub" style="max-width:600px;margin-left:auto;margin-right:auto">For AI operations or a US launch, see <a href="/work">Work with me</a>. For partnerships, talks, investing or a podcast guest slot, the Let's Talk page has the details.</p>
       <div style="margin-top:28px">
         <a href="/goal" class="btn btn-primary">Let's Talk →</a>
       </div>
@@ -1012,7 +1028,7 @@
     <div class="container contact-wrap">
       <p class="section-eyebrow light">Get in Touch</p>
       <h2 class="section-heading light">Build something <em>useful</em> with me</h2>
-      <p class="contact-sub">Open to collaborations, speaking invitations, investment conversations, and connecting with bold people working on hard problems.</p>
+      <p class="contact-sub">Write to me about a partnership, a talk, an investment or something you're building. I read every message.</p>
       <div class="contact-cards">
         <div class="contact-card contact-card-email">
           <a href="mailto:panagiotis.kokmotoss@gmail.com" class="contact-card-inner-link"><span class="cc-icon">✉️</span><div><strong>Email</strong><p>panagiotis.kokmotoss@gmail.com</p></div></a>
@@ -1068,11 +1084,10 @@
     <div class="footer-inner">
       <a href="/" class="footer-logo">
         <picture>
-          <source srcset="photo.webp" type="image/webp" />
-          <img src="photo.jpg" alt="Panos Kokmotos" loading="lazy" />
+          <img src="/assets/avatar.jpg" alt="Panos Kokmotos" loading="lazy" />
         </picture>
       </a>
-      <p>© 2026 Panos Kokmotos · Advocate ✨ Changemaker 🌍 Builder 🚀</p>
+      <p>© 2026 Panos Kokmotos · Athens and San Francisco</p>
       <p style="margin:0;font-size:.85rem"><a href="/about" style="color:inherit">About</a> · <a href="/press" style="color:inherit">Press</a> · <a href="/faq" style="color:inherit">FAQ</a></p>
       <div class="footer-links">
         <a href="https://www.linkedin.com/in/panoskokmotos/" target="_blank" rel="noopener" aria-label="LinkedIn" title="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>
@@ -1099,8 +1114,7 @@
       <div class="chat-header">
         <div class="chat-header-info">
           <picture>
-            <source srcset="/photo.webp" type="image/webp" />
-            <img src="/photo.jpg" alt="Panos Kokmotos" class="chat-avatar" />
+            <img src="/assets/avatar.jpg" alt="Panos Kokmotos" class="chat-avatar" />
           </picture>
           <div class="chat-header-text">
             <strong>Ask Panos</strong>
@@ -1188,7 +1202,7 @@
   <script src="script.min.js?v=20261016"></script>
   <script>window.__lazyChat="/chat.min.js?v=20261126";</script>
   <script src="search.min.js?v=20261016"></script>
-  <script src="assets/island.js?v=20261129" defer></script>
+  <script src="assets/island.js?v=20261130" defer></script>
   <script src="assets/hero-chat.js?v=20261126" defer></script>
   <!-- Service Worker registration -->
   <script>
@@ -1198,5 +1212,6 @@
       });
     }
   </script>
+  <script src="/assets/page-object.js?v=20261130" defer></script>
 </body>
 </html>

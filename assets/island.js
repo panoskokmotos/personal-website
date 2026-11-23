@@ -35,7 +35,7 @@
   near.observe(section);
 
   // Phones: the hero (name + chat) goes above the island panel, not below it.
-  if (matchMedia('(max-width: 860px)').matches) { const hero = section.querySelector('.isl-hero'), layout = section.querySelector('.isl-layout'); if (hero && layout) { hero.classList.add('isl-hero-top'); section.insertBefore(hero, layout); } }
+  if (matchMedia('(max-width: 860px)').matches) { const hero = section.querySelector('.isl-hero'), layout = section.querySelector('.isl-layout'); if (hero && layout && !hero.classList.contains('isl-hero-top')) { hero.classList.add('isl-hero-top'); section.insertBefore(hero, layout); } }
 
   function init() {
     const t0 = performance.now();
@@ -267,6 +267,18 @@
     const bar = document.createElement('div'); bar.className = 'isl-ctrl';
     bar.innerHTML = '<button type="button" data-a="tour" aria-label="Play the guided tour">▶</button><button type="button" data-a="out" aria-label="Zoom out">−</button><button type="button" data-a="in" aria-label="Zoom in">+</button><button type="button" data-a="reset" aria-label="Reset view">⟲</button><button type="button" data-a="night" aria-label="Day or night">☾</button><button type="button" data-a="sound" aria-label="Island music" aria-pressed="false">♪</button>';
     stage.appendChild(bar);
+    // Keyboard and screen readers: the stage is focusable; arrows rotate/tilt, +/- zoom, 0 resets, Esc closes the card.
+    stage.tabIndex = 0; stage.setAttribute('role', 'region');
+    stage.setAttribute('aria-label', section.dataset.kbd || 'Interactive 3D island of my story. Arrow keys rotate and tilt, plus and minus zoom, 0 resets, Escape closes a card. Each landmark label opens its chapter.');
+    stage.addEventListener('keydown', ev => {
+      const k = ev.key; let used = true;
+      if (k === 'ArrowLeft') yaw += 0.15; else if (k === 'ArrowRight') yaw -= 0.15;
+      else if (k === 'ArrowUp') pitch = Math.min(0.7, pitch + 0.08); else if (k === 'ArrowDown') pitch = Math.max(-0.5, pitch - 0.08);
+      else if (k === '+' || k === '=') zoom = clampZoom(zoom / 1.2); else if (k === '-' || k === '_') zoom = clampZoom(zoom * 1.2);
+      else if (k === '0') { yaw = 0; pitch = 0; zoom = 1; } else if (k === 'Escape') { stopTour(); closeCard(); stage.focus(); }
+      else used = false;
+      if (used && ev.target === stage) ev.preventDefault();
+    });
     const hint = document.createElement('div'); hint.className = 'isl-zoomhint'; hint.textContent = navigator.platform.includes('Mac') ? 'Hold ⌘ and scroll to zoom' : 'Hold Ctrl and scroll to zoom'; stage.appendChild(hint);
     let audio = null;
     bar.addEventListener('click', ev => {
@@ -367,6 +379,8 @@
       if (more) { const a = document.createElement('a'); a.href = more.href; a.textContent = more.textContent; if (more.target) a.target = more.target; row.appendChild(a); }
       const x = document.createElement('button'); x.type = 'button'; x.className = 'isl-card-x'; x.setAttribute('aria-label', 'Close'); x.textContent = '×'; x.addEventListener('click', () => { stopTour(); closeCard(); });
       card.append(x, e1, e2, e3, row); card.hidden = false;
+      card.setAttribute('role', 'dialog'); card.setAttribute('aria-label', e2.textContent);
+      if (stage.contains(document.activeElement) && !touring) read.focus({ preventScroll: true });
       Object.entries(pins).forEach(([pid, b]) => b.setAttribute('aria-current', String(pid === id)));
     }
     function closeCard() { card.hidden = true; cardId = null; }

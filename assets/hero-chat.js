@@ -20,7 +20,7 @@
     const row = document.createElement('div');
     row.className = 'hc-msg hc-' + role + (opts && opts.thinking ? ' hc-thinking' : '');
     if (role === 'assistant') {
-      row.innerHTML = '<span class="hc-avatar" aria-hidden="true"><img src="/photo.webp" alt="" width="26" height="26"></span><div class="hc-body"></div>';
+      row.innerHTML = '<span class="hc-avatar" aria-hidden="true"><img src="/assets/avatar.jpg" alt="" width="26" height="26"></span><div class="hc-body"></div>';
       const body = row.querySelector('.hc-body');
       if (opts && opts.thinking) body.innerHTML = '<span class="hc-dots" aria-label="Thinking"><i></i><i></i><i></i></span>';
       else body.innerHTML = md(text);

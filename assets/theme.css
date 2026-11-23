@@ -246,3 +246,50 @@ html[data-theme="light"] .nav-links .nav-more-btn { color: var(--text-light); }
 .impact-label { max-width: none !important; text-align: left !important; }
 @media (max-width: 860px) { .impact-bar-inner { grid-template-columns: minmax(0, 1fr) !important; padding: 40px 20px !important; } .impact-stats-row { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; } }
 .np-home { padding-top: 80px !important; }
+
+/* ── Spacing rhythm: one section scale, consistent heading/intro gaps ── */
+#now, #blog, #open-to, #contact, .np-home, .book-sec, .wk-offers, .wk-cases, .wk-who, .wk-logos, .wk-final, .about-timeline { padding-block: 104px !important; }
+.featured-bar { padding-block: 40px !important; }
+.section-eyebrow { margin: 0 0 10px !important; }
+.section-heading { margin: 0 0 16px !important; }
+.section-sub, .book-sub { max-width: 60ch; margin: 0 0 44px !important; text-align: left !important; font-size: 1.05rem; line-height: 1.65; color: var(--text-light); }
+#blog .container > .section-sub { margin-left: 0 !important; margin-right: 0 !important; }
+.now-header { margin-bottom: 36px !important; align-items: flex-end; }
+.container { max-width: 1120px; }
+@media (max-width: 860px) { #now, #blog, #open-to, #contact, .np-home, .book-sec, .wk-offers, .wk-cases, .wk-who, .wk-logos, .wk-final, .about-timeline { padding-block: 72px !important; } }
+.now-icon { display: none !important; }
+
+/* Book */
+.book-grid { display: grid; grid-template-columns: 280px minmax(0, 1fr); gap: 40px; align-items: center; }
+.book-sec { background: var(--bg-alt); border-block: 1px solid var(--border); }
+@media (max-width: 860px) { .book-grid { grid-template-columns: minmax(0, 1fr); } }
+
+/* Real photos */
+.portrait-wide { width: 100%; max-width: 1120px; aspect-ratio: 16 / 7; object-fit: cover; object-position: 40% 35%; border-radius: 24px; display: block; margin: 8px auto 0; box-shadow: var(--shadow-lg); }
+.wk-hero-grid { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 48px; align-items: center; }
+.wk-portrait { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; object-position: 45% 30%; border-radius: 24px; box-shadow: var(--shadow-lg); }
+@media (max-width: 860px) { .wk-hero-grid { grid-template-columns: minmax(0, 1fr); } .wk-portrait { aspect-ratio: 4 / 3; } .portrait-wide { aspect-ratio: 4 / 3; } }
+
+.tl { list-style: none; margin: 24px 0 0; padding: 0; border-left: 2px solid var(--border); }
+.tl li { position: relative; display: grid; grid-template-columns: 120px minmax(0, 1fr); gap: 20px; padding: 0 0 26px 28px; }
+.tl li::before { content: ""; position: absolute; left: -7px; top: 6px; width: 12px; height: 12px; border-radius: 50%; background: var(--bg); border: 2px solid var(--blue); }
+.tl-year { font-weight: 600; color: var(--navy); }
+.tl p { margin: 0; color: var(--text-light); line-height: 1.6; max-width: 62ch; }
+@media (max-width: 640px) { .tl li { grid-template-columns: minmax(0, 1fr); gap: 4px; } }
+
+/* Essay pages */
+.essay { padding: 132px 0 96px; }
+.essay-wrap { max-width: 720px !important; }
+.essay h1 { font-size: clamp(2.4rem, 5vw, 3.6rem) !important; }
+.essay-dek { font-size: 1.2rem; color: var(--text-muted); margin: 0 0 36px; line-height: 1.5; }
+.essay p { font-size: 1.12rem; line-height: 1.75; color: var(--text); margin: 0 0 22px; }
+.essay p a { color: var(--blue); }
+.essay-end { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 40px; padding-top: 28px; border-top: 1px solid var(--border); }
+@media (min-width: 900px) { .blog-grid > .blog-card:nth-child(5), .blog-grid > .blog-card:nth-child(6) { grid-column: span 3 !important; } }
+
+/* Cookie button: darker pink so white text reads at 4.5:1 */
+:root[data-theme="light"] .cookie-btn-accept, :root:not([data-theme]) .cookie-btn-accept { background: #c81f66; }
+
+/* Fallback for Instrument Serif sized to its narrow width, so headings don't rewrap when the font arrives. */
+@font-face { font-family: "Instrument Serif Fallback"; src: local("Times New Roman"), local("Times"), local("Liberation Serif"); size-adjust: 82%; ascent-override: 92%; descent-override: 24%; }
+html:root, html:root[data-theme="light"], html:root[data-theme="dark"] { --serif: "Instrument Serif", "Instrument Serif Fallback", "Iowan Old Style", Georgia, serif; }
