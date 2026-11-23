@@ -24,15 +24,22 @@
   function loadScript(src) {
     return new Promise((res, rej) => { const s = document.createElement('script'); s.src = src; s.onload = res; s.onerror = rej; document.head.appendChild(s); });
   }
-  const near = new IntersectionObserver((entries) => {
-    if (!entries.some(e => e.isIntersecting)) return;
-    near.disconnect();
+  // The poster (stage background) shows first. The 3D code, about 600 KB of scripts and model, loads once the page is idle:
+  // right after load on desktop, and on phones at the first touch, scroll or key press (or after 8 s).
+  let started = false;
+  function start() {
+    if (started) return; started = true;
+    ['pointerdown', 'touchstart', 'wheel', 'keydown', 'scroll'].forEach(ev => removeEventListener(ev, start));
     loadScript('https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js')
       .then(() => loadScript('https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js'))
       .then(() => loadScript('https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/libs/meshopt_decoder.js'))
       .then(init).catch(() => {});
-  }, { rootMargin: '800px 0px' });
-  near.observe(section);
+  }
+  const phone = matchMedia('(max-width: 860px)').matches;
+  ['pointerdown', 'touchstart', 'wheel', 'keydown', 'scroll'].forEach(ev => addEventListener(ev, start, { passive: true, once: true }));
+  const idle = window.requestIdleCallback || (cb => setTimeout(cb, 400));
+  const afterLoad = () => phone ? setTimeout(start, 8000) : idle(start, { timeout: 2500 });
+  if (document.readyState === 'complete') afterLoad(); else addEventListener('load', afterLoad);
 
   // Phones: the hero (name + chat) goes above the island panel, not below it.
   if (matchMedia('(max-width: 860px)').matches) { const hero = section.querySelector('.isl-hero'), layout = section.querySelector('.isl-layout'); if (hero && layout && !hero.classList.contains('isl-hero-top')) { hero.classList.add('isl-hero-top'); section.insertBefore(hero, layout); } }
