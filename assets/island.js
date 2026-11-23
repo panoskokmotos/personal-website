@@ -431,7 +431,8 @@
       // GivingTuesday (Dec 1, 2026): a banner with the running donation count from the daily stats file.
       if (md >= 1123 && md <= 1202) fetch('/assets/givelink-stats.json').then(r => r.json()).then(st => {
         const b = document.createElement('div'); b.className = 'isl-banner';
-        b.textContent = (section.dataset.gt || 'GivingTuesday is Dec 1 · {n} donations through Givelink so far').replace('{n}', (Math.floor((st.donations || 0) / 100) * 100).toLocaleString() + '+');
+        const n = Math.floor((st.donations || 0) / 100) * 100;
+        b.textContent = n ? (section.dataset.gt || 'GivingTuesday is Dec 1 · {n} donations through Givelink so far').replace('{n}', n.toLocaleString() + '+') : (section.dataset.gtShort || 'GivingTuesday is Dec 1');
         stage.appendChild(b);
       }).catch(() => {});
     }

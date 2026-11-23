@@ -1,5 +1,5 @@
 // Keep in sync with the ?v= cache-buster used in the HTML (bump both on asset changes).
-const ASSET_VERSION = '20261131';
+const ASSET_VERSION = '20261132';
 const CACHE_NAME = 'panos-' + ASSET_VERSION;
 const OFFLINE_URL = '/offline.html';
 
@@ -49,8 +49,10 @@ self.addEventListener('fetch', event => {
   const isHTML = event.request.headers.get('accept')?.includes('text/html');
   const isSameOrigin = url.origin === self.location.origin;
 
-  if (isHTML && isSameOrigin) {
-    // Network-first for HTML
+  const isData = isSameOrigin && /\.json$/.test(url.pathname);
+
+  if ((isHTML || isData) && isSameOrigin) {
+    // Network-first for HTML and JSON data (the daily Givelink numbers must not go stale)
     event.respondWith(
       fetch(event.request)
         .then(res => {
