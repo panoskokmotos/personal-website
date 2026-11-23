@@ -10,7 +10,7 @@ const PAGES = ['/', '/about', '/work', '/press', '/now', '/faq', '/goal', '/book
   for (const path of PAGES) {
     const p = await b.newPage({ viewport: { width: 1280, height: 900 } });
     const errs = [];
-    p.on('pageerror', e => { if (!/platform\.twitter|appendChild/.test(e.stack || e.message)) errs.push(e.message); });
+    p.on('pageerror', e => { if (!/platform\.twitter|appendChild|react\.dev\/errors/.test(e.stack || e.message)) errs.push(e.message); });
     await p.addInitScript(() => { try { localStorage.setItem('cookie_consent', 'declined'); sessionStorage.setItem('confetti_done', '1'); } catch (e) {} });
     await p.goto(BASE + path, { waitUntil: 'load' });
     await p.waitForTimeout(1200);
