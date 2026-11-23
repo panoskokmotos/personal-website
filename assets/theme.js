@@ -91,7 +91,9 @@
   const navc = document.querySelector('.nav-controls');
   if (navc && !navc.querySelector('.lang-switch')) {
     const el = document.documentElement.lang === 'el';
-    const a = document.createElement('a'); a.className = 'lang-switch'; a.href = el ? '/' : '/el'; a.textContent = el ? 'EN' : 'EL'; a.lang = el ? 'en' : 'el';
+    const path = location.pathname.replace(/\.html$/, '').replace(/\/index$/, '/');
+    const toEl = { '/': '/el', '/work': '/el-work', '/about': '/el-about' }, toEn = { '/el': '/', '/el-work': '/work', '/el-about': '/about' };
+    const a = document.createElement('a'); a.className = 'lang-switch'; a.href = el ? (toEn[path] || '/') : (toEl[path] || '/el'); a.textContent = el ? 'EN' : 'EL'; a.lang = el ? 'en' : 'el';
     a.setAttribute('aria-label', el ? 'English' : 'Ελληνικά');
     navc.insertBefore(a, navc.firstChild);
   }
@@ -112,4 +114,9 @@
     const idle = window.requestIdleCallback || (cb => setTimeout(cb, 2500));
     addEventListener('load', () => idle(() => loadChat(), { timeout: 4000 }));
   }
+
+  // Book section appears only once its store link is set (data-book-url on #book).
+  const book = document.getElementById('book');
+  if (book && book.dataset.bookUrl) { book.querySelector('.book-link').href = book.dataset.bookUrl; book.hidden = false; }
+  document.querySelectorAll('[data-book-link]').forEach(a => { const u = (document.getElementById('book') || {}).dataset ? document.getElementById('book').dataset.bookUrl : ''; if (u) { a.href = u; a.hidden = false; } });
 })();

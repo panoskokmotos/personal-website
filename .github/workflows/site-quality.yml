@@ -1,0 +1,17 @@
+name: Site quality
+
+# Every PR: unreadable text, JavaScript errors and sideways scrolling on every page fail the check.
+on:
+  pull_request:
+  workflow_dispatch: {}
+
+jobs:
+  qa:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - run: npm i --no-save playwright@1.49.1 && npx playwright install --with-deps chromium
+      - run: (python3 serve.py 4173 &) && sleep 2 && node scripts/qa.js http://127.0.0.1:4173
