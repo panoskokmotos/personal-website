@@ -1,0 +1,12 @@
+# GitHub Pages runs this repo through Jekyll. The site is plain HTML, so this
+# file only keeps source, tooling and notes from being published.
+exclude:
+  - README.md
+  - docs/
+  - blender/
+  - scripts/
+  - partials/
+  - "*.py"
+  - cloudflare-worker.js
+  - wrangler.jsonc
+  - .github/

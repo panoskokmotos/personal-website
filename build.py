@@ -16,6 +16,12 @@ its partial. Editing shared chrome is therefore: edit partials/<name>.html once,
 run build.py, commit. The committed pages stay fully-rendered, valid, and
 servable as-is — the markers are HTML comments and never affect output.
 
+It also stamps one cache-buster on every local CSS/JS URL: each `?v=...` on a
+same-site .css/.js reference is rewritten to ASSET_VERSION from sw.js, so the
+HTML, the service worker's precache list and its cache name always agree.
+`python build.py --bump` raises ASSET_VERSION first; do that whenever a CSS/JS
+file changes, or returning visitors keep the cached copy (sw.js is cache-first).
+
 Idempotent: running it twice makes no further change. Pure stdlib.
 """
 from __future__ import annotations
@@ -26,6 +32,22 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
 PARTIALS = ROOT / "partials"
+SW = ROOT / "sw.js"
+SW_VERSION = re.compile(r"(const ASSET_VERSION = ')(\d+)(';)")
+# href/src pointing at a same-site .css/.js file (not http(s):// or //host) with a ?v= tag
+ASSET_REF = re.compile(r'((?:href|src|__lazyChat)="(?!https?:|//)[^"?]+\.(?:css|js)\?v=)[0-9a-z]+(")')
+
+
+def asset_version(bump: bool = False) -> str:
+    text = SW.read_text()
+    current = SW_VERSION.search(text).group(2)
+    if not bump:
+        return current
+    from datetime import date
+    new = str(max(int(current) + 1, int(date.today().strftime("%Y%m%d"))))
+    SW.write_text(SW_VERSION.sub(lambda m: m.group(1) + new + m.group(3), text))
+    print(f"ASSET_VERSION {current} -> {new}")
+    return new
 
 MARKER = re.compile(
     r"(?P<open><!-- include:(?P<name>[a-z0-9-]+) -->\n)"
@@ -34,12 +56,14 @@ MARKER = re.compile(
 )
 
 
-def sync(check_only: bool = False) -> int:
+def sync(check_only: bool = False, bump: bool = False) -> int:
+    version = asset_version(bump and not check_only)
     partials: dict[str, str] = {}
     changed = 0
     missing: set[str] = set()
 
-    for html in sorted(ROOT.glob("*.html")):
+    pages = sorted(ROOT.glob("*.html")) + sorted(ROOT.glob("el/**/*.html")) + sorted(ROOT.glob("tachyon/**/*.html"))
+    for html in pages:
         text = html.read_text()
 
         def repl(m: re.Match) -> str:
@@ -53,6 +77,7 @@ def sync(check_only: bool = False) -> int:
             return f"{m.group('open')}{partials[name]}{m.group('close')}"
 
         new = MARKER.sub(repl, text)
+        new = ASSET_REF.sub(lambda m: f"{m.group(1)}{version}{m.group(2)}", new)
         if new != text:
             changed += 1
             if not check_only:
@@ -69,4 +94,5 @@ def sync(check_only: bool = False) -> int:
 
 if __name__ == "__main__":
     # `python build.py --check` fails (exit 1) if anything is out of sync, for CI.
-    sys.exit(sync(check_only="--check" in sys.argv[1:]))
+    args = sys.argv[1:]
+    sys.exit(sync(check_only="--check" in args, bump="--bump" in args))

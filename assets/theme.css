@@ -93,7 +93,7 @@ section { border-color: var(--border); }
 .rv-on .rv.rv-in { opacity: 1; transform: none; }
 .hero-title .w { display: inline-block; opacity: 0; transform: translateY(.35em); filter: blur(6px); animation: wIn .8s cubic-bezier(.2,.7,.2,1) forwards; }
 @keyframes wIn { to { opacity: 1; transform: none; filter: none; } }
-@media (prefers-reduced-motion: reduce) {
+@media print, (prefers-reduced-motion: reduce) {
   .rv-on .rv { opacity: 1 !important; transform: none !important; transition: none !important; }
   .hero-title .w { animation: none !important; opacity: 1 !important; transform: none !important; filter: none !important; }
 }
@@ -265,9 +265,9 @@ html[data-theme="light"] .nav-links .nav-more-btn { color: var(--text-light); }
 @media (max-width: 860px) { .book-grid { grid-template-columns: minmax(0, 1fr); } }
 
 /* Real photos */
-.portrait-wide { width: 100%; max-width: 1120px; aspect-ratio: 16 / 7; object-fit: cover; object-position: 40% 35%; border-radius: 24px; display: block; margin: 8px auto 0; box-shadow: var(--shadow-lg); }
+.portrait-wide { width: 100%; height: auto; max-width: 1120px; aspect-ratio: 16 / 7; object-fit: cover; object-position: 40% 35%; border-radius: 24px; display: block; margin: 8px auto 0; box-shadow: var(--shadow-lg); }
 .wk-hero-grid { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 48px; align-items: center; }
-.wk-portrait { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; object-position: 45% 30%; border-radius: 24px; box-shadow: var(--shadow-lg); }
+.wk-portrait { width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; object-position: 45% 30%; border-radius: 24px; box-shadow: var(--shadow-lg); }
 @media (max-width: 860px) { .wk-hero-grid { grid-template-columns: minmax(0, 1fr); } .wk-portrait { aspect-ratio: 4 / 3; } .portrait-wide { aspect-ratio: 4 / 3; } }
 
 .tl { list-style: none; margin: 24px 0 0; padding: 0; border-left: 2px solid var(--border); }
@@ -293,3 +293,15 @@ html[data-theme="light"] .nav-links .nav-more-btn { color: var(--text-light); }
 /* Fallback for Instrument Serif sized to its narrow width, so headings don't rewrap when the font arrives. */
 @font-face { font-family: "Instrument Serif Fallback"; src: local("Times New Roman"), local("Times"), local("Liberation Serif"); size-adjust: 82%; ascent-override: 92%; descent-override: 24%; }
 html:root, html:root[data-theme="light"], html:root[data-theme="dark"] { --serif: "Instrument Serif", "Instrument Serif Fallback", "Iowan Old Style", Georgia, serif; }
+
+/* Cookie banner: compact corner card so it never covers the hero CTAs or chat */
+.cookie-banner { left: 16px; right: auto; bottom: 16px; transform: none; width: auto; max-width: 340px; padding: 14px 16px; background: var(--bg-alt); color: var(--text); border: 1px solid var(--border); box-shadow: var(--shadow-lg); animation-name: cookieSlideUpCorner; }
+@keyframes cookieSlideUpCorner { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+.cookie-banner .cookie-banner-inner { flex-direction: column; align-items: stretch; gap: 10px; }
+.cookie-banner .cookie-icon { display: none; }
+.cookie-banner .cookie-title { display: block; margin: 0 0 4px; font-weight: 600; color: var(--text); }
+.cookie-banner .cookie-text { font-size: .82rem; line-height: 1.45; margin: 0; color: var(--text-muted); }
+.cookie-banner .cookie-actions { display: flex; gap: 8px; justify-content: flex-end; }
+.cookie-banner .cookie-btn { padding: 7px 14px; font-size: .85rem; }
+.cookie-banner .cookie-btn-decline { background: transparent; color: var(--text); border: 1px solid var(--border); }
+@media (max-width: 600px) { .cookie-banner { left: 12px; right: 12px; max-width: none; } }

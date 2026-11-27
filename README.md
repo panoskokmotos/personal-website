@@ -36,7 +36,7 @@ This repository contains the complete source code for my personal portfolio webs
 | **JavaScript** | Interactive components & chat |
 | **Cloudflare Worker** | Edge computing for routing |
 | **GitHub Pages** | Static hosting |
-| **Plausible Analytics** | Privacy-first analytics |
+| **Google Analytics + PostHog** | Analytics, loaded only after cookie consent |
 | **Formspree** | Email form submissions |
 
 ---
@@ -50,11 +50,10 @@ personal-website/
 ├── partials/               # Single source for shared chrome (nav, footer, tool-header, analytics)
 ├── build.py                # Syncs partials into pages — see "Shared page chrome" below
 ├── style.css               # Global styles & components
-├── shared.js               # Shared config (worker URLs + secret) + helpers (markdown, notify)
+├── shared.js               # Shared config (worker URLs) + helpers (markdown, notify)
 ├── script.js               # Homepage / content-page behavior
 ├── chat.js                 # "Ask Panos" chat widget
 ├── search.js               # Client-side search over search-index.json
-├── tool-utils.js           # Shared runtime for the AI tool pages
 ├── sw.js, offline.html     # PWA service worker + offline fallback
 ├── cloudflare-worker.js    # Edge API: Claude proxy + notify/email (deployed separately)
 ├── serve.py                # Local dev server:  python serve.py [port]
@@ -62,7 +61,7 @@ personal-website/
 ├── scripts/check_links.py  # Link checker (run in CI)
 ├── assets/, logos/         # Images and media
 ├── CNAME                   # Custom domain (panoskokmotos.com)
-├── DOMAIN_TROUBLESHOOTING.md
+├── docs/                   # Internal notes (audit plan, domain troubleshooting); not published
 └── README.md               # This file
 ```
 
@@ -143,7 +142,7 @@ Value: 185.199.111.153
 4. Custom domain: `panoskokmotos.com`
 5. ✅ Enforce HTTPS
 
-**Need Help?** See [`DOMAIN_TROUBLESHOOTING.md`](./DOMAIN_TROUBLESHOOTING.md)
+**Need Help?** See [`docs/DOMAIN_TROUBLESHOOTING.md`](./docs/DOMAIN_TROUBLESHOOTING.md)
 
 ---
 
@@ -182,19 +181,9 @@ Value: 185.199.111.153
 
 ## 📊 Analytics
 
-### Plausible Analytics Setup
-
-**Privacy-first analytics** (no cookie banners needed!)
-
-```html
-<!-- Already configured in index.html -->
-<script defer data-domain="panoskokmotos.com" src="https://plausible.io/js/script.js"></script>
-```
-
-**View Analytics:**
-1. Sign in: https://plausible.io
-2. Open project: `panoskokmotos.com`
-3. See metrics: visitors, top pages, referrers, countries, goals
+Google Analytics (`partials/gtag.html`) and PostHog load only after a visitor accepts the
+cookie banner (`partials/cookie-banner.html`). Until then GA runs in consent mode with
+analytics storage denied.
 
 ---
 
@@ -224,8 +213,7 @@ Powered by **Formspree** – emails sent to your inbox
 - ✅ HTTPS enforced
 - ✅ No sensitive data in frontend
 - ✅ Form submissions via Formspree
-- ✅ Analytics privacy-first (Plausible)
-- ✅ No tracking cookies
+- ✅ Analytics cookies only after consent
 - ✅ Regular security updates
 
 ---
@@ -249,7 +237,7 @@ Optimized for all devices:
 - **Lighthouse Score**: 95+
 - **No JavaScript frameworks** for faster load times
 - **Optimized images** with modern formats (WebP)
-- **Raw (un-minified) CSS/JS** served directly — no build step
+- **Minified CSS/JS** (`*.min.*`) served directly; one `?v=` cache-buster set by `build.py`
 
 **Test Performance**: https://pagespeed.web.dev/
 
@@ -304,6 +292,14 @@ To change shared chrome once and apply it everywhere:
 `build.py` is pure-stdlib and idempotent. Pages without markers — and pages whose block is
 intentionally different (e.g. `index.html`, or tool pages with custom back-links) — are left
 untouched. Run `python build.py --check` (e.g. in CI) to fail if any page is out of sync.
+
+**Cache-busting.** `build.py` also stamps `ASSET_VERSION` from `sw.js` onto every local
+`.css`/`.js` `?v=` in the HTML. The service worker serves assets cache-first, so after
+changing any CSS or JS run `python build.py --bump` — otherwise returning visitors keep
+the old file.
+
+**Publishing.** `_config.yml` (GitHub Pages/Jekyll) and `.assetsignore` (Cloudflare) keep
+`docs/`, `scripts/`, `partials/`, `blender/`, the README and the Python tooling off the live site.
 
 ---
 
@@ -371,7 +367,7 @@ Already configured:
 | Check links | `python scripts/check_links.py` |
 | Regenerate OG image | `python generate_og.py` (requires Pillow) |
 | Deploy | `git push origin main` |
-| Analytics | Visit https://plausible.io |
+| Analytics | Google Analytics + PostHog dashboards |
 
 ---
 
@@ -421,7 +417,7 @@ MIT License – see LICENSE file
 
 ### Previous Updates
 - Added responsive design
-- Implemented analytics (Plausible)
+- Implemented analytics (now GA + PostHog, behind consent)
 - Set up contact form (Formspree)
 - Optimized performance
 

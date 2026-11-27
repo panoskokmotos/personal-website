@@ -58,7 +58,8 @@
   });
 
   // Section reveals: gentle fade-up the first time each block enters view.
-  if (!reduce && 'IntersectionObserver' in window) {
+  // Automated browsers (link previews, full-page screenshots) never scroll, so they skip the reveal.
+  if (!reduce && !navigator.webdriver && 'IntersectionObserver' in window) {
     const targets = document.querySelectorAll('main > section:not(#island) .container > *, .impact-bar-inner > *, .featured-bar > *, .isl-ch');
     if (targets.length) {
       document.documentElement.classList.add('rv-on');
@@ -94,7 +95,10 @@
     const path = location.pathname.replace(/\.html$/, '').replace(/\/index$/, '/');
     const toEl = { '/': '/el', '/work': '/el-work', '/about': '/el-about' }, toEn = { '/el': '/', '/el-work': '/work', '/el-about': '/about' };
     const a = document.createElement('a'); a.className = 'lang-switch'; a.href = el ? (toEn[path] || '/') : (toEl[path] || '/el'); a.textContent = el ? 'EN' : 'EL'; a.lang = el ? 'en' : 'el';
-    a.title = el ? 'English' : 'Ελληνικά';
+    // Only About, Work and the homepage are translated; elsewhere the switch goes to the other homepage, so say so.
+    const paired = el ? path in toEn : path in toEl;
+    a.title = el ? (paired ? 'English' : 'English homepage') : (paired ? 'Ελληνικά' : 'Ελληνική αρχική (αυτή η σελίδα υπάρχει μόνο στα αγγλικά)');
+    a.setAttribute('aria-label', a.title);
     navc.insertBefore(a, navc.firstChild);
   }
 
