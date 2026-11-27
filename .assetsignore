@@ -1,0 +1,12 @@
+# Cloudflare static-asset upload (wrangler.jsonc assets.directory = ".") — keep tooling and notes private.
+.git
+.github
+README.md
+docs
+blender
+scripts
+partials
+*.py
+cloudflare-worker.js
+wrangler.jsonc
+_config.yml

@@ -1,5 +1,5 @@
-// Keep in sync with the ?v= cache-buster used in the HTML (bump both on asset changes).
-const ASSET_VERSION = '20261132';
+// Set by `python build.py --bump`, which also stamps this value on every ?v= in the HTML. Bump on any CSS/JS change.
+const ASSET_VERSION = '20261134';
 const CACHE_NAME = 'panos-' + ASSET_VERSION;
 const OFFLINE_URL = '/offline.html';
 
